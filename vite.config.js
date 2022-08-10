@@ -32,7 +32,7 @@ export default defineConfig(({ mode, command }) => {
         // https://cn.vitejs.dev/config/#server-proxy
         '/dev-api': {
           // target: 'http://vue.ruoyi.vip/prod-api',
-          target:'http://api.sp.shanhaiping.com',
+          target:'http://192.168.123.90:8080',
           changeOrigin: true,
           rewrite: (p) => p.replace(/^\/dev-api/, '')
         }
