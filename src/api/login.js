@@ -41,8 +41,8 @@ export function getInfo() {
 // 退出方法
 export function logout() {
   return request({
-    url: '/logout',
-    method: 'post'
+    url: '/auth/logout',
+    method: 'delete'
   })
 }
 

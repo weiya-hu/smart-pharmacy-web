@@ -332,7 +332,7 @@
 import { listOrder, getOrder, delOrder, addOrder, updateOrder } from "@/api/index12";
 
 const { proxy } = getCurrentInstance();
-const { ${dictsNoSymbol} } = proxy.useDict(${dicts});
+
 
 const orderList = ref([]);
 const open = ref(false);
@@ -384,7 +384,7 @@ const { queryParams, form, rules } = toRefs(data);
 function getList() {
   loading.value = true;
   listOrder(queryParams.value).then(response => {
-    orderList.value = response.rows;
+    orderList.value = response.data.list;
     total.value = response.total;
     loading.value = false;
   });
