@@ -125,7 +125,7 @@ const defaultProps = {
   children: 'children',
   label: 'label',
   disabled: function (data, node) {
-    if (data.userId) {
+    if (data.nodeRelUserId) {
       return false
     } else {
       return true

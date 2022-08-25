@@ -78,7 +78,7 @@ export default defineComponent({
       required: true
     }
   },
-  // emits: ['newBtnClick', 'editBtnClick'],
+  emits: ['editBtnClick'],
   setup(props, {emit}) {
     let store = null
     store = tableStore.get(props.storeConfig.storeName)() || null
@@ -133,6 +133,7 @@ export default defineComponent({
     const handleEditClick = (item) => {
       emit('editBtnClick', item)
     }
+
     defineExpose({
       getSelectedValue
     })

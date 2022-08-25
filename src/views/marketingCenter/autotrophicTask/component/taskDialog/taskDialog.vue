@@ -1,11 +1,13 @@
 <template>
   <div class="outBox">
-    <el-dialog :width="dialogWidth" v-model="dialogFormVisible" :close-on-click-modal="false"
+    <el-dialog :append-to-body="false" :width="dialogWidth" v-model="dialogFormVisible"
+               :close-on-click-modal="false"
                :title="title"
                style="width: 80vw">
       <template v-if="step==1">
-        <el-form :model="activeTaskInfo" label-width="100px" label-position="left">
-          <el-form-item class="label" label="激励活动名称" label-width="50">
+        <el-form v-loading="isShowLoading" ref="baseForm" :model="activeTaskInfo" :rules="ruleForm" label-width="100px"
+                 label-position="left">
+          <el-form-item class="label" label="激励活动名称" label-width="50" prop="name">
             <el-input clearable placeholder="请输入" v-model="activeTaskInfo.name" autocomplete="off"/>
           </el-form-item>
           <el-form-item class="label" label="激励活动类型">
@@ -14,7 +16,7 @@
               <el-option label="激励销售" value="beijing"/>
             </el-select>
           </el-form-item>
-          <el-form-item class="label" label="激励负责人">
+          <el-form-item class="label" label="激励负责人" prop="responsibleUsers">
             <!--激励负责人数据回显-->
             <div class="responsibilityPeople">
               <el-tag
@@ -37,7 +39,7 @@
                           ref="selectPeopleResponsibility"></selectDialog>
 
           </el-form-item>
-          <el-form-item class="label" label="激励参与人">
+          <el-form-item class="label" label="激励参与人" prop="participants">
 
             <!--激励参与数据回显-->
             <div class="responsibilityPeople">
@@ -77,7 +79,6 @@
                 value-format="YYYY-MM-DD HH:mm:ss"
                 start-placeholder="开始时间"
                 end-placeholder="结束时间"
-                :default-time="defaultTime1"
             />
           </el-form-item>
           <el-form-item class="label" label="任务海报">
@@ -116,7 +117,7 @@
               </div>
             </el-upload>
           </el-form-item>
-          <el-form-item class="label" label="任务描述">
+          <el-form-item class="label" label="任务描述" prop="comment">
             <el-input
                 v-model="activeTaskInfo.comment"
                 :autosize="{ minRows: 2, maxRows: 4 }"
@@ -224,7 +225,7 @@
 
 <script setup>
 import {Plus, Search, Picture, RefreshRight} from '@element-plus/icons-vue'
-import {reactive, ref, defineProps, getCurrentInstance, onMounted, onBeforeUpdate, watch} from 'vue'
+import {reactive, ref, defineProps, getCurrentInstance, onMounted, onBeforeUpdate, watch, nextTick} from 'vue'
 import ParticipantDialog from '../participantDialog/index.vue'
 import {useSelectionRangeFunction} from '@/hooks/use-selectRange.js'
 import {useSelectDialogFunction} from '@/hooks/use-selectDialog.js'
@@ -238,6 +239,7 @@ import store from '@/components/goodsRulesConfig/store.vue'
 import Brand from "@/components/goodsRulesConfig/brand";
 import addRewardRulesDialog from '@/components/addRewardRulesDialog/addRewardRulesDialog.vue'
 import useAutotrophicTaskStore from "@/store/modules/autotrophicTask.js";
+
 import {ElMessage} from 'element-plus'
 //初始化任务的基本信息
 let taskInfo = reactive({})
@@ -250,16 +252,53 @@ const close = function () {
   storeInstanceArray.value = []
   singleInstanceArray.value = []
   dialogFormVisible.value = false
-
+  baseForm.value.resetFields()
+  watchInstance()
 }
+let responsibleUsersRule = (rule, value, callback) => {
+  if (activeTaskInfo.value.responsibleUsers.length == 0) {
+    callback(new Error("请选择激励活动负责人"));
+  } else {
+    callback();
+  }
+};
+let participantsRule = (rule, value, callback) => {
+  if (activeTaskInfo.value.participants.length == 0) {
+    callback(new Error("请选择激励活动参与人"));
+  } else {
+    callback();
+  }
+};
+let timeLimiteRule = (rule, value, callback) => {
+  if (activeTaskInfo.value.timeLimite.length == 0) {
+    callback(new Error("请选择任务时段"));
+  } else {
+    callback();
+  }
+};
+//规则
+const ruleForm = {
+  name: [{required: true, message: "请输入活动名称", trigger: "change"}],
+  rewardType: [{required: true, message: "请选择活动类型", trigger: "change"}],
+  responsibleUsers: [{required: true, validator: responsibleUsersRule}],
+  participants: [{required: true, validator: participantsRule}],
+  comment: [{required: true, message: "请输入任务描述", trigger: "change"}],
+  timeLimite: [{required: true, validator: timeLimiteRule}],
+}
+let baseForm = ref('')
+
+
 const responsibleCallBack = function (data) {
-  console.log("回调执行")
+  //执行校验
   activeTaskInfo.value.responsibleUsers = data
+  baseForm.value.validateField(['responsibleUsers'])
+
 }
 
 const participateCallBack = function (data) {
-  console.log("参与人")
+  //执行校验
   activeTaskInfo.value.participants = data
+  baseForm.value.validateField(['participants'])
 }
 
 const props = defineProps({
@@ -274,18 +313,21 @@ const props = defineProps({
     required: false
   }
 });
-
-
+let isShowLoading = ref(false)
 //监听传入数据进行初始化活动数据
-watch(() => props.dataInfo, () => {
+let watchInstance = watch(() => props.dataInfo, () => {
+  isShowLoading.value = true
   innitTaskInfo(props.dataInfo)
-})
+}, {immediate: false})
+
+
 let innitTaskInfo = function (data) {
   let store = useAutotrophicTaskStore()
   //查询任务详情
   store.getAutotrophicTaskDetail(data.eventId).then(res => {
     activeTaskInfo.value = {...activeTaskInfo, ...store.ActiveTaskDetail}
     activeTaskInfo.value.timeLimite = [activeTaskInfo.value.beginTime, activeTaskInfo.value.endTime]
+    isShowLoading.value = false
   })
 
 }
@@ -370,6 +412,7 @@ const step = ref(null)
 const showDialog = function () {
   dialogFormVisible.value = true
   step.value = 1
+  innitTaskInfo(props.dataInfo)
 }
 //加减步骤操作
 const cutStep = function (param) {
@@ -377,12 +420,19 @@ const cutStep = function (param) {
     if (step.value > 1) {
       step.value--
       dialogWidth.value = "40vw"
+
     }
   } else {
-    if (step.value < 2) {
-      step.value++
-      dialogWidth.value = "90vw"
-    }
+    baseForm.value.validate((valid) => {
+      if (valid) {
+        if (step.value < 2) {
+          step.value++
+          dialogWidth.value = "90vw"
+
+        }
+      }
+    })
+
   }
 }
 //活动类型选择
@@ -440,9 +490,7 @@ let brandInstanceArray = ref([])
 let brandInstance = function (itemInstance) {
   brandInstanceArray.value.push(itemInstance)
 }
-let arrat = ref([
-  {}
-])
+
 const subMit = function () {
   // loopExecution(brandInstanceArray.value)
   // loopExecution(storeInstanceArray.value)
@@ -471,15 +519,18 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-.label::v-deep( .el-form-item__label) {
-  color: #606266;
-  font-weight: 600;
-  justify-content: flex-start !important;
-}
+
 
 .outBox {
   display: flex;
   flex-direction: column;
+
+  .label::v-deep( .el-form-item__label) {
+    color: #606266;
+    font-weight: 600;
+    margin-bottom: 5px;
+    justify-content: flex-start !important;
+  }
 
   .step_two_outBox {
     .topHeader {

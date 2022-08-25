@@ -1,7 +1,7 @@
 <template>
   <div class="outBox">
     <div class="dailog">
-      <taskDialog :dataInfo="activeDetail" ref="Dialog" :title="title"></taskDialog>
+        <taskDialog :dataInfo="activeDetail" ref="Dialog" :title="title"></taskDialog>
     </div>
 
     <div class="desc">
