@@ -1,7 +1,7 @@
 <template>
   <div class="outBox">
     <div class="dialogTotal">
-      <addOrganization ref="addOrganizationInstance"></addOrganization>
+      <addOrganization :selectTreeData="depTreeData" @loadDepTree="loadDepTree" ref="addOrganizationInstance"></addOrganization>
       <addMember ref="addMemberInstance"></addMember>
     </div>
     <div class="left_tree">
@@ -26,19 +26,19 @@
         >
           <el-tab-pane label="组织机构" name="first">
             <el-tree
-                :data="data"
-                show-checkbox
+                v-model="queryUsersByDeptParams.parentId"
+                :data="depTreeData"
                 node-key="id"
-                :default-expanded-keys="[2, 3]"
-                :default-checked-keys="[5]"
-                :props="defaultProps"
+                check-strictly
+                check-on-click-node
+                default-expand-all
             />
 
 
           </el-tab-pane>
           <el-tab-pane label="业务机构" name="second">
             <el-tree
-                :data="data"
+                :data="depTreeData"
                 show-checkbox
                 node-key="id"
                 :default-expanded-keys="[2, 3]"
@@ -77,83 +77,50 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import {ref,onMounted,reactive} from 'vue'
 import {CloseBold, Search} from '@element-plus/icons-vue'
 import pageContent from "@/components/page-content/page-content";
 import {contentTableConfig} from './config/tableConfig'
 import addOrganization from "./component/addOrganization.vue"
 import addMember from './component/addMember.vue'
 import {addressBook} from './config/storeConfig.js'
+import {findDeptByTree} from "@/api/company/addressBook";
 
 const organization = ref('first')
+const depTreeData = ref([])
+const handleEditData = ()=>{
 
-const defaultProps = {
-  children: 'children',
-  label: 'label',
 }
-console.log("执行")
-const data = [
-  {
-    id: 1,
-    label: 'Level one 1',
-    children: [
-      {
-        id: 4,
-        label: 'Level two 1-1',
-        children: [
-          {
-            id: 9,
-            label: 'Level three 1-1-1',
-          },
-          {
-            id: 10,
-            label: 'Level three 1-1-2',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 2,
-    label: 'Level one 2',
-    children: [
-      {
-        id: 5,
-        label: 'Level two 2-1',
-      },
-      {
-        id: 6,
-        label: 'Level two 2-2',
-      },
-    ],
-  },
-  {
-    id: 3,
-    label: 'Level one 3',
-    children: [
-      {
-        id: 7,
-        label: 'Level two 3-1',
-      },
-      {
-        id: 8,
-        label: 'Level two 3-2',
-      },
-    ],
-  },
-]
-
 let addOrganizationInstance = ref('')
 //添加机构
 const addOrganizationFunction = function () {
   addOrganizationInstance.value.showDialog()
 }
-
 let addMemberInstance = ref('')
 //添加成员
 const addMemberFunction = function () {
   addMemberInstance.value.showDialog()
 }
+//加载部门树
+const loadDepTree=()=>{
+  findDeptByTree({}).then(res=>{
+    depTreeData.value = res.data.list
+  })
+}
+// 查询部门人员
+const  queryUsersByDeptParams=reactive({
+  depId:''
+})
+const queryUsersByDept=()=>{
+
+}
+
+
+
+
+onMounted(()=>{
+  loadDepTree({})
+})
 </script>
 
 <style lang="scss" scoped>
