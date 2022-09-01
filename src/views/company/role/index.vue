@@ -1,9 +1,9 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" v-show="showSearch" :inline="true">
-         <el-form-item label="角色名称" prop="roleName">
+         <el-form-item label="角色名称" prop="name">
             <el-input
-               v-model="queryParams.roleName"
+               v-model="queryParams.name"
                placeholder="请输入角色名称"
                clearable
                style="width: 240px"
@@ -95,16 +95,16 @@
       <el-table v-loading="loading" :data="roleList" @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="55" align="center" />
          <el-table-column label="角色编号" prop="roleId" width="120" />
-         <el-table-column label="角色名称" prop="roleName" :show-overflow-tooltip="true" width="150" />
+         <el-table-column label="角色名称" prop="name" :show-overflow-tooltip="true" width="150" />
          <el-table-column label="权限字符" prop="roleKey" :show-overflow-tooltip="true" width="150" />
-         <el-table-column label="显示顺序" prop="roleSort" width="100" />
+         <el-table-column label="显示顺序" prop="sort" width="100" />
          <el-table-column label="状态" align="center" width="100">
             <template #default="scope">
                <el-switch
                   v-model="scope.row.status"
-                  active-value="0"
-                  inactive-value="1"
-                  @change="handleStatusChange(scope.row)"
+                  :active-value="1"
+                  :inactive-value="0"
+                  @click="handleStatusChange(scope.row)"
                ></el-switch>
             </template>
          </el-table-column>
@@ -160,10 +160,10 @@
       />
 
       <!-- 添加或修改角色配置对话框 -->
-      <el-dialog :title="title" v-model="open" width="500px" append-to-body>
+      <el-dialog :title="title" v-model="open" width="50%" append-to-body>
          <el-form ref="roleRef" :model="form" :rules="rules" label-width="100px">
-            <el-form-item label="角色名称" prop="roleName">
-               <el-input v-model="form.roleName" placeholder="请输入角色名称" />
+            <el-form-item label="角色名称" prop="name">
+               <el-input v-model="form.name" placeholder="请输入角色名称" />
             </el-form-item>
             <el-form-item prop="roleKey">
                <template #label>
@@ -176,8 +176,8 @@
                </template>
                <el-input v-model="form.roleKey" placeholder="请输入权限字符" />
             </el-form-item>
-            <el-form-item label="角色顺序" prop="roleSort">
-               <el-input-number v-model="form.roleSort" controls-position="right" :min="0" />
+            <el-form-item label="角色顺序" prop="sort">
+               <el-input-number v-model="form.sort" controls-position="right" :min="0" />
             </el-form-item>
             <el-form-item label="状态">
                <el-radio-group v-model="form.status">
@@ -188,6 +188,24 @@
                   >{{ dict.label }}</el-radio>
                </el-radio-group>
             </el-form-item>
+           <el-form-item label="超级管理员">
+             <el-radio-group v-model="form.admin">
+               <el-radio
+                   v-for="dict in sys_yes_no"
+                   :key="dict.value"
+                   :label="dict.value"
+               >{{ dict.label }}</el-radio>
+             </el-radio-group>
+           </el-form-item>
+           <el-form-item label="系统内置">
+             <el-radio-group v-model="form.sysDefault">
+               <el-radio
+                   v-for="dict in sys_yes_no"
+                   :key="dict.value"
+                   :label="dict.value"
+               >{{ dict.label }}</el-radio>
+             </el-radio-group>
+           </el-form-item>
             <el-form-item label="菜单权限">
                <el-checkbox v-model="menuExpand" @change="handleCheckedTreeExpand($event, 'menu')">展开/折叠</el-checkbox>
                <el-checkbox v-model="menuNodeAll" @change="handleCheckedTreeNodeAll($event, 'menu')">全选/全不选</el-checkbox>
@@ -197,14 +215,14 @@
                   :data="menuOptions"
                   show-checkbox
                   ref="menuRef"
-                  node-key="id"
+                  node-key="menuid"
                   :check-strictly="!form.menuCheckStrictly"
                   empty-text="加载中，请稍候"
-                  :props="{ label: 'label', children: 'children' }"
+                  :props="{ label: 'menuName', children: 'children' }"
                ></el-tree>
             </el-form-item>
             <el-form-item label="备注">
-               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
+               <el-input v-model="form.roleDesc" type="textarea" placeholder="请输入内容"></el-input>
             </el-form-item>
          </el-form>
          <template #footer>
@@ -216,10 +234,10 @@
       </el-dialog>
 
       <!-- 分配角色数据权限对话框 -->
-      <el-dialog :title="title" v-model="openDataScope" width="500px" append-to-body>
+      <el-dialog :title="title" v-model="openDataScope" width="50%" append-to-body>
          <el-form :model="form" label-width="80px">
             <el-form-item label="角色名称">
-               <el-input v-model="form.roleName" :disabled="true" />
+               <el-input v-model="form.name" :disabled="true" />
             </el-form-item>
             <el-form-item label="权限字符">
                <el-input v-model="form.roleKey" :disabled="true" />
@@ -263,12 +281,12 @@
 
 <script setup name="Role">
 import { addRole, changeRoleStatus, dataScope, delRole, getRole, listRole, updateRole } from "@/api/system/role";
-import { roleMenuTreeselect, treeselect as menuTreeselect } from "@/api/system/menu";
+import {wecomRoleMenuTreeselect, treeselect as menuTreeselect } from "@/api/system/menu";
 import { treeselect as deptTreeselect, roleDeptTreeselect } from "@/api/system/dept";
 
 const router = useRouter();
 const { proxy } = getCurrentInstance();
-const { sys_normal_disable } = proxy.useDict("sys_normal_disable");
+const { sys_normal_disable,sys_yes_no } = proxy.useDict("sys_normal_disable","sys_yes_no");
 
 const roleList = ref([]);
 const open = ref(false);
@@ -304,14 +322,14 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
-    roleName: undefined,
+    name: undefined,
     roleKey: undefined,
     status: undefined
   },
   rules: {
-    roleName: [{ required: true, message: "角色名称不能为空", trigger: "blur" }],
+    name: [{ required: true, message: "角色名称不能为空", trigger: "blur" }],
     roleKey: [{ required: true, message: "权限字符不能为空", trigger: "blur" }],
-    roleSort: [{ required: true, message: "角色顺序不能为空", trigger: "blur" }]
+    sort: [{ required: true, message: "角色顺序不能为空", trigger: "blur" }]
   },
 });
 
@@ -321,7 +339,7 @@ const { queryParams, form, rules } = toRefs(data);
 function getList() {
   loading.value = true;
   listRole(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
-    roleList.value = response.rows;
+    roleList.value = response.data.list;
     total.value = response.total;
     loading.value = false;
   });
@@ -361,13 +379,14 @@ function handleSelectionChange(selection) {
 }
 /** 角色状态修改 */
 function handleStatusChange(row) {
-  let text = row.status === "0" ? "启用" : "停用";
-  proxy.$modal.confirm('确认要"' + text + '""' + row.roleName + '"角色吗?').then(function () {
+  console.log('状态', row.status)
+  let text = row.status === 1 ? "启用" : "停用";
+  proxy.$modal.confirm('确认要"' + text + '""' + row.name + '"角色吗?').then(function () {
     return changeRoleStatus(row.roleId, row.status);
   }).then(() => {
     proxy.$modal.msgSuccess(text + "成功");
   }).catch(function () {
-    row.status = row.status === "0" ? "1" : "0";
+    row.status = row.status === 0 ? 1 : 0;
   });
 }
 /** 更多操作 */
@@ -385,7 +404,7 @@ function handleCommand(command, row) {
 }
 /** 分配用户 */
 function handleAuthUser(row) {
-  router.push("/system/role-auth/user/" + row.roleId);
+  router.push({path:"/enterpriseCenter/company/role/authuser",query:{roleId: row.roleId}});
 }
 /** 查询菜单树结构 */
 function getMenuTreeselect() {
@@ -413,15 +432,17 @@ function reset() {
   deptNodeAll.value = false;
   form.value = {
     roleId: undefined,
-    roleName: undefined,
+    name: undefined,
     roleKey: undefined,
-    roleSort: 0,
-    status: "0",
+    sort: 0,
+    status: 1,
     menuIds: [],
     deptIds: [],
+    admin:0,
     menuCheckStrictly: true,
     deptCheckStrictly: true,
-    remark: undefined
+    roleDesc: undefined,
+    sysDefault:0,
   };
   proxy.resetForm("roleRef");
 }
@@ -436,19 +457,23 @@ function handleAdd() {
 function handleUpdate(row) {
   reset();
   const roleId = row.roleId || ids.value;
-  const roleMenu = getRoleMenuTreeselect(roleId);
   getRole(roleId).then(response => {
     form.value = response.data;
-    form.value.roleSort = Number(form.value.roleSort);
+    form.value.sort = Number(form.value.sort);
     open.value = true;
     nextTick(() => {
-      roleMenu.then((res) => {
-        let checkedKeys = res.checkedKeys;
-        checkedKeys.forEach((v) => {
-          nextTick(() => {
-            menuRef.value.setChecked(v, true, false);
+      menuTreeselect().then((res) => {
+        menuOptions.value = res.data
+        wecomRoleMenuTreeselect(roleId).then(res=>{
+          let checkedKeys = res.data.map(item=>{
+            return item.menuId
+          })
+          checkedKeys.forEach((v) => {
+            nextTick(() => {
+              menuRef.value.setChecked(v, true, false);
+            });
           });
-        });
+        })
       });
     });
     title.value = "修改角色";
@@ -456,7 +481,7 @@ function handleUpdate(row) {
 }
 /** 根据角色ID查询菜单树结构 */
 function getRoleMenuTreeselect(roleId) {
-  return roleMenuTreeselect(roleId).then(response => {
+  return wecomRoleMenuTreeselect(roleId).then(response => {
     menuOptions.value = response.menus;
     return response;
   });
@@ -473,12 +498,12 @@ function handleCheckedTreeExpand(value, type) {
   if (type == "menu") {
     let treeList = menuOptions.value;
     for (let i = 0; i < treeList.length; i++) {
-      menuRef.value.store.nodesMap[treeList[i].id].expanded = value;
+      menuRef.value.store.nodesMap[treeList[i].menuId].expanded = value;
     }
   } else if (type == "dept") {
     let treeList = deptOptions.value;
     for (let i = 0; i < treeList.length; i++) {
-      deptRef.value.store.nodesMap[treeList[i].id].expanded = value;
+      deptRef.value.store.nodesMap[treeList[i].menuId].expanded = value;
     }
   }
 }
@@ -576,5 +601,5 @@ function cancelDataScope() {
   reset();
 }
 
-getList();
+handleQuery();
 </script>

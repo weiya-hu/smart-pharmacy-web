@@ -214,7 +214,8 @@ const { queryParams, form, rules } = toRefs(data);
 /** 查询门店销售的产品数据从连锁产品库中继承列表 */
 function getList() {
   loading.value = true;
-  listStore(queryParams.value).then(response => {
+  // queryParams.value
+  listStore({storeIds:[1]}).then(response => {
     storeList.value = response.rows;
     total.value = response.total;
     loading.value = false;

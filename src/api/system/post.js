@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询岗位列表
 export function listPost(query) {
   return request({
-    url: '/system/post/list',
+    url: '/wecom/corpinfo/job/page',
     method: 'get',
     params: query
   })
@@ -12,15 +12,16 @@ export function listPost(query) {
 // 查询岗位详细
 export function getPost(postId) {
   return request({
-    url: '/system/post/' + postId,
-    method: 'get'
+    url: '/wecom/corpinfo/job/get',
+    method: 'get',
+    params:{id:postId}
   })
 }
 
 // 新增岗位
 export function addPost(data) {
   return request({
-    url: '/system/post',
+    url: '/wecom/corpinfo/job/create',
     method: 'post',
     data: data
   })
@@ -29,7 +30,7 @@ export function addPost(data) {
 // 修改岗位
 export function updatePost(data) {
   return request({
-    url: '/system/post',
+    url: '/wecom/corpinfo/job/update',
     method: 'put',
     data: data
   })
@@ -38,7 +39,8 @@ export function updatePost(data) {
 // 删除岗位
 export function delPost(postId) {
   return request({
-    url: '/system/post/' + postId,
-    method: 'delete'
+    url: '/wecom/corpinfo/job/delete',
+    method: 'delete',
+    params:{id:postId}
   })
 }

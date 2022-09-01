@@ -1,24 +1,24 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-         <el-form-item label="岗位编码" prop="postCode">
+         <el-form-item label="岗位编码" prop="jobId">
             <el-input
-               v-model="queryParams.postCode"
+               v-model="queryParams.jobId"
                placeholder="请输入岗位编码"
                clearable
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="岗位名称" prop="postName">
+         <el-form-item label="岗位名称" prop="name">
             <el-input
-               v-model="queryParams.postName"
+               v-model="queryParams.name"
                placeholder="请输入岗位名称"
                clearable
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="状态" prop="status">
-            <el-select v-model="queryParams.status" placeholder="岗位状态" clearable>
+         <el-form-item label="状态" prop="state">
+            <el-select v-model="queryParams.state" placeholder="岗位状态" clearable>
                <el-option
                   v-for="dict in sys_normal_disable"
                   :key="dict.value"
@@ -77,13 +77,12 @@
 
       <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="55" align="center" />
-         <el-table-column label="岗位编号" align="center" prop="postId" />
-         <el-table-column label="岗位编码" align="center" prop="postCode" />
-         <el-table-column label="岗位名称" align="center" prop="postName" />
-         <el-table-column label="岗位排序" align="center" prop="postSort" />
-         <el-table-column label="状态" align="center" prop="status">
+         <el-table-column label="岗位编号" align="center" prop="jobId" />
+         <el-table-column label="岗位名称" align="center" prop="name" />
+         <el-table-column label="岗位排序" align="center" prop="sort" />
+         <el-table-column label="状态" align="center" prop="state">
             <template #default="scope">
-               <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
+               <dict-tag :options="sys_normal_disable" :value="scope.row.state" />
             </template>
          </el-table-column>
          <el-table-column label="创建时间" align="center" prop="createTime" width="180">
@@ -120,17 +119,14 @@
       <!-- 添加或修改岗位对话框 -->
       <el-dialog :title="title" v-model="open" width="500px" append-to-body>
          <el-form ref="postRef" :model="form" :rules="rules" label-width="80px">
-            <el-form-item label="岗位名称" prop="postName">
-               <el-input v-model="form.postName" placeholder="请输入岗位名称" />
+            <el-form-item label="岗位名称" prop="name">
+               <el-input v-model="form.name" placeholder="请输入岗位名称" />
             </el-form-item>
-            <el-form-item label="岗位编码" prop="postCode">
-               <el-input v-model="form.postCode" placeholder="请输入编码名称" />
+            <el-form-item label="岗位顺序" prop="sort">
+               <el-input-number v-model.number="form.sort" controls-position="right" :min="0" />
             </el-form-item>
-            <el-form-item label="岗位顺序" prop="postSort">
-               <el-input-number v-model="form.postSort" controls-position="right" :min="0" />
-            </el-form-item>
-            <el-form-item label="岗位状态" prop="status">
-               <el-radio-group v-model="form.status">
+            <el-form-item label="岗位状态" prop="state">
+               <el-radio-group v-model.number="form.state">
                   <el-radio
                      v-for="dict in sys_normal_disable"
                      :key="dict.value"
@@ -157,7 +153,6 @@ import { listPost, addPost, delPost, getPost, updatePost } from "@/api/system/po
 
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable } = proxy.useDict("sys_normal_disable");
-
 const postList = ref([]);
 const open = ref(false);
 const loading = ref(true);
@@ -173,14 +168,13 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
-    postCode: undefined,
-    postName: undefined,
-    status: undefined
+    name: undefined,
+    state: 1,
+    jobId:'',
   },
   rules: {
-    postName: [{ required: true, message: "岗位名称不能为空", trigger: "blur" }],
-    postCode: [{ required: true, message: "岗位编码不能为空", trigger: "blur" }],
-    postSort: [{ required: true, message: "岗位顺序不能为空", trigger: "blur" }],
+    name: [{ required: true, message: "岗位名称不能为空", trigger: "blur" }],
+    sort: [{ required: true, message: "岗位顺序不能为空", trigger: "blur" }],
   }
 });
 
@@ -190,7 +184,7 @@ const { queryParams, form, rules } = toRefs(data);
 function getList() {
   loading.value = true;
   listPost(queryParams.value).then(response => {
-    postList.value = response.rows;
+    postList.value = response.data.list;
     total.value = response.total;
     loading.value = false;
   });
@@ -203,11 +197,10 @@ function cancel() {
 /** 表单重置 */
 function reset() {
   form.value = {
-    postId: undefined,
-    postCode: undefined,
-    postName: undefined,
-    postSort: 0,
-    status: "0",
+    jobId: undefined,
+    name: undefined,
+    sort: 99,
+    state: 1,
     remark: undefined
   };
   proxy.resetForm("postRef");
@@ -224,7 +217,7 @@ function resetQuery() {
 }
 /** 多选框选中数据 */
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.postId);
+  ids.value = selection.map(item => item.jobId);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -237,8 +230,8 @@ function handleAdd() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
-  const postId = row.postId || ids.value;
-  getPost(postId).then(response => {
+  const jobId = row.jobId || ids.value;
+  getPost(jobId).then(response => {
     form.value = response.data;
     open.value = true;
     title.value = "修改岗位";
@@ -248,7 +241,7 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["postRef"].validate(valid => {
     if (valid) {
-      if (form.value.postId != undefined) {
+      if (form.value.jobId != undefined) {
         updatePost(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
@@ -266,9 +259,9 @@ function submitForm() {
 }
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const postIds = row.postId || ids.value;
-  proxy.$modal.confirm('是否确认删除岗位编号为"' + postIds + '"的数据项？').then(function() {
-    return delPost(postIds);
+  const jobIds = row.jobId || ids.value;
+  proxy.$modal.confirm('是否确认删除岗位编号为"' + jobIds + '"的数据项？').then(function() {
+    return delPost(jobIds);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");
@@ -280,6 +273,5 @@ function handleExport() {
     ...queryParams.value
   }, `post_${new Date().getTime()}.xlsx`);
 }
-
 getList();
 </script>

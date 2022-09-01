@@ -46,9 +46,9 @@
                      @keyup.enter="handleQuery"
                   />
                </el-form-item>
-               <el-form-item label="状态" prop="status">
+               <el-form-item label="状态" prop="enable">
                   <el-select
-                     v-model="queryParams.status"
+                     v-model="queryParams.enable"
                      placeholder="用户状态"
                      clearable
                      style="width: 240px"
@@ -132,16 +132,16 @@
                <el-table-column type="selection" width="50" align="center" />
                <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" />
                <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="用户昵称" align="center" key="nickName" prop="nickName" v-if="columns[2].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="部门" align="center" key="deptName" prop="dept.deptName" v-if="columns[3].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber" v-if="columns[4].visible" width="120" />
-               <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
+               <el-table-column label="企业微信ID" align="center" key="weUserId" prop="weUserId" v-if="columns[2].visible" :show-overflow-tooltip="true" />
+               <el-table-column label="部门" align="center" key="deptname" prop="deptname" v-if="columns[3].visible" :show-overflow-tooltip="true" />
+               <el-table-column label="手机号码" align="center" key="mobile" prop="mobile" v-if="columns[4].visible" width="120" />
+               <el-table-column label="状态" align="center" key="enable" v-if="columns[5].visible">
                   <template #default="scope">
                      <el-switch
-                        v-model="scope.row.status"
-                        active-value="0"
-                        inactive-value="1"
-                        @change="handleStatusChange(scope.row)"
+                        v-model="scope.row.enable"
+                        :active-value="1"
+                        :inactive-value="0"
+                        @click="handleStatusChange(scope.row)"
                      ></el-switch>
                   </template>
                </el-table-column>
@@ -198,7 +198,7 @@
       </el-row>
 
       <!-- 添加或修改用户配置对话框 -->
-      <el-dialog :title="title" v-model="open" width="600px" append-to-body>
+      <el-dialog :title="title" v-model="open" width="50%" append-to-body>
          <el-form :model="form" :rules="rules" ref="userRef" label-width="80px">
             <el-row>
                <el-col :span="12">
@@ -207,9 +207,9 @@
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="归属部门" prop="deptId">
+                  <el-form-item label="归属部门" prop="department">
                      <el-tree-select
-                        v-model="form.deptId"
+                        v-model="form.department"
                         :data="deptOptions"
                         :props="{ value: 'id', label: 'label', children: 'children' }"
                         value-key="id"
@@ -258,7 +258,7 @@
                </el-col>
                <el-col :span="12">
                   <el-form-item label="状态">
-                     <el-radio-group v-model="form.status">
+                     <el-radio-group v-model="form.enable">
                         <el-radio
                            v-for="dict in sys_normal_disable"
                            :key="dict.value"
@@ -269,28 +269,28 @@
                </el-col>
             </el-row>
             <el-row>
-               <el-col :span="12">
-                  <el-form-item label="岗位">
-                     <el-select v-model="form.postIds" multiple placeholder="请选择">
-                        <el-option
-                           v-for="item in postOptions"
-                           :key="item.postId"
-                           :label="item.postName"
-                           :value="item.postId"
-                           :disabled="item.status == 1"
-                        ></el-option>
-                     </el-select>
-                  </el-form-item>
-               </el-col>
+<!--               <el-col :span="12">-->
+<!--                  <el-form-item label="岗位">-->
+<!--                     <el-select v-model="form.postIds" multiple placeholder="请选择">-->
+<!--                        <el-option-->
+<!--                           v-for="item in postOptions"-->
+<!--                           :key="item.jobId"-->
+<!--                           :label="item.name"-->
+<!--                           :value="item.jobId"-->
+<!--                           :disabled="item.state == 0"-->
+<!--                        ></el-option>-->
+<!--                     </el-select>-->
+<!--                  </el-form-item>-->
+<!--               </el-col>-->
                <el-col :span="12">
                   <el-form-item label="角色">
                      <el-select v-model="form.roleIds" multiple placeholder="请选择">
                         <el-option
                            v-for="item in roleOptions"
                            :key="item.roleId"
-                           :label="item.roleName"
+                           :label="item.name"
                            :value="item.roleId"
-                           :disabled="item.status == 1"
+                           :disabled="item.status == 0"
                         ></el-option>
                      </el-select>
                   </el-form-item>
@@ -313,7 +313,7 @@
       </el-dialog>
 
       <!-- 用户导入对话框 -->
-      <el-dialog :title="upload.title" v-model="upload.open" width="400px" append-to-body>
+      <el-dialog :title="upload.title" v-model="upload.open" width="50%" append-to-body>
          <el-upload
             ref="uploadRef"
             :limit="1"
@@ -351,6 +351,8 @@
 <script setup name="User">
 import { getToken } from "@/utils/auth";
 import { treeselect } from "@/api/system/dept";
+import { listRole} from "@/api/system/role";
+import { listPost} from "@/api/system/post";
 import { changeUserStatus, listUser, resetUserPwd, delUser, getUser, updateUser, addUser } from "@/api/system/user";
 
 const router = useRouter();
@@ -405,8 +407,8 @@ const data = reactive({
     pageSize: 10,
     userName: undefined,
     phonenumber: undefined,
-    status: undefined,
-    deptId: undefined
+    enable: undefined,
+    department: undefined
   },
   rules: {
     userName: [{ required: true, message: "用户名称不能为空", trigger: "blur" }, { min: 2, max: 20, message: "用户名称长度必须介于 2 和 20 之间", trigger: "blur" }],
@@ -418,6 +420,15 @@ const data = reactive({
 });
 
 const { queryParams, form, rules } = toRefs(data);
+//加载角色、职务
+const loadRolePost = ()=>{
+  listRole().then(res=>{
+    roleOptions.value = res.data.list
+  })
+  listPost().then(res=>{
+    postOptions.value = res.data.list
+  })
+}
 
 /** 通过条件过滤节点  */
 const filterNode = (value, data) => {
@@ -431,7 +442,7 @@ watch(deptName, val => {
 /** 查询部门下拉树结构 */
 function getTreeselect() {
   treeselect().then(response => {
-    deptOptions.value = response.data;
+    deptOptions.value = response.data.list;
   });
 };
 /** 查询用户列表 */
@@ -439,13 +450,17 @@ function getList() {
   loading.value = true;
   listUser(proxy.addDateRange(queryParams.value, dateRange.value)).then(res => {
     loading.value = false;
-    userList.value = res.rows;
-    total.value = res.total;
+    userList.value = res.data.list;
+    total.value = Number(res.data.total);
   });
 };
 /** 节点单击事件 */
 function handleNodeClick(data) {
-  queryParams.value.deptId = data.id;
+  if(data.parentId==null){
+    queryParams.value.department = null
+  }else{
+    queryParams.value.department = data.id;
+  }
   handleQuery();
 };
 /** 搜索按钮操作 */
@@ -477,13 +492,13 @@ function handleExport() {
 };
 /** 用户状态修改  */
 function handleStatusChange(row) {
-  let text = row.status === "0" ? "启用" : "停用";
+  let text = row.enable === 1 ? "启用" : "停用";
   proxy.$modal.confirm('确认要"' + text + '""' + row.userName + '"用户吗?').then(function () {
-    return changeUserStatus(row.userId, row.status);
+    return changeUserStatus(row.userId, row.enable);
   }).then(() => {
     proxy.$modal.msgSuccess(text + "成功");
   }).catch(function () {
-    row.status = row.status === "0" ? "1" : "0";
+    row.enable = row.enable === 1 ? 1 : 0;
   });
 };
 /** 更多操作 */
@@ -502,7 +517,7 @@ function handleCommand(command, row) {
 /** 跳转角色分配 */
 function handleAuthRole(row) {
   const userId = row.userId;
-  router.push("/system/user-auth/role/" + userId);
+  router.push({path:"/enterpriseCenter/company/users/authRole",query:{userId:userId}});
 };
 /** 重置密码按钮操作 */
 function handleResetPwd(row) {
@@ -563,14 +578,14 @@ function initTreeData() {
 function reset() {
   form.value = {
     userId: undefined,
-    deptId: undefined,
+    department: undefined,
     userName: undefined,
     nickName: undefined,
     password: undefined,
     phonenumber: undefined,
     email: undefined,
     sex: undefined,
-    status: "0",
+    enable: 1,
     remark: undefined,
     postIds: [],
     roleIds: []
@@ -586,13 +601,9 @@ function cancel() {
 function handleAdd() {
   reset();
   initTreeData();
-  getUser().then(response => {
-    postOptions.value = response.posts;
-    roleOptions.value = response.roles;
-    open.value = true;
-    title.value = "添加用户";
-    form.value.password = initPassword.value;
-  });
+  open.value = true;
+  title.value = "添加用户";
+  form.value.password = initPassword.value;
 };
 /** 修改按钮操作 */
 function handleUpdate(row) {
@@ -633,4 +644,5 @@ function submitForm() {
 
 getTreeselect();
 getList();
+loadRolePost()
 </script>

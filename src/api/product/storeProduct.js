@@ -3,16 +3,16 @@ import request from '@/utils/request'
 // 查询门店销售的产品数据从连锁产品库中继承列表
 export function listStore(query) {
     return request({
-        url: '/wecom/store/list',
-        method: 'get',
-        params: query
+        url: '/product/store/list',
+        method: 'POST',
+        data:query
     })
 }
 
 // 查询门店销售的产品数据从连锁产品库中继承详细
 export function getStore(productChainid) {
     return request({
-        url: '/wecom/store/' + productChainid,
+        url: '/product/store/' + productChainid,
         method: 'get'
     })
 }
@@ -20,7 +20,7 @@ export function getStore(productChainid) {
 // 新增门店销售的产品数据从连锁产品库中继承
 export function addStore(data) {
     return request({
-        url: '/wecom/store',
+        url: '/product/store',
         method: 'post',
         data: data
     })
@@ -29,7 +29,7 @@ export function addStore(data) {
 // 修改门店销售的产品数据从连锁产品库中继承
 export function updateStore(data) {
     return request({
-        url: '/wecom/store',
+        url: '/product/store',
         method: 'put',
         data: data
     })
@@ -38,7 +38,7 @@ export function updateStore(data) {
 // 删除门店销售的产品数据从连锁产品库中继承
 export function delStore(productChainid) {
     return request({
-        url: '/wecom/store/' + productChainid,
+        url: '/product/store/' + productChainid,
         method: 'delete'
     })
 }
@@ -46,7 +46,7 @@ export function delStore(productChainid) {
 // 导出门店销售的产品数据从连锁产品库中继承
 export function exportStore(query) {
     return request({
-        url: '/wecom/store/export',
+        url: '/product/store/export',
         method: 'get',
         params: query
     })
