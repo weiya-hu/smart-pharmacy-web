@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询连锁门店销售的所有产品的数据列表
 export function listProduct(query) {
     return request({
-        url: '/wecom/product/list',
+        url: '/product/chain/product/list',
         method: 'get',
         params: query
     })
@@ -12,7 +12,7 @@ export function listProduct(query) {
 // 查询连锁门店销售的所有产品的数据详细
 export function getProduct(productChainid) {
     return request({
-        url: '/wecom/product/' + productChainid,
+        url: `/product/chain/product/${productChainId}`,
         method: 'get'
     })
 }
@@ -20,7 +20,7 @@ export function getProduct(productChainid) {
 // 新增连锁门店销售的所有产品的数据
 export function addProduct(data) {
     return request({
-        url: '/wecom/product',
+        url: '/product/chain/product',
         method: 'post',
         data: data
     })
@@ -29,7 +29,7 @@ export function addProduct(data) {
 // 修改连锁门店销售的所有产品的数据
 export function updateProduct(data) {
     return request({
-        url: '/wecom/product',
+        url: '/product/chain/product',
         method: 'put',
         data: data
     })
@@ -38,7 +38,7 @@ export function updateProduct(data) {
 // 删除连锁门店销售的所有产品的数据
 export function delProduct(productChainid) {
     return request({
-        url: '/wecom/product/' + productChainid,
+        url: `/product/chain/product/${productChainId}`,
         method: 'delete'
     })
 }

@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询厂家的产品信息列表
 export function listProduct(query) {
     return request({
-        url: '/wecom/product/list',
+        url: '/product/maker/product/list',
         method: 'get',
         params: query
     })
@@ -12,7 +12,7 @@ export function listProduct(query) {
 // 查询厂家的产品信息详细
 export function getProduct(productMakerid) {
     return request({
-        url: '/wecom/product/' + productMakerid,
+        url: `/product/maker/product/${productMakerid}`,
         method: 'get'
     })
 }
@@ -20,7 +20,7 @@ export function getProduct(productMakerid) {
 // 新增厂家的产品信息
 export function addProduct(data) {
     return request({
-        url: '/wecom/product',
+        url: '/product/maker/product',
         method: 'post',
         data: data
     })
@@ -29,7 +29,7 @@ export function addProduct(data) {
 // 修改厂家的产品信息
 export function updateProduct(data) {
     return request({
-        url: '/wecom/product',
+        url: '/product/maker/product',
         method: 'put',
         data: data
     })
@@ -38,7 +38,7 @@ export function updateProduct(data) {
 // 删除厂家的产品信息
 export function delProduct(productMakerid) {
     return request({
-        url: '/wecom/product/' + productMakerid,
+        url: `/product/maker/product/${productMakerid}`,
         method: 'delete'
     })
 }

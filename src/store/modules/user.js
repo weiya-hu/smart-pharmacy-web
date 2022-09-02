@@ -9,7 +9,8 @@ const useUserStore = defineStore(
         name: '',
         avatar: '',
         roles: [],
-        permissions: []
+        permissions: [],
+        userInfo:{}
       }),
       actions: {
         // 登录
@@ -33,6 +34,7 @@ const useUserStore = defineStore(
           return new Promise((resolve, reject) => {
             getInfo().then(res => {
               const user = res.data.user
+              this.userInfo = res.data.user
               const avatar = (user.avatar == "" || user.avatar == null) ? defAva : import.meta.env.VITE_APP_BASE_API + user.avatar;
 
               if (res.data.roles && res.data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
