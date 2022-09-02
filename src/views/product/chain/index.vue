@@ -1,53 +1,17 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="商家产品ID" prop="productChainid">
-        <el-input
-            v-model="queryParams.productChainid"
-            placeholder="请输入商家产品ID"
-            clearable
-            @keyup.enter="handleQuery"
-        />
+      <el-form-item label="产品编辑" prop="code">
+        <el-input v-model="queryParams.code" placeholder="请输入产品编号" clearable @keyup.enter="handleQuery"/>
       </el-form-item>
-      <el-form-item label="产品ID" prop="productid">
-        <el-input
-            v-model="queryParams.productid"
-            placeholder="请输入产品ID"
-            clearable
-            @keyup.enter="handleQuery"
-        />
+      <el-form-item label="产品简称" prop="name">
+        <el-input v-model="queryParams.name" placeholder="请输入产品简称" clearable @keyup.enter="handleQuery"/>
       </el-form-item>
-      <el-form-item label="公司ID" prop="companyid">
-        <el-input
-            v-model="queryParams.companyid"
-            placeholder="请输入公司ID"
-            clearable
-            @keyup.enter="handleQuery"
-        />
+      <el-form-item label="产品类别" prop="productType">
+        <el-input v-model="queryParams.productType" placeholder="请输入产品简称" clearable @keyup.enter="handleQuery"/>
       </el-form-item>
-      <el-form-item label="序号" prop="sort">
-        <el-input
-            v-model="queryParams.sort"
-            placeholder="请输入序号"
-            clearable
-            @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="创建人" prop="createUserid">
-        <el-input
-            v-model="queryParams.createUserid"
-            placeholder="请输入创建人"
-            clearable
-            @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="修改人" prop="updateUserid">
-        <el-input
-            v-model="queryParams.updateUserid"
-            placeholder="请输入修改人"
-            clearable
-            @keyup.enter="handleQuery"
-        />
+      <el-form-item label="品牌" prop="brands">
+        <el-input v-model="queryParams.brands" placeholder="请输入产品简称" clearable @keyup.enter="handleQuery"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -56,72 +20,76 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-            type="primary"
-            plain
-            icon="Plus"
-            @click="handleAdd"
-            v-hasPermi="['wecom:product:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-            type="success"
-            plain
-            icon="Edit"
-            :disabled="single"
-            @click="handleUpdate"
-            v-hasPermi="['wecom:product:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-            type="danger"
-            plain
-            icon="Delete"
-            :disabled="multiple"
-            @click="handleDelete"
-            v-hasPermi="['wecom:product:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-            type="warning"
-            plain
-            icon="Download"
-            @click="handleExport"
-            v-hasPermi="['wecom:product:export']"
-        >导出</el-button>
-      </el-col>
+      <!--      <el-col :span="1.5">-->
+      <!--        <el-button-->
+      <!--            type="primary"-->
+      <!--            plain-->
+      <!--            icon="Plus"-->
+      <!--            @click="handleAdd"-->
+      <!--            v-hasPermi="['wecom:product:add']"-->
+      <!--        >新增</el-button>-->
+      <!--      </el-col>-->
+      <!--      <el-col :span="1.5">-->
+      <!--        <el-button-->
+      <!--            type="success"-->
+      <!--            plain-->
+      <!--            icon="Edit"-->
+      <!--            :disabled="single"-->
+      <!--            @click="handleUpdate"-->
+      <!--            v-hasPermi="['wecom:product:edit']"-->
+      <!--        >修改</el-button>-->
+      <!--      </el-col>-->
+      <!--      <el-col :span="1.5">-->
+      <!--        <el-button-->
+      <!--            type="danger"-->
+      <!--            plain-->
+      <!--            icon="Delete"-->
+      <!--            :disabled="multiple"-->
+      <!--            @click="handleDelete"-->
+      <!--            v-hasPermi="['wecom:product:remove']"-->
+      <!--        >删除</el-button>-->
+      <!--      </el-col>-->
+      <!--      <el-col :span="1.5">-->
+      <!--        <el-button-->
+      <!--            type="warning"-->
+      <!--            plain-->
+      <!--            icon="Download"-->
+      <!--            @click="handleExport"-->
+      <!--            v-hasPermi="['wecom:product:export']"-->
+      <!--        >导出</el-button>-->
+      <!--      </el-col>-->
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="productList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="商家产品ID" align="center" prop="productChainid" />
-      <el-table-column label="产品ID" align="center" prop="productid" />
-      <el-table-column label="公司ID" align="center" prop="companyid" />
-      <el-table-column label="自定义标签" align="center" prop="tag" />
-      <el-table-column label="序号" align="center" prop="sort" />
-      <el-table-column label="创建人" align="center" prop="createUserid" />
-      <el-table-column label="修改人" align="center" prop="updateUserid" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template #default="scope">
-          <el-button
-              type="text"
-              icon="Edit"
-              @click="handleUpdate(scope.row)"
-              v-hasPermi="['wecom:product:edit']"
-          >修改</el-button>
-          <el-button
-              type="text"
-              icon="Delete"
-              @click="handleDelete(scope.row)"
-              v-hasPermi="['wecom:product:remove']"
-          >删除</el-button>
-        </template>
-      </el-table-column>
+      <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column label="69码" prop="barCode"/>
+      <el-table-column label="产品编号" prop="code"/>
+      <el-table-column label="产品简称" prop="name"/>
+      <el-table-column label="产品全称" prop="fullname"/>
+      <el-table-column label="产品类别" prop="productType"/>
+      <el-table-column label="产品等级" prop="level"/>
+      <el-table-column label="品牌" prop="brand"/>
+      <el-table-column label="规格" prop="specification"/>
+      <el-table-column label="最小计量单位" prop="unit"/>
+      <!--      <el-table-column label="操作" class-name="small-padding fixed-width">-->
+      <!--        <template #default="scope">-->
+      <!--          <el-button-->
+      <!--              type="text"-->
+      <!--              icon="Edit"-->
+      <!--              @click="handleUpdate(scope.row)"-->
+      <!--              v-hasPermi="['wecom:product:edit']"-->
+      <!--          >修改-->
+      <!--          </el-button>-->
+      <!--          <el-button-->
+      <!--              type="text"-->
+      <!--              icon="Delete"-->
+      <!--              @click="handleDelete(scope.row)"-->
+      <!--              v-hasPermi="['wecom:product:remove']"-->
+      <!--          >删除-->
+      <!--          </el-button>-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
     </el-table>
 
     <pagination
@@ -136,25 +104,25 @@
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="productRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="商家产品ID" prop="productChainid">
-          <el-input v-model="form.productChainid" placeholder="请输入商家产品ID" />
+          <el-input v-model="form.productChainid" placeholder="请输入商家产品ID"/>
         </el-form-item>
         <el-form-item label="产品ID" prop="productid">
-          <el-input v-model="form.productid" placeholder="请输入产品ID" />
+          <el-input v-model="form.productid" placeholder="请输入产品ID"/>
         </el-form-item>
         <el-form-item label="公司ID" prop="companyid">
-          <el-input v-model="form.companyid" placeholder="请输入公司ID" />
+          <el-input v-model="form.companyid" placeholder="请输入公司ID"/>
         </el-form-item>
         <el-form-item label="自定义标签" prop="tag">
-          <el-input v-model="form.tag" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.tag" type="textarea" placeholder="请输入内容"/>
         </el-form-item>
         <el-form-item label="序号" prop="sort">
-          <el-input v-model="form.sort" placeholder="请输入序号" />
+          <el-input v-model="form.sort" placeholder="请输入序号"/>
         </el-form-item>
         <el-form-item label="创建人" prop="createUserid">
-          <el-input v-model="form.createUserid" placeholder="请输入创建人" />
+          <el-input v-model="form.createUserid" placeholder="请输入创建人"/>
         </el-form-item>
         <el-form-item label="修改人" prop="updateUserid">
-          <el-input v-model="form.updateUserid" placeholder="请输入修改人" />
+          <el-input v-model="form.updateUserid" placeholder="请输入修改人"/>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -168,9 +136,9 @@
 </template>
 
 <script setup name="Chain">
-import { listProduct, getProduct, delProduct, addProduct, updateProduct } from "@/api/product/chainProduct";
+import {listProduct, getProduct, delProduct, addProduct, updateProduct} from "@/api/product/chainProduct";
 
-const { proxy } = getCurrentInstance();
+const {proxy} = getCurrentInstance();
 // const { ${dictsNoSymbol} } = proxy.useDict(${dicts});
 
 const productList = ref([]);
@@ -188,23 +156,27 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
-    productChainid: null,                                                                    productid: null,                                                                    companyid: null,                                                                    tag: null,                                                                    sort: null,                                                                    createUserid: null,                                                                                                updateUserid: null,                                                                },
+    code: null,
+    productType:null,
+    brands:null
+  },
   rules: {
     productChainid: [
-      { required: true, message: "商家产品ID不能为空", trigger: "blur" }
-    ],                                                                                                                                        companyid: [
-      { required: true, message: "公司ID不能为空", trigger: "blur" }
-    ],                                                                                                                                                                                                            }
+      {required: true, message: "商家产品ID不能为空", trigger: "blur"}
+    ], companyid: [
+      {required: true, message: "公司ID不能为空", trigger: "blur"}
+    ],
+  }
 });
 
-const { queryParams, form, rules } = toRefs(data);
+const {queryParams, form, rules} = toRefs(data);
 
 /** 查询连锁门店销售的所有产品的数据列表 */
 function getList() {
   loading.value = true;
   listProduct(queryParams.value).then(response => {
-    productList.value = response.rows;
-    total.value = response.total;
+    productList.value = response.data.list;
+    total.value = Number(response.data.total);
     loading.value = false;
   });
 }
@@ -218,7 +190,16 @@ function cancel() {
 // 表单重置
 function reset() {
   form.value = {
-    productChainid: null,                                                                    productid: null,                                                                    companyid: null,                                                                    tag: null,                                                                    sort: null,                                                                    createUserid: null,                                                                    createTime: null,                                                                    updateUserid: null,                                                                    updateTime: null                                    };
+    productChainid: null,
+    productid: null,
+    companyid: null,
+    tag: null,
+    sort: null,
+    createUserid: null,
+    createTime: null,
+    updateUserid: null,
+    updateTime: null
+  };
   proxy.resetForm("productRef");
 }
 
@@ -283,12 +264,13 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const _productChainids = row.productChainid || ids.value;
-  proxy.$modal.confirm('是否确认删除连锁门店销售的所有产品的数据编号为"' + _productChainids + '"的数据项？').then(function() {
+  proxy.$modal.confirm('是否确认删除连锁门店销售的所有产品的数据编号为"' + _productChainids + '"的数据项？').then(function () {
     return delProduct(_productChainids);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");
-  }).catch(() => {});
+  }).catch(() => {
+  });
 }
 
 /** 导出按钮操作 */
