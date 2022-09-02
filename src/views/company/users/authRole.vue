@@ -17,15 +17,16 @@
       </el-form>
 
       <h4 class="form-header h4">角色信息</h4>
-      <el-table v-loading="loading" :row-key="getRowKey" @row-click="clickRow" ref="roleRef" @selection-change="handleSelectionChange" :data="roles.slice((pageNum - 1) * pageSize, pageNum * pageSize)">
-         <el-table-column label="序号" width="55" type="index" align="center">
-            <template #default="scope">
-               <span>{{ (pageNum - 1) * pageSize + scope.$index + 1 }}</span>
-            </template>
-         </el-table-column>
+<!--      <el-table v-loading="loading" :row-key="getRowKey" @row-click="clickRow" ref="roleRef" @selection-change="handleSelectionChange" :data="roles.slice((pageNum - 1) * pageSize, pageNum * pageSize)">-->
+   <el-table v-loading="loading" :row-key="getRowKey" @row-click="clickRow" ref="roleRef" @selection-change="handleSelectionChange" :data="userInfoData">
          <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
          <el-table-column label="角色编号" align="center" prop="roleId" />
-         <el-table-column label="角色名称" align="center" prop="roleName" />
+         <el-table-column label="是否是管理员" align="center" prop="admin">
+           <template #default="scope">
+             <span v-if="scope.row.admin == 1">是</span>
+             <span v-if="scope.row.admin == 0">否</span>
+           </template>
+         </el-table-column>
          <el-table-column label="权限字符" align="center" prop="roleKey" />
          <el-table-column label="创建时间" align="center" prop="createTime" width="180">
             <template #default="scope">
@@ -63,6 +64,8 @@ const form = ref({
   userId: undefined
 });
 
+const userInfoData = ref([])
+
 /** 单击选中行数据 */
 function clickRow(row) {
   proxy.$refs["roleRef"].toggleRowSelection(row);
@@ -77,37 +80,53 @@ function getRowKey(row) {
 };
 /** 关闭按钮 */
 function close() {
-  const obj = { path: "/system/user" };
+  const obj = { path: "/enterpriseCenter/company/users" };
   proxy.$tab.closeOpenPage(obj);
 };
 /** 提交按钮 */
 function submitForm() {
-  const userId = form.value.userId;
-  const rIds = roleIds.value.join(",");
-  updateAuthRole({ userId: userId, roleIds: rIds }).then(response => {
+  // const userId = form.value.userId;
+  // const rIds = roleIds.value.join(",");
+  const userId = [route.query.userId]
+  if (roleIds.value.length == 0) {
+    proxy.$modal.msgError('请选择要分配的用户角色')
+    return;
+  }
+  updateAuthRole({ userIds: userId, roleId: roleIds.value }).then(response => {
     proxy.$modal.msgSuccess("授权成功");
     close();
   });
 };
 
-(() => {
-  const userId = route.params && route.params.userId;
-  console.log('userId',userId)
-  if (userId) {
-    loading.value = true;
-    getAuthRole(userId).then(response => {
-      form.value = response.user;
-      roles.value = response.roles;
-      total.value = roles.value.length;
-      nextTick(() => {
-        roles.value.forEach(row => {
-          if (row.flag) {
-            proxy.$refs["roleRef"].toggleRowSelection(row);
-          }
-        });
-      });
-      loading.value = false;
-    });
-  }
-})();
+function getList() {
+  getAuthRole({userId: route.query.userId}).then(res => {
+    if (res.code === 200) {
+      loading.value = false
+      userInfoData.value = res.data
+    }
+  })
+}
+
+getList()
+// (() => {
+//   const userId = route.query.userId;
+//   // console.log('userId',userId)
+//   // route.currentRoute.value.params.userId
+//   if (userId) {
+//     loading.value = true;
+//     getAuthRole(userId).then(response => {
+//       form.value = response.user;
+//       roles.value = response.roles;
+//       total.value = roles.value.length;
+//       nextTick(() => {
+//         roles.value.forEach(row => {
+//           if (row.flag) {
+//             proxy.$refs["roleRef"].toggleRowSelection(row);
+//           }
+//         });
+//       });
+//       loading.value = false;
+//     });
+//   }
+// })();
 </script>

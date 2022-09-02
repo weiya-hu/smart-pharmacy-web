@@ -37,9 +37,9 @@
                      @keyup.enter="handleQuery"
                   />
                </el-form-item>
-               <el-form-item label="手机号码" prop="phonenumber">
+               <el-form-item label="手机号码" prop="mobile">
                   <el-input
-                     v-model="queryParams.phonenumber"
+                     v-model="queryParams.mobile"
                      placeholder="请输入手机号码"
                      clearable
                      style="width: 240px"
@@ -130,7 +130,7 @@
 
             <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
                <el-table-column type="selection" width="50" align="center" />
-               <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" />
+               <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" :show-overflow-tooltip="true" />
                <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible" :show-overflow-tooltip="true" />
                <el-table-column label="企业微信ID" align="center" key="weUserId" prop="weUserId" v-if="columns[2].visible" :show-overflow-tooltip="true" />
                <el-table-column label="部门" align="center" key="deptname" prop="deptname" v-if="columns[3].visible" :show-overflow-tooltip="true" />
@@ -202,27 +202,28 @@
          <el-form :model="form" :rules="rules" ref="userRef" label-width="80px">
             <el-row>
                <el-col :span="12">
-                  <el-form-item label="用户昵称" prop="nickName">
-                     <el-input v-model="form.nickName" placeholder="请输入用户昵称" maxlength="30" />
+                  <el-form-item label="用户昵称" prop="alias">
+                     <el-input v-model="form.alias" placeholder="请输入用户昵称" maxlength="30" />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="归属部门" prop="department">
+                  <el-form-item label="归属部门" prop="deptIds">
                      <el-tree-select
-                        v-model="form.department"
+                        v-model="form.deptIds"
                         :data="deptOptions"
                         :props="{ value: 'id', label: 'label', children: 'children' }"
                         value-key="id"
+                        multiple
                         placeholder="请选择归属部门"
-                        check-strictly
+                        style="width: 100%"
                      />
                   </el-form-item>
                </el-col>
             </el-row>
             <el-row>
                <el-col :span="12">
-                  <el-form-item label="手机号码" prop="phonenumber">
-                     <el-input v-model="form.phonenumber" placeholder="请输入手机号码" maxlength="11" />
+                  <el-form-item label="手机号码" prop="mobile">
+                     <el-input v-model="form.mobile" placeholder="请输入手机号码" maxlength="11" />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
@@ -246,7 +247,7 @@
             <el-row>
                <el-col :span="12">
                   <el-form-item label="用户性别">
-                     <el-select v-model="form.sex" placeholder="请选择">
+                     <el-select v-model="form.gender" placeholder="请选择">
                         <el-option
                            v-for="dict in sys_user_sex"
                            :key="dict.value"
@@ -354,6 +355,7 @@ import { treeselect } from "@/api/system/dept";
 import { listRole} from "@/api/system/role";
 import { listPost} from "@/api/system/post";
 import { changeUserStatus, listUser, resetUserPwd, delUser, getUser, updateUser, addUser } from "@/api/system/user";
+import {reactive, ref} from "vue";
 
 const router = useRouter();
 const { proxy } = getCurrentInstance();
@@ -406,16 +408,16 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     userName: undefined,
-    phonenumber: undefined,
+    mobile: undefined,
     enable: undefined,
-    department: undefined
+    deptIds: []
   },
   rules: {
     userName: [{ required: true, message: "用户名称不能为空", trigger: "blur" }, { min: 2, max: 20, message: "用户名称长度必须介于 2 和 20 之间", trigger: "blur" }],
-    nickName: [{ required: true, message: "用户昵称不能为空", trigger: "blur" }],
+    alias: [{ required: true, message: "用户昵称不能为空", trigger: "blur" }],
     password: [{ required: true, message: "用户密码不能为空", trigger: "blur" }, { min: 5, max: 20, message: "用户密码长度必须介于 5 和 20 之间", trigger: "blur" }],
     email: [{ type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }],
-    phonenumber: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur" }]
+    mobile: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur" }]
   }
 });
 
@@ -457,9 +459,9 @@ function getList() {
 /** 节点单击事件 */
 function handleNodeClick(data) {
   if(data.parentId==null){
-    queryParams.value.department = null
+    queryParams.value.deptIds = null
   }else{
-    queryParams.value.department = data.id;
+    queryParams.value.deptIds = data.id;
   }
   handleQuery();
 };
@@ -516,8 +518,10 @@ function handleCommand(command, row) {
 };
 /** 跳转角色分配 */
 function handleAuthRole(row) {
-  const userId = row.userId;
-  router.push({path:"/enterpriseCenter/company/users/authRole",query:{userId:userId}});
+  router.push({
+    path:"/enterpriseCenter/company/users/authRole",
+    query: {userId: row.userId}
+  })
 };
 /** 重置密码按钮操作 */
 function handleResetPwd(row) {
@@ -578,17 +582,17 @@ function initTreeData() {
 function reset() {
   form.value = {
     userId: undefined,
-    department: undefined,
+    deptIds: undefined,
     userName: undefined,
-    nickName: undefined,
+    alias: undefined,
     password: undefined,
-    phonenumber: undefined,
+    mobile: undefined,
     email: undefined,
-    sex: undefined,
+    gender: undefined,
     enable: 1,
     remark: undefined,
-    postIds: [],
-    roleIds: []
+    // postIds: [],
+    roleIds: undefined
   };
   proxy.resetForm("userRef");
 };
@@ -612,14 +616,15 @@ function handleUpdate(row) {
   const userId = row.userId || ids.value;
   getUser(userId).then(response => {
     form.value = response.data;
-    postOptions.value = response.posts;
-    roleOptions.value = response.roles;
-    form.value.postIds = response.postIds;
-    form.value.roleIds = response.roleIds;
+  //   postOptions.value = response.posts;
+  //   roleOptions.value = response.roles;
+  //   form.value.postIds = response.postIds;
+  //   form.value.roleName = response.data.roleName;
     open.value = true;
     title.value = "修改用户";
     form.password = "";
   });
+
 };
 /** 提交按钮 */
 function submitForm() {

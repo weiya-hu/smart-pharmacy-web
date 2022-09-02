@@ -94,7 +94,7 @@
       <!-- 表格数据 -->
       <el-table v-loading="loading" :data="roleList" @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="55" align="center" />
-         <el-table-column label="角色编号" prop="roleId" width="120" />
+         <el-table-column label="角色编号" prop="roleId" width="150" :show-overflow-tooltip="true" />
          <el-table-column label="角色名称" prop="name" :show-overflow-tooltip="true" width="150" />
          <el-table-column label="权限字符" prop="roleKey" :show-overflow-tooltip="true" width="150" />
          <el-table-column label="显示顺序" prop="sort" width="100" />
@@ -115,7 +115,7 @@
          </el-table-column>
          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
-              <el-tooltip content="修改" placement="top" v-if="scope.row.roleId !== 1">
+              <el-tooltip content="修改" placement="top" v-if="scope.row.name !== '超级管理员'">
                 <el-button
                   type="text"
                   icon="Edit"
@@ -123,7 +123,7 @@
                   v-hasPermi="['system:role:edit']"
                 ></el-button>
               </el-tooltip>
-              <el-tooltip content="删除" placement="top" v-if="scope.row.roleId !== 1">
+              <el-tooltip content="删除" placement="top" v-if="scope.row.name !== '超级管理员'">
                 <el-button
                   type="text"
                   icon="Delete"
@@ -131,7 +131,7 @@
                   v-hasPermi="['system:role:remove']"
                 ></el-button>
               </el-tooltip>
-              <el-tooltip content="数据权限" placement="top" v-if="scope.row.roleId !== 1">
+              <el-tooltip content="数据权限" placement="top" v-if="scope.row.name !== '超级管理员'">
                 <el-button
                   type="text"
                   icon="CircleCheck"
@@ -139,7 +139,7 @@
                   v-hasPermi="['system:role:edit']"
                 ></el-button>
               </el-tooltip>
-              <el-tooltip content="分配用户" placement="top" v-if="scope.row.roleId !== 1">
+              <el-tooltip content="分配用户" placement="top" v-if="scope.row.name !== '超级管理员'">
                 <el-button
                   type="text"
                   icon="User"
@@ -234,7 +234,7 @@
       </el-dialog>
 
       <!-- 分配角色数据权限对话框 -->
-      <el-dialog :title="title" v-model="openDataScope" width="50%" append-to-body>
+      <el-dialog :title="title" v-model="openDataScope" width="50%" append-to-body class="dialog-box">
          <el-form :model="form" label-width="80px">
             <el-form-item label="角色名称">
                <el-input v-model="form.name" :disabled="true" />
@@ -260,12 +260,11 @@
                   class="tree-border"
                   :data="deptOptions"
                   show-checkbox
-                  default-expand-all
                   ref="deptRef"
                   node-key="id"
                   :check-strictly="!form.deptCheckStrictly"
                   empty-text="加载中，请稍候"
-                  :props="{ label: 'label', children: 'children' }"
+                  :props="{ label: 'name', children: 'children' }"
                ></el-tree>
             </el-form-item>
          </el-form>
@@ -282,7 +281,8 @@
 <script setup name="Role">
 import { addRole, changeRoleStatus, dataScope, delRole, getRole, listRole, updateRole } from "@/api/system/role";
 import {wecomRoleMenuTreeselect, treeselect as menuTreeselect } from "@/api/system/menu";
-import { treeselect as deptTreeselect, roleDeptTreeselect } from "@/api/system/dept";
+import {roleDeptTreeselect, relTree} from "@/api/system/dept";
+// import { relTree as deptTreeselect, roleDeptTreeselect } from "@/api/system/dept";
 
 const router = useRouter();
 const { proxy } = getCurrentInstance();
@@ -310,11 +310,11 @@ const deptRef = ref(null);
 
 /** 数据范围选项*/
 const dataScopeOptions = ref([
-  { value: "1", label: "全部数据权限" },
-  { value: "2", label: "自定数据权限" },
-  { value: "3", label: "本部门数据权限" },
-  { value: "4", label: "本部门及以下数据权限" },
-  { value: "5", label: "仅本人数据权限" }
+  { value: 1, label: "全部数据权限" },
+  { value: 2, label: "自定数据权限" },
+  { value: 3, label: "本部门数据权限" },
+  { value: 4, label: "本部门及以下数据权限" },
+  { value: 5, label: "仅本人数据权限" }
 ]);
 
 const data = reactive({
@@ -404,7 +404,10 @@ function handleCommand(command, row) {
 }
 /** 分配用户 */
 function handleAuthUser(row) {
-  router.push({path:"/enterpriseCenter/company/role/authuser",query:{roleId: row.roleId}});
+  router.push({
+    path:"/enterpriseCenter/company/role/authuser",
+    query: {roleId: row.roleId}
+  })
 }
 /** 查询菜单树结构 */
 function getMenuTreeselect() {
@@ -426,6 +429,9 @@ function reset() {
   if (menuRef.value != undefined) {
     menuRef.value.setCheckedKeys([]);
   }
+  if (deptRef.value != undefined) {
+    deptRef.value.setCheckedKeys([])
+  }
   menuExpand.value = false;
   menuNodeAll.value = false;
   deptExpand.value = true;
@@ -443,6 +449,7 @@ function reset() {
     deptCheckStrictly: true,
     roleDesc: undefined,
     sysDefault:0,
+    dataScope: undefined
   };
   proxy.resetForm("roleRef");
 }
@@ -489,10 +496,11 @@ function getRoleMenuTreeselect(roleId) {
 /** 根据角色ID查询部门树结构 */
 function getRoleDeptTreeselect(roleId) {
   return roleDeptTreeselect(roleId).then(response => {
-    deptOptions.value = response.depts;
+    deptOptions.value = response.data;
     return response;
   });
 }
+
 /** 树权限（展开/折叠）*/
 function handleCheckedTreeExpand(value, type) {
   if (type == "menu") {
@@ -565,24 +573,34 @@ function dataScopeSelectChange(value) {
     deptRef.value.setCheckedKeys([]);
   }
 }
+
+/** 查询菜单树结构 */
+function getDeptTreeselect() {
+  relTree().then(response => {
+    deptOptions.value = response.data;
+  });
+}
+
 /** 分配数据权限操作 */
 function handleDataScope(row) {
   reset();
-  const roleDeptTreeselect = getRoleDeptTreeselect(row.roleId);
-  getRole(row.roleId).then(response => {
-    form.value = response.data;
-    openDataScope.value = true;
-    nextTick(() => {
-      roleDeptTreeselect.then(res => {
-        nextTick(() => {
-          if (deptRef.value) {
-            deptRef.value.setCheckedKeys(res.checkedKeys);
-          }
+  title.value = "分配数据权限";
+  const roleId = row.roleId || ids.value;
+  relTree().then(response => {
+    deptOptions.value = response.data;
+      form.value = row
+      openDataScope.value = true;
+      roleDeptTreeselect(roleId).then(res=>{
+        let checkedKeys = res.data.nodes.map(item=>{
+          return item.id
+        })
+        checkedKeys.forEach((v) => {
+          nextTick(() => {
+            deptRef.value.setChecked(v, true, false);
+          });
         });
       });
-    });
-    title.value = "分配数据权限";
-  });
+    })
 }
 /** 提交按钮（数据权限） */
 function submitDataScope() {
@@ -603,3 +621,11 @@ function cancelDataScope() {
 
 handleQuery();
 </script>
+<style lang="scss" scoped>
+//.dialog-box {
+  :deep(.el-dialog__body) {
+    height: 628px;
+    overflow: auto;
+  }
+//}
+</style>

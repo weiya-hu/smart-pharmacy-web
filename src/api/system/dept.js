@@ -33,10 +33,17 @@ export function treeselect() {
   })
 }
 
+// 关系树
+export function relTree() {
+  return request({
+    url: '/wecom/corpinfo/reltree/tree',
+    method: 'GET'
+  })
+}
 // 根据角色ID查询部门树结构
 export function roleDeptTreeselect(roleId) {
   return request({
-    url: '/wecom/corpinfo/dept/roleDeptTreeselect/' + roleId,
+    url: '/wecom/corpinfo/reltree/roleBussinessTreeSelect/' + roleId,
     method: 'get'
   })
 }

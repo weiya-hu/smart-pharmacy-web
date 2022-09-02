@@ -10,9 +10,9 @@
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="手机号码" prop="phonenumber">
+         <el-form-item label="手机号码" prop="mobile">
             <el-input
-               v-model="queryParams.phonenumber"
+               v-model="queryParams.mobile"
                placeholder="请输入手机号码"
                clearable
                @keyup.enter="handleQuery"
@@ -27,12 +27,12 @@
          <el-table @row-click="clickRow" ref="refTable" :data="userList" @selection-change="handleSelectionChange" height="260px">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column label="用户名称" prop="userName" :show-overflow-tooltip="true" />
-            <el-table-column label="用户昵称" prop="nickName" :show-overflow-tooltip="true" />
+            <el-table-column label="用户昵称" prop="alias" :show-overflow-tooltip="true" />
             <el-table-column label="邮箱" prop="email" :show-overflow-tooltip="true" />
-            <el-table-column label="手机" prop="phonenumber" :show-overflow-tooltip="true" />
-            <el-table-column label="状态" align="center" prop="status">
+            <el-table-column label="手机" prop="mobile" :show-overflow-tooltip="true" />
+            <el-table-column label="状态" align="center" prop="enable">
                <template #default="scope">
-                  <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
+                  <dict-tag :options="sys_normal_disable" :value="scope.row.enable" />
                </template>
             </el-table-column>
             <el-table-column label="创建时间" align="center" prop="createTime" width="180">
@@ -78,14 +78,14 @@ const userIds = ref([]);
 const queryParams = reactive({
   pageNum: 1,
   pageSize: 10,
-  roleId: undefined,
+  roleIds: undefined,
   userName: undefined,
-  phonenumber: undefined
+  mobile: undefined
 });
 
 // 显示弹框
 function show() {
-  queryParams.roleId = props.roleId;
+  queryParams.roleIds = props.roleId;
   getList();
   visible.value = true;
 }
@@ -100,7 +100,7 @@ function handleSelectionChange(selection) {
 // 查询表数据
 function getList() {
   unallocatedUserList(queryParams).then(res => {
-    userList.value = res.rows;
+    userList.value = res.data.list;
     total.value = res.total;
   });
 }
@@ -117,13 +117,12 @@ function resetQuery() {
 const emit = defineEmits(["ok"]);
 /** 选择授权用户操作 */
 function handleSelectUser() {
-  const roleId = queryParams.roleId;
-  const uIds = userIds.value.join(",");
-  if (uIds == "") {
+  const roleId = [queryParams.roleIds];
+  if (userIds.value.length == 0) {
     proxy.$modal.msgError("请选择要分配的用户");
     return;
   }
-  authUserSelectAll({ roleId: roleId, userIds: uIds }).then(res => {
+  authUserSelectAll({ roleId: roleId, userIds: userIds.value }).then(res => {
     proxy.$modal.msgSuccess(res.msg);
     if (res.code === 200) {
       visible.value = false;

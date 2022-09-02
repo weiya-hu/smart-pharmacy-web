@@ -11,9 +11,9 @@
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="手机号码" prop="phonenumber">
+         <el-form-item label="手机号码" prop="mobile">
             <el-input
-               v-model="queryParams.phonenumber"
+               v-model="queryParams.mobile"
                placeholder="请输入手机号码"
                clearable
                style="width: 240px"
@@ -60,12 +60,12 @@
       <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="55" align="center" />
          <el-table-column label="用户名称" prop="userName" :show-overflow-tooltip="true" />
-         <el-table-column label="用户昵称" prop="nickName" :show-overflow-tooltip="true" />
+         <el-table-column label="用户昵称" prop="alias" :show-overflow-tooltip="true" />
          <el-table-column label="邮箱" prop="email" :show-overflow-tooltip="true" />
-         <el-table-column label="手机" prop="phonenumber" :show-overflow-tooltip="true" />
-         <el-table-column label="状态" align="center" prop="status">
+         <el-table-column label="手机" prop="mobile" :show-overflow-tooltip="true" />
+         <el-table-column label="状态" align="center" prop="enable">
             <template #default="scope">
-               <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
+               <dict-tag :options="sys_normal_disable" :value="scope.row.enable" />
             </template>
          </el-table-column>
          <el-table-column label="创建时间" align="center" prop="createTime" width="180">
@@ -92,12 +92,12 @@
          v-model:limit="queryParams.pageSize"
          @pagination="getList"
       />
-      <select-user ref="selectRef" :roleId="queryParams.roleId" @ok="handleQuery" />
+      <select-user ref="selectRef" :roleId="queryParams.roleIds" @ok="handleQuery" />
    </div>
 </template>
 
 <script setup name="AuthUser">
-import selectUser from "./selectUser";
+import SelectUser from "./selectUser";
 import { allocatedUserList, authUserCancel, authUserCancelAll } from "@/api/system/role";
 
 const route = useRoute();
@@ -114,23 +114,23 @@ const userIds = ref([]);
 const queryParams = reactive({
   pageNum: 1,
   pageSize: 10,
-  roleId: route.params.roleId,
+  roleIds: route.query.roleId,
   userName: undefined,
-  phonenumber: undefined,
+  mobile: undefined,
 });
 
 /** 查询授权用户列表 */
 function getList() {
   loading.value = true;
   allocatedUserList(queryParams).then(response => {
-    userList.value = response.rows;
+    userList.value = response.data.list;
     total.value = response.total;
     loading.value = false;
   });
 }
 // 返回按钮
 function handleClose() {
-  const obj = { path: "/system/role" };
+  const obj = { path: "/enterpriseCenter/company/role" };
   proxy.$tab.closeOpenPage(obj);
 }
 /** 搜索按钮操作 */
@@ -155,7 +155,7 @@ function openSelectUser() {
 /** 取消授权按钮操作 */
 function cancelAuthUser(row) {
   proxy.$modal.confirm('确认要取消该用户"' + row.userName + '"角色吗？').then(function () {
-    return authUserCancel({ userId: row.userId, roleId: queryParams.roleId });
+    return authUserCancel({ userId: row.userId, roleId: queryParams.roleIds });
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("取消授权成功");
@@ -163,7 +163,7 @@ function cancelAuthUser(row) {
 }
 /** 批量取消授权按钮操作 */
 function cancelAuthUserAll(row) {
-  const roleId = queryParams.roleId;
+  const roleId = queryParams.roleIds;
   const uIds = userIds.value.join(",");
   proxy.$modal.confirm("是否取消选中用户授权数据项?").then(function () {
     return authUserCancelAll({ roleId: roleId, userIds: uIds });

@@ -13,7 +13,8 @@ export function listUser(query) {
 // 查询用户详细
 export function getUser(userId) {
   return request({
-    url: '/wecom/corpinfo/user/' + parseStrEmpty(userId),
+    // url: '/wecom/corpinfo/user/' + parseStrEmpty(userId),
+    url: '/wecom/corpinfo/user/getUserInfoForEdit/' + parseStrEmpty(userId),
     method: 'get'
   })
 }
@@ -109,19 +110,20 @@ export function uploadAvatar(data) {
   })
 }
 
-// 查询授权角色
-export function getAuthRole(userId) {
+// 查询某个用户的角色列表
+export function getAuthRole(query) {
   return request({
-    url: '/wecom/corpinfo/user/authRole/' + userId,
-    method: 'get'
+    url: '/wecom/corpinfo/role/authUser/roleList',
+    method: 'get',
+    params: query
   })
 }
 
-// 保存授权角色
+// 批量选择用户授权
 export function updateAuthRole(data) {
   return request({
-    url: '/wecom/corpinfo/user/authRole',
-    method: 'put',
-    params: data
+    url: '/wecom/corpinfo/role/authUser/selectAll',
+    method: 'POST',
+    data: data
   })
 }

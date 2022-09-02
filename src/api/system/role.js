@@ -101,7 +101,7 @@ export function authUserCancelAll(data) {
 export function authUserSelectAll(data) {
   return request({
     url: '/wecom/corpinfo/role/authUser/selectAll',
-    method: 'put',
-    params: data
+    method: 'POST',
+    data: data
   })
 }
