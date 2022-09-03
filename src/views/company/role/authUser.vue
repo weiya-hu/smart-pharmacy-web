@@ -124,7 +124,7 @@ function getList() {
   loading.value = true;
   allocatedUserList(queryParams).then(response => {
     userList.value = response.data.list;
-    total.value = response.total;
+    total.value = Number(response.data.total);
     loading.value = false;
   });
 }

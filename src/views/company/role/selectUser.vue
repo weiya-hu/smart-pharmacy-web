@@ -101,7 +101,7 @@ function handleSelectionChange(selection) {
 function getList() {
   unallocatedUserList(queryParams).then(res => {
     userList.value = res.data.list;
-    total.value = res.total;
+    total.value = Number(res.data.total);
   });
 }
 /** 搜索按钮操作 */

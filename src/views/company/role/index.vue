@@ -234,40 +234,43 @@
       </el-dialog>
 
       <!-- 分配角色数据权限对话框 -->
-      <el-dialog :title="title" v-model="openDataScope" width="50%" append-to-body class="dialog-box">
-         <el-form :model="form" label-width="80px">
+      <el-dialog :title="title" v-model="openDataScope" width="50%" append-to-body>
+        <el-scrollbar height="525px">
+          <el-form :model="form" label-width="80px">
             <el-form-item label="角色名称">
-               <el-input v-model="form.name" :disabled="true" />
+              <el-input v-model="form.name" :disabled="true" />
             </el-form-item>
             <el-form-item label="权限字符">
-               <el-input v-model="form.roleKey" :disabled="true" />
+              <el-input v-model="form.roleKey" :disabled="true" />
             </el-form-item>
             <el-form-item label="权限范围">
-               <el-select v-model="form.dataScope" @change="dataScopeSelectChange">
-                  <el-option
-                     v-for="item in dataScopeOptions"
-                     :key="item.value"
-                     :label="item.label"
-                     :value="item.value"
-                  ></el-option>
-               </el-select>
+              <el-select v-model="form.dataScope" @change="dataScopeSelectChange">
+                <el-option
+                    v-for="item in dataScopeOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                ></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="数据权限" v-show="form.dataScope == 2">
-               <el-checkbox v-model="deptExpand" @change="handleCheckedTreeExpand($event, 'dept')">展开/折叠</el-checkbox>
-               <el-checkbox v-model="deptNodeAll" @change="handleCheckedTreeNodeAll($event, 'dept')">全选/全不选</el-checkbox>
-               <el-checkbox v-model="form.deptCheckStrictly" @change="handleCheckedTreeConnect($event, 'dept')">父子联动</el-checkbox>
-               <el-tree
+              <el-checkbox v-model="deptExpand" @change="handleCheckedTreeExpand($event, 'dept')">展开/折叠</el-checkbox>
+              <el-checkbox v-model="deptNodeAll" @change="handleCheckedTreeNodeAll($event, 'dept')">全选/全不选</el-checkbox>
+              <el-checkbox v-model="form.deptCheckStrictly" @change="handleCheckedTreeConnect($event, 'dept')">父子联动</el-checkbox>
+              <el-tree
                   class="tree-border"
                   :data="deptOptions"
                   show-checkbox
                   ref="deptRef"
                   node-key="id"
+                  default-expand-all
                   :check-strictly="!form.deptCheckStrictly"
                   empty-text="加载中，请稍候"
                   :props="{ label: 'name', children: 'children' }"
-               ></el-tree>
+              ></el-tree>
             </el-form-item>
-         </el-form>
+          </el-form>
+        </el-scrollbar>
          <template #footer>
             <div class="dialog-footer">
                <el-button type="primary" @click="submitDataScope">确 定</el-button>
@@ -340,7 +343,7 @@ function getList() {
   loading.value = true;
   listRole(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
     roleList.value = response.data.list;
-    total.value = response.total;
+    total.value = Number(response.data.total);
     loading.value = false;
   });
 }
@@ -621,11 +624,3 @@ function cancelDataScope() {
 
 handleQuery();
 </script>
-<style lang="scss" scoped>
-//.dialog-box {
-  :deep(.el-dialog__body) {
-    height: 628px;
-    overflow: auto;
-  }
-//}
-</style>
