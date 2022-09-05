@@ -44,6 +44,7 @@
         :data="deptList"
         row-key="id"
         :default-expand-all="isExpandAll"
+        height="72vh"
     >
       <el-table-column prop="name" label="部门名称" width="500"></el-table-column>
       <el-table-column prop="state" label="状态">
@@ -56,21 +57,21 @@
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="200">
         <template #default="scope">
-          <el-button
-              type="text"
-              icon="Edit"
-              @click="handleUpdate(scope.row)"
-              v-hasPermi="['system:dept:edit']"
-          >修改
-          </el-button>
           <el-button
               type="text"
               icon="Plus"
               @click="handleAdd(scope.row)"
               v-hasPermi="['system:dept:add']"
           >新增
+          </el-button>
+          <el-button
+              type="text"
+              icon="Edit"
+              @click="handleUpdate(scope.row)"
+              v-hasPermi="['system:dept:edit']"
+          >修改
           </el-button>
           <el-button
               v-if="scope.row.parentNodeId != 0"
@@ -103,19 +104,31 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="名称" prop="name">
-              <el-input v-model="form.name" style="width: 100%" placeholder="请输入名称"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
             <el-form-item label="类型" prop="type">
-              <el-select  v-model="form.type"  placeholder="类型"    style="width: 100%" >
+              <el-select  v-model="form.type"  placeholder="类型" @change="handleChange" style="width: 100%" >
                 <el-option
                     v-for="dict in wecom_reltree_type"
                     :key="dict.value"
                     :label="dict.label"
                     :value="dict.value"
                 />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="名称" prop="name">
+<!--              <el-input v-model="form.name" style="width: 100%" placeholder="请选择名称 / 如没有需要的供应商，请输入名称"/>-->
+              <el-select
+                  v-model="form.name"
+                  filterable
+                  allow-create
+                  default-first-option
+                  :reserve-keyword="false"
+                  placeholder="请选择名称 / 如没有需要的供应商，请输入名称"
+                  clearable
+                  style="width: 100%"
+              >
+                <el-option v-for="item in nameList" :key="item.id" :label="item.name" :value="item.id" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -165,7 +178,7 @@
 </template>
 
 <script setup name="Dept">
-import {listReltree, getReltree, addReltree, updateReltree, delReltree} from "@/api/company/reltree";
+import {listReltree, getReltree, addReltree, updateReltree, delReltree, makerList, chainList, storeList} from "@/api/company/reltree";
 import {listPost} from "@/api/system/post";
 import {listUser} from "@/api/system/user";
 
@@ -186,12 +199,10 @@ let tableUsers = reactive({
 const selectUsers = ref([])
 const selectJobs = ref([])
 const formTableRef = ref()
-const rulesTable = ref(
-    {
-      userName: [{required: true, message: "请选择用户", trigger: "change"}],
-      job: [{required: true, message: "请选择职务", trigger: "change"}],
-    }
-)
+const rulesTable = ref({
+    userName: [{required: true, message: "请选择用户", trigger: "change"}],
+    job: [{required: true, message: "请选择职务", trigger: "change"}],
+})
 const data = reactive({
   form: {},
   queryParams: {
@@ -203,6 +214,7 @@ const data = reactive({
     type: [{required: true, message: "类型不能为空", trigger: "change"}],
   },
 });
+const nameList = ref([])
 
 const {queryParams, form, rules} = toRefs(data);
 
@@ -340,6 +352,29 @@ function handleDelete(row) {
   });
 }
 
+function handleChange(val) {
+  if (val === 1) {
+    makerList().then(res => {
+      if (res.code === 200) {
+        nameList.value = res.data
+      }
+    })
+  } else if (val === 3) {
+    chainList().then(res => {
+      if (res.code === 200) {
+        nameList.value = res.data.list
+      }
+    })
+  } else if (val === 4) {
+    storeList().then(res => {
+      if (res.code === 200) {
+        nameList.value = res.data.list
+      }
+    })
+  } else {
+    nameList.value = null
+  }
+}
 loadSelectJobs()
 loadSelectUsers()
 getList();

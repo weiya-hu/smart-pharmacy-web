@@ -41,3 +41,25 @@ export function delReltree(nodeid) {
         method: 'delete'
     })
 }
+
+// 查询生产厂家列表
+export function makerList() {
+    return request({
+        url: `/wecom/corpinfo/maker/list`,
+        method: 'GET'
+    })
+}
+// 查询连锁门店列表
+export function chainList() {
+    return request({
+        url: `/wecom/corpinfo/chain/list`,
+        method: 'GET'
+    })
+}
+// 查询门店列表
+export function storeList() {
+    return request({
+        url: `/wecom/corpinfo/store/list`,
+        method: 'GET'
+    })
+}
