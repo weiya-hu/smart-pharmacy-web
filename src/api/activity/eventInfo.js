@@ -51,3 +51,13 @@ export function publish(data) {
         data:data
     })
 }
+
+//新增规则
+export function addEventRule(data) {
+    return request({
+        url: `/sop/event/rule`,
+        method: 'POST',
+        data:data
+    })
+}
+

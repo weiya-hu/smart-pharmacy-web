@@ -24,21 +24,10 @@
       <el-col :span="1.5">
         <el-button type="primary" plain icon="Plus" @click="handleAdd" v-hasPermi="['wecom:order:add']">新增</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate"
-                   v-hasPermi="['wecom:order:edit']">修改
-        </el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete"
-                   v-hasPermi="['wecom:order:remove']">删除
-        </el-button>
-      </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="activityList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center"/>
+    <el-table v-loading="loading" :data="activityList" >
       <el-table-column prop="eventId" label="任务ID"></el-table-column>
       <el-table-column prop="name" label="任务简称"></el-table-column>
       <el-table-column prop="state" label="状态">
@@ -49,8 +38,11 @@
       <el-table-column prop="beginTime" label="开始时间"/>
       <el-table-column prop="endTime" label="结束时间"/>
 
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作"  class-name="small-padding fixed-width" :width="350">
         <template #default="scope">
+          <el-button type="text" icon="Search" @click="handleQueryInfo(scope.row)" v-hasPermi="['wecom:order:remove']">
+            查看
+          </el-button>
           <el-button type="text" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['wecom:order:edit']">修改
           </el-button>
           <el-button type="text" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['wecom:order:remove']">
@@ -90,7 +82,6 @@ const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
 const betweenDates = ref([])
-const makerList = ref([])
 
 const data = reactive({
   queryParams: {
@@ -107,7 +98,7 @@ function getList() {
   loading.value = true;
   queryEventInfoList(queryParams.value).then(response => {
     activityList.value = response.data.list;
-    total.value = response.total;
+    total.value = Number(response.data.total);
     loading.value = false;
   });
 }
@@ -124,27 +115,25 @@ function resetQuery() {
   handleQuery();
 }
 
-// 多选框选中数据
-function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.id);
-  single.value = selection.length != 1;
-  multiple.value = !selection.length;
-}
 
 /** 新增按钮操作 */
 function handleAdd() {
-  router.push({path:'/markteCenter/activityInfo',query:{}})
+  router.push({path:'/markteCenter/activityInfo',query:{handleType:'add'}})
 }
 
 /** 修改按钮操作 */
 function handleUpdate(row) {
+  router.push({path:'/markteCenter/activityInfo',query:{handleType:'edit',eventId:row.eventId}})
+}
+/** 查看按钮操作 */
+function handleQueryInfo(row) {
+  router.push({path:'/markteCenter/activityInfo',query:{handleType:'query',eventId:row.eventId}})
 }
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const _ids = row.id || ids.value;
-  proxy.$modal.confirm('是否确认删除任务编号为"' + _ids + '"？').then(function () {
-    return delEventInfoByid(_ids);
+  proxy.$modal.confirm('是否确认删除任务编号为"' + row.eventId + '"？').then(function () {
+    return delEventInfoByid(row.eventId);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");

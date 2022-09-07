@@ -29,7 +29,7 @@ export function addReltree(data) {
 export function updateReltree(data) {
     return request({
         url: '/wecom/corpinfo/reltree/update',
-        method: 'POST',
+        method: 'PUT',
         data: data
     })
 }

@@ -249,8 +249,7 @@ function cancel() {
 /** 表单重置 */
 function reset() {
   form.value = {
-    id: undefined,
-    parentNodeId: undefined,
+    nodeId: undefined,
     name: undefined,
     type: undefined,
   };
@@ -310,7 +309,7 @@ function submitForm() {
       formTableRef.value.validate((v) => {
         if (v) {
           form.value.users = tableUsers.tableData
-          if (form.value.deptId != undefined) {
+          if (form.value.nodeId != undefined) {
             updateReltree(form.value).then(response => {
               proxy.$modal.msgSuccess("修改成功");
               open.value = false;
