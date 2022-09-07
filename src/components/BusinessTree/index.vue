@@ -2,7 +2,7 @@
   <el-checkbox v-model="menuExpand" @change="handleCheckedTreeExpand($event, )">展开/折叠</el-checkbox>
   <el-checkbox v-model="menuNodeAll" @change="handleCheckedTreeNodeAll($event, )">全选/全不选</el-checkbox>
   <el-checkbox v-model="menuCheckStrictly" @change="handleCheckedTreeConnect($event, )">父子联动</el-checkbox>
-  <el-scrollbar style="height: 500px;">
+  <el-scrollbar style="height: 450px;">
       <el-tree
           class="tree-border"
           :data="treeData"
@@ -20,6 +20,7 @@
 
 <script setup>
 import {listReltree} from '@/api/company/reltree'
+import {nextTick} from "vue";
 const menuRef = ref()
 const treeData = ref([]);
 const menuExpand = ref(true);
@@ -33,6 +34,11 @@ const loadTree = () => {
       .then(res => {
         if (res.code === 200) {
           treeData.value = res.data
+          if(props.handelType === 'query' ||props.handelType === 'edit'){
+            nextTick(()=>{
+              menuRef.value.setCheckedKeys( props.data.map(m=>m.nodeId));
+            })
+          }
         }
       })
 }
@@ -60,19 +66,24 @@ function getMenuAllCheckedKeys() {
   // 目前被选中的菜单节点
   let checkedKeys = menuRef.value.getCheckedKeys();
   // 半选中的菜单节点
-  let halfCheckedKeys = menuRef.value.getHalfCheckedKeys();
-  checkedKeys.unshift.apply(checkedKeys, halfCheckedKeys);
-  return checkedKeys;
+  // let halfCheckedKeys = menuRef.value.getHalfCheckedKeys();
+  // checkedKeys.unshift.apply(checkedKeys, halfCheckedKeys);
+  let checknodes = menuRef.value.getCheckedNodes()
+  return checknodes;
 }
 
 defineExpose({
   getMenuAllCheckedKeys
 })
-defineProps({
-  readonly: {
-    type: Boolean,
-    default: false
+const props = defineProps({
+  handelType: {
+    type: String,
+    default: undefined
   },
+  data:{
+    type:Array,
+    default: undefined
+  }
 })
 
 loadTree()

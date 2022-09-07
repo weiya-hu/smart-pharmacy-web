@@ -16,9 +16,8 @@ export function useDict(...args) {
         getDicts(dictType).then(resp => {
           res.value[dictType] = resp.data.map(p => {
             let dictValue = p.dictValue;
-            try {
+            if(Number(p.dictValue)){
               dictValue = Number(p.dictValue)
-            }catch (e){
             }
             return { label: p.dictLabel, value: dictValue, elTagType: p.listClass, elTagClass: p.cssClass }
           })
