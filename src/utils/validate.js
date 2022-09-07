@@ -1,9 +1,11 @@
 /**
- * 判断url是否是http或https 
+ * 判断url是否是http或https
  * @param {string} path
  * @returns {Boolean}
  */
- export function isHttp(url) {
+import store from "../store";
+
+export function isHttp(url) {
   return url.indexOf('http://') !== -1 || url.indexOf('https://') !== -1
 }
 
@@ -90,4 +92,20 @@ export function isArray(arg) {
     return Object.prototype.toString.call(arg) === '[object Array]'
   }
   return Array.isArray(arg)
+}
+
+export function GetQueryString(key) {
+  var urlGets = location.search;
+  if (urlGets.length > 0) {
+    let start = urlGets.indexOf(key + '=');
+    if (start != -1) {
+      start = start + key.length + 1;
+      let end = urlGets.indexOf('&', start)
+      if (end == -1) {
+        end = urlGets.length;
+      }
+      return decodeURIComponent(urlGets.substring(start, end))
+    }
+  }
+  return ''
 }

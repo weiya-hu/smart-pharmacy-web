@@ -37,14 +37,15 @@ export const constantRoutes = [
             }
         ]
     },
+    // {
+    //     path: '/login',
+    //     component: () => import('@/views/login'),
+    //     hidden: true
+    // },
     {
         path: '/login',
-        component: () => import('@/views/login'),
-        hidden: true
-    },
-    {
-        path: '/register',
-        component: () => import('@/views/register'),
+        // component: () => import('@/views/register'),
+        component: () => import('@/views/login/index'),
         hidden: true
     },
     {

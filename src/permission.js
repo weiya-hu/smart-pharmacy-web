@@ -8,10 +8,11 @@ import { isRelogin } from '@/utils/request'
 import useUserStore from '@/store/modules/user'
 import useSettingsStore from '@/store/modules/settings'
 import usePermissionStore from '@/store/modules/permission'
+import {GetQueryString} from "@/utils/validate"; // 从cookie获取令牌
 
 NProgress.configure({ showSpinner: false });
 
-const whiteList = ['/login', '/auth-redirect', '/bind', '/register'];
+const whiteList = ['/login'];
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
@@ -19,7 +20,7 @@ router.beforeEach((to, from, next) => {
     to.meta.title && useSettingsStore().setTitle(to.meta.title)
     /* has token*/
     if (to.path === '/login') {
-      next({ path: '/' })
+      next({ path: '/index' })
       NProgress.done()
     } else {
       if (useUserStore().roles.length === 0) {
@@ -40,7 +41,7 @@ router.beforeEach((to, from, next) => {
         }).catch(err => {
           useUserStore().logOut().then(() => {
             ElMessage.error(err)
-            next({ path: '/' })
+            next({ path: '/index' })
           })
         })
       } else {

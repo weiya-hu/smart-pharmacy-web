@@ -2,6 +2,7 @@
   <div class="login">
     <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
       <h3 class="title">系统</h3>
+      <router-link class="link-type" :to="'/register'">立即注册</router-link>
       <el-form-item prop="username">
         <el-input
             v-model="loginForm.username"
@@ -114,8 +115,7 @@ function handleLogin() {
       }
       // 调用action的登录方法
       userStore.login(loginForm.value).then(() => {
-        console.log("执行")
-        router.push({path: redirect.value || "/"});
+        router.push({path: redirect.value || "/index"});
       }).catch(() => {
         loading.value = false;
         // 重新获取验证码

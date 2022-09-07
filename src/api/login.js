@@ -57,3 +57,19 @@ export function getCodeImg() {
     timeout: 20000
   })
 }
+// 微信扫码登录
+export function wechatLogin(data) {
+  return request({
+    url: '/auth/wechatLogin',
+    method: 'get',
+    params: data
+  })
+}
+// 企微扫码登录
+export function oauthLogin(data) {
+  return request({
+    url: '/auth/oauthLogin',
+    method: 'get',
+    params: data
+  })
+}
