@@ -20,6 +20,7 @@
 
 <script setup>
 import {listReltree} from '@/api/company/reltree'
+import {nextTick} from "vue";
 const menuRef = ref()
 const treeData = ref([]);
 const menuExpand = ref(true);
@@ -33,6 +34,11 @@ const loadTree = () => {
       .then(res => {
         if (res.code === 200) {
           treeData.value = res.data
+          if(props.handelType === 'query' ||props.handelType === 'edit'){
+            nextTick(()=>{
+              menuRef.value.setCheckedKeys( props.data.map(m=>m.nodeId));
+            })
+          }
         }
       })
 }
@@ -69,11 +75,15 @@ function getMenuAllCheckedKeys() {
 defineExpose({
   getMenuAllCheckedKeys
 })
-defineProps({
-  readonly: {
-    type: Boolean,
-    default: false
+const props = defineProps({
+  handelType: {
+    type: String,
+    default: undefined
   },
+  data:{
+    type:Array,
+    default: undefined
+  }
 })
 
 loadTree()

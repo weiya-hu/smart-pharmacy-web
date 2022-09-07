@@ -21,14 +21,24 @@
                         :disabled="formDisabled"/>
       </el-form-item>
       <el-form-item label="任务范围" prop="ruleScupes">
-        <el-button @click="showRuleScupes = !showRuleScupes" link type="primary">ruleScupes</el-button>
+        <el-button @click="showRuleScupes = !showRuleScupes" link type="primary">
+          <span v-show="handleType === 'query'">查看</span>
+          <span v-show="handleType === 'edit'">编辑</span>
+          <span v-show="handleType === 'add'">新增</span>
+        </el-button>
       </el-form-item>
       <el-form-item label="任务负责人" prop="ruleResponsibleUsers">
-        <el-button @click="showResponsibleUsers = !showResponsibleUsers" link type="primary">responsibleUsers
+        <el-button @click="showResponsibleUsers = !showResponsibleUsers" link type="primary">
+          <span v-show="handleType === 'query'">查看</span>
+          <span v-show="handleType === 'edit'">编辑</span>
+          <span v-show="handleType === 'add'">新增</span>
         </el-button>
       </el-form-item>
       <el-form-item label="任务参与方" prop="participants">
-        <el-button @click="showRarticipants = !showRarticipants" link type="primary">participants
+        <el-button @click="showRarticipants = !showRarticipants" link type="primary">
+          <span v-show="handleType === 'query'">查看</span>
+          <span v-show="handleType === 'edit'">编辑</span>
+          <span v-show="handleType === 'add'">新增</span>
         </el-button>
       </el-form-item>
       <!--      <el-form-item label="任务截止类型" prop="endType">-->
@@ -50,7 +60,7 @@
       </el-form-item>
     </el-form>
 
-    <el-dialog title="任务范围" v-model="showRuleScupes" width="50%" :close-on-click-modal="false">
+    <el-dialog title="任务范围" v-model="showRuleScupes" width="50%" >
       <el-form :model="queryRuleScupesParams" label-width="68px">
         <el-form-item label="品类" prop="productTypes">
           <el-select v-model="queryRuleScupesParams.productTypes" multiple clearable>
@@ -74,7 +84,7 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <BusinessTree ref="businessTreeParticipantsRef" :readonly="false"></BusinessTree>
+      <BusinessTree ref="businessTreeParticipantsRef" :handelType="props.handleType" :data="data.form.ruleScupes"></BusinessTree>
       <template #footer>
         <div class="dialog-footer">
           <el-button type="primary" @click="onSuccessRuleScupes">确 定</el-button>
@@ -117,7 +127,7 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <BusinessTree ref="businessTreeParticipantsRef" :readonly="false"></BusinessTree>
+      <BusinessTree ref="businessTreeParticipantsRef" :handelType="props.handleType" :data="data.form.participants" ></BusinessTree>
       <template #footer>
         <div class="dialog-footer">
           <el-button type="primary" @click="onSuccessRarticipants">确 定</el-button>
@@ -208,7 +218,7 @@ async function submitForm() {
   let v = await proxy.$refs["activityRef"].validate();
   if (v) {
     //任务范围
-    if (form.value.id != null) {
+    if (form.value.eventId != null) {
       return updateEventInfo(form.value)
     } else {
       return createEventInfo(form.value)

@@ -60,4 +60,12 @@ export function addEventRule(data) {
         data:data
     })
 }
+//查询活动任务的规则列表
+export function queryEventRule(data) {
+    return request({
+        url: `/sop/event/rule/list`,
+        method: 'get',
+        params:data
+    })
+}
 

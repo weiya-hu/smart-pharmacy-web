@@ -61,7 +61,8 @@
                 </el-input>
               </el-form-item>
             </el-row>
-            <el-button type="primary" link @click="openProductsDialog(index)">产品列表</el-button>
+            <el-button v-show="firstFormModel.products.length === 0" type="primary" link @click="openProductsDialog(index)">添加商品</el-button>
+            <el-button v-show="firstFormModel.products.length > 0 " type="primary" link @click="openProductsDialog(index)">已选（{{firstFormModel.products.length}}）个</el-button>
             <el-button type="primary" link @click="delForm(index)">删除</el-button>
             <el-button type="primary" link @click="saveFormAndAdd(index)">保存并新增</el-button>
             <el-button type="primary" link @click="addForm">新增</el-button>
@@ -243,7 +244,7 @@
 import {
   queryBrandList, queryStoreList, queryJobList
 } from "@/api/activity/activityProduct";
-import {addEventRule} from '@/api/activity/eventInfo'
+import {addEventRule, queryEventRule} from '@/api/activity/eventInfo'
 import SelectProducts from '@/components/SelectProducts/index'
 import SelectStore from '@/components/SelectStore/index'
 
@@ -275,7 +276,8 @@ const firstFormModels = ref({
             jobId: '',
             jobName: '',
           }
-        ]
+        ],
+        products:[]
       }]
     }
 )
@@ -287,7 +289,8 @@ const resetFirstForm = () => {
     timeRangeUnit: 'everyday',
     calcUnit: 1,
     rewardType: 1,
-    jobs:jobList.value,
+    jobs: jobList.value,
+    products:[]
   }
 }
 
@@ -334,7 +337,7 @@ const resetSecondForm = () => {
     timeRangeUnit: 'everyday',
     rewardType: 1,
     calcUnit: 1,
-    jobs:jobList.value,
+    jobs: jobList.value,
     filter: {
       brands: []
     }
@@ -351,7 +354,7 @@ const thirdFormModels = ref({
     timeRangeUnit: 'everyday',
     rewardType: 1,
     calcUnit: 1,
-    jobs:jobList.value,
+    jobs: jobList.value,
     filter: {
       storeIds: []
     }
@@ -365,7 +368,7 @@ const resetThirdForm = () => {
     timeRangeUnit: 'everyday',
     rewardType: 1,
     calcUnit: 1,
-    jobs:jobList.value,
+    jobs: jobList.value,
     filter: {
       storeIds: []
     }
@@ -438,7 +441,7 @@ const openProductsDialog = (index) => {
   showProductsDialog.value = true
 }
 
-const openStoreDialog = (index)=>{
+const openStoreDialog = (index) => {
   showStoreDialog.value = true
   formStoreIndex.value = index
 }
@@ -512,9 +515,12 @@ const saveFormAndAdd = async (index) => {
         firstFormModels.value.formListData[index].eventId = props.eventId
         addEventRule(firstFormModels.value.formListData[index])
             .then(res => {
-              proxy.$modal.msgSuccess("保存成功");
+              if(res.code === 200){
+                proxy.$modal.msgSuccess("保存成功");
+                firstFormModels.value.formListData.push(resetFirstForm())
+              }
             })
-        firstFormModels.value.formListData.push(resetFirstForm())
+
       }
       break;
     case 'second' :
@@ -523,9 +529,12 @@ const saveFormAndAdd = async (index) => {
         secondFormModels.value.formListData[index].eventId = props.eventId
         addEventRule(secondFormModels.value.formListData[index])
             .then(res => {
-              proxy.$modal.msgSuccess("保存成功");
+              if(res.code === 200){
+                proxy.$modal.msgSuccess("保存成功");
+                secondFormModels.value.formListData.push(resetSecondForm())
+              }
             })
-        secondFormModels.value.formListData.push(resetSecondForm())
+
       }
       break;
     case 'third' :
@@ -534,9 +543,11 @@ const saveFormAndAdd = async (index) => {
         thirdFormModels.value.formListData[index].eventId = props.eventId
         addEventRule(thirdFormModels.value.formListData[index])
             .then(res => {
-              proxy.$modal.msgSuccess("保存成功");
+              if(res.code === 200){
+                proxy.$modal.msgSuccess("保存成功");
+                thirdFormModels.value.formListData.push(resetThirdForm())
+              }
             })
-        thirdFormModels.value.formListData.push(resetThirdForm())
       }
       break;
   }
@@ -555,9 +566,26 @@ const props = defineProps({
   eventId: {
     type: String,
     default: undefined
+  },
+  handleType: {
+    type: String,
+    default: undefined
   }
 })
-defineExpose({})
+//加载任务规则
+const loadEventRule = () => {
+  if (props.handleType === 'query' || props.handleType === 'query') {
+    queryEventRule({eventId: props.eventId})
+        .then(res => {
+          if (res.code === 200) {
+            console.log('任务规则详情',res.data)
+          }
+        })
+  }
+}
+defineExpose({
+  loadEventRule
+})
 getJobList()
 
 </script>
