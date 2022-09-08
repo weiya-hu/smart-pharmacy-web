@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form v-model="queryParam" ref="queryForm" label-width="50px">
+    <el-form v-model="queryParam" ref="queryForm" label-width="70px">
       <el-row>
         <el-form-item label="门店名称">
           <el-input v-model="queryParam.name"></el-input>
@@ -43,6 +43,7 @@
 
 <script setup>
 import {queryStoreList} from '@/api/activity/activityProduct'
+
 const queryParam = ref({
   name: '',
   productTypes: '',
@@ -50,7 +51,7 @@ const queryParam = ref({
   brands: '',
   pageNum: 1,
   pageSize: 10,
-  eventId:'',
+  eventId: '',
 })
 const loading = ref(false)
 const storeList = ref([])
@@ -65,7 +66,7 @@ const handleQuery = () => {
 
 //搜索产品
 const getList = () => {
-  if(props.eventId){
+  if (props.eventId) {
     queryStoreList(props.eventId)
         .then(res => {
           if (res.code === 200) {
@@ -83,8 +84,8 @@ const resetQuery = () => {
 }
 //选择门店
 const handleAdd = (row) => {
-  let isExists = storeResultList.value.some(r=>r.storeId === row.storeId)
-  if(!isExists){
+  let isExists = storeResultList.value.some(r => r.storeId === row.storeId)
+  if (!isExists) {
     row.account = 1
     storeResultList.value.push(row)
   }
@@ -97,14 +98,14 @@ const handleDelete = (row) => {
   }
 }
 //获取已选择门店
-const getStoreResultList = ()=>{
-  return  storeResultList.value.map(item=>(item.storeId))
+const getStoreResultList = () => {
+  return storeResultList.value.map(item => (item.storeId))
 }
 
 const props = defineProps({
-  eventId:{
-    type:String,
-    default:undefined
+  eventId: {
+    type: String,
+    default: undefined
   },
 })
 

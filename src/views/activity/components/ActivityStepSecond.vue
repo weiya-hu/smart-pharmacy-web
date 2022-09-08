@@ -4,8 +4,18 @@
       <el-tab-pane name="first" label="单品｜组合">
         <el-form ref="firstForm" :model="firstFormModels" :rules="formRule" inline label-width="100px">
           <div class="form-div" v-for="(firstFormModel,index) in firstFormModels.formListData" :key="index">
+            <div class="handler">
+              <div>
+                <el-button type="primary" @click="delForm(index)">删除</el-button>
+                <el-button type="primary" @click="saveFormAndAdd(index)">保存并新增</el-button>
+                <el-button type="primary" @click="addForm">新增</el-button>
+              </div>
+            </div>
             <el-row>
-              <el-form-item label="核算方式" :prop="'formListData.' + index + '.calcType'"
+              <div class="moudelTitle">奖励核算配置</div>
+            </el-row>
+            <el-row>
+              <el-form-item class="label" label="核算方式" :prop="'formListData.' + index + '.calcType'"
                             :rules="formRule.calcType">
                 <el-select v-model="firstFormModel.calcType">
                   <el-option v-for="item in sop_calc_type" :key="item.value" :value="item.value" :label="item.label">
@@ -13,7 +23,7 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="核算周期" :prop="'formListData.' + index + '.timeRange'"
+              <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             :rules="formRule.timeRangeUnit">
                 <el-input type="number" v-model="firstFormModel.timeRange" class="input-with-select">
                   <template #append>
@@ -26,25 +36,34 @@
                   </template>
                 </el-input>
               </el-form-item>
-              <el-form-item label="奖励条件" :prop="'formListData.' + index + '.calcUnit'"
+            </el-row>
+            <el-row>
+              <el-form-item class="label" label="奖励条件" :prop="'formListData.' + index + '.calcUnit'"
                             :rules="formRule.calcUnit">
                 <el-select v-model="firstFormModel.calcUnit">
                   <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
-              <el-form-item label="奖励方式" :prop="'formListData.' + index + '.rewardType'"
+              <el-form-item class="label" label="奖励方式" :prop="'formListData.' + index + '.rewardType'"
                             :rules="formRule.rewardType">
                 <el-select v-model="firstFormModel.rewardType">
                   <el-option v-for="item in sop_reward_type" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
             </el-row>
-            <el-divider content-position="left">参与职务列表</el-divider>
+            <el-divider content-position="left"></el-divider>
+            <el-row>
+              <div class="moudelTitle">
+                参与职务列表
+              </div>
+            </el-row>
             <el-row v-for="(item,index) in firstFormModel.jobs">
-              <el-form-item label="职务">
-                {{ item.jobName }}
+              <el-form-item class="label" label="职务">
+                <div style="width: 70px !important;fontWeight: bold;color: #606266;">
+                  {{ item.jobName }}
+                </div>
               </el-form-item>
-              <el-form-item label="奖励阈值">
+              <el-form-item class="label" label="奖励阈值">
                 <el-input
                     v-model="item.targetRange"
                     class="input-with-select">
@@ -56,24 +75,41 @@
                   </template>
                 </el-input>
               </el-form-item>
-              <el-form-item label="奖励金额">
+              <el-form-item class="label" label="奖励金额">
                 <el-input v-model="item.price" class="input-with-select">
                 </el-input>
               </el-form-item>
             </el-row>
-            <el-button v-show="firstFormModel.products.length === 0" type="primary" link @click="openProductsDialog(index)">添加商品</el-button>
-            <el-button v-show="firstFormModel.products.length > 0 " type="primary" link @click="openProductsDialog(index)">已选（{{firstFormModel.products.length}}）个</el-button>
-            <el-button type="primary" link @click="delForm(index)">删除</el-button>
-            <el-button type="primary" link @click="saveFormAndAdd(index)">保存并新增</el-button>
-            <el-button type="primary" link @click="addForm">新增</el-button>
+            <el-divider content-position="left"></el-divider>
+            <el-row>
+              <div class="moudelTitle">参与商品</div>
+            </el-row>
+            <el-button v-show="firstFormModel.products.length === 0" type="primary" link
+                       @click="openProductsDialog(index)">添加商品
+            </el-button>
+            <el-button type="primary" link>已选（{{ firstFormModel.products.length }}）个</el-button>
+            <el-button v-show="firstFormModel.products.length > 0 " type="primary"
+                       @click="openProductsDialog(index)">点击查看商品列表
+            </el-button>
+
           </div>
         </el-form>
       </el-tab-pane>
       <el-tab-pane name="second" label="品牌">
         <el-form ref="secondForm" v-model="secondFormModels" :rules="formRule" inline label-width="100px">
           <div class="form-div" v-for="(secondFormModel,index) in secondFormModels.formListData" :key="index">
+            <div class="handler">
+              <div>
+                <el-button type="primary" @click="delForm(index)">删除</el-button>
+                <el-button type="primary" @click="saveFormAndAdd(index)">保存并新增</el-button>
+                <el-button type="primary" @click="addForm">新增</el-button>
+              </div>
+            </div>
             <el-row>
-              <el-form-item label="核算方式" :prop="'formListData.' + index + '.calcType'"
+              <div class="moudelTitle">奖励核算配置</div>
+            </el-row>
+            <el-row>
+              <el-form-item class="label" label="核算方式" :prop="'formListData.' + index + '.calcType'"
                             :rules="formRule.calcType">
                 <el-select v-model="secondFormModel.calcType">
                   <el-option v-for="item in sop_calc_type" :key="item.value" :value="item.value" :label="item.label">
@@ -81,7 +117,7 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="核算周期" :prop="'formListData.' + index + '.timeRange'"
+              <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             :rules="formRule.timeRangeUnit">
                 <el-input type="number" v-model="secondFormModel.timeRange" class="input-with-select">
                   <template #append>
@@ -94,25 +130,32 @@
                   </template>
                 </el-input>
               </el-form-item>
-              <el-form-item label="奖励条件" :prop="'formListData.' + index + '.calcUnit'"
+            </el-row>
+            <el-row>
+              <el-form-item class="label" label="奖励条件" :prop="'formListData.' + index + '.calcUnit'"
                             :rules="formRule.calcUnit">
                 <el-select v-model="secondFormModel.calcUnit">
                   <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
-              <el-form-item label="奖励方式" :prop="'formListData.' + index + '.rewardType'"
+              <el-form-item class="label" label="奖励方式" :prop="'formListData.' + index + '.rewardType'"
                             :rules="formRule.rewardType">
                 <el-select v-model="secondFormModel.rewardType">
                   <el-option v-for="item in sop_reward_type" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
             </el-row>
-            <el-divider content-position="left">参与职务列表</el-divider>
+            <el-divider content-position="left"></el-divider>
+            <el-row>
+              <div class="moudelTitle">参与职务列表</div>
+            </el-row>
             <el-row v-for="(item,index) in secondFormModel.jobs">
-              <el-form-item label="职务">
-                {{ item.jobName }}
+              <el-form-item class="label" label="职务">
+                <div style="width: 70px !important;fontWeight: bold;color: #606266;">
+                  {{ item.jobName }}
+                </div>
               </el-form-item>
-              <el-form-item label="奖励阈值">
+              <el-form-item class="label" label="奖励阈值">
                 <el-input
                     v-model="item.targetRange"
                     class="input-with-select">
@@ -124,12 +167,15 @@
                   </template>
                 </el-input>
               </el-form-item>
-              <el-form-item label="奖励金额">
+              <el-form-item class="label" label="奖励金额">
                 <el-input v-model="item.price" class="input-with-select">
                 </el-input>
               </el-form-item>
             </el-row>
-            <el-divider content-position="left">品牌</el-divider>
+            <el-divider content-position="left"></el-divider>
+            <el-row>
+              <div class="moudelTitle">参与品牌</div>
+            </el-row>
             <el-checkbox v-model="secondFormModel.brandsCheckAll" :indeterminate="secondFormModel.isIndeterminate"
                          @change="handleCheckAllChange($event,secondFormModel)"
             >全选
@@ -140,18 +186,29 @@
                 {{ brand }}
               </el-checkbox>
             </el-checkbox-group>
-            <el-button type="primary" link @click="delForm(index)">删除</el-button>
-            <el-button type="primary" link @click="saveFormAndAdd(index)">保存并新增</el-button>
-            <el-button type="primary" link @click="addForm">新增</el-button>
+
           </div>
 
         </el-form>
       </el-tab-pane>
       <el-tab-pane name="third" label="门店">
         <el-form ref="thirdForm" v-model="thirdFormModels" :rules="formRule" inline label-width="100px">
+
           <div class="form-div" v-for="(thirdFormModel,index) in thirdFormModels.formListData" :key="index">
+            <div class="handler">
+              <div>
+                <el-button type="primary" @click="delForm(index)">删除</el-button>
+                <el-button type="primary" @click="saveFormAndAdd(index)">保存并新增</el-button>
+                <el-button type="primary" @click="addForm">新增</el-button>
+              </div>
+            </div>
             <el-row>
-              <el-form-item label="核算方式" :prop="'formListData.' + index + '.calcType'"
+              <div class="moudelTitle">
+                奖励核算配置
+              </div>
+            </el-row>
+            <el-row>
+              <el-form-item class="label" label="核算方式" :prop="'formListData.' + index + '.calcType'"
                             :rules="formRule.calcType">
                 <el-select v-model="thirdFormModel.calcType">
                   <el-option v-for="item in sop_calc_type" :key="item.value" :value="item.value" :label="item.label">
@@ -159,7 +216,7 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="核算周期" :prop="'formListData.' + index + '.timeRange'"
+              <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             :rules="formRule.timeRangeUnit">
                 <el-input type="number" v-model="thirdFormModel.timeRange" class="input-with-select">
                   <template #append>
@@ -172,25 +229,34 @@
                   </template>
                 </el-input>
               </el-form-item>
-              <el-form-item label="奖励条件" :prop="'formListData.' + index + '.calcUnit'"
+            </el-row>
+            <el-row>
+              <el-form-item class="label" label="奖励条件" :prop="'formListData.' + index + '.calcUnit'"
                             :rules="formRule.calcUnit">
                 <el-select v-model="thirdFormModel.calcUnit">
                   <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
-              <el-form-item label="奖励方式" :prop="'formListData.' + index + '.rewardType'"
+              <el-form-item class="label" label="奖励方式" :prop="'formListData.' + index + '.rewardType'"
                             :rules="formRule.rewardType">
                 <el-select v-model="thirdFormModel.rewardType">
                   <el-option v-for="item in sop_reward_type" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
             </el-row>
-            <el-divider content-position="left">参与职务列表</el-divider>
+            <el-divider content-position="left"></el-divider>
+            <el-row>
+              <div class="moudelTitle">
+                参与职务列表
+              </div>
+            </el-row>
             <el-row v-for="(item,index) in thirdFormModel.jobs">
-              <el-form-item label="职务">
-                {{ item.jobName }}
+              <el-form-item class="label" label="职务">
+                <div style="width: 70px !important;fontWeight: bold;color: #606266;">
+                  {{ item.jobName }}
+                </div>
               </el-form-item>
-              <el-form-item label="奖励阈值">
+              <el-form-item class="label" label="奖励阈值">
                 <el-input
                     v-model="item.targetRange"
                     class="input-with-select">
@@ -202,15 +268,26 @@
                   </template>
                 </el-input>
               </el-form-item>
-              <el-form-item label="奖励金额">
+              <el-form-item class="label" label="奖励金额">
                 <el-input v-model="item.price" class="input-with-select">
                 </el-input>
               </el-form-item>
             </el-row>
-            <el-button type="primary" link @click="openStoreDialog(index)">门店列表</el-button>
-            <el-button type="primary" link @click="delForm(index)">删除</el-button>
-            <el-button type="primary" link @click="saveFormAndAdd(index)">保存并新增</el-button>
-            <el-button type="primary" link @click="addForm">新增</el-button>
+
+            <el-divider content-position="left"></el-divider>
+            <el-row>
+              <div class="moudelTitle">参与门店</div>
+            </el-row>
+            <el-button v-if="thirdFormModels.formListData[index].filter.storeIds.length==0" type="primary" link
+                       @click="openStoreDialog(index)">添加门店
+            </el-button>
+            <el-button type="primary" link>已选（{{
+                thirdFormModels.formListData[index].filter.storeIds.length
+              }}）个
+            </el-button>
+            <el-button v-if="thirdFormModels.formListData[index].filter.storeIds.length!==0" type="primary"
+                       @click="openStoreDialog(index)">点击查看门店列表
+            </el-button>
           </div>
 
         </el-form>
@@ -277,7 +354,7 @@ const firstFormModels = ref({
             jobName: '',
           }
         ],
-        products:[]
+        products: []
       }]
     }
 )
@@ -290,7 +367,7 @@ const resetFirstForm = () => {
     calcUnit: 1,
     rewardType: 1,
     jobs: jobList.value,
-    products:[]
+    products: []
   }
 }
 
@@ -515,7 +592,7 @@ const saveFormAndAdd = async (index) => {
         firstFormModels.value.formListData[index].eventId = props.eventId
         addEventRule(firstFormModels.value.formListData[index])
             .then(res => {
-              if(res.code === 200){
+              if (res.code === 200) {
                 proxy.$modal.msgSuccess("保存成功");
                 firstFormModels.value.formListData.push(resetFirstForm())
               }
@@ -529,7 +606,7 @@ const saveFormAndAdd = async (index) => {
         secondFormModels.value.formListData[index].eventId = props.eventId
         addEventRule(secondFormModels.value.formListData[index])
             .then(res => {
-              if(res.code === 200){
+              if (res.code === 200) {
                 proxy.$modal.msgSuccess("保存成功");
                 secondFormModels.value.formListData.push(resetSecondForm())
               }
@@ -543,7 +620,7 @@ const saveFormAndAdd = async (index) => {
         thirdFormModels.value.formListData[index].eventId = props.eventId
         addEventRule(thirdFormModels.value.formListData[index])
             .then(res => {
-              if(res.code === 200){
+              if (res.code === 200) {
                 proxy.$modal.msgSuccess("保存成功");
                 thirdFormModels.value.formListData.push(resetThirdForm())
               }
@@ -578,7 +655,7 @@ const loadEventRule = () => {
     queryEventRule({eventId: props.eventId})
         .then(res => {
           if (res.code === 200) {
-            console.log('任务规则详情',res.data)
+            console.log('任务规则详情', res.data)
           }
         })
   }
@@ -590,10 +667,29 @@ getJobList()
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.label::v-deep( .el-form-item__label) {
+  color: #606266;
+  font-weight: 600;
+  justify-content: flex-start !important;
+  text-align: left;
+}
+
 .form-div {
   border: 1px solid #D4D7DE;
   margin: 5px;
   padding: 20px;
+}
+
+.moudelTitle {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.handler {
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 0;
 }
 </style>
