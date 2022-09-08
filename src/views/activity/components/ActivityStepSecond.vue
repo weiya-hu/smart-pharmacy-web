@@ -59,7 +59,7 @@
             </el-row>
             <el-row v-for="(item,index) in firstFormModel.jobs">
               <el-form-item class="label" label="职务">
-                <div style="width: 70px !important;">
+                <div style="width: 70px !important;fontWeight: bold;color: #606266;">
                   {{ item.jobName }}
                 </div>
               </el-form-item>
@@ -151,7 +151,7 @@
             </el-row>
             <el-row v-for="(item,index) in secondFormModel.jobs">
               <el-form-item class="label" label="职务">
-                <div style="width: 70px !important;">
+                <div style="width: 70px !important;fontWeight: bold;color: #606266;">
                   {{ item.jobName }}
                 </div>
               </el-form-item>
@@ -252,7 +252,7 @@
             </el-row>
             <el-row v-for="(item,index) in thirdFormModel.jobs">
               <el-form-item class="label" label="职务">
-                <div style="width: 70px !important;">
+                <div style="width: 70px !important;fontWeight: bold;color: #606266;">
                   {{ item.jobName }}
                 </div>
               </el-form-item>
