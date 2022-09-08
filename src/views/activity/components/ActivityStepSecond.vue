@@ -59,7 +59,9 @@
             </el-row>
             <el-row v-for="(item,index) in firstFormModel.jobs">
               <el-form-item class="label" label="职务">
-                {{ item.jobName }}
+                <div style="width: 70px !important;">
+                  {{ item.jobName }}
+                </div>
               </el-form-item>
               <el-form-item class="label" label="奖励阈值">
                 <el-input
@@ -78,11 +80,16 @@
                 </el-input>
               </el-form-item>
             </el-row>
+            <el-divider content-position="left"></el-divider>
+            <el-row>
+              <div class="moudelTitle">参与商品</div>
+            </el-row>
             <el-button v-show="firstFormModel.products.length === 0" type="primary" link
                        @click="openProductsDialog(index)">添加商品
             </el-button>
-            <el-button v-show="firstFormModel.products.length > 0 " type="primary" link
-                       @click="openProductsDialog(index)">已选（{{ firstFormModel.products.length }}）个
+            <el-button type="primary" link>已选（{{ firstFormModel.products.length }}）个</el-button>
+            <el-button v-show="firstFormModel.products.length > 0 " type="primary"
+                       @click="openProductsDialog(index)">点击查看商品列表
             </el-button>
 
           </div>
@@ -91,6 +98,13 @@
       <el-tab-pane name="second" label="品牌">
         <el-form ref="secondForm" v-model="secondFormModels" :rules="formRule" inline label-width="100px">
           <div class="form-div" v-for="(secondFormModel,index) in secondFormModels.formListData" :key="index">
+            <div class="handler">
+              <div>
+                <el-button type="primary" @click="delForm(index)">删除</el-button>
+                <el-button type="primary" @click="saveFormAndAdd(index)">保存并新增</el-button>
+                <el-button type="primary" @click="addForm">新增</el-button>
+              </div>
+            </div>
             <el-row>
               <div class="moudelTitle">奖励核算配置</div>
             </el-row>
@@ -137,9 +151,11 @@
             </el-row>
             <el-row v-for="(item,index) in secondFormModel.jobs">
               <el-form-item class="label" label="职务">
-                {{ item.jobName }}
+                <div style="width: 70px !important;">
+                  {{ item.jobName }}
+                </div>
               </el-form-item>
-              <el-form-item label="奖励阈值">
+              <el-form-item class="label" label="奖励阈值">
                 <el-input
                     v-model="item.targetRange"
                     class="input-with-select">
@@ -236,7 +252,9 @@
             </el-row>
             <el-row v-for="(item,index) in thirdFormModel.jobs">
               <el-form-item class="label" label="职务">
-                {{ item.jobName }}
+                <div style="width: 70px !important;">
+                  {{ item.jobName }}
+                </div>
               </el-form-item>
               <el-form-item class="label" label="奖励阈值">
                 <el-input
@@ -255,8 +273,21 @@
                 </el-input>
               </el-form-item>
             </el-row>
-            <el-button type="primary" link @click="openStoreDialog(index)">门店列表</el-button>
 
+            <el-divider content-position="left"></el-divider>
+            <el-row>
+              <div class="moudelTitle">参与门店</div>
+            </el-row>
+            <el-button v-if="thirdFormModels.formListData[index].filter.storeIds.length==0" type="primary" link
+                       @click="openStoreDialog(index)">添加门店
+            </el-button>
+            <el-button type="primary" link>已选（{{
+                thirdFormModels.formListData[index].filter.storeIds.length
+              }}）个
+            </el-button>
+            <el-button v-if="thirdFormModels.formListData[index].filter.storeIds.length!==0" type="primary"
+                       @click="openStoreDialog(index)">点击查看门店列表
+            </el-button>
           </div>
 
         </el-form>
@@ -641,6 +672,7 @@ getJobList()
   color: #606266;
   font-weight: 600;
   justify-content: flex-start !important;
+  text-align: left;
 }
 
 .form-div {
