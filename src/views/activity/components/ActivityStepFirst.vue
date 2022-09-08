@@ -50,13 +50,41 @@
       <!--      </el-form-item>-->
       <el-form-item class="label" label="任务附件" prop="filesInfos">
         <el-upload
-            v-model:file-list="form.filesInfos"
-            class="upload-demo"
-            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-            :limit="3"
-        >
-          <el-button type="primary" size="small">上传</el-button>
+            :disabled="formDisabled"
+            :action="uploadData.imgBannerUrl"
+            :headers="{'Authorization':uploadData.token}"
+            :data="uploadData.imgBannerParam"
+            method:="POST"
+            accept="image/jpg,image/jpeg,image/png"
+            :limit="1"
+            :file-list="imgBannerList"
+            :show-file-list="false"
+            :on-success="handleImgBannerSuccess">
+          <div class="demo-image__placeholder">
+            <div class="block">
+              <el-image :src="form.files[0].url" v-if="form.files.length!==0"
+                        style="width: 400px;height: 150px;border: 1px solid #c0c4cc">
+                <template #placeholder>
+                  <div class="image-slot">Loading<span class="dot">...</span></div>
+                </template>
+              </el-image>
+              <el-image
+                  v-if="form.files.length==0"
+                  style="width: 300px;height: 100px;border: 1px solid #c0c4cc">
+                <template #error>
+                  <div class="image-slot"
+                       style="display: flex;justify-content:center;align-items:center;height: 100px">
+                    <el-icon :size="48">
+                      <Picture/>
+                    </el-icon>
+                  </div>
+                </template>
+              </el-image>
+            </div>
+          </div>
         </el-upload>
+
+
       </el-form-item>
     </el-form>
 
@@ -150,6 +178,9 @@ import {
 } from "@/api/activity/eventInfo";
 import BusinessTree from '@/components/BusinessTree/index'
 import SelectUsers from '@/components/SelectUsers/index'
+import {reactive} from "vue";
+import {getToken} from "@/utils/auth";
+import {ElMessage} from "element-plus";
 
 let ruleScupes = (rule, value, callback) => {
   if (form.value.ruleScupes === undefined || form.value.ruleScupes.length === 0) {
@@ -176,7 +207,9 @@ const businessTreeParticipantsRef = ref()
 const responsibleUsersRef = ref()
 
 const data = reactive({
-  form: {},
+  form: {
+    files: []
+  },
   rules: {
     beginTime: [{required: true, message: "请选择开始时间", trigger: "change"}],
     endTime: [{required: true, message: "请选择结束时间", trigger: "change"}],
@@ -190,7 +223,6 @@ const data = reactive({
 
 const {form, rules} = toRefs(data);
 
-
 // 表单重置
 function reset() {
   form.value = {
@@ -200,6 +232,7 @@ function reset() {
     fullname: '', //全称
     beginTime: '', //开始时间
     endTime: '', //结束时间
+    files: [],
     ruleScupes: [], //任务范围
     sendNotice: false, //是否发送通知给执行人
     responsibleUsers: [],//任务负责人
@@ -213,6 +246,28 @@ function reset() {
     syncProdKnowledge: false,
   };
   proxy.resetForm("activityRef");
+}
+
+/**上传附件*/
+const imgBannerList = ref([])
+let uploadData = reactive({
+  imgBannerUrl: '/dev-api' + '/file/file/upload',
+  imgBannerParam: {path: '/activity/imgBanner'},
+  token: getToken(),
+  parameter: {corpId: '', file: ''}
+})
+/**上传文件成功的回调*/
+const handleImgBannerSuccess = (res) => {
+  //成功之后清空上传文件列表
+  imgBannerList.value = []
+  if (res.code === 200) {
+    //清空原文件
+    form.value.files = []
+    form.value.files.push(res.data)
+    ElMessage({type: 'success', message: res.msg})
+  } else {
+    ElMessage({type: 'warning', message: res.msg})
+  }
 }
 
 /** 提交按钮 */
@@ -278,15 +333,12 @@ const onCancelRarticipants = () => {
 }
 
 //查询任务数据
-const queryActivityEventId = (eventId) => {
-  getEventInfoByid(eventId)
-      .then(res => {
-        if (res.code === 200) {
-          data.form = res.data
-        }
-      })
+const queryActivityEventId = async (eventId) => {
+  let {code, data: resultData} = await getEventInfoByid(eventId)
+  if (code === 200) {
+    data.form = resultData
+  }
 }
-
 
 defineExpose({
   submitForm
@@ -315,7 +367,7 @@ const onLoad = async () => {
     case 'query' :
       //禁用表单
       formDisabled.value = true
-      queryActivityEventId(props.eventId)
+      await queryActivityEventId(props.eventId)
       //查询任务数据
       break;
   }
