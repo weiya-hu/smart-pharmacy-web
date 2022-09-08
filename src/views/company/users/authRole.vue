@@ -20,15 +20,16 @@
 <!--      <el-table v-loading="loading" :row-key="getRowKey" @row-click="clickRow" ref="roleRef" @selection-change="handleSelectionChange" :data="roles.slice((pageNum - 1) * pageSize, pageNum * pageSize)">-->
    <el-table v-loading="loading" :row-key="getRowKey" @row-click="clickRow" ref="roleRef" @selection-change="handleSelectionChange" :data="userInfoData">
          <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
-         <el-table-column label="角色编号" align="center" prop="roleId" />
-         <el-table-column label="是否是管理员" align="center" prop="admin">
+         <el-table-column label="角色编号" prop="roleId" />
+         <el-table-column label="角色名称" prop="name"></el-table-column>
+         <el-table-column label="是否是管理员" prop="admin">
            <template #default="scope">
              <span v-if="scope.row.admin == 1">是</span>
              <span v-if="scope.row.admin == 0">否</span>
            </template>
          </el-table-column>
-         <el-table-column label="权限字符" align="center" prop="roleKey" />
-         <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+         <el-table-column label="权限字符" prop="roleKey" />
+         <el-table-column label="创建时间" prop="createTime" width="180">
             <template #default="scope">
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>

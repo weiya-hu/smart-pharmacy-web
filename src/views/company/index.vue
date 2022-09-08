@@ -7,9 +7,6 @@
     </div>
     <div class="form-box">
       <el-form v-model="form" label-position="left">
-        <el-form-item label="老板 ID" prop="bossUserId">
-          <el-input v-model="form.bossUserId" readonly :disabled="inputType==='readey'" style="width: 300px;" />
-        </el-form-item>
         <el-form-item label="企业logo" prop="logo">
           <div>
             <el-upload
@@ -37,10 +34,13 @@
                   :src="form.url"
                   :initial-index="4"
                   fit="cover"
-                  style="width:300px;height:160px;"/>
+                  style="width:210px;height:100px;"/>
             </div>
             <div class="form-tips">推荐尺寸702*180</div>
           </div>
+        </el-form-item>
+        <el-form-item label="老板的ID" prop="bossUserId">
+          <el-input v-model="form.bossUserId" readonly :disabled="inputType==='readey'" style="width: 300px;" />
         </el-form-item>
         <el-form-item label="企业名称">
           <el-input v-model="form.name" readonly :disabled="inputType==='readey'" style="width: 300px;" />

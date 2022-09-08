@@ -53,8 +53,8 @@
          row-key="id"
          :default-expand-all="isExpandAll"
       >
-         <el-table-column prop="name" label="部门名称" ></el-table-column>
-        <el-table-column prop="fullname" label="部门全称"></el-table-column>
+         <el-table-column prop="name" label="部门名称" show-tooltip-when-overflow></el-table-column>
+         <el-table-column prop="fullname" label="部门全称"></el-table-column>
          <el-table-column prop="sort" label="排序" ></el-table-column>
          <el-table-column prop="state" label="状态" >
             <template #default="scope">
@@ -66,24 +66,27 @@
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+         <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="200">
             <template #default="scope">
+              <el-button
+                  type="text"
+                  icon="Plus"
+                  size="small"
+                  @click="handleAdd(scope.row)"
+                  v-hasPermi="['system:dept:add']"
+              >新增</el-button>
                <el-button
                   type="text"
                   icon="Edit"
+                  size="small"
                   @click="handleUpdate(scope.row)"
                   v-hasPermi="['system:dept:edit']"
                >修改</el-button>
                <el-button
-                  type="text"
-                  icon="Plus"
-                  @click="handleAdd(scope.row)"
-                  v-hasPermi="['system:dept:add']"
-               >新增</el-button>
-               <el-button
                   v-if="scope.row.parentId != 0"
                   type="text"
                   icon="Delete"
+                  size="small"
                   @click="handleDelete(scope.row)"
                   v-hasPermi="['system:dept:remove']"
                >删除</el-button>
@@ -92,8 +95,8 @@
       </el-table>
 
       <!-- 添加或修改部门对话框 -->
-      <el-dialog :title="title" v-model="open" width="600px" append-to-body>
-         <el-form ref="deptRef" :model="form" :rules="rules" label-width="80px">
+      <el-dialog :title="title" v-model="open" width="750px" append-to-body>
+         <el-form ref="deptRef" :model="form" :rules="rules" label-width="100px">
             <el-row>
                <el-col :span="24" v-if="form.parentId !== 0">
                   <el-form-item label="上级部门" >
@@ -105,6 +108,7 @@
                         clearable
                         placeholder="选择上级部门"
                         check-strictly
+                        style="width: 100%"
                      />
                   </el-form-item>
                </el-col>
@@ -120,7 +124,7 @@
               </el-col>
                <el-col :span="12">
                   <el-form-item label="显示排序" prop="sort">
-                     <el-input-number v-model="form.sort" controls-position="right" :min="0" />
+                     <el-input-number v-model="form.sort" controls-position="right" :min="0" style="width: 100%;" />
                   </el-form-item>
                </el-col>
                <el-col :span="12">

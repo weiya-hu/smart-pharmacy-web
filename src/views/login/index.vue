@@ -5,17 +5,22 @@
         <img src="../../assets/images/login_left.png" alt="" />
       </div>
       <div class="login-right">
-        <div class="login-btn">
-          <wxlogin
-              appid="wx3a6a5cc2924a2405"
-              :scope="'snsapi_login'"
-              :theme="'black'"
-              state='wechat'
-              :redirect_uri='redirectUri'
-          >
-          </wxlogin>
-          <el-button @click="onClick('qw')" type="primary" size="large">企微登录</el-button>
-        </div>
+        <el-tabs v-model="activeName" class="demo-tabs">
+          <el-tab-pane label="微信扫码登录" name="first">
+            <wxlogin
+                appid="wx3a6a5cc2924a2405"
+                :scope="'snsapi_login'"
+                :theme="'black'"
+                state='wechat'
+                :redirect_uri='redirectUri'
+                href="data:text/css;base64,LmltcG93ZXJCb3ggLnFyY29kZSB7d2lkdGg6IDI0MHB4O30KLmltcG93ZXJCb3ggLnRpdGxlIHtkaXNwbGF5OiBub25lO30KLmltcG93ZXJCb3ggLmluZm8ge3dpZHRoOiAyNDBweDt9Ci5zdGF0dXNfaWNvbiB7ZGlzcGxheTogbm9uZX0KLmltcG93ZXJCb3ggLnN0YXR1cyB7dGV4dC1hbGlnbjogY2VudGVyO30g"
+            >
+            </wxlogin>
+          </el-tab-pane>
+          <el-tab-pane label="企业微信扫码登陆" name="second">
+            <iframe :src="authUrl" height="400px" width="100%" frameborder="0"></iframe>
+          </el-tab-pane>
+        </el-tabs>
       </div>
     </div>
   </div>
@@ -29,11 +34,11 @@ import {setToken, getToken} from "../../utils/auth";
 
 const router = useRouter();
 const redirect = ref(undefined);
+const activeName = ref('first')
 
 // 微信扫码登录
 const redirectUri = encodeURIComponent("http://wang.shanhaiping.com/login")
-const qRedirectUri = 'http://wang.shanhaiping.com/login'
-
+const authUrl = `https://open.work.weixin.qq.com/wwopen/sso/3rd_qrConnect?appid=ww15d16db33f11c8a2&redirect_uri=${redirectUri}&state=wecom&usertype=member&href=data:text/css;base64,LmltcG93ZXJCb3ggLnFyY29kZSB7d2lkdGg6IDIyMHB4O30KLmltcG93ZXJCb3ggLnRpdGxlIHtkaXNwbGF5OiBub25lO30KLmltcG93ZXJCb3ggLmluZm8ge3dpZHRoOiAyMjBweDt9Ci5zdGF0dXNfaWNvbiB7ZGlzcGxheTogbm9uZSAgIWltcG9ydGFudH0KLmltcG93ZXJCb3ggLnN0YXR1cyB7dGV4dC1hbGlnbjogY2VudGVyO30g`
 // 微信
 function getWechatLogin() {
   if (!getToken()) {
@@ -75,10 +80,7 @@ function getOauthLogin() {
     } else {}
   }
 }
-// 登录
-function onClick(){
-  window.open(`https://open.work.weixin.qq.com/wwopen/sso/3rd_qrConnect?appid=ww15d16db33f11c8a2&redirect_uri=${encodeURIComponent(qRedirectUri)}&state=wecom&usertype=member`)
-}
+
 const login = ()=>{
   if(GetQueryString('state') === 'wecom'){
     getOauthLogin()
@@ -86,6 +88,7 @@ const login = ()=>{
     getWechatLogin()
   }
 }
+
 login()
 </script>
 
@@ -100,63 +103,38 @@ login()
   background-size: cover;
   position: relative;
   .login-box {
-    max-width: 1000px;
-    height: 525px;
+    max-width: 980px;
+    height: 568px;
     background: #fff;
-    padding: 50px 20px;
+    padding: 30px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-    -webkit-box-shadow: 0 1px 15px #eee;
     box-shadow: 0 1px 15px #eee;
     border-radius: 10px;
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
     justify-content: space-between;
     .login-left {
-      width: 550px;
-      height: 429px;
-      margin-right: 40px;
+      width: 520px;
+      height: 435px;
     }
     .login-right {
-      width: 520px;
-      max-width: 100%;
+      width: 400px;
       margin: 0 auto;
       overflow: hidden;
-      .login-logo {
-        width: 168px;
-        height: 78px;
-        display: block;
-        margin: 0 auto;
-        margin-bottom: 30px;
+      padding: 0 20px 0 40px;
+      :deep(.el-tabs__nav) {
+        transform: translateX(52px) !important;
       }
-      .login-title {
-        font-size: 34px;
-        color: #333;
-        margin-bottom: 45px;
+      #pane-first {
         text-align: center;
-        font-weight: bold;
-      }
-      .login-btn {
-        width: 80%;
-        margin: 0 auto;
-        & > div {
-          text-align: center;
-        }
-        .el-button {
-          width: 100%;
-        }
       }
     }
   }
 }
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 980px) {
   .login {
     .login-box {
       width: 500px;

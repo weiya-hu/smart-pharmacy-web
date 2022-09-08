@@ -63,15 +63,15 @@
 
     <el-table v-loading="loading" :data="storeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="69码" prop="barCode"/>
-      <el-table-column label="产品编号" prop="code"/>
-      <el-table-column label="产品简称" prop="name"/>
-      <el-table-column label="产品全称" prop="fullname"/>
-      <el-table-column label="产品类别" prop="productType"/>
-      <el-table-column label="产品等级" prop="level"/>
-      <el-table-column label="品牌" prop="brand"/>
-      <el-table-column label="规格" prop="specification"/>
-      <el-table-column label="最小计量单位" prop="unit"/>
+      <el-table-column label="69码" prop="barCode" show-tooltip-when-overflow />
+      <el-table-column label="产品编号" prop="code" show-tooltip-when-overflow />
+      <el-table-column label="产品简称" prop="name" show-tooltip-when-overflow />
+      <el-table-column label="产品全称" prop="fullname" show-tooltip-when-overflow />
+      <el-table-column label="产品类别" prop="productType" show-tooltip-when-overflow />
+      <el-table-column label="产品等级" prop="level" show-tooltip-when-overflow />
+      <el-table-column label="品牌" prop="brand" show-tooltip-when-overflow />
+      <el-table-column label="规格" prop="specification" show-tooltip-when-overflow />
+      <el-table-column label="最小计量单位" prop="unit" />
       <!--      <el-table-column label="操作" class-name="small-padding fixed-width">-->
       <!--        <template #default="scope">-->
       <!--          <el-button-->

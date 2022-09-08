@@ -132,7 +132,7 @@
                <el-table-column type="selection" width="50" align="center" />
                <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" :show-overflow-tooltip="true" />
                <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="企业微信ID" align="center" key="weUserId" prop="weUserId" v-if="columns[2].visible" :show-overflow-tooltip="true" />
+               <el-table-column label="企业微信ID" align="center" key="weUserId" prop="weUserId" v-if="columns[2].visible" :show-overflow-tooltip="true" min-width="100" />
                <el-table-column label="部门" align="center" key="deptname" prop="deptname" v-if="columns[3].visible" :show-overflow-tooltip="true" />
                <el-table-column label="手机号码" align="center" key="mobile" prop="mobile" v-if="columns[4].visible" width="120" />
                <el-table-column label="状态" align="center" key="enable" v-if="columns[5].visible">
@@ -150,40 +150,36 @@
                      <span>{{ parseTime(scope.row.createTime) }}</span>
                   </template>
                </el-table-column>
-               <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
+               <el-table-column label="操作" align="center" width="280" class-name="small-padding fixed-width">
                   <template #default="scope">
-                     <el-tooltip content="修改" placement="top" v-if="scope.row.userId !== 1">
                         <el-button
                            type="text"
                            icon="Edit"
+                           size="small"
                            @click="handleUpdate(scope.row)"
                            v-hasPermi="['system:user:edit']"
-                        ></el-button>
-                     </el-tooltip>
-                     <el-tooltip content="删除" placement="top" v-if="scope.row.userId !== 1">
+                        >修改</el-button>
                         <el-button
                            type="text"
                            icon="Delete"
+                           size="small"
                            @click="handleDelete(scope.row)"
                            v-hasPermi="['system:user:remove']"
-                        ></el-button>
-                     </el-tooltip>
-                     <el-tooltip content="重置密码" placement="top" v-if="scope.row.userId !== 1">
+                        >删除</el-button>
                         <el-button
                            type="text"
                            icon="Key"
+                           size="small"
                            @click="handleResetPwd(scope.row)"
                            v-hasPermi="['system:user:resetPwd']"
-                        ></el-button>
-                     </el-tooltip>
-                     <el-tooltip content="分配角色" placement="top" v-if="scope.row.userId !== 1">
+                        >重置密码</el-button>
                         <el-button
                            type="text"
                            icon="CircleCheck"
+                           size="small"
                            @click="handleAuthRole(scope.row)"
                            v-hasPermi="['system:user:edit']"
-                        ></el-button>
-                     </el-tooltip>
+                        >分配角色</el-button>
                   </template>
                </el-table-column>
             </el-table>
@@ -198,7 +194,7 @@
       </el-row>
 
       <!-- 添加或修改用户配置对话框 -->
-      <el-dialog :title="title" v-model="open" width="50%" append-to-body>
+      <el-dialog :title="title" v-model="open" width="58%" append-to-body>
          <el-form :model="form" :rules="rules" ref="userRef" label-width="80px">
             <el-row>
                <el-col :span="12">
@@ -206,20 +202,35 @@
                      <el-input v-model="form.alias" placeholder="请输入用户昵称" maxlength="30" />
                   </el-form-item>
                </el-col>
-               <el-col :span="12">
-                  <el-form-item label="归属部门" prop="deptIds">
-                     <el-tree-select
-                        v-model="form.deptIds"
-                        :data="deptOptions"
-                        :props="{ value: 'id', label: 'label', children: 'children' }"
-                        value-key="id"
-                        multiple
-                        placeholder="请选择归属部门"
-                        style="width: 100%"
-                     />
-                  </el-form-item>
-               </el-col>
+              <el-col :span="12">
+                <el-form-item label="角色">
+                  <el-select v-model="form.roleIds" multiple placeholder="请选择" style="width: 100%">
+                    <el-option
+                        v-for="item in roleOptions"
+                        :key="item.roleId"
+                        :label="item.name"
+                        :value="item.roleId"
+                        :disabled="item.status == 0"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
             </el-row>
+           <el-row>
+             <el-col :span="24">
+               <el-form-item label="归属部门" prop="deptIds">
+                 <el-tree-select
+                     v-model="form.deptIds"
+                     :data="deptOptions"
+                     :props="{ value: 'id', label: 'label', children: 'children' }"
+                     value-key="id"
+                     multiple
+                     placeholder="请选择归属部门"
+                     style="width: 100%"
+                 />
+               </el-form-item>
+             </el-col>
+           </el-row>
             <el-row>
                <el-col :span="12">
                   <el-form-item label="手机号码" prop="mobile">
@@ -247,7 +258,7 @@
             <el-row>
                <el-col :span="12">
                   <el-form-item label="用户性别">
-                     <el-select v-model="form.gender" placeholder="请选择">
+                     <el-select v-model="form.gender" placeholder="请选择" style="width: 100%">
                         <el-option
                            v-for="dict in sys_user_sex"
                            :key="dict.value"
@@ -283,19 +294,6 @@
 <!--                     </el-select>-->
 <!--                  </el-form-item>-->
 <!--               </el-col>-->
-               <el-col :span="12">
-                  <el-form-item label="角色">
-                     <el-select v-model="form.roleIds" multiple placeholder="请选择">
-                        <el-option
-                           v-for="item in roleOptions"
-                           :key="item.roleId"
-                           :label="item.name"
-                           :value="item.roleId"
-                           :disabled="item.status == 0"
-                        ></el-option>
-                     </el-select>
-                  </el-form-item>
-               </el-col>
             </el-row>
             <el-row>
                <el-col :span="24">

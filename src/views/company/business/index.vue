@@ -46,22 +46,23 @@
         :default-expand-all="isExpandAll"
         height="72vh"
     >
-      <el-table-column prop="name" label="部门名称" width="500"></el-table-column>
+      <el-table-column prop="name" label="部门名称" width="450" show-tooltip-when-overflow></el-table-column>
       <el-table-column prop="state" label="状态">
         <template #default="scope">
           <dict-tag :options="sys_normal_disable" :value="scope.row.state"/>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="200">
+      <el-table-column label="创建时间" prop="createTime" show-tooltip-when-overflow>
         <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="200">
+      <el-table-column label="操作" class-name="small-padding fixed-width" width="180">
         <template #default="scope">
           <el-button
               type="text"
               icon="Plus"
+              size="small"
               @click="handleAdd(scope.row)"
               v-hasPermi="['system:dept:add']"
           >新增
@@ -69,6 +70,7 @@
           <el-button
               type="text"
               icon="Edit"
+              size="small"
               @click="handleUpdate(scope.row)"
               v-hasPermi="['system:dept:edit']"
           >修改
@@ -77,6 +79,7 @@
               v-if="scope.row.parentNodeId != 0"
               type="text"
               icon="Delete"
+              size="small"
               @click="handleDelete(scope.row)"
               v-hasPermi="['system:dept:remove']"
           >删除
@@ -140,11 +143,11 @@
         </div>
       </el-divider>
       <el-form ref="formTableRef" :rules="rulesTable" :model="tableUsers">
-        <el-table :data="tableUsers.tableData" style="width: 100%">
+        <el-table :data="tableUsers.tableData" style="width: 100%" height="350px" class="table-data">
           <el-table-column prop="userName" label="人员">
             <template #default="{ row, column, $index }">
               <el-form-item :prop=" 'tableData.' + $index + '.userId' " :rules="rulesTable.userName">
-                <el-select v-model="row.userId" filterable placeholder="请选择人员">
+                <el-select v-model="row.userId" filterable placeholder="请选择人员" style="width: 90%">
                   <el-option v-for="item in selectUsers" :key="item.userId" :label="item.userName"
                              :value="item.userId"/>
                 </el-select>
@@ -154,7 +157,7 @@
           <el-table-column prop="job" label="职务">
             <template #default="{ row, column, $index }">
               <el-form-item :prop=" 'tableData.' + $index + '.jobId' " :rules="rulesTable.job">
-                <el-select v-model="row.jobId" filterable placeholder="请选择职务">
+                <el-select v-model="row.jobId" filterable placeholder="请选择职务" style="width: 90%">
                   <el-option v-for="item in selectJobs" :key="item.jobId" :label="item.name" :value="item.jobId"/>
                 </el-select>
               </el-form-item>
@@ -162,7 +165,7 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="120">
             <template #default="{ row, column, $index }">
-              <el-button link type="primary" size="small" @click="handleDelUser($index)">删除</el-button>
+              <el-button link type="primary" icon="Delete" size="small" @click="handleDelUser($index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -378,3 +381,11 @@ loadSelectJobs()
 loadSelectUsers()
 getList();
 </script>
+<style lang="scss" scoped>
+.table-data {
+  .el-form-item {
+    margin-bottom: 0 !important;
+  }
+}
+
+</style>

@@ -77,7 +77,7 @@
 
     <el-table v-loading="loading" :data="makerList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="生产厂家ID" align="center" prop="makerId" />
+      <el-table-column label="生产厂家ID" align="center" prop="makerId" width="100" />
       <el-table-column label="简称" align="center" prop="name" />
       <el-table-column label="类型" align="center" prop="type" />
       <el-table-column label="省份" align="center" prop="province" />
@@ -90,17 +90,19 @@
           <dict-tag :options="sys_normal_disable" :value="scope.row.state"/>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="150">
         <template #default="scope">
           <el-button
               type="text"
               icon="Edit"
+              size="small"
               @click="handleUpdate(scope.row)"
               v-hasPermi="['wecom:maker:edit']"
           >修改</el-button>
           <el-button
               type="text"
               icon="Delete"
+              size="small"
               @click="handleDelete(scope.row)"
               v-hasPermi="['wecom:maker:remove']"
           >删除</el-button>
@@ -117,8 +119,9 @@
     />
 
     <!-- 添加或修改生产厂家对话框 -->
-    <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="makerRef" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" v-model="open" width="64%" append-to-body>
+      <el-scrollbar height="640px">
+        <el-form ref="makerRef" :model="form" :rules="rules" label-width="100px" class="dialog-form">
         <el-form-item label="简称" prop="name">
           <el-input v-model="form.name" placeholder="请输入简称" />
         </el-form-item>
@@ -126,7 +129,7 @@
           <el-input v-model="form.fullname" placeholder="请输入全称" />
         </el-form-item>
         <el-form-item label="类型" prop="type">
-          <el-select v-model="form.type" placeholder="请选择类型">
+          <el-select v-model="form.type" placeholder="请选择类型" style="width: 100%">
             <el-option label="请选择字典生成" value="" />
           </el-select>
         </el-form-item>
@@ -197,6 +200,7 @@
           <el-input v-model="form.communityCode" placeholder="请输入村社区编码" />
         </el-form-item>
       </el-form>
+      </el-scrollbar>
       <template #footer>
         <div class="dialog-footer">
           <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -338,3 +342,8 @@ function handleExport() {
 
 getList();
 </script>
+<style lang="scss" scoped>
+.dialog-form {
+  padding-right: 18px;
+}
+</style>

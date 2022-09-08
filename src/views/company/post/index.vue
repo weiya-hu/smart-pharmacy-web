@@ -76,31 +76,33 @@
       </el-row>
 
       <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
-         <el-table-column type="selection" width="55" align="center" />
-         <el-table-column label="岗位编号" align="center" prop="jobId" />
-         <el-table-column label="岗位名称" align="center" prop="name" />
-         <el-table-column label="岗位排序" align="center" prop="sort" />
-         <el-table-column label="状态" align="center" prop="state">
+         <el-table-column type="selection" width="55" />
+         <el-table-column label="岗位编号" prop="jobId" show-tooltip-when-overflow />
+         <el-table-column label="岗位名称" prop="name" />
+         <el-table-column label="岗位排序" prop="sort" />
+         <el-table-column label="状态" prop="state">
             <template #default="scope">
                <dict-tag :options="sys_normal_disable" :value="scope.row.state" />
             </template>
          </el-table-column>
-         <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+         <el-table-column label="创建时间"  prop="createTime" show-tooltip-when-overflow>
             <template #default="scope">
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+         <el-table-column label="操作"  class-name="small-padding fixed-width" width="150">
             <template #default="scope">
                <el-button
                   type="text"
                   icon="Edit"
+                  size="small"
                   @click="handleUpdate(scope.row)"
                   v-hasPermi="['system:post:edit']"
                >修改</el-button>
                <el-button
                   type="text"
                   icon="Delete"
+                  size="small"
                   @click="handleDelete(scope.row)"
                   v-hasPermi="['system:post:remove']"
                >删除</el-button>
@@ -117,26 +119,36 @@
       />
 
       <!-- 添加或修改岗位对话框 -->
-      <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-         <el-form ref="postRef" :model="form" :rules="rules" label-width="80px">
-            <el-form-item label="岗位名称" prop="name">
-               <el-input v-model="form.name" placeholder="请输入岗位名称" />
-            </el-form-item>
-            <el-form-item label="岗位顺序" prop="sort">
-               <el-input-number v-model.number="form.sort" controls-position="right" :min="0" />
-            </el-form-item>
-            <el-form-item label="岗位状态" prop="state">
-               <el-radio-group v-model.number="form.state">
-                  <el-radio
-                     v-for="dict in sys_normal_disable"
-                     :key="dict.value"
-                     :label="dict.value"
-                  >{{ dict.label }}</el-radio>
-               </el-radio-group>
-            </el-form-item>
-            <el-form-item label="备注" prop="remark">
-               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-            </el-form-item>
+      <el-dialog :title="title" v-model="open" width="50%" append-to-body>
+         <el-form ref="postRef" :model="form" :rules="rules" label-width="100px">
+           <el-row>
+             <el-col :span="24">
+               <el-form-item label="岗位名称" prop="name">
+                 <el-input v-model="form.name" placeholder="请输入岗位名称" />
+               </el-form-item>
+             </el-col>
+             <el-col :span="12">
+               <el-form-item label="岗位顺序" prop="sort">
+                 <el-input-number v-model.number="form.sort" controls-position="right" :min="0" style="width: 100%" />
+               </el-form-item>
+             </el-col>
+             <el-col :span="12">
+               <el-form-item label="岗位状态" prop="state">
+                 <el-radio-group v-model.number="form.state">
+                   <el-radio
+                       v-for="dict in sys_normal_disable"
+                       :key="dict.value"
+                       :label="dict.value"
+                   >{{ dict.label }}</el-radio>
+                 </el-radio-group>
+               </el-form-item>
+             </el-col>
+             <el-col :span="24">
+               <el-form-item label="备注" prop="remark">
+                 <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+               </el-form-item>
+             </el-col>
+           </el-row>
          </el-form>
          <template #footer>
             <div class="dialog-footer">
@@ -185,7 +197,7 @@ function getList() {
   loading.value = true;
   listPost(queryParams.value).then(response => {
     postList.value = response.data.list;
-    total.value = response.total;
+    total.value = Number(response.data.total);
     loading.value = false;
   });
 }

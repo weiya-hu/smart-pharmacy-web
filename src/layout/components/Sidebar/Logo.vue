@@ -1,11 +1,11 @@
 <template>
   <div class="sidebar-logo-container" :class="{ 'collapse': collapse }" :style="{ backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground }">
     <transition name="sidebarLogoFade">
-      <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
+      <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/index">
         <img v-if="logo" :src="logo" class="sidebar-logo" />
         <h1 v-else class="sidebar-title" :style="{ color: sideTheme === 'theme-dark' ? variables.logoTitleColor : variables.logoLightTitleColor }">{{ title }}</h1>
       </router-link>
-      <router-link v-else key="expand" class="sidebar-logo-link" to="/">
+      <router-link v-else key="expand" class="sidebar-logo-link" to="/index">
         <img v-if="logo" :src="logo" class="sidebar-logo" />
         <h1 class="sidebar-title" :style="{ color: sideTheme === 'theme-dark' ? variables.logoTitleColor : variables.logoLightTitleColor }">{{ title }}</h1>
       </router-link>
@@ -25,7 +25,7 @@ defineProps({
   }
 })
 
-const title = ref('若依管理系统');
+const title = ref('山海平管理系统');
 const settingsStore = useSettingsStore();
 const sideTheme = computed(() => settingsStore.sideTheme);
 </script>
@@ -54,8 +54,10 @@ const sideTheme = computed(() => settingsStore.sideTheme);
     width: 100%;
 
     & .sidebar-logo {
-      width: 32px;
-      height: 32px;
+      //width: 32px;
+      //height: 32px;
+      width: 55px;
+      height: 20px;
       vertical-align: middle;
       margin-right: 12px;
     }
