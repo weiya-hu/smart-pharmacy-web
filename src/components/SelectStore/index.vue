@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form v-model="queryParam" ref="queryForm" label-width="50px">
+    <el-form v-model="queryParam" ref="queryForm" label-width="70px">
       <el-row>
         <el-form-item label="门店名称">
           <el-input v-model="queryParam.name"></el-input>

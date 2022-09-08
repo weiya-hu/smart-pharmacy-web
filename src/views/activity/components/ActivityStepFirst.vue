@@ -1,40 +1,40 @@
 <template>
   <div class="app-container">
     <el-form ref="activityRef" :model="form" :rules="rules" label-width="120px">
-      <el-form-item label="任务简称" prop="name">
+      <el-form-item class="label" label="任务简称" prop="name">
         <el-input v-model="form.name" placeholder="请输入任务简称" :disabled="formDisabled"/>
       </el-form-item>
-      <el-form-item label="任务全称" prop="fullname">
+      <el-form-item class="label" label="任务全称" prop="fullname">
         <el-input v-model="form.fullname" placeholder="请输入任务全称" :disabled="formDisabled"/>
       </el-form-item>
-      <el-form-item label="任务奖励预算" prop="moneyRange">
+      <el-form-item class="label" label="任务奖励预算" prop="moneyRange">
         <el-input type="number" v-model.number="form.moneyRange" placeholder="请输入任务奖励预算"
                   :disabled="formDisabled"/>
       </el-form-item>
 
-      <el-form-item label="开始时间" prop="beginTime">
+      <el-form-item class="label" label="开始时间" prop="beginTime">
         <el-date-picker v-model="form.beginTime" type="date" placeholder="开始时间" value-format="YYYY-MM-DD HH:mm:ss"
                         :disabled="formDisabled"/>
       </el-form-item>
-      <el-form-item label="结束时间" prop="endTime">
+      <el-form-item class="label" label="结束时间" prop="endTime">
         <el-date-picker v-model="form.endTime" type="date" placeholder="结束时间" value-format="YYYY-MM-DD HH:mm:ss"
                         :disabled="formDisabled"/>
       </el-form-item>
-      <el-form-item label="任务范围" prop="ruleScupes">
+      <el-form-item class="label" label="任务范围" prop="ruleScupes">
         <el-button @click="showRuleScupes = !showRuleScupes" link type="primary">
           <span v-show="handleType === 'query'">查看</span>
           <span v-show="handleType === 'edit'">编辑</span>
           <span v-show="handleType === 'add'">新增</span>
         </el-button>
       </el-form-item>
-      <el-form-item label="任务负责人" prop="ruleResponsibleUsers">
+      <el-form-item class="label" label="任务负责人" prop="ruleResponsibleUsers">
         <el-button @click="showResponsibleUsers = !showResponsibleUsers" link type="primary">
           <span v-show="handleType === 'query'">查看</span>
           <span v-show="handleType === 'edit'">编辑</span>
           <span v-show="handleType === 'add'">新增</span>
         </el-button>
       </el-form-item>
-      <el-form-item label="任务参与方" prop="participants">
+      <el-form-item class="label" label="任务参与方" prop="participants">
         <el-button @click="showRarticipants = !showRarticipants" link type="primary">
           <span v-show="handleType === 'query'">查看</span>
           <span v-show="handleType === 'edit'">编辑</span>
@@ -48,7 +48,7 @@
       <!--          </el-option>-->
       <!--        </el-select>-->
       <!--      </el-form-item>-->
-      <el-form-item label="任务附件" prop="filesInfos">
+      <el-form-item class="label" label="任务附件" prop="filesInfos">
         <el-upload
             v-model:file-list="form.filesInfos"
             class="upload-demo"
@@ -60,7 +60,7 @@
       </el-form-item>
     </el-form>
 
-    <el-dialog title="任务范围" v-model="showRuleScupes" width="50%" >
+    <el-dialog title="任务范围" v-model="showRuleScupes" width="50%">
       <el-form :model="queryRuleScupesParams" label-width="68px">
         <el-form-item label="品类" prop="productTypes">
           <el-select v-model="queryRuleScupesParams.productTypes" multiple clearable>
@@ -84,7 +84,8 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <BusinessTree ref="businessTreeParticipantsRef" :handelType="props.handleType" :data="data.form.ruleScupes"></BusinessTree>
+      <BusinessTree ref="businessTreeParticipantsRef" :handelType="props.handleType"
+                    :data="data.form.ruleScupes"></BusinessTree>
       <template #footer>
         <div class="dialog-footer">
           <el-button type="primary" @click="onSuccessRuleScupes">确 定</el-button>
@@ -127,7 +128,8 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <BusinessTree ref="businessTreeParticipantsRef" :handelType="props.handleType" :data="data.form.participants" ></BusinessTree>
+      <BusinessTree ref="businessTreeParticipantsRef" :handelType="props.handleType"
+                    :data="data.form.participants"></BusinessTree>
       <template #footer>
         <div class="dialog-footer">
           <el-button type="primary" @click="onSuccessRarticipants">确 定</el-button>
@@ -323,6 +325,10 @@ onLoad()
 
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.label::v-deep( .el-form-item__label) {
+  color: #606266;
+  font-weight: 600;
+  justify-content: flex-start !important;
+}
 </style>
