@@ -39,10 +39,10 @@ router.beforeEach((to, from, next) => {
           })
 
         }).catch(err => {
-          useUserStore().logOut().then(() => {
-            ElMessage.error(err)
-            next({ path: '/index' })
-          })
+          // useUserStore().logOut().then(() => {
+          //   ElMessage.error(err)
+          //   next({ path: '/index' })
+          // })
         })
       } else {
         next()
