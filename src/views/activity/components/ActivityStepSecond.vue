@@ -7,7 +7,8 @@
             <div class="handler">
               <div>
                 <el-button type="primary" @click="delForm(index)">删除</el-button>
-                <el-button type="primary" @click="saveFormAndAdd(index)">保存并新增</el-button>
+                <el-button type="primary" @click="saveFormAndAdd(index,'save')">保存</el-button>
+                <el-button type="primary" @click="saveFormAndAdd(index,'saveAndAdd')">保存并新增</el-button>
                 <el-button type="primary" @click="addForm">新增</el-button>
               </div>
             </div>
@@ -101,7 +102,8 @@
             <div class="handler">
               <div>
                 <el-button type="primary" @click="delForm(index)">删除</el-button>
-                <el-button type="primary" @click="saveFormAndAdd(index)">保存并新增</el-button>
+                <el-button type="primary" @click="saveFormAndAdd(index,'save')">保存</el-button>
+                <el-button type="primary" @click="saveFormAndAdd(index,'saveAndAdd')">保存并新增</el-button>
                 <el-button type="primary" @click="addForm">新增</el-button>
               </div>
             </div>
@@ -198,7 +200,8 @@
             <div class="handler">
               <div>
                 <el-button type="primary" @click="delForm(index)">删除</el-button>
-                <el-button type="primary" @click="saveFormAndAdd(index)">保存并新增</el-button>
+                <el-button type="primary" @click="saveFormAndAdd(index,'save')">保存</el-button>
+                <el-button type="primary" @click="saveFormAndAdd(index,'saveAndAdd')">保存并新增</el-button>
                 <el-button type="primary" @click="addForm">新增</el-button>
               </div>
             </div>
@@ -321,7 +324,7 @@
 import {
   queryBrandList, queryStoreList, queryJobList
 } from "@/api/activity/activityProduct";
-import {addEventRule, queryEventRule} from '@/api/activity/eventInfo'
+import {addEventRule, queryEventRule,publish} from '@/api/activity/eventInfo'
 import SelectProducts from '@/components/SelectProducts/index'
 import SelectStore from '@/components/SelectStore/index'
 
@@ -584,7 +587,7 @@ const delForm = (index) => {
   }
 }
 //保存并新增规则
-const saveFormAndAdd = async (index) => {
+const saveFormAndAdd = async (index,type) => {
   switch (tabValue.value) {
     case 'first' :
       let v = await firstForm.value.validate()
@@ -594,7 +597,9 @@ const saveFormAndAdd = async (index) => {
             .then(res => {
               if (res.code === 200) {
                 proxy.$modal.msgSuccess("保存成功");
-                firstFormModels.value.formListData.push(resetFirstForm())
+                if(type==='saveAndAdd'){
+                  firstFormModels.value.formListData.push(resetFirstForm())
+                }
               }
             })
 
@@ -608,7 +613,9 @@ const saveFormAndAdd = async (index) => {
             .then(res => {
               if (res.code === 200) {
                 proxy.$modal.msgSuccess("保存成功");
-                secondFormModels.value.formListData.push(resetSecondForm())
+                if(type==='saveAndAdd'){
+                  secondFormModels.value.formListData.push(resetSecondForm())
+                }
               }
             })
 
@@ -622,7 +629,10 @@ const saveFormAndAdd = async (index) => {
             .then(res => {
               if (res.code === 200) {
                 proxy.$modal.msgSuccess("保存成功");
-                thirdFormModels.value.formListData.push(resetThirdForm())
+                if(type==='saveAndAdd'){
+                  thirdFormModels.value.formListData.push(resetThirdForm())
+                }
+
               }
             })
       }
@@ -671,9 +681,13 @@ const loadEventRule = () => {
         })
   }
 }
+const publishActivity=()=>{
+  return publish(props.eventId)
+}
 defineExpose({
   loadEventRule,
-  getJobList
+  getJobList,
+  publishActivity
 })
 
 </script>

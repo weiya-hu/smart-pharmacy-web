@@ -39,16 +39,15 @@ export function queryEventInfoList(data) {
     return request({
         url: `/sop/event/info/list`,
         method: 'get',
-        params:data
+        params: data
     })
 }
 
 //发布活动
-export function publish(data) {
+export function publish(eventId) {
     return request({
-        url: `/sop/event/info/publish`,
-        method: 'POST',
-        data:data
+        url: `/sop/event/info/publish/${eventId}`,
+        method: 'get',
     })
 }
 
@@ -57,15 +56,23 @@ export function addEventRule(data) {
     return request({
         url: `/sop/event/rule`,
         method: 'POST',
-        data:data
+        data: data
     })
 }
+
 //查询活动任务的规则列表
 export function queryEventRule(data) {
     return request({
         url: `/sop/event/rule/list`,
         method: 'get',
-        params:data
+        params: data
     })
 }
 
+//发布活动任务
+export function publishActivityTask(data) {
+    return request({
+        url: `/sop/event/info/publish/${data}`,
+        method: 'get',
+    })
+}

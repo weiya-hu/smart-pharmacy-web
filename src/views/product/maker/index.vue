@@ -16,84 +16,92 @@
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+        <el-button
+            type="info"
+            plain
+            icon="Upload"
+            @click="handleImport"
+        >导入
+        </el-button>
       </el-form-item>
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--            type="primary"-->
-<!--            plain-->
-<!--            icon="Plus"-->
-<!--            @click="handleAdd"-->
-<!--            v-hasPermi="['wecom:product:add']"-->
-<!--        >新增-->
-<!--        </el-button>-->
-<!--      </el-col>-->
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--            type="success"-->
-<!--            plain-->
-<!--            icon="Edit"-->
-<!--            :disabled="single"-->
-<!--            @click="handleUpdate"-->
-<!--            v-hasPermi="['wecom:product:edit']"-->
-<!--        >修改-->
-<!--        </el-button>-->
-<!--      </el-col>-->
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--            type="danger"-->
-<!--            plain-->
-<!--            icon="Delete"-->
-<!--            :disabled="multiple"-->
-<!--            @click="handleDelete"-->
-<!--            v-hasPermi="['wecom:product:remove']"-->
-<!--        >删除-->
-<!--        </el-button>-->
-<!--      </el-col>-->
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--            type="warning"-->
-<!--            plain-->
-<!--            icon="Download"-->
-<!--            @click="handleExport"-->
-<!--            v-hasPermi="['wecom:product:export']"-->
-<!--        >导出-->
-<!--        </el-button>-->
-<!--      </el-col>-->
+      <el-col :span="1.5">
+        <!--        <el-button-->
+        <!--            type="primary"-->
+        <!--            plain-->
+        <!--            icon="Plus"-->
+        <!--            @click="handleAdd"-->
+        <!--            v-hasPermi="['wecom:product:add']"-->
+        <!--        >新增-->
+        <!--        </el-button>-->
+        <!--      </el-col>-->
+        <!--      <el-col :span="1.5">-->
+        <!--        <el-button-->
+        <!--            type="success"-->
+        <!--            plain-->
+        <!--            icon="Edit"-->
+        <!--            :disabled="single"-->
+        <!--            @click="handleUpdate"-->
+        <!--            v-hasPermi="['wecom:product:edit']"-->
+        <!--        >修改-->
+        <!--        </el-button>-->
+        <!--      </el-col>-->
+        <!--      <el-col :span="1.5">-->
+        <!--        <el-button-->
+        <!--            type="danger"-->
+        <!--            plain-->
+        <!--            icon="Delete"-->
+        <!--            :disabled="multiple"-->
+        <!--            @click="handleDelete"-->
+        <!--            v-hasPermi="['wecom:product:remove']"-->
+        <!--        >删除-->
+        <!--        </el-button>-->
+        <!--      </el-col>-->
+        <!--      <el-col :span="1.5">-->
+        <!--        <el-button-->
+        <!--            type="warning"-->
+        <!--            plain-->
+        <!--            icon="Download"-->
+        <!--            @click="handleExport"-->
+        <!--            v-hasPermi="['wecom:product:export']"-->
+        <!--        >导出-->
+        <!--        </el-button>-->
+
+      </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="productList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="69码" prop="barCode" show-tooltip-when-overflow />
-      <el-table-column label="产品编号" prop="code" show-tooltip-when-overflow />
-      <el-table-column label="产品简称" prop="name" show-tooltip-when-overflow />
-      <el-table-column label="产品全称" prop="fullname" show-tooltip-when-overflow />
-      <el-table-column label="产品类别" prop="productType" show-tooltip-when-overflow />
-      <el-table-column label="产品等级" prop="level" show-tooltip-when-overflow />
-      <el-table-column label="品牌" prop="brand" show-tooltip-when-overflow />
-      <el-table-column label="规格" prop="specification" show-tooltip-when-overflow />
-      <el-table-column label="最小计量单位" prop="unit" show-tooltip-when-overflow />
-<!--      <el-table-column label="操作" class-name="small-padding fixed-width">-->
-<!--        <template #default="scope">-->
-<!--          <el-button-->
-<!--              type="text"-->
-<!--              icon="Edit"-->
-<!--              @click="handleUpdate(scope.row)"-->
-<!--              v-hasPermi="['wecom:product:edit']"-->
-<!--          >修改-->
-<!--          </el-button>-->
-<!--          <el-button-->
-<!--              type="text"-->
-<!--              icon="Delete"-->
-<!--              @click="handleDelete(scope.row)"-->
-<!--              v-hasPermi="['wecom:product:remove']"-->
-<!--          >删除-->
-<!--          </el-button>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
+      <el-table-column label="69码" prop="barCode" show-tooltip-when-overflow/>
+      <el-table-column label="产品编号" prop="code" show-tooltip-when-overflow/>
+      <el-table-column label="产品简称" prop="name" show-tooltip-when-overflow/>
+      <el-table-column label="产品全称" prop="fullname" show-tooltip-when-overflow/>
+      <el-table-column label="产品类别" prop="productType" show-tooltip-when-overflow/>
+      <el-table-column label="产品等级" prop="level" show-tooltip-when-overflow/>
+      <el-table-column label="品牌" prop="brand" show-tooltip-when-overflow/>
+      <el-table-column label="规格" prop="specification" show-tooltip-when-overflow/>
+      <el-table-column label="最小计量单位" prop="unit" show-tooltip-when-overflow/>
+      <!--      <el-table-column label="操作" class-name="small-padding fixed-width">-->
+      <!--        <template #default="scope">-->
+      <!--          <el-button-->
+      <!--              type="text"-->
+      <!--              icon="Edit"-->
+      <!--              @click="handleUpdate(scope.row)"-->
+      <!--              v-hasPermi="['wecom:product:edit']"-->
+      <!--          >修改-->
+      <!--          </el-button>-->
+      <!--          <el-button-->
+      <!--              type="text"-->
+      <!--              icon="Delete"-->
+      <!--              @click="handleDelete(scope.row)"-->
+      <!--              v-hasPermi="['wecom:product:remove']"-->
+      <!--          >删除-->
+      <!--          </el-button>-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
     </el-table>
 
     <pagination
@@ -151,11 +159,50 @@
         </div>
       </template>
     </el-dialog>
+    <!-- 产品导入和模板下载   -->
+    <el-dialog title="产品导入" v-model="upload.open" width="50%" append-to-body>
+      <el-upload
+          ref="uploadRef"
+          :limit="1"
+          accept=".xlsx, .xls"
+          :headers="upload.headers"
+          :action="upload.url + '?updateSupport=' + upload.updateSupport"
+          :disabled="upload.isUploading"
+          :on-progress="handleFileUploadProgress"
+          :on-success="handleFileSuccess"
+          :auto-upload="false"
+          drag
+      >
+        <el-icon class="el-icon--upload">
+          <upload-filled/>
+        </el-icon>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <template #tip>
+          <div class="el-upload__tip text-center">
+            <div class="el-upload__tip">
+              <el-checkbox v-model="upload.updateSupport"/>
+              是否更新已经存在的用户数据
+            </div>
+            <span>仅允许导入xls、xlsx格式文件。</span>
+            <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;"
+                     @click="importTemplate">下载模板
+            </el-link>
+          </div>
+        </template>
+      </el-upload>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitFileForm">确 定</el-button>
+          <el-button @click="upload.open = false">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup name="Marker">
 import {listProduct, getProduct, delProduct, addProduct, updateProduct} from "@/api/product/makerProduct";
+import {getToken} from "@/utils/auth";
 
 const {proxy} = getCurrentInstance();
 // const { ${dictsNoSymbol} } = proxy.useDict(${dicts});
@@ -176,8 +223,8 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     code: null,
-    productType:null,
-    brands:null
+    productType: null,
+    brands: null
   },
   rules: {
     productMakerid: [
@@ -189,6 +236,47 @@ const data = reactive({
 });
 
 const {queryParams, form, rules} = toRefs(data);
+
+/** 提交上传文件 */
+function submitFileForm() {
+  proxy.$refs["uploadRef"].submit();
+};
+
+/** 下载模板操作 */
+function importTemplate() {
+  proxy.downloadToGet("/product/product/exportTemplate", `product_template_${new Date().getTime()}.xlsx`);
+};
+/*** 用户导入参数 */
+const upload = reactive({
+  // 是否显示弹出层（订单导入）
+  open: false,
+  // 是否禁用上传
+  isUploading: false,
+  // 是否更新已经存在的用户数据
+  updateSupport: 0,
+  // 设置上传的请求头部
+  headers: {Authorization: "Bearer " + getToken()},
+  // 上传的地址
+  url: import.meta.env.VITE_APP_BASE_API + "/product/product/importData"
+});
+
+/** 导入按钮操作 */
+function handleImport() {
+  upload.title = "用户导入";
+  upload.open = true;
+};
+
+/** 文件上传成功处理 */
+const handleFileSuccess = (response, file, fileList) => {
+  proxy.$refs["uploadRef"].handleRemove(file);
+  proxy.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入结果", {dangerouslyUseHTMLString: true});
+  upload.open = false
+  getList();
+};
+/**文件上传中处理 */
+const handleFileUploadProgress = (event, file, fileList) => {
+  upload.isUploading = true;
+};
 
 /** 查询厂家的产品信息列表 */
 function getList() {
