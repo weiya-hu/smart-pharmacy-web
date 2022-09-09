@@ -79,15 +79,15 @@
                v-hasPermi="['system:role:remove']"
             >删除</el-button>
          </el-col>
-         <el-col :span="1.5">
-            <el-button
-               type="warning"
-               plain
-               icon="Download"
-               @click="handleExport"
-               v-hasPermi="['system:role:export']"
-            >导出</el-button>
-         </el-col>
+<!--         <el-col :span="1.5">-->
+<!--            <el-button-->
+<!--               type="warning"-->
+<!--               plain-->
+<!--               icon="Download"-->
+<!--               @click="handleExport"-->
+<!--               v-hasPermi="['system:role:export']"-->
+<!--            >导出</el-button>-->
+<!--         </el-col>-->
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
@@ -204,22 +204,26 @@
              <el-col :span="12">
                <el-form-item label="超级管理员">
                  <el-radio-group v-model="form.admin">
-                   <el-radio
-                       v-for="dict in sys_yes_no"
-                       :key="dict.value"
-                       :label="dict.value"
-                   >{{ dict.label }}</el-radio>
+<!--                   <el-radio-->
+<!--                       v-for="dict in sys_yes_no"-->
+<!--                       :key="dict.value"-->
+<!--                       :label="dict.value"-->
+<!--                   >{{ dict.label }}</el-radio>-->
+                   <el-radio :label="1">是</el-radio>
+                   <el-radio :label="0">否</el-radio>
                  </el-radio-group>
                </el-form-item>
              </el-col>
              <el-col :span="12">
                <el-form-item label="系统内置">
                  <el-radio-group v-model="form.sysDefault">
-                   <el-radio
-                       v-for="dict in sys_yes_no"
-                       :key="dict.value"
-                       :label="dict.value"
-                   >{{ dict.label }}</el-radio>
+<!--                   <el-radio-->
+<!--                       v-for="dict in sys_yes_no"-->
+<!--                       :key="dict.value"-->
+<!--                       :label="dict.value"-->
+<!--                   >{{ dict.label }}</el-radio>-->
+                   <el-radio :label="1">是</el-radio>
+                   <el-radio :label="0">否</el-radio>
                  </el-radio-group>
                </el-form-item>
              </el-col>
@@ -243,7 +247,7 @@
              </el-col>
              <el-col :span="24">
                <el-form-item label="备注">
-                 <el-input v-model="form.roleDesc" type="textarea" placeholder="请输入内容"></el-input>
+                 <el-input v-model="form.note" type="textarea" placeholder="请输入内容"></el-input>
                </el-form-item>
              </el-col>
            </el-row>
@@ -323,7 +327,7 @@ const total = ref(0);
 const title = ref("");
 const dateRange = ref([]);
 const menuOptions = ref([]);
-const menuExpand = ref(false);
+const menuExpand = ref(true);
 const menuNodeAll = ref(false);
 const deptExpand = ref(true);
 const deptNodeAll = ref(false);
@@ -456,7 +460,7 @@ function reset() {
   if (deptRef.value != undefined) {
     deptRef.value.setCheckedKeys([])
   }
-  menuExpand.value = false;
+  menuExpand.value = true;
   menuNodeAll.value = false;
   deptExpand.value = true;
   deptNodeAll.value = false;
@@ -471,7 +475,7 @@ function reset() {
     admin:0,
     menuCheckStrictly: true,
     deptCheckStrictly: true,
-    roleDesc: undefined,
+    note: undefined,
     sysDefault:0,
     dataScope: undefined
   };

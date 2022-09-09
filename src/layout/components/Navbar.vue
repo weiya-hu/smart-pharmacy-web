@@ -122,9 +122,6 @@ function logout() {
         color: #999999;
       }
     }
-    .el-button {
-      padding-left: 0;
-    }
   }
 }
 @media screen and (max-width: 768px){

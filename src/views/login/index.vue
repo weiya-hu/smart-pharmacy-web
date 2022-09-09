@@ -8,7 +8,7 @@
         <el-tabs v-model="activeName" class="demo-tabs">
           <el-tab-pane label="微信扫码登录" name="first">
             <wxlogin
-                appid="wx638b6577cf54981f"
+                appid="wx3a6a5cc2924a2405"
                 :scope="'snsapi_login'"
                 :theme="'black'"
                 state='wechat'
@@ -43,7 +43,7 @@ const authUrl = `https://open.work.weixin.qq.com/wwopen/sso/3rd_qrConnect?appid=
 function getWechatLogin() {
   if (!getToken()) {
     let params = {
-      appId: 'wx638b6577cf54981f',
+      appId: 'wx3a6a5cc2924a2405',
       authCode: GetQueryString('code'),
       corpId: ''
     }

@@ -26,10 +26,11 @@ export function getDept(deptId) {
 }
 
 // 查询部门下拉树结构
-export function treeselect() {
+export function treeselect(query) {
   return request({
     url: '/wecom/corpinfo/dept/tree',
-    method: 'get'
+    method: 'get',
+    params: query
   })
 }
 

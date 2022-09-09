@@ -115,24 +115,6 @@
                       @click="handleSynchro"
                   >同步</el-button>
                </el-col>
-               <el-col :span="1.5">
-                  <el-button
-                     type="info"
-                     plain
-                     icon="Upload"
-                     @click="handleImport"
-                     v-hasPermi="['system:user:import']"
-                  >导入</el-button>
-               </el-col>
-               <el-col :span="1.5">
-                  <el-button
-                     type="warning"
-                     plain
-                     icon="Download"
-                     @click="handleExport"
-                     v-hasPermi="['system:user:export']"
-                  >导出</el-button>
-               </el-col>
                <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
             </el-row>
 
@@ -158,7 +140,7 @@
                      <span>{{ parseTime(scope.row.createTime) }}</span>
                   </template>
                </el-table-column>
-               <el-table-column label="操作" align="center" width="280" class-name="small-padding fixed-width">
+               <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
                   <template #default="scope">
                         <el-button
                            type="text"
@@ -174,13 +156,6 @@
                            @click="handleDelete(scope.row)"
                            v-hasPermi="['system:user:remove']"
                         >删除</el-button>
-                        <el-button
-                           type="text"
-                           icon="Key"
-                           size="small"
-                           @click="handleResetPwd(scope.row)"
-                           v-hasPermi="['system:user:resetPwd']"
-                        >重置密码</el-button>
                         <el-button
                            type="text"
                            icon="CircleCheck"
@@ -360,7 +335,7 @@ import { getToken } from "@/utils/auth";
 import { treeselect } from "@/api/system/dept";
 import { listRole} from "@/api/system/role";
 import { listPost} from "@/api/system/post";
-import { changeUserStatus, listUser, resetUserPwd, delUser, getUser, updateUser, addUser, synchWeUser } from "@/api/system/user";
+import { changeUserStatus, listUser, delUser, getUser, updateUser, addUser, synchWeUser } from "@/api/system/user";
 import {reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
 
@@ -493,23 +468,6 @@ function handleDelete(row) {
     proxy.$modal.msgSuccess("删除成功");
   }).catch(() => {});
 };
-/** 导出按钮操作 */
-function handleExport() {
-  proxy.download("system/user/export", {
-    ...queryParams.value,
-  },`user_${new Date().getTime()}.xlsx`);
-};
-/** 用户状态修改  */
-function handleStatusChange(row) {
-  let text = row.enable === 1 ? "启用" : "停用";
-  proxy.$modal.confirm('确认要"' + text + '""' + row.userName + '"用户吗?').then(function () {
-    return changeUserStatus(row.userId, row.enable);
-  }).then(() => {
-    proxy.$modal.msgSuccess(text + "成功");
-  }).catch(function () {
-    row.enable = row.enable === 1 ? 1 : 0;
-  });
-};
 /** 更多操作 */
 function handleCommand(command, row) {
   switch (command) {
@@ -530,30 +488,11 @@ function handleAuthRole(row) {
     query: {userId: row.userId}
   })
 };
-/** 重置密码按钮操作 */
-function handleResetPwd(row) {
-  proxy.$prompt('请输入"' + row.userName + '"的新密码', "提示", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    closeOnClickModal: false,
-    inputPattern: /^.{5,20}$/,
-    inputErrorMessage: "用户密码长度必须介于 5 和 20 之间",
-  }).then(({ value }) => {
-    resetUserPwd(row.userId, value).then(response => {
-      proxy.$modal.msgSuccess("修改成功，新密码是：" + value);
-    });
-  }).catch(() => {});
-};
 /** 选择条数  */
 function handleSelectionChange(selection) {
   ids.value = selection.map(item => item.userId);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
-};
-/** 导入按钮操作 */
-function handleImport() {
-  upload.title = "用户导入";
-  upload.open = true;
 };
 /** 下载模板操作 */
 function importTemplate() {

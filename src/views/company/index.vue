@@ -31,7 +31,7 @@
 
             <div v-if="inputType==='readey'" class="demo-image__preview">
               <el-image
-                  :src="form.url"
+                  :src="form.logo"
                   :initial-index="4"
                   fit="cover"
                   style="width:210px;height:100px;"/>
@@ -40,14 +40,14 @@
           </div>
         </el-form-item>
         <el-form-item label="老板的ID" prop="bossUserId">
-          <el-input v-model="form.bossUserId" readonly :disabled="inputType==='readey'" style="width: 300px;" />
+          <el-input v-model="form.bossUserId" :disabled="inputType==='readey'" style="width: 300px;" />
         </el-form-item>
         <el-form-item label="企业名称">
-          <el-input v-model="form.name" readonly :disabled="inputType==='readey'" style="width: 300px;" />
+          <el-input v-model="form.name" :disabled="inputType==='readey'" style="width: 300px;" />
         </el-form-item>
-        <el-form-item label="企业全称">
-          <el-input v-model="form.fullname" readonly :disabled="inputType==='readey'" style="width: 300px;" />
-        </el-form-item>
+<!--        <el-form-item label="企业全称">-->
+<!--          <el-input v-model="form.fullname" :disabled="inputType==='readey'" style="width: 300px;" />-->
+<!--        </el-form-item>-->
         <el-form-item label="企业类型">
           <el-select v-model="form.corpType" :disabled="inputType==='readey'" placeholder="请选择" style="width: 300px;">
             <el-option v-for="item in corpTypeList" :key="item.value" :label="item.label" :value="item.value" />
@@ -132,7 +132,7 @@ const form = ref({
   bossUserId: '', // 老板的userID
   logo: '', // 企业logo
   name: '', // 企业名称
-  fullname: '', // 企业全称
+  // fullname: '', // 企业全称
   corpType: '', // 企业类型:1厂家,2代理商,3连锁药房,4药店
   address: '', // 详细地址
   code: '', // 门店编码
@@ -152,6 +152,7 @@ const corpTypeList = [
   {value: 2, label: '代理商'},
   {value: 3, label: '连锁药房'},
   {value: 4, label: '药店'},
+  {value: 5, label: '其他'},
 ]
 // 连锁品牌
 // const sourceList = [

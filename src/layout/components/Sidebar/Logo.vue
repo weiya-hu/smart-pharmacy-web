@@ -1,5 +1,6 @@
 <template>
-  <div class="sidebar-logo-container" :class="{ 'collapse': collapse }" :style="{ backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground }">
+<!--  <div class="sidebar-logo-container" :class="{ 'collapse': collapse }" :style="{ backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground }">-->
+  <div class="sidebar-logo-container" :class="{ 'collapse': collapse }">
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/index">
         <img v-if="logo" :src="logo" class="sidebar-logo" />
@@ -7,7 +8,8 @@
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/index">
         <img v-if="logo" :src="logo" class="sidebar-logo" />
-        <h1 class="sidebar-title" :style="{ color: sideTheme === 'theme-dark' ? variables.logoTitleColor : variables.logoLightTitleColor }">{{ title }}</h1>
+<!--        <h1 class="sidebar-title" :style="{ color: sideTheme === 'theme-dark' ? variables.logoTitleColor : variables.logoLightTitleColor }">{{ title }}</h1>-->
+        <h1 class="sidebar-title">{{ title }}</h1>
       </router-link>
     </transition>
   </div>
@@ -48,6 +50,7 @@ const sideTheme = computed(() => settingsStore.sideTheme);
   background: #2b2f3a;
   text-align: center;
   overflow: hidden;
+  background: #FFFFFF;
 
   & .sidebar-logo-link {
     height: 100%;
@@ -61,14 +64,18 @@ const sideTheme = computed(() => settingsStore.sideTheme);
     }
 
     & .sidebar-title {
+      //color: #fff;
+      //font-weight: 600;
+      //font-size: 14px;
+      //font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
       display: inline-block;
       margin: 0;
-      color: #fff;
-      font-weight: 600;
       line-height: 50px;
-      font-size: 14px;
-      font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
       vertical-align: middle;
+      font-size: 12px;
+      font-family: Source Han Sans CN;
+      font-weight: bold;
+      color: #979797;
     }
   }
 
