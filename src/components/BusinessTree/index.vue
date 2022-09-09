@@ -34,7 +34,7 @@ const loadTree = () => {
       .then(res => {
         if (res.code === 200) {
           treeData.value = res.data
-          if(props.handelType === 'query' ||props.handelType === 'edit'){
+          if(props.handelType === 'query' ){
             nextTick(()=>{
               menuRef.value.setCheckedKeys( props.data.map(m=>m.nodeId));
             })

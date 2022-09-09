@@ -9,8 +9,7 @@
 
     <ActivityStepFirst ref="activityStepFirstRef" :handleType="handleType" :eventId="eventId"
                        v-show="step === 1"></ActivityStepFirst>
-    <ActivityStepSecond v-if="eventId" :handleType="handleType" :eventId="eventId" ref="activityStepSecondRef"
-                        v-show="step === 2"></ActivityStepSecond>
+    <ActivityStepSecond ref="activityStepSecondRef" v-show="eventId && step === 2" :handleType="handleType" :eventId="eventId"></ActivityStepSecond>
     <div style="text-align: center;margin-top: 5%">
       <el-button @click="step--" v-show="step > 1">上一步</el-button>
       <el-button @click="handleBack" v-show="step===1">返回</el-button>
@@ -32,25 +31,29 @@ const eventId = ref('')
 const handleType = ref('')
 
 
-const handleNext = () => {
+const handleNext = async () => {
   if (step.value === 1) {
     if (handleType.value === 'query') {
       step.value++
       activityStepSecondRef.value.loadEventRule()
     } else {
-      activityStepFirstRef.value.submitForm().then(res => {
+      await activityStepFirstRef.value.submitForm().then(res => {
         if (res.code === 200) {
           if (res.data) {
             eventId.value = res.data
           }
           step.value++
           proxy.$modal.msgSuccess("保存成功");
+          if(handleType.value === 'query' || handleType.value === 'edit'){
+            activityStepSecondRef.value.loadEventRule()
+          }
         }
       })
     }
   } else if (step.value === 2) {
     step.value++
   }
+  activityStepSecondRef.value.getJobList()
 }
 //返回
 const handleBack = () => {

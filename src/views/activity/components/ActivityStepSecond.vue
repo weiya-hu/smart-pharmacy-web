@@ -651,19 +651,30 @@ const props = defineProps({
 })
 //加载任务规则
 const loadEventRule = () => {
-  if (props.handleType === 'query' || props.handleType === 'query') {
+  if (props.handleType === 'query' ) {
     queryEventRule({eventId: props.eventId})
         .then(res => {
           if (res.code === 200) {
-            console.log('任务规则详情', res.data)
+            firstFormModels.value.formListData = []
+            secondFormModels.value.formListData = []
+            thirdFormModels.value.formListData = []
+            res.data.list.forEach(item=>{
+              if(item.eventCalcRewardType === 1){
+                firstFormModels.value.formListData.push(item)
+              }else if(item.eventCalcRewardType === 2){
+                secondFormModels.value.formListData.push(item)
+              }else if(item.eventCalcRewardType === 3){
+                thirdFormModels.value.formListData.push(item)
+              }
+            })
           }
         })
   }
 }
 defineExpose({
-  loadEventRule
+  loadEventRule,
+  getJobList
 })
-getJobList()
 
 </script>
 

@@ -13,6 +13,7 @@ export default defineConfig(({mode, command}) => {
         base: VITE_APP_ENV === 'production' ? '/' : '/',
         plugins: createVitePlugins(env, command === 'build'),
         resolve: {
+            dedupe: ['vue'],
             // https://cn.vitejs.dev/config/#resolve-alias
             alias: {
                 // 设置路径

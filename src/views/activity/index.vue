@@ -43,8 +43,6 @@
           <el-button type="text" icon="Search" @click="handleQueryInfo(scope.row)" v-hasPermi="['wecom:order:remove']">
             查看
           </el-button>
-          <el-button type="text" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['wecom:order:edit']">修改
-          </el-button>
           <el-button type="text" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['wecom:order:remove']">
             删除
           </el-button>
@@ -120,10 +118,6 @@ function handleAdd() {
   router.push({path: '/markteCenter/activityInfo', query: {handleType: 'add'}})
 }
 
-/** 修改按钮操作 */
-function handleUpdate(row) {
-  router.push({path: '/markteCenter/activityInfo', query: {handleType: 'edit', eventId: row.eventId}})
-}
 
 /** 查看按钮操作 */
 function handleQueryInfo(row) {
