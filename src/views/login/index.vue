@@ -2,13 +2,13 @@
   <div class="login">
     <div class="login-box">
       <div class="login-left">
-        <img src="../../assets/images/login_left.png" alt=""/>
+        <img src="../../assets/images/login_left.png" alt="" />
       </div>
       <div class="login-right">
         <el-tabs v-model="activeName" class="demo-tabs">
           <el-tab-pane label="微信扫码登录" name="first">
             <wxlogin
-                appid="wx3a6a5cc2924a2405"
+                appid="wx638b6577cf54981f"
                 :scope="'snsapi_login'"
                 :theme="'black'"
                 state='wechat'
@@ -28,9 +28,9 @@
 
 <script setup>
 import wxlogin from 'vue-wxlogin';
-import {oauthLogin, wechatLogin} from "@/api/login";
+import {oauthLogin, wechatLogin} from "../../api/login";
 import {GetQueryString} from '@/utils/validate';
-import {setToken, getToken} from "@/utils/auth";
+import {setToken, getToken} from "../../utils/auth";
 
 const router = useRouter();
 const redirect = ref(undefined);
@@ -39,7 +39,6 @@ const activeName = ref('first')
 // 微信扫码登录
 const redirectUri = encodeURIComponent("http://platform.shanhaiping.com/")
 const authUrl = `https://open.work.weixin.qq.com/wwopen/sso/3rd_qrConnect?appid=ww15d16db33f11c8a2&redirect_uri=${redirectUri}&state=wecom&usertype=member&href=data:text/css;base64,LmltcG93ZXJCb3ggLnFyY29kZSB7d2lkdGg6IDIyMHB4O30KLmltcG93ZXJCb3ggLnRpdGxlIHtkaXNwbGF5OiBub25lO30KLmltcG93ZXJCb3ggLmluZm8ge3dpZHRoOiAyMjBweDt9Ci5zdGF0dXNfaWNvbiB7ZGlzcGxheTogbm9uZSAgIWltcG9ydGFudH0KLmltcG93ZXJCb3ggLnN0YXR1cyB7dGV4dC1hbGlnbjogY2VudGVyO30g`
-
 // 微信
 function getWechatLogin() {
   if (!getToken()) {
@@ -62,12 +61,11 @@ function getWechatLogin() {
     }
   }
 }
-
 // 企业微信
 function getOauthLogin() {
   if (!getToken()) {
     let params = {
-      authCode: GetQueryString('auth_code') ? GetQueryString('auth_code') : '',
+      authCode: GetQueryString('auth_code') ? GetQueryString('auth_code')  : '',
       state: 'qrLoginsplit',
     }
     if (params.authCode !== '') {
@@ -97,15 +95,14 @@ const wecomControlLogin = ()=>{
           router.push({path: '/login'});
         }
       })
-    } else {
-    }
+    } else {}
   }
 }
 
-const login = () => {
-  if (GetQueryString('state') === 'wecom') {
+const login = ()=>{
+  if(GetQueryString('state') === 'wecom'){
     getOauthLogin()
-  } else if (GetQueryString('state') === 'wechat') {
+  }else if(GetQueryString('state') === 'wechat'){
     getWechatLogin()
   }else if(GetQueryString('state') === 'oauthLoginsplit'){
     wecomControlLogin()
@@ -120,13 +117,11 @@ login()
   img {
     width: 100%;
   }
-
   width: 100%;
   height: 100%;
-  background: url("@/assets/images/login_bg.png");
+  background: url("../../assets/images/login_bg.png");
   background-size: cover;
   position: relative;
-
   .login-box {
     max-width: 980px;
     height: 568px;
@@ -141,29 +136,24 @@ login()
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     .login-left {
       width: 520px;
       height: 435px;
     }
-
     .login-right {
       width: 400px;
       margin: 0 auto;
       overflow: hidden;
       padding: 0 20px 0 40px;
-
       :deep(.el-tabs__nav) {
         transform: translateX(52px) !important;
       }
-
       #pane-first {
         text-align: center;
       }
     }
   }
 }
-
 @media screen and (max-width: 980px) {
   .login {
     .login-box {
