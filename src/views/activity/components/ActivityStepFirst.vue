@@ -22,20 +22,23 @@
       </el-form-item>
       <el-form-item class="label" label="任务范围" prop="ruleScupes">
         <el-button @click="showRuleScupes = !showRuleScupes" link type="primary">
-          <span v-show="handleType === 'query'">查看</span>
-          <span v-show="handleType === 'add'">新增</span>
+          <span v-show="handleType === 'query'">查看<span v-show="form.ruleScupes.length>0">已选择（{{form.ruleScupes.length}}）个</span></span>
+          <span v-show="handleType === 'edit'">编辑 <span v-show="form.ruleScupes.length>0">已选择（{{form.ruleScupes.length}}）个</span></span>
+          <span v-show="handleType === 'add'">新增 <span v-show="form.ruleScupes.length>0">已选择（{{form.ruleScupes.length}}）个</span></span>
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="任务负责人" prop="ruleResponsibleUsers">
         <el-button @click="showResponsibleUsers = !showResponsibleUsers" link type="primary">
-          <span v-show="handleType === 'query'">查看</span>
-          <span v-show="handleType === 'add'">新增</span>
+          <span v-show="handleType === 'query'">查看 <span v-show="form.responsibleUsers.length>0">已选择（{{form.responsibleUsers.length}}）个</span></span>
+          <span v-show="handleType === 'edit'">编辑 <span v-show="form.responsibleUsers.length>0">已选择（{{form.responsibleUsers.length}}）个</span></span>
+          <span v-show="handleType === 'add'">新增<span v-show="form.responsibleUsers.length>0">已选择（{{form.responsibleUsers.length}}）个</span></span>
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="任务参与方" prop="participants">
         <el-button @click="showRarticipants = !showRarticipants" link type="primary">
-          <span v-show="handleType === 'query'">查看</span>
-          <span v-show="handleType === 'add'">新增</span>
+          <span v-show="handleType === 'query'">查看  <span v-show="form.participants.length>0">已选择（{{form.participants.length}}）个</span></span>
+          <span v-show="handleType === 'edit'">编辑<span v-show="form.participants.length>0">已选择（{{form.participants.length}}）个</span></span>
+          <span v-show="handleType === 'add'">新增<span v-show="form.participants.length>0">已选择（{{form.participants.length}}）个</span></span>
         </el-button>
       </el-form-item>
       <!--      <el-form-item label="任务截止类型" prop="endType">-->
@@ -205,7 +208,10 @@ const responsibleUsersRef = ref()
 
 const data = reactive({
   form: {
-    files: []
+    files: [],
+    ruleScupes:[],
+    participants:[],
+    responsibleUsers:[]
   },
   rules: {
     beginTime: [{required: true, message: "请选择开始时间", trigger: "change"}],
@@ -223,6 +229,7 @@ const {form, rules} = toRefs(data);
 // 表单重置
 function reset() {
   form.value = {
+    canEdit:false,
     activityJoint: false,
     moneyRange: 0,//任务奖励预算
     name: '', //简称
@@ -272,10 +279,14 @@ async function submitForm() {
   let v = await proxy.$refs["activityRef"].validate();
   if (v) {
     //任务范围
-    if (form.value.eventId != null) {
+    if (form.value.eventId != null && form.value.canEdit) {
       return updateEventInfo(form.value)
-    } else {
+    } else if(form.value.eventId === undefined) {
       return createEventInfo(form.value)
+    }else if(form.value.eventId != null){
+      return new Promise((resolve) => {
+        resolve({code:200,data:form.value.eventId})
+      })
     }
   }
 }
@@ -357,6 +368,9 @@ const onLoad = async () => {
   let handleType = props.handleType
   switch (handleType) {
     case 'add' :
+      break;
+    case 'edit' :
+      await queryActivityEventId(props.eventId)
       break;
     case 'query' :
       //禁用表单

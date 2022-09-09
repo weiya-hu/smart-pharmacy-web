@@ -21,7 +21,7 @@
 <script setup>
 import ActivityStepFirst from './components/ActivityStepFirst'
 import ActivityStepSecond from './components/ActivityStepSecond'
-
+import {queryEventRule,publish} from '@/api/activity/eventInfo'
 const route = useRoute();
 const {proxy} = getCurrentInstance();
 const step = ref(1)
@@ -51,7 +51,21 @@ const handleNext = async () => {
       })
     }
   } else if (step.value === 2) {
-    step.value++
+    queryEventRule({eventId: eventId.value})
+        .then(res=>{
+          if(res.code !== 200 || res.data.list.length ===0){
+            proxy.$modal.msgError('请先保存规则')
+          }else{
+            //发布任务
+            activityStepSecondRef.value.publishActivity()
+                .then(res=>{
+                  if(res.code === 200){
+                    proxy.$modal.msgSuccess("已提交审核");
+                    step.value++
+                  }
+                })
+          }
+        })
   }
   activityStepSecondRef.value.getJobList()
 }

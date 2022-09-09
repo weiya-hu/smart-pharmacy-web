@@ -44,11 +44,10 @@ export function queryEventInfoList(data) {
 }
 
 //发布活动
-export function publish(data) {
+export function publish(eventId) {
     return request({
-        url: `/sop/event/info/publish`,
-        method: 'POST',
-        data:data
+        url: `/sop/event/info/publish/${eventId}`,
+        method: 'get',
     })
 }
 
