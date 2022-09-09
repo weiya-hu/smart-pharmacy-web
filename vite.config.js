@@ -34,10 +34,9 @@ export default defineConfig(({mode, command}) => {
                 '/dev-api': {
                     // target:'http://127.0.0.1:8080/',
                     // target: 'http://testv2.api.shanhaiping.com',
-                    target:'http://192.168.123.91:8080',
+                    target: 'http://192.168.123.91:8080',
                     // target: 'http://test.api.shanhaiping.com',
                     // target: 'http://testv2.api.shanhaiping.com/',
-                    // target: 'http://api.sp.shanhaiping.com',
                     changeOrigin: true,
                     rewrite: (p) => p.replace(/^\/dev-api/, '')
                 }
