@@ -23,21 +23,18 @@
       <el-form-item class="label" label="任务范围" prop="ruleScupes">
         <el-button @click="showRuleScupes = !showRuleScupes" link type="primary">
           <span v-show="handleType === 'query'">查看</span>
-          <span v-show="handleType === 'edit'">编辑</span>
           <span v-show="handleType === 'add'">新增</span>
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="任务负责人" prop="ruleResponsibleUsers">
         <el-button @click="showResponsibleUsers = !showResponsibleUsers" link type="primary">
           <span v-show="handleType === 'query'">查看</span>
-          <span v-show="handleType === 'edit'">编辑</span>
           <span v-show="handleType === 'add'">新增</span>
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="任务参与方" prop="participants">
         <el-button @click="showRarticipants = !showRarticipants" link type="primary">
           <span v-show="handleType === 'query'">查看</span>
-          <span v-show="handleType === 'edit'">编辑</span>
           <span v-show="handleType === 'add'">新增</span>
         </el-button>
       </el-form-item>
@@ -360,9 +357,6 @@ const onLoad = async () => {
   let handleType = props.handleType
   switch (handleType) {
     case 'add' :
-      break;
-    case 'edit' :
-      await queryActivityEventId(props.eventId)
       break;
     case 'query' :
       //禁用表单
