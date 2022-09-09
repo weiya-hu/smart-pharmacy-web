@@ -43,7 +43,7 @@ const authUrl = `https://open.work.weixin.qq.com/wwopen/sso/3rd_qrConnect?appid=
 function getWechatLogin() {
   if (!getToken()) {
     let params = {
-      appId: 'wx3a6a5cc2924a2405',
+      appId: 'wx638b6577cf54981f',
       authCode: GetQueryString('code'),
       corpId: ''
     }
