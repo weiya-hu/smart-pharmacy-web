@@ -312,6 +312,7 @@ function handleUpdate(row) {
   });
   getReltree(row.id).then(response => {
     form.value = response.data;
+    tableUsers.tableData = response.data.users
     open.value = true;
     title.value = "修改部门";
   });
@@ -358,7 +359,7 @@ function handleChange(val) {
   if (val === 1) {
     makerList().then(res => {
       if (res.code === 200) {
-        nameList.value = res.data
+        nameList.value = res.data.list
       }
     })
   } else if (val === 3) {

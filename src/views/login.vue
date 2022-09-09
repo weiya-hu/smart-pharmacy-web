@@ -2,7 +2,7 @@
   <div class="login">
     <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
       <h3 class="title">系统</h3>
-      <router-link class="link-type" :to="'/register'">立即注册</router-link>
+<!--      <router-link class="link-type" :to="'/register'">立即注册</router-link>-->
       <el-form-item prop="username">
         <el-input
             v-model="loginForm.username"

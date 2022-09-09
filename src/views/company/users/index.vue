@@ -109,6 +109,14 @@
                </el-col>
                <el-col :span="1.5">
                   <el-button
+                      plain
+                      type="success"
+                      icon="Sort"
+                      @click="handleSynchro"
+                  >同步</el-button>
+               </el-col>
+               <el-col :span="1.5">
+                  <el-button
                      type="info"
                      plain
                      icon="Upload"
@@ -352,8 +360,9 @@ import { getToken } from "@/utils/auth";
 import { treeselect } from "@/api/system/dept";
 import { listRole} from "@/api/system/role";
 import { listPost} from "@/api/system/post";
-import { changeUserStatus, listUser, resetUserPwd, delUser, getUser, updateUser, addUser } from "@/api/system/user";
+import { changeUserStatus, listUser, resetUserPwd, delUser, getUser, updateUser, addUser, synchWeUser } from "@/api/system/user";
 import {reactive, ref} from "vue";
+import {ElMessage} from "element-plus";
 
 const router = useRouter();
 const { proxy } = getCurrentInstance();
@@ -644,6 +653,14 @@ function submitForm() {
     }
   });
 };
+/** 同步通讯录 */
+function handleSynchro() {
+  synchWeUser().then(res => {
+    if (res.code === 200) {
+      ElMessage.success(res.msg)
+    }
+  })
+}
 
 getTreeselect();
 getList();

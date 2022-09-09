@@ -127,3 +127,11 @@ export function updateAuthRole(data) {
     data: data
   })
 }
+
+// 同步通讯录
+export function synchWeUser() {
+  return request({
+    url: '/wecom/corpinfo/user/synchWeUser',
+    method: 'get'
+  })
+}

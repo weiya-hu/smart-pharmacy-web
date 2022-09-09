@@ -25,7 +25,7 @@ defineProps({
   }
 })
 
-const title = ref('山海平管理系统');
+const title = ref('店绩·药店版');
 const settingsStore = useSettingsStore();
 const sideTheme = computed(() => settingsStore.sideTheme);
 </script>
@@ -54,10 +54,8 @@ const sideTheme = computed(() => settingsStore.sideTheme);
     width: 100%;
 
     & .sidebar-logo {
-      //width: 32px;
-      //height: 32px;
-      width: 55px;
-      height: 20px;
+      width: 38px;
+      height: 38px;
       vertical-align: middle;
       margin-right: 12px;
     }
