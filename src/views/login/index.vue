@@ -80,12 +80,32 @@ function getOauthLogin() {
     } else {}
   }
 }
+const wecomControlLogin = ()=>{
+  if (!getToken()) {
+    let params = {
+      authCode: GetQueryString('auth_code') ? GetQueryString('auth_code')  : '',
+      state: 'oauthLoginsplit',
+    }
+    if (params.authCode !== '') {
+      oauthLogin(params).then(res => {
+        if (res.code === 200) {
+          setToken(res.data.access_token)
+          router.push({path: redirect.value || "/index"});
+        } else {
+          router.push({path: '/login'});
+        }
+      })
+    } else {}
+  }
+}
 
 const login = ()=>{
   if(GetQueryString('state') === 'wecom'){
     getOauthLogin()
   }else if(GetQueryString('state') === 'wechat'){
     getWechatLogin()
+  }else if(GetQueryString('state') === 'oauthLoginsplit'){
+    wecomControlLogin()
   }
 }
 
