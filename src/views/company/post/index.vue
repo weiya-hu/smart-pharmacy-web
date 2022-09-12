@@ -63,15 +63,15 @@
                v-hasPermi="['system:post:remove']"
             >删除</el-button>
          </el-col>
-         <el-col :span="1.5">
-            <el-button
-               type="warning"
-               plain
-               icon="Download"
-               @click="handleExport"
-               v-hasPermi="['system:post:export']"
-            >导出</el-button>
-         </el-col>
+<!--         <el-col :span="1.5">-->
+<!--            <el-button-->
+<!--               type="warning"-->
+<!--               plain-->
+<!--               icon="Download"-->
+<!--               @click="handleExport"-->
+<!--               v-hasPermi="['system:post:export']"-->
+<!--            >导出</el-button>-->
+<!--         </el-col>-->
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
@@ -248,6 +248,8 @@ function handleUpdate(row) {
     open.value = true;
     title.value = "修改岗位";
   });
+  console.log('ids', ids.value)
+  console.log('row', row.jobId)
 }
 /** 提交按钮 */
 function submitForm() {
