@@ -93,6 +93,11 @@ service.interceptors.response.use(res => {
           });
         }
         return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
+      }else if (code === 400 && msg === "未取到登录信息" ) {
+        removeToken()
+        useUserStore().logOut().then(() => {
+          location.href = '/index';
+        })
       } else if (code === 500) {
         ElMessage({
           message: msg,
@@ -104,9 +109,7 @@ service.interceptors.response.use(res => {
           title: msg
         })
         return Promise.reject('error')
-      } else if (code === 400 && msg === "未取到登录信息" ) {
-        removeToken()
-      } else {
+      }  else {
         return Promise.resolve(res.data)
       }
     },
