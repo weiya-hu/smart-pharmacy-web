@@ -1,29 +1,29 @@
 <template>
    <div class="app-container">
-      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
-         <el-form-item label="部门名称" prop="name">
-            <el-input
-               v-model="queryParams.name"
-               placeholder="请输入部门名称"
-               clearable
-               @keyup.enter="handleQuery"
-            />
-         </el-form-item>
-         <el-form-item label="状态" prop="state">
-            <el-select v-model="queryParams.state" placeholder="部门状态" clearable>
-               <el-option
-                  v-for="dict in sys_normal_disable"
-                  :key="dict.value"
-                  :label="dict.label"
-                  :value="dict.value"
-               />
-            </el-select>
-         </el-form-item>
-         <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-         </el-form-item>
-      </el-form>
+<!--      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">-->
+<!--         <el-form-item label="部门名称" prop="name">-->
+<!--            <el-input-->
+<!--               v-model="queryParams.name"-->
+<!--               placeholder="请输入部门名称"-->
+<!--               clearable-->
+<!--               @keyup.enter="handleQuery"-->
+<!--            />-->
+<!--         </el-form-item>-->
+<!--         <el-form-item label="状态" prop="state">-->
+<!--            <el-select v-model="queryParams.state" placeholder="部门状态" clearable>-->
+<!--               <el-option-->
+<!--                  v-for="dict in sys_normal_disable"-->
+<!--                  :key="dict.value"-->
+<!--                  :label="dict.label"-->
+<!--                  :value="dict.value"-->
+<!--               />-->
+<!--            </el-select>-->
+<!--         </el-form-item>-->
+<!--         <el-form-item>-->
+<!--            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>-->
+<!--            <el-button icon="Refresh" @click="resetQuery">重置</el-button>-->
+<!--         </el-form-item>-->
+<!--      </el-form>-->
 
       <el-row :gutter="10" class="mb8">
          <el-col :span="1.5">
@@ -53,15 +53,15 @@
          row-key="id"
          :default-expand-all="isExpandAll"
       >
-         <el-table-column prop="name" label="部门名称" show-tooltip-when-overflow></el-table-column>
-         <el-table-column prop="fullname" label="部门全称"></el-table-column>
+         <el-table-column prop="name" label="部门名称" min-width="200px" show-tooltip-when-overflow></el-table-column>
+<!--         <el-table-column prop="fullname" label="部门全称"></el-table-column>-->
          <el-table-column prop="sort" label="排序" ></el-table-column>
          <el-table-column prop="state" label="状态" >
             <template #default="scope">
                <dict-tag :options="sys_normal_disable" :value="scope.row.state" />
             </template>
          </el-table-column>
-         <el-table-column label="创建时间" align="center" prop="createTime" width="200">
+         <el-table-column label="创建时间" align="center" prop="createTime" show-tooltip-when-overflow>
             <template #default="scope">
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
@@ -93,13 +93,6 @@
             </template>
          </el-table-column>
       </el-table>
-     <pagination
-         v-show="total > 0"
-         :total="total"
-         v-model:page="queryParams.pageNum"
-         v-model:limit="queryParams.pageSize"
-         @pagination="getList"
-     />
 
       <!-- 添加或修改部门对话框 -->
       <el-dialog :title="title" v-model="open" width="750px" append-to-body>
@@ -159,7 +152,7 @@
 </template>
 
 <script setup name="Dept">
-import { listDept,treeselect, getDept, delDept, addDept, updateDept, listDeptExcludeChild } from "@/api/system/dept";
+import { treeselect, getDept, delDept, addDept, updateDept } from "@/api/system/dept";
 
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable } = proxy.useDict("sys_normal_disable");
@@ -168,7 +161,6 @@ const deptList = ref([]);
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
-const total = ref(0);
 const title = ref("");
 const deptOptions = ref([]);
 const isExpandAll = ref(true);
@@ -179,8 +171,6 @@ const data = reactive({
   queryParams: {
     name: undefined,
     state: undefined,
-    pageNum: 1,
-    pageSize: 10,
   },
   rules: {
     name: [{ required: true, message: "部门名称不能为空", trigger: "blur" }],
@@ -196,7 +186,6 @@ function getList() {
   loading.value = true;
   treeselect(queryParams.value).then(response => {
     deptList.value = response.data.list //proxy.handleTree(response.data.list, "id");
-    total.value = Number(response.data.total)
     loading.value = false;
   });
 }

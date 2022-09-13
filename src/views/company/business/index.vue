@@ -1,19 +1,19 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
-      <el-form-item label="部门名称" prop="name">
-        <el-input
-            v-model="queryParams.name"
-            placeholder="请输入部门名称"
-            clearable
-            @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+<!--    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">-->
+<!--      <el-form-item label="部门名称" prop="name">-->
+<!--        <el-input-->
+<!--            v-model="queryParams.name"-->
+<!--            placeholder="请输入部门名称"-->
+<!--            clearable-->
+<!--            @keyup.enter="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item>-->
+<!--        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>-->
+<!--        <el-button icon="Refresh" @click="resetQuery">重置</el-button>-->
+<!--      </el-form-item>-->
+<!--    </el-form>-->
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
