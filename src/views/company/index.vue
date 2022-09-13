@@ -39,15 +39,14 @@
             <div class="form-tips">推荐尺寸702*180</div>
           </div>
         </el-form-item>
-        <el-form-item label="老板的ID" prop="bossUserId">
-          <el-input v-model="form.bossUserId" :disabled="inputType==='readey'" style="width: 300px;" />
+        <el-form-item label="法定代表人" prop="legalPersonId">
+          <el-select v-model="form.legalPersonId" :disabled="inputType==='readey'" style="width: 300px;">
+            <el-option v-for="item in legalPersonList" :key="item.userId" :label="item.userName" :value="item.userId" />
+          </el-select>
         </el-form-item>
         <el-form-item label="企业名称">
           <el-input v-model="form.name" :disabled="inputType==='readey'" style="width: 300px;" />
         </el-form-item>
-<!--        <el-form-item label="企业全称">-->
-<!--          <el-input v-model="form.fullname" :disabled="inputType==='readey'" style="width: 300px;" />-->
-<!--        </el-form-item>-->
         <el-form-item label="企业类型">
           <el-select v-model="form.corpType" :disabled="inputType==='readey'" placeholder="请选择" style="width: 300px;">
             <el-option v-for="item in corpTypeList" :key="item.value" :label="item.label" :value="item.value" />
@@ -116,6 +115,7 @@ import {ref, reactive} from "vue";
 import {useStore} from 'vuex';
 import {getToken} from '../../utils/auth';
 import {getCorpInfo, getCorpEdit} from '../../api/company/info.js'
+import { listUser } from "../../api/system/user";
 import useUserStore from "../../store/modules/user";
 import {ElMessage} from "element-plus";
 
@@ -126,10 +126,11 @@ let uploadData = reactive({
   uploadUrl: import.meta.env.VITE_APP_BASE_API + '/file/file/upload?path=temp&corpId=' + corpId,
   token: getToken(),
   dialogVisible: false,
+  url: ''
 })
 const fileList = ref([])
 const form = ref({
-  bossUserId: '', // 老板的userID
+  legalPersonId: '', // 法定代表人
   logo: '', // 企业logo
   name: '', // 企业名称
   // fullname: '', // 企业全称
@@ -162,30 +163,12 @@ const corpTypeList = [
 // ]
 // 获取公司信息
 
-function getFormData() {
-  getCorpInfo(corpId).then(res => {
-    if (res.code === 200) {
-      form.value = res.data
-    }
-  })
-}
-// 点击事件
-function handelRead(type) {
-  if (type === 'edit'){
-    inputType.value='write'
-  } else if (type === 'sure') {
-    inputType.value='readey'
-    onSubmit()
-  } else if (type === 'cancel') {
-    inputType.value='readey'
-  }
-}
-function onSubmit() {
-  getCorpEdit(form.value).then(res => {
-    if (res.code === 200) {
-      ElMessage.success('修改成功')
-      getFormData()
-    }
+// 法定代表人
+const legalPersonList = ref([])
+// 法定代表人数据
+function getSelectData() {
+  listUser().then(res => {
+    legalPersonList.value = res.data.list
   })
 }
 // 归属连锁
@@ -193,10 +176,11 @@ function onSubmit() {
 //
 // }
 
-
 // 上传成功
 function handleAvatarSuccess(res) {
   if (res.code === 200) {
+    uploadData.url = res.data.url
+    form.value.logo = uploadData.url
     ElMessage.success('上传成功')
   } else {
     ElMessage.error(res.msg)
@@ -221,6 +205,35 @@ function handleChange (file, fileList) {
     fileList.splice(0,1)
   }
 }
+
+function getFormData() {
+  getCorpInfo(corpId).then(res => {
+    if (res.code === 200) {
+      form.value = res.data
+      console.log('form', form.value)
+    }
+  })
+}
+// 点击事件
+function handelRead(type) {
+  if (type === 'edit'){
+    inputType.value='write'
+  } else if (type === 'sure') {
+    inputType.value='readey'
+    onSubmit()
+  } else if (type === 'cancel') {
+    inputType.value='readey'
+  }
+}
+function onSubmit() {
+  getCorpEdit(form.value).then(res => {
+    if (res.code === 200) {
+      ElMessage.success('修改成功')
+      getFormData()
+    }
+  })
+}
+getSelectData()
 getFormData()
 </script>
 <style lang="scss" scoped>

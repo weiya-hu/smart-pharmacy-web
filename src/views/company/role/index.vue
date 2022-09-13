@@ -193,11 +193,13 @@
              <el-col :span="12">
                <el-form-item label="状态">
                  <el-radio-group v-model="form.status">
-                   <el-radio
-                       v-for="dict in sys_normal_disable"
-                       :key="dict.value"
-                       :label="dict.value"
-                   >{{ dict.label }}</el-radio>
+<!--                   <el-radio-->
+<!--                       v-for="dict in sys_normal_disable"-->
+<!--                       :key="dict.value"-->
+<!--                       :label="dict.value"-->
+<!--                   >{{ dict.label }}</el-radio>-->
+                   <el-radio :label="1">启用</el-radio>
+                   <el-radio :label="0">停用</el-radio>
                  </el-radio-group>
                </el-form-item>
              </el-col>
@@ -407,10 +409,10 @@ function handleSelectionChange(selection) {
 }
 /** 角色状态修改 */
 function handleStatusChange(row) {
-  console.log('状态', row.status)
+  console.log(row.roleId)
   let text = row.status === 1 ? "启用" : "停用";
   proxy.$modal.confirm('确认要"' + text + '""' + row.name + '"角色吗?').then(function () {
-    return changeRoleStatus(row.roleId, row.status);
+    return changeRoleStatus({roleId:row.roleId, status:row.status});
   }).then(() => {
     proxy.$modal.msgSuccess(text + "成功");
   }).catch(function () {
@@ -534,12 +536,12 @@ function handleCheckedTreeExpand(value, type) {
   if (type == "menu") {
     let treeList = menuOptions.value;
     for (let i = 0; i < treeList.length; i++) {
-      menuRef.value.store.nodesMap[treeList[i].menuId].expanded = value;
+      menuRef.value.store.nodesMap[treeList[i].menuid].expanded = value;
     }
   } else if (type == "dept") {
     let treeList = deptOptions.value;
     for (let i = 0; i < treeList.length; i++) {
-      deptRef.value.store.nodesMap[treeList[i].menuId].expanded = value;
+      deptRef.value.store.nodesMap[treeList[i].id].expanded = value;
     }
   }
 }

@@ -2,17 +2,18 @@
   <div class="navbar">
     <hamburger id="hamburger-container" :is-active="appStore.sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
     <div class="right-menu">
-      <div class="cprp-con">重庆鑫乐医疗保健用品有限公司</div>
+      <div class="cprp-con">{{ data.corpName }}</div>
       <el-divider direction="vertical" />
       <div class="term-con">
-        <span class="term-edition">v1.0</span>
-        <span class="term-time">有效期：2022-06-01</span>
+<!--        <span class="term-edition">v1.0</span>-->
+        <span class="term-time">{{ data.packageName }}</span>
+        <span class="term-time">有效期：{{ data.expireTime }}</span>
         <a href="#">续费</a>
       </div>
       <el-divider direction="vertical" />
       <div class="avatar-con">
-        <img :src="userStore.avatar" class="user-avatar" />
-        <span class="user-name">Admin</span>
+        <img :src="data.headImageUrl" alt="" />
+        <span class="user-name">{{ data.userName }}</span>
       </div>
       <el-divider direction="vertical" />
       <el-button text @click="logout">
@@ -27,9 +28,18 @@ import { ElMessageBox } from 'element-plus'
 import Hamburger from '@/components/Hamburger'
 import useAppStore from '@/store/modules/app'
 import useUserStore from '@/store/modules/user'
+import {getCurrUserBaseInfo} from '../../api/company/info'
 
 const appStore = useAppStore()
 const userStore = useUserStore()
+
+const data = ref({
+  corpName: '',
+  packageName: '',
+  expireTime: '',
+  headImageUrl: '',
+  userName: ''
+})
 
 function toggleSideBar() {
   appStore.toggleSideBar()
@@ -51,6 +61,14 @@ function logout() {
 // function setLayout() {
 //   emits('setLayout');
 // }
+function getInfo() {
+  getCurrUserBaseInfo().then(res =>{
+    if (res.code === 200) {
+      data.value = res.data
+    }
+  })
+}
+getInfo()
 </script>
 
 <style lang='scss' scoped>
@@ -98,7 +116,7 @@ function logout() {
         font-family: Source Han Sans CN;
         font-weight: 500;
         color: #999999;
-        margin: 0 20px;
+        margin-right: 15px;
       }
       a {
         font-size: 14px;

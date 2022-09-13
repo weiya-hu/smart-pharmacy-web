@@ -53,12 +53,14 @@
                      clearable
                      style="width: 240px"
                   >
-                     <el-option
-                        v-for="dict in sys_normal_disable"
-                        :key="dict.value"
-                        :label="dict.label"
-                        :value="dict.value"
-                     />
+<!--                     <el-option-->
+<!--                        v-for="dict in sys_normal_disable"-->
+<!--                        :key="dict.value"-->
+<!--                        :label="dict.label"-->
+<!--                        :value="dict.value"-->
+<!--                     />-->
+                    <el-option :value="1" label="启用" />
+                    <el-option :value="0" label="禁用" />
                   </el-select>
                </el-form-item>
                <el-form-item label="创建时间" style="width: 308px;">
@@ -127,12 +129,14 @@
                <el-table-column label="手机号码" align="center" key="mobile" prop="mobile" v-if="columns[4].visible" width="120" />
                <el-table-column label="状态" align="center" key="enable" v-if="columns[5].visible">
                   <template #default="scope">
-                     <el-switch
-                        v-model="scope.row.enable"
-                        :active-value="1"
-                        :inactive-value="0"
-                        @click="handleStatusChange(scope.row)"
-                     ></el-switch>
+<!--                     <el-switch-->
+<!--                        v-model="scope.row.enable"-->
+<!--                        :active-value="1"-->
+<!--                        :inactive-value="0"-->
+<!--                        @click="handleStatusChange(scope.row)"-->
+<!--                     ></el-switch>-->
+                    <span v-if="scope.row.enable == 1">启用</span>
+                    <span v-if="scope.row.enable == 0">禁用</span>
                   </template>
                </el-table-column>
                <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[6].visible" width="160">

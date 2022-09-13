@@ -98,6 +98,7 @@
                   style="width: 100%"
                   v-model="form.parentNodeId"
                   :data="deptOptions"
+                  :render-after-expand="false"
                   :props="{ value: 'id', label: 'name', children: 'children' }"
                   value-key="id"
                   placeholder="选择上级部门"
@@ -265,6 +266,7 @@ function cancel() {
 function reset() {
   form.value = {
     nodeId: undefined,
+    parentNodeId: undefined,
     name: undefined,
     type: undefined,
   };
@@ -286,7 +288,8 @@ function resetQuery() {
 function handleAdd(row) {
   reset();
   listReltree().then(response => {
-    deptOptions.value = proxy.handleTree(response.data, "id");
+    // deptOptions.value = proxy.handleTree(response.data, "id");
+    deptOptions.value = response.data
   });
   if (row != undefined) {
     form.value.parentNodeId = row.id;
@@ -307,11 +310,14 @@ function toggleExpandAll() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
-  listReltree({nodeId: row.id}).then(response => {
-    deptOptions.value = proxy.handleTree(response.data, "id");
+  // listReltree({nodeId: row.id}).then(response => {
+  listReltree().then(response => {
+    // deptOptions.value = proxy.handleTree(response.data, "id");
+    deptOptions.value = response.data
   });
   getReltree(row.id).then(response => {
     form.value = response.data;
+    form.value.parentNodeId = response.data.parentId
     tableUsers.tableData = response.data.users
     open.value = true;
     title.value = "修改部门";

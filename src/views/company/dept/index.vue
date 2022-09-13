@@ -110,6 +110,7 @@
                      <el-tree-select
                         v-model="form.parentId"
                         :data="deptOptions"
+                        :render-after-expand="false"
                         :props="{ value: 'id', label: 'name', children: 'children' }"
                         value-key="id"
                         clearable
@@ -132,21 +133,6 @@
                <el-col :span="12">
                   <el-form-item label="显示排序" prop="sort">
                      <el-input-number v-model="form.sort" controls-position="right" :min="0" style="width: 100%;" />
-                  </el-form-item>
-               </el-col>
-               <el-col :span="12">
-                  <el-form-item label="负责人" prop="leader">
-                     <el-input v-model="form.leader" placeholder="请输入负责人" maxlength="20" />
-                  </el-form-item>
-               </el-col>
-               <el-col :span="12">
-                  <el-form-item label="联系电话" prop="phone">
-                     <el-input v-model="form.phone" placeholder="请输入联系电话" maxlength="11" />
-                  </el-form-item>
-               </el-col>
-               <el-col :span="12">
-                  <el-form-item label="邮箱" prop="email">
-                     <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
@@ -200,8 +186,6 @@ const data = reactive({
     name: [{ required: true, message: "部门名称不能为空", trigger: "blur" }],
     fullname: [{ required: true, message: "部门全称不能为空", trigger: "blur" }],
     sort: [{ required: true, message: "显示排序不能为空", trigger: "blur" }],
-    email: [{ type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }],
-    phone: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur" }]
   },
 });
 
@@ -229,9 +213,6 @@ function reset() {
     fullname:undefined,
     name: undefined,
     sort: 0,
-    leader: undefined,
-    phone: undefined,
-    email: undefined,
     state: 1
   };
   proxy.resetForm("deptRef");
@@ -250,7 +231,8 @@ function resetQuery() {
 function handleAdd(row) {
   reset();
   treeselect().then(response => {
-    deptOptions.value = proxy.handleTree(response.data.list, "id");
+    // deptOptions.value = proxy.handleTree(response.data.list, "id");
+    deptOptions.value = response.data.list
   });
   if (row != undefined) {
     form.value.parentId = row.id;
@@ -269,8 +251,10 @@ function toggleExpandAll() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
-  treeselect({nodeId:row.id}).then(response => {
-    deptOptions.value = proxy.handleTree(response.data.list, "id");
+  // treeselect({nodeId:row.id}).then(response => {
+  // deptOptions.value = proxy.handleTree(response.data.list, "id");
+  treeselect().then(response => {
+    deptOptions.value = response.data.list
   });
   getDept(row.id).then(response => {
     form.value = response.data;

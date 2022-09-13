@@ -82,7 +82,9 @@
          <el-table-column label="岗位排序" prop="sort" />
          <el-table-column label="状态" prop="state">
             <template #default="scope">
-               <dict-tag :options="sys_normal_disable" :value="scope.row.state" />
+<!--               <dict-tag :options="sys_normal_disable" :value="scope.row.state" />-->
+              <el-tag v-if="scope.row.state == 1" type="primary">正常</el-tag>
+              <el-tag v-if="scope.row.state == 0" type="danger">停用</el-tag>
             </template>
          </el-table-column>
          <el-table-column label="创建时间"  prop="createTime" show-tooltip-when-overflow>
@@ -135,11 +137,13 @@
              <el-col :span="12">
                <el-form-item label="岗位状态" prop="state">
                  <el-radio-group v-model.number="form.state">
-                   <el-radio
-                       v-for="dict in sys_normal_disable"
-                       :key="dict.value"
-                       :label="dict.value"
-                   >{{ dict.label }}</el-radio>
+<!--                   <el-radio-->
+<!--                       v-for="dict in sys_normal_disable"-->
+<!--                       :key="dict.value"-->
+<!--                       :label="dict.value"-->
+<!--                   >{{ dict.label }}</el-radio>-->
+                   <el-radio :label="1">启用</el-radio>
+                   <el-radio :label="0">停用</el-radio>
                  </el-radio-group>
                </el-form-item>
              </el-col>
@@ -174,6 +178,7 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
+const jobId = ref(null)
 
 const data = reactive({
   form: {},
@@ -181,7 +186,7 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     name: undefined,
-    state: 1,
+    state: undefined,
     jobId:'',
   },
   rules: {
@@ -232,6 +237,9 @@ function handleSelectionChange(selection) {
   ids.value = selection.map(item => item.jobId);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
+  selection.map(items => {
+    jobId.value = items.jobId
+  })
 }
 /** 新增按钮操作 */
 function handleAdd() {
@@ -242,14 +250,13 @@ function handleAdd() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
-  const jobId = row.jobId || ids.value;
-  getPost(jobId).then(response => {
+  // const jobId = row.jobId || ids.value;
+  const jobIds = row.jobId || jobId.value
+  getPost({id: jobIds}).then(response => {
     form.value = response.data;
     open.value = true;
     title.value = "修改岗位";
   });
-  console.log('ids', ids.value)
-  console.log('row', row.jobId)
 }
 /** 提交按钮 */
 function submitForm() {

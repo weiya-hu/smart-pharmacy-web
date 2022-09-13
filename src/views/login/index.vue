@@ -23,18 +23,26 @@
         </el-tabs>
       </div>
     </div>
+    <el-dialog v-model="dialogVisible" title="注册" width="380px">
+      <div>
+        <img src="@/assets/images/register.png" alt="" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
 import wxlogin from 'vue-wxlogin';
 import {oauthLogin, wechatLogin} from "../../api/login";
+import { getRouters } from '@/api/menu'
 import {GetQueryString} from '@/utils/validate';
 import {setToken, getToken} from "../../utils/auth";
+import {ElMessage} from "element-plus";
 
 const router = useRouter();
 const redirect = ref(undefined);
 const activeName = ref('first')
+const dialogVisible = ref(false)
 
 // 微信扫码登录
 const redirectUri = encodeURIComponent("http://platform.shanhaiping.com/")
@@ -50,8 +58,15 @@ function getWechatLogin() {
     if (params.authCode !== '') {
       wechatLogin(params).then(res => {
         if (res.code === 200) {
-          setToken(res.data.access_token)
-          router.push({path: redirect.value || "/index"});
+          // setToken(res.data.access_token)
+          // router.push({path: redirect.value || "/index"});
+          if (params.corpId = '') {
+            ElMessage.error('请先注册企业信息')
+            dialogVisible.value = true
+          } else {
+            setToken(res.data.access_token)
+            router.push({path: redirect.value || "/index"});
+          }
         } else {
           router.push({path: '/login'});
         }

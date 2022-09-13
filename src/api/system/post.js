@@ -10,11 +10,13 @@ export function listPost(query) {
 }
 
 // 查询岗位详细
-export function getPost(postId) {
+// export function getPost(postId) {
+export function getPost(query) {
   return request({
     url: '/wecom/corpinfo/job/get',
     method: 'get',
-    params:{id:postId}
+    // params:{id:postId}
+    params: query
   })
 }
 

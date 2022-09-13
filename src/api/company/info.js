@@ -15,3 +15,10 @@ export function getCorpEdit(data) {
         data
     })
 }
+// 公司信息
+export function getCurrUserBaseInfo() {
+    return request({
+        url: `/wecom/corpinfo/user/getCurrUserBaseInfo`,
+        method: 'GET',
+    })
+}
