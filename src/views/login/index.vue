@@ -34,7 +34,6 @@
 <script setup>
 import wxlogin from 'vue-wxlogin';
 import {oauthLogin, wechatLogin} from "../../api/login";
-import { getRouters } from '@/api/menu'
 import {GetQueryString} from '@/utils/validate';
 import {setToken, getToken} from "../../utils/auth";
 import {ElMessage} from "element-plus";
@@ -57,16 +56,12 @@ function getWechatLogin() {
     }
     if (params.authCode !== '') {
       wechatLogin(params).then(res => {
-        if (res.code === 200) {
-          // setToken(res.data.access_token)
-          // router.push({path: redirect.value || "/index"});
-          if (params.corpId = '') {
-            ElMessage.error('请先注册企业信息')
-            dialogVisible.value = true
-          } else {
-            setToken(res.data.access_token)
-            router.push({path: redirect.value || "/index"});
-          }
+        if (res.code === 400) {
+          ElMessage.error('请先注册企业信息')
+          dialogVisible.value = true
+        } else if (res.code === 200) {
+          setToken(res.data.access_token)
+          router.push({path: redirect.value || "/index"});
         } else {
           router.push({path: '/login'});
         }

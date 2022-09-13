@@ -39,16 +39,19 @@
             <div class="form-tips">推荐尺寸702*180</div>
           </div>
         </el-form-item>
+        <el-form-item label="企微ID" prop="plainCorpId">
+          <el-input v-model="form.plainCorpId" :disabled="inputType==='readey'" style="width: 364px;" />
+        </el-form-item>
         <el-form-item label="法定代表人" prop="legalPersonId">
-          <el-select v-model="form.legalPersonId" :disabled="inputType==='readey'" style="width: 300px;">
+          <el-select v-model="form.legalPersonId" :disabled="inputType==='readey'" style="width: 336px;">
             <el-option v-for="item in legalPersonList" :key="item.userId" :label="item.userName" :value="item.userId" />
           </el-select>
         </el-form-item>
         <el-form-item label="企业名称">
-          <el-input v-model="form.name" :disabled="inputType==='readey'" style="width: 300px;" />
+          <el-input v-model="form.name" :disabled="inputType==='readey'" />
         </el-form-item>
         <el-form-item label="企业类型">
-          <el-select v-model="form.corpType" :disabled="inputType==='readey'" placeholder="请选择" style="width: 300px;">
+          <el-select v-model="form.corpType" :disabled="inputType==='readey'" placeholder="请选择" style="width: 350px;">
             <el-option v-for="item in corpTypeList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -56,10 +59,10 @@
           <el-input v-model="form.code"
                     clearable
                     :disabled="inputType==='readey'"
-                    style="width: 300px;" />
+                    />
         </el-form-item>
         <el-form-item label="详细地址">
-          <el-input v-model="form.address" placeholder="请输入详细地址" style="width: 300px;" :disabled="inputType==='readey'"></el-input>
+          <el-input v-model="form.address" placeholder="请输入详细地址" :disabled="inputType==='readey'"></el-input>
         </el-form-item>
 <!--          <el-form-item label="归属连锁" v-if="form.corpType == 4">-->
 <!--            <el-select-->
@@ -130,10 +133,10 @@ let uploadData = reactive({
 })
 const fileList = ref([])
 const form = ref({
-  legalPersonId: '', // 法定代表人
   logo: '', // 企业logo
+  plainCorpId: '', // 企微ID
+  legalPersonId: '', // 法定代表人
   name: '', // 企业名称
-  // fullname: '', // 企业全称
   corpType: '', // 企业类型:1厂家,2代理商,3连锁药房,4药店
   address: '', // 详细地址
   code: '', // 门店编码
@@ -246,6 +249,9 @@ getFormData()
       font-size: 12px;
       color: #787878;
       margin-top: 7px;
+    }
+    .el-input {
+      width: 350px;
     }
   }
 }

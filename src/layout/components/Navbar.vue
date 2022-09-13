@@ -140,6 +140,9 @@ getInfo()
         color: #999999;
       }
     }
+    .el-button {
+      transform: translateX(-7px);
+    }
   }
 }
 @media screen and (max-width: 768px){
