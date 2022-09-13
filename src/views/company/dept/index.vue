@@ -1,29 +1,29 @@
 <template>
    <div class="app-container">
-<!--      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">-->
-<!--         <el-form-item label="部门名称" prop="name">-->
-<!--            <el-input-->
-<!--               v-model="queryParams.name"-->
-<!--               placeholder="请输入部门名称"-->
-<!--               clearable-->
-<!--               @keyup.enter="handleQuery"-->
-<!--            />-->
-<!--         </el-form-item>-->
-<!--         <el-form-item label="状态" prop="state">-->
-<!--            <el-select v-model="queryParams.state" placeholder="部门状态" clearable>-->
-<!--               <el-option-->
-<!--                  v-for="dict in sys_normal_disable"-->
-<!--                  :key="dict.value"-->
-<!--                  :label="dict.label"-->
-<!--                  :value="dict.value"-->
-<!--               />-->
-<!--            </el-select>-->
-<!--         </el-form-item>-->
-<!--         <el-form-item>-->
-<!--            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>-->
-<!--            <el-button icon="Refresh" @click="resetQuery">重置</el-button>-->
-<!--         </el-form-item>-->
-<!--      </el-form>-->
+      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
+         <el-form-item label="部门名称" prop="name">
+            <el-input
+               v-model="queryParams.name"
+               placeholder="请输入部门名称"
+               clearable
+               @keyup.enter="handleQuery"
+            />
+         </el-form-item>
+         <el-form-item label="状态" prop="state">
+            <el-select v-model="queryParams.state" placeholder="部门状态" clearable>
+               <el-option
+                  v-for="dict in sys_normal_disable"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+               />
+            </el-select>
+         </el-form-item>
+         <el-form-item>
+            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+         </el-form-item>
+      </el-form>
 
       <el-row :gutter="10" class="mb8">
          <el-col :span="1.5">
@@ -50,11 +50,12 @@
          v-if="refreshTable"
          v-loading="loading"
          :data="deptList"
-         row-key="id"
+         row-key="deptId"
          :default-expand-all="isExpandAll"
+         :tree-props="{ children: 'children' }"
       >
          <el-table-column prop="name" label="部门名称" min-width="200px" show-tooltip-when-overflow></el-table-column>
-<!--         <el-table-column prop="fullname" label="部门全称"></el-table-column>-->
+         <el-table-column prop="fullname" label="部门全称"></el-table-column>
          <el-table-column prop="sort" label="排序" ></el-table-column>
          <el-table-column prop="state" label="状态" >
             <template #default="scope">
@@ -152,7 +153,7 @@
 </template>
 
 <script setup name="Dept">
-import { treeselect, getDept, delDept, addDept, updateDept } from "@/api/system/dept";
+import { treeselect, getDept, delDept, addDept, updateDept, listDept } from "@/api/system/dept";
 
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable } = proxy.useDict("sys_normal_disable");
@@ -184,8 +185,8 @@ const { queryParams, form, rules } = toRefs(data);
 /** 查询部门列表 */
 function getList() {
   loading.value = true;
-  treeselect(queryParams.value).then(response => {
-    deptList.value = response.data.list //proxy.handleTree(response.data.list, "id");
+  listDept(queryParams.value).then(response => {
+    deptList.value = proxy.handleTree(response.data.list, "deptId");
     loading.value = false;
   });
 }

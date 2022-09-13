@@ -1,19 +1,19 @@
 <template>
   <div class="app-container">
-<!--    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">-->
-<!--      <el-form-item label="部门名称" prop="name">-->
-<!--        <el-input-->
-<!--            v-model="queryParams.name"-->
-<!--            placeholder="请输入部门名称"-->
-<!--            clearable-->
-<!--            @keyup.enter="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item>-->
-<!--        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>-->
-<!--        <el-button icon="Refresh" @click="resetQuery">重置</el-button>-->
-<!--      </el-form-item>-->
-<!--    </el-form>-->
+    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
+      <el-form-item label="部门名称" prop="name">
+        <el-input
+            v-model="queryParams.queryName"
+            placeholder="请输入部门名称"
+            clearable
+            @keyup.enter="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+      </el-form-item>
+    </el-form>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
@@ -42,16 +42,16 @@
         v-if="refreshTable"
         v-loading="loading"
         :data="deptList"
-        row-key="id"
         :default-expand-all="isExpandAll"
-        height="72vh"
+        row-key="nodeId"
+        :tree-props="{ children: 'children' }"
     >
       <el-table-column prop="name" label="部门名称" width="450" show-tooltip-when-overflow></el-table-column>
-      <el-table-column prop="state" label="状态">
-        <template #default="scope">
-          <dict-tag :options="sys_normal_disable" :value="scope.row.state"/>
-        </template>
-      </el-table-column>
+<!--      <el-table-column prop="state" label="状态">-->
+<!--        <template #default="scope">-->
+<!--          <dict-tag :options="sys_normal_disable" :value="scope.row.state"/>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
       <el-table-column label="创建时间" prop="createTime" show-tooltip-when-overflow>
         <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -182,7 +182,7 @@
 </template>
 
 <script setup name="Dept">
-import {listReltree, getReltree, addReltree, updateReltree, delReltree, makerList, chainList, storeList} from "@/api/company/reltree";
+import {listReltree, listPage, getReltree, addReltree, updateReltree, delReltree, makerList, chainList, storeList} from "@/api/company/reltree";
 import {listPost} from "@/api/system/post";
 import {listUser} from "@/api/system/user";
 
@@ -210,7 +210,7 @@ const rulesTable = ref({
 const data = reactive({
   form: {},
   queryParams: {
-    name: undefined,
+    queryName: undefined,
     state: undefined
   },
   rules: {
@@ -250,8 +250,8 @@ const loadSelectJobs = () => {
 /** 查询部门列表 */
 function getList() {
   loading.value = true;
-  listReltree(queryParams.value).then(response => {
-    deptList.value = response.data //proxy.handleTree(response.data.list, "id");
+  listPage(queryParams.value).then(response => {
+    deptList.value = proxy.handleTree(response.data.list, "nodeId", "parentNodeId");
     loading.value = false;
   });
 }
