@@ -61,7 +61,7 @@ function getWechatLogin() {
           dialogVisible.value = true
         } else if (res.code === 200) {
           setToken(res.data.access_token)
-          router.push({path: redirect.value || "/index"});
+          router.push({path: "/index"});
         } else {
           router.push({path: '/login'});
         }
@@ -82,7 +82,7 @@ function getOauthLogin() {
       oauthLogin(params).then(res => {
         if (res.code === 200) {
           setToken(res.data.access_token)
-          router.push({path: redirect.value || "/index"});
+          router.push({path: "/index"});
         } else {
           router.push({path: '/login'});
         }
@@ -100,7 +100,7 @@ const wecomControlLogin = ()=>{
       oauthLogin(params).then(res => {
         if (res.code === 200) {
           setToken(res.data.access_token)
-          router.push({path: redirect.value || "/index"});
+          router.push({path: "/index"});
         } else {
           router.push({path: '/login'});
         }
