@@ -6,6 +6,7 @@ import { tansParams, blobValidate } from '@/utils/ruoyi'
 import cache from '@/plugins/cache'
 import { saveAs } from 'file-saver'
 import useUserStore from '@/store/modules/user'
+import {removeToken, setToken} from "./auth";
 
 let downloadLoadingInstance;
 // 是否显示重新登录
@@ -103,6 +104,8 @@ service.interceptors.response.use(res => {
           title: msg
         })
         return Promise.reject('error')
+      } else if (code === 400 && msg === "未取到登录信息" ) {
+        removeToken()
       } else {
         return Promise.resolve(res.data)
       }
@@ -115,7 +118,7 @@ service.interceptors.response.use(res => {
       } else if (message.includes("timeout")) {
         message = "系统接口请求超时";
       } else if (message.includes("Request failed with status code")) {
-        message = "系统接口" + message.substr(message.length - 3) + "异常";
+        message = "系统接口" + message.substring(message.length - 3) + "异常";
       }
       ElMessage({
         message: message,

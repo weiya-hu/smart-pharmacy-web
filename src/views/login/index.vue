@@ -28,6 +28,11 @@
         <img src="@/assets/images/register.png" alt=""/>
       </div>
     </el-dialog>
+    <el-dialog v-model="dialogUrlVisible" title="注册" width="380px" :close-on-click-modal="false">
+      <div>
+        <img src="@/assets/images/register.png" alt=""/>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -41,6 +46,7 @@ const router = useRouter();
 const redirect = ref(undefined);
 const activeName = ref('first')
 const dialogVisible = ref(false)
+const dialogUrlVisible = ref(false)
 
 // 微信扫码登录
 const redirectUri = encodeURIComponent("http://platform.shanhaiping.com/")
@@ -69,22 +75,21 @@ function getWechatLogin() {
 
 // 企业微信
 function getOauthLogin() {
-  if (!getToken()) {
-    let params = {
-      authCode: GetQueryString('auth_code') ? GetQueryString('auth_code') : '',
-      state: 'qrLoginsplit',
-    }
-    if (params.authCode !== '') {
-      oauthLogin(params).then(res => {
-        if (res.code === 200) {
-          setToken(res.data.access_token)
-          router.push({path: "/index"});
-        } else {
-          router.push({path: '/login'});
-        }
-      })
-    } else {
-    }
+  let params = {
+    authCode: GetQueryString('auth_code') ? GetQueryString('auth_code') : '',
+    state: 'qrLoginsplit',
+  }
+  if (params.authCode !== '') {
+    oauthLogin(params).then(res => {
+      if (res.code === 200) {
+        setToken(res.data.access_token)
+        router.push({path: "/index"});
+      }
+    }).catch(err => {
+      dialogUrlVisible.value = true
+    })
+  } else {
+    router.push({path: "/login"})
   }
 }
 
