@@ -21,7 +21,7 @@
           width="80"
       ></el-table-column>
       <template v-for="propItem in propList" :key="propItem.prop">
-        <el-table-column  v-bind="propItem" align="center" show-overflow-tooltip>
+        <el-table-column v-bind="propItem" align="center" show-overflow-tooltip>
           <template #default="scope">
             <slot :name="propItem.slotName" :row="scope.row">
               {{ scope.row[propItem.prop] }}
@@ -77,11 +77,11 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
-    showSelectCheckBox:{
+    showSelectCheckBox: {
       type: Boolean,
       default: false
     },
-    isShowBorder:{
+    isShowBorder: {
       type: Boolean,
       default: false
     },

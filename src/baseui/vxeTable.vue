@@ -10,7 +10,7 @@
         align="center"
         class="mytable-scrollbar"
     >
-      <vxe-column type="seq">
+      <vxe-column type="seq" title="序号">
       </vxe-column>
       <template v-for="propItem in propList" :key="propItem.prop">
         <vxe-column v-bind="propItem" align="center" show-overflow-tooltip>

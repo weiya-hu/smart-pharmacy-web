@@ -86,7 +86,7 @@ service.interceptors.response.use(res => {
           }).then(() => {
             isRelogin.show = false;
             useUserStore().logOut().then(() => {
-              location.href = '/index';
+              location.href = '/login';
             })
           }).catch(() => {
             isRelogin.show = false;
@@ -96,7 +96,7 @@ service.interceptors.response.use(res => {
       }else if (code === 400 && msg === "未取到登录信息" ) {
         removeToken()
         useUserStore().logOut().then(() => {
-          location.href = '/index';
+          location.href = '/login';
         })
       } else if (code === 500) {
         ElMessage({

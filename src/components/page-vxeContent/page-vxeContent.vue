@@ -53,7 +53,6 @@ import LLTable from '@/baseui/vxeTable'
 import {tableStore} from "@/utils/mapTableStore";
 import {cloneFunction} from '@/utils/globalFunction.js'
 //导入所有表格数据的pinia
-
 export default defineComponent({
   components: {
     LLTable
@@ -74,10 +73,11 @@ export default defineComponent({
     store = tableStore.get(props.storeConfig.storeName)() || null
     // 2.发送网络请求
     const getPageData = (queryInfo) => {
-      store[props.storeConfig.requestMethodName]()
+      if (store[props.storeConfig.requestMethodName instanceof Function]) {
+        store[props.storeConfig.requestMethodName]()
+      }
     }
-    getPageData()
-
+    // getPageData()
     // 1.双向绑定pageInfo
     const pageInfo = ref({currentPage: 1, pageSize: 10})
     watch(pageInfo, () => getPageData())

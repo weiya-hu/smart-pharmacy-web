@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%;height: 100%" class="container" ref="containerBox">
+  <div :style="{width:size.width,height:size.height}" class="container" ref="containerBox">
   </div>
 
 </template>
@@ -12,10 +12,16 @@ let props = defineProps({
   dataOption: {
     type: Object,
     required: true
+  },
+  size: {
+    type: Object,
+    default: {
+      width: '50vw',
+      height: '40vh'
+    }
   }
 })
 onMounted(() => {
-  console.log("???")
   init();
 })
 const containerBox = ref('')
@@ -32,6 +38,12 @@ const init = () => {
     myEcharts.resize();
   }
 }
+const setOption = function (option) {
+  myEcharts.setOption(option);
+}
+defineExpose({
+  setOption
+})
 </script>
 
 <style scoped lang="scss">

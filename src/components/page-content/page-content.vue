@@ -78,27 +78,36 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['editBtnClick'],
-  setup(props, {emit}) {
+  emits: ['editBtnClick', 'selectChoose'],
+  setup(props, {emit, expose}) {
     let store = null
     store = tableStore.get(props.storeConfig.storeName)() || null
     // 2.发送网络请求
-    const getPageData = (queryInfo) => {
-      store[props.storeConfig.requestMethodName]()
-    }
-    getPageData()
-
     // 1.双向绑定pageInfo
     const pageInfo = ref({currentPage: 1, pageSize: 10})
+    const getPageData = (queryInfo = {}) => {
+      let pramObject = {
+        pageSize: pageInfo.value.pageSize,
+        pageNum: pageInfo.value.currentPage,
+        ...queryInfo
+      }
+      store[props.storeConfig.requestMethodName](pramObject)
+    }
+    getPageData(pageInfo)
+
+
     watch(pageInfo, () => {
       getPageData()
     })
+    //搜索条件
+    const searchTableList = function (query) {
+      getPageData(query)
+    }
 
-
-    const dataList = computed(() =>
+    let dataList = computed(() =>
         store[props.storeConfig.showDataListName]
     )
-    const dataCount = computed(() =>
+    let dataCount = computed(() =>
         store[props.storeConfig.countName]
     )
 
@@ -121,6 +130,7 @@ export default defineComponent({
     //复选框选中值
     const selectionCallback = function (param) {
       selectedData.value = param
+      emit('selectChoose', param)
     }
     //定义函数供引用获取选中值
     const getSelectedValue = function () {
@@ -128,14 +138,13 @@ export default defineComponent({
       selectedData.value = null
       return cloneData
     }
-
-
     const handleEditClick = (item) => {
       emit('editBtnClick', item)
     }
 
-    defineExpose({
-      getSelectedValue
+    expose({
+      getSelectedValue,
+      searchTableList
     })
     return {
       dataList,
