@@ -89,10 +89,11 @@ const handleNext = async () => {
                     proxy.$modal.msgSuccess("已提交审核");
                     auditLoadiang.value = false
                     step.value++
-                  } else {
-                    proxy.$modal.msgError(res.msg)
-                    step.value--
                   }
+
+                }, rej => {
+                  step.value--
+                  auditLoadiang.value = false
                 })
           } else {
             proxy.$modal.msgError('请检查规则内容是否完整')
