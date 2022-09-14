@@ -280,7 +280,7 @@ function reset() {
 /**上传附件*/
 const imgBannerList = ref([])
 let uploadData = reactive({
-  imgBannerUrl: '/dev-api' + '/file/file/upload',
+  imgBannerUrl: import.meta.env.VITE_APP_BASE_API + '/file/file/upload',
   imgBannerParam: {path: '/activity/imgBanner'},
   token: getToken(),
   parameter: {corpId: '', file: ''}
@@ -298,6 +298,7 @@ const handleImgBannerSuccess = (res) => {
     ElMessage({type: 'warning', message: res.msg})
   }
 }
+console.log(import.meta.env.VITE_APP_BASE_API, "???")
 
 /** 提交按钮 */
 async function submitForm() {
@@ -385,7 +386,13 @@ const onCancelRuleScupes = () => {
 //任务负责人选择确定
 const onSuccessResponsibleUsers = () => {
   showResponsibleUsers.value = false
-  form.value.responsibleUsers = responsibleUsersRef.value.getSelectUsers().map(item => ({userId: item.userId}))
+  form.value.responsibleUsers = responsibleUsersRef.value.getSelectUsers().map(item => {
+    console.log(item)
+    return {
+      userId: item.userId,
+      name: item.userName
+    }
+  })
 }
 //任务负责人选择取消
 const onCancelResponsibleUsers = () => {
