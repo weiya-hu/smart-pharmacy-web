@@ -96,6 +96,14 @@
          </el-table-column>
       </el-table>
 
+     <pagination
+         v-show="total > 0"
+         :total="total"
+         v-model:page="queryParams.pageNum"
+         v-model:limit="queryParams.pageSize"
+         @pagination="getList"
+     />
+
       <!-- 添加或修改部门对话框 -->
       <el-dialog :title="title" v-model="open" width="750px" append-to-body>
          <el-form ref="deptRef" :model="form" :rules="rules" label-width="100px">
@@ -163,6 +171,7 @@ const deptList = ref([]);
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
+const total = ref(0);
 const title = ref("");
 const deptOptions = ref([]);
 const isExpandAll = ref(true);
@@ -173,6 +182,8 @@ const data = reactive({
   queryParams: {
     name: undefined,
     state: undefined,
+    pageNum: 1,
+    pageSize: 10,
   },
   rules: {
     name: [{ required: true, message: "部门名称不能为空", trigger: "blur" }],
@@ -188,6 +199,7 @@ function getList() {
   loading.value = true;
   listDept(queryParams.value).then(response => {
     deptList.value = proxy.handleTree(response.data.list, "deptId");
+    total.value = Number(response.data.total);
     loading.value = false;
   });
 }
