@@ -1,11 +1,11 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" v-loading="secondLoading" element-loading-text="加载中...">
     <el-tabs type="border-card" v-model="tabValue" @tab-change="changeTab">
       <el-tab-pane name="first" label="单品｜组合">
         <el-form ref="firstForm" :model="firstFormModels" :rules="formRule" inline label-width="100px">
           <div class="form-div" v-for="(firstFormModel,index) in firstFormModels.formListData" :key="index">
             <div class="handler">
-              <div>
+              <div v-if="handleType!=='query'">
                 <el-button type="primary" @click="delForm(index)">删除</el-button>
                 <el-button type="primary" @click="saveFormAndAdd(index,'save')">保存</el-button>
                 <el-button type="primary" @click="saveFormAndAdd(index,'saveAndAdd')">保存并新增</el-button>
@@ -18,7 +18,7 @@
             <el-row>
               <el-form-item class="label" label="核算方式" :prop="'formListData.' + index + '.calcType'"
                             :rules="formRule.calcType">
-                <el-select v-model="firstFormModel.calcType">
+                <el-select :disabled="handleType=='query'" v-model="firstFormModel.calcType">
                   <el-option v-for="item in sop_calc_type" :key="item.value" :value="item.value" :label="item.label">
                     {{ item.label }}
                   </el-option>
@@ -26,7 +26,8 @@
               </el-form-item>
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             :rules="formRule.timeRangeUnit">
-                <el-input type="number" v-model="firstFormModel.timeRange" class="input-with-select">
+                <el-input :disabled="handleType=='query'" type="number" v-model="firstFormModel.timeRange"
+                          class="input-with-select">
                   <template #append>
                     <el-select v-model="firstFormModel.timeRangeUnit">
                       <el-option v-for="item in sop_time_range_unit" :key="item.value" :value="item.value"
@@ -41,13 +42,13 @@
             <el-row>
               <el-form-item class="label" label="奖励条件" :prop="'formListData.' + index + '.calcUnit'"
                             :rules="formRule.calcUnit">
-                <el-select v-model="firstFormModel.calcUnit">
+                <el-select :disabled="handleType=='query'" v-model="firstFormModel.calcUnit">
                   <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
               <el-form-item class="label" label="奖励方式" :prop="'formListData.' + index + '.rewardType'"
                             :rules="formRule.rewardType">
-                <el-select v-model="firstFormModel.rewardType">
+                <el-select :disabled="handleType=='query'" v-model="firstFormModel.rewardType">
                   <el-option v-for="item in sop_reward_type" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
@@ -66,7 +67,8 @@
               </el-form-item>
               <el-form-item class="label" label="奖励阈值">
                 <el-input
-                    v-model="item.targetRange"
+                    :disabled="handleType=='query'"
+                    v-model.number="item.targetRange"
                     class="input-with-select">
                   <template #append>
                     <el-select v-model="firstFormModel.calcUnit" disabled style="width: 80px">
@@ -77,7 +79,7 @@
                 </el-input>
               </el-form-item>
               <el-form-item class="label" label="奖励金额">
-                <el-input v-model="item.price" class="input-with-select">
+                <el-input :disabled="handleType=='query'" v-model.number="item.price" class="input-with-select">
                 </el-input>
               </el-form-item>
             </el-row>
@@ -100,7 +102,7 @@
         <el-form ref="secondForm" v-model="secondFormModels" :rules="formRule" inline label-width="100px">
           <div class="form-div" v-for="(secondFormModel,index) in secondFormModels.formListData" :key="index">
             <div class="handler">
-              <div>
+              <div v-if="handleType!=='query'">
                 <el-button type="primary" @click="delForm(index)">删除</el-button>
                 <el-button type="primary" @click="saveFormAndAdd(index,'save')">保存</el-button>
                 <el-button type="primary" @click="saveFormAndAdd(index,'saveAndAdd')">保存并新增</el-button>
@@ -113,7 +115,7 @@
             <el-row>
               <el-form-item class="label" label="核算方式" :prop="'formListData.' + index + '.calcType'"
                             :rules="formRule.calcType">
-                <el-select v-model="secondFormModel.calcType">
+                <el-select :disabled="handleType=='query'" v-model="secondFormModel.calcType">
                   <el-option v-for="item in sop_calc_type" :key="item.value" :value="item.value" :label="item.label">
                     {{ item.label }}
                   </el-option>
@@ -121,7 +123,8 @@
               </el-form-item>
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             :rules="formRule.timeRangeUnit">
-                <el-input type="number" v-model="secondFormModel.timeRange" class="input-with-select">
+                <el-input :disabled="handleType=='query'" type="number" v-model="secondFormModel.timeRange"
+                          class="input-with-select">
                   <template #append>
                     <el-select v-model="secondFormModel.timeRangeUnit">
                       <el-option v-for="item in sop_time_range_unit" :key="item.value" :value="item.value"
@@ -136,13 +139,13 @@
             <el-row>
               <el-form-item class="label" label="奖励条件" :prop="'formListData.' + index + '.calcUnit'"
                             :rules="formRule.calcUnit">
-                <el-select v-model="secondFormModel.calcUnit">
+                <el-select :disabled="handleType=='query'" v-model="secondFormModel.calcUnit">
                   <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
               <el-form-item class="label" label="奖励方式" :prop="'formListData.' + index + '.rewardType'"
                             :rules="formRule.rewardType">
-                <el-select v-model="secondFormModel.rewardType">
+                <el-select :disabled="handleType=='query'" v-model="secondFormModel.rewardType">
                   <el-option v-for="item in sop_reward_type" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
@@ -159,7 +162,8 @@
               </el-form-item>
               <el-form-item class="label" label="奖励阈值">
                 <el-input
-                    v-model="item.targetRange"
+                    :disabled="handleType=='query'"
+                    v-model.number="item.targetRange"
                     class="input-with-select">
                   <template #append>
                     <el-select v-model="secondFormModel.calcUnit" disabled style="width: 80px">
@@ -170,7 +174,7 @@
                 </el-input>
               </el-form-item>
               <el-form-item class="label" label="奖励金额">
-                <el-input v-model="item.price" class="input-with-select">
+                <el-input :disabled="handleType=='query'" v-model.number="item.price" class="input-with-select">
                 </el-input>
               </el-form-item>
             </el-row>
@@ -195,10 +199,9 @@
       </el-tab-pane>
       <el-tab-pane name="third" label="门店">
         <el-form ref="thirdForm" v-model="thirdFormModels" :rules="formRule" inline label-width="100px">
-
           <div class="form-div" v-for="(thirdFormModel,index) in thirdFormModels.formListData" :key="index">
             <div class="handler">
-              <div>
+              <div v-if="handleType!=='query'">
                 <el-button type="primary" @click="delForm(index)">删除</el-button>
                 <el-button type="primary" @click="saveFormAndAdd(index,'save')">保存</el-button>
                 <el-button type="primary" @click="saveFormAndAdd(index,'saveAndAdd')">保存并新增</el-button>
@@ -213,7 +216,7 @@
             <el-row>
               <el-form-item class="label" label="核算方式" :prop="'formListData.' + index + '.calcType'"
                             :rules="formRule.calcType">
-                <el-select v-model="thirdFormModel.calcType">
+                <el-select :disabled="handleType=='query'" v-model="thirdFormModel.calcType">
                   <el-option v-for="item in sop_calc_type" :key="item.value" :value="item.value" :label="item.label">
                     {{ item.label }}
                   </el-option>
@@ -221,7 +224,8 @@
               </el-form-item>
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             :rules="formRule.timeRangeUnit">
-                <el-input type="number" v-model="thirdFormModel.timeRange" class="input-with-select">
+                <el-input :disabled="handleType=='query'" type="number" v-model="thirdFormModel.timeRange"
+                          class="input-with-select">
                   <template #append>
                     <el-select v-model="thirdFormModel.timeRangeUnit">
                       <el-option v-for="item in sop_time_range_unit" :key="item.value" :value="item.value"
@@ -236,13 +240,13 @@
             <el-row>
               <el-form-item class="label" label="奖励条件" :prop="'formListData.' + index + '.calcUnit'"
                             :rules="formRule.calcUnit">
-                <el-select v-model="thirdFormModel.calcUnit">
+                <el-select :disabled="handleType=='query'" v-model="thirdFormModel.calcUnit">
                   <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
               <el-form-item class="label" label="奖励方式" :prop="'formListData.' + index + '.rewardType'"
                             :rules="formRule.rewardType">
-                <el-select v-model="thirdFormModel.rewardType">
+                <el-select :disabled="handleType=='query'" v-model="thirdFormModel.rewardType">
                   <el-option v-for="item in sop_reward_type" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
@@ -261,7 +265,8 @@
               </el-form-item>
               <el-form-item class="label" label="奖励阈值">
                 <el-input
-                    v-model="item.targetRange"
+                    :disabled="handleType=='query'"
+                    v-model.number="item.targetRange"
                     class="input-with-select">
                   <template #append>
                     <el-select v-model="thirdFormModel.calcUnit" disabled style="width: 80px">
@@ -272,7 +277,7 @@
                 </el-input>
               </el-form-item>
               <el-form-item class="label" label="奖励金额">
-                <el-input v-model="item.price" class="input-with-select">
+                <el-input :disabled="handleType=='query'" v-model.number="item.price" class="input-with-select">
                 </el-input>
               </el-form-item>
             </el-row>
@@ -281,14 +286,14 @@
             <el-row>
               <div class="moudelTitle">参与门店</div>
             </el-row>
-            <el-button v-if="thirdFormModels.formListData[index].filter.storeIds.length==0" type="primary" link
+            <el-button v-if="thirdFormModels.formListData[index].filter.ids.length==0" type="primary" link
                        @click="openStoreDialog(index)">添加门店
             </el-button>
             <el-button type="primary" link>已选（{{
-                thirdFormModels.formListData[index].filter.storeIds.length
+                thirdFormModels.formListData[index].filter.ids.length
               }}）个
             </el-button>
-            <el-button v-if="thirdFormModels.formListData[index].filter.storeIds.length!==0" type="primary"
+            <el-button v-if="thirdFormModels.formListData[index].filter.ids.length!==0" type="primary"
                        @click="openStoreDialog(index)">点击查看门店列表
             </el-button>
           </div>
@@ -301,8 +306,8 @@
       <SelectProducts :eventId="props.eventId" :packageId="productPackageId" ref="selectProductsRef"></SelectProducts>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="onSuccessProductsDialog(0)">单品保存</el-button>
-          <el-button type="primary" @click="onSuccessProductsDialog(1)">组合保存</el-button>
+          <el-button v-if="handleType!=='query'" type="primary" @click="onSuccessProductsDialog(0)">单品保存</el-button>
+          <el-button v-if="handleType!=='query'" type="primary" @click="onSuccessProductsDialog(1)">组合保存</el-button>
           <el-button @click="onCancelProductsDialog">取 消</el-button>
         </div>
       </template>
@@ -312,7 +317,7 @@
       <SelectStore :eventId="props.eventId" ref="selectStoreRef"></SelectStore>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="onSuccessStoreDialog">保 存</el-button>
+          <el-button v-if="handleType!=='query'" type="primary" @click="onSuccessStoreDialog">保 存</el-button>
           <el-button @click="onCancelStoreDialog">取 消</el-button>
         </div>
       </template>
@@ -322,23 +327,31 @@
 
 <script setup>
 import {
-  queryBrandList, queryStoreList, queryJobList
+  queryBrandList, queryStoreList, queryJobList,
 } from "@/api/activity/activityProduct";
-import {addEventRule, queryEventRule,publish} from '@/api/activity/eventInfo'
+import {
+  addEventRule,
+  queryEventRule,
+  publish,
+  publishActivityTask,
+  changeEventRule,
+  deleteEventRule,
+  approvalActivityTask,
+  getEventInfoByid
+} from '@/api/activity/eventInfo'
 import SelectProducts from '@/components/SelectProducts/index'
 import SelectStore from '@/components/SelectStore/index'
+import {nextTick} from "vue";
 
 const {proxy} = getCurrentInstance();
 const {
   sop_calc_type, sop_calc_unit, sop_event_calc_reward_type,
   sop_reward_type, sop_time_range_unit
 } = proxy.useDict("sop_calc_type", 'sop_calc_unit', 'sop_event_calc_reward_type', 'sop_reward_type', 'sop_time_range_unit');
-
 const tabValue = ref('first')
-
 const firstForm = ref()
 const jobList = ref([])
-
+let secondLoading = ref(false)
 const productPackageId = ref(NaN)
 const formStoreIndex = ref(NaN)
 const firstFormModels = ref({
@@ -367,9 +380,16 @@ const resetFirstForm = () => {
     calcType: 1,
     timeRange: 1,
     timeRangeUnit: 'everyday',
-    calcUnit: 1,
     rewardType: 1,
-    jobs: jobList.value,
+    calcUnit: 1,
+    jobs: [
+      {
+        targetRange: 0,
+        price: 0,
+        jobId: '',
+        jobName: '',
+      }
+    ],
     products: []
   }
 }
@@ -382,12 +402,11 @@ const formRule = {
 }
 
 const secondForm = ref()
-
 const secondFormModels = ref({
   formListData: [{
     brandsCheckAll: false,
     isIndeterminate: false,
-    eventCalcRewardType: 1,
+    eventCalcRewardType: 3,
     calcType: 1,
     timeRange: 1,
     timeRangeUnit: 'everyday',
@@ -411,13 +430,20 @@ const resetSecondForm = () => {
   return {
     brandsCheckAll: false,
     isIndeterminate: false,
-    eventCalcRewardType: 1,
+    eventCalcRewardType: 3,
     calcType: 1,
     timeRange: 1,
     timeRangeUnit: 'everyday',
     rewardType: 1,
     calcUnit: 1,
-    jobs: jobList.value,
+    jobs: [
+      {
+        targetRange: 0,
+        price: 0,
+        jobId: '',
+        jobName: '',
+      }
+    ],
     filter: {
       brands: []
     }
@@ -428,7 +454,7 @@ const thirdForm = ref()
 
 const thirdFormModels = ref({
   formListData: [{
-    eventCalcRewardType: 1,
+    eventCalcRewardType: 2,
     calcType: 1,
     timeRange: 1,
     timeRangeUnit: 'everyday',
@@ -436,13 +462,13 @@ const thirdFormModels = ref({
     calcUnit: 1,
     jobs: jobList.value,
     filter: {
-      storeIds: []
+      ids: []
     }
   }]
 })
 const resetThirdForm = () => {
   return {
-    eventCalcRewardType: 1,
+    eventCalcRewardType: 2,
     calcType: 1,
     timeRange: 1,
     timeRangeUnit: 'everyday',
@@ -450,7 +476,7 @@ const resetThirdForm = () => {
     calcUnit: 1,
     jobs: jobList.value,
     filter: {
-      storeIds: []
+      ids: []
     }
   }
 
@@ -566,83 +592,217 @@ const addForm = () => {
   }
 }
 //删除规则
-const delForm = (index) => {
-
+const delForm = async (index) => {
   switch (tabValue.value) {
     case 'first' :
       if (firstFormModels.value.formListData.length > 1) {
-        firstFormModels.value.formListData.splice(index, 1)
+        if (firstFormModels.value.formListData[index].eventRuleId) {
+          let {data: {canEdit}} = await getEventInfoByid(firstFormModels.value.formListData[index].eventId)
+          // 存在规则id将规则进行删除
+          if (canEdit) {
+            await deleteEventRule(firstFormModels.value.formListData[index].eventRuleId).then(res => {
+              if (res.code == 200) {
+                proxy.$modal.msgSuccess("删除成功");
+                getActivityRules()
+              }
+            })
+          } else {
+            proxy.$modal.msgError("任务规则不允许被删除");
+          }
+        } else {
+          firstFormModels.value.formListData.splice(index, 1)
+        }
+        break;
       }
-      break;
-    case 'second' :
+    case
+    'second'
+    :
       if (secondFormModels.value.formListData.length > 1) {
-        secondFormModels.value.formListData.splice(index, 1)
+        // 存在规则id将规则进行删除
+        if (secondFormModels.value.formListData[index].eventRuleId) {
+          let {data: {canEdit}} = await getEventInfoByid(secondFormModels.value.formListData[index].eventId)
+          if (canEdit) {
+            await deleteEventRule(secondFormModels.value.formListData[index].eventRuleId).then(res => {
+              if (res.code == 200) {
+                proxy.$modal.msgSuccess("删除成功");
+                getActivityRules()
+              }
+            })
+          } else {
+            proxy.$modal.msgError("任务规则不允许被删除");
+          }
+        } else {
+          secondFormModels.value.formListData.splice(index, 1)
+        }
       }
       break;
-    case 'third' :
+    case
+    'third'
+    :
       if (thirdFormModels.value.formListData.length > 1) {
-        thirdFormModels.value.formListData.splice(index, 1)
+        // 存在规则id将规则进行删除
+        if (thirdFormModels.value.formListData[index].eventRuleId) {
+          let {data: {canEdit}} = await getEventInfoByid(thirdFormModels.value.formListData[index].eventId)
+          if (canEdit) {
+            await deleteEventRule(thirdFormModels.value.formListData[index].eventRuleId).then(res => {
+              if (res.code == 200) {
+                proxy.$modal.msgSuccess("删除成功");
+                getActivityRules()
+              }
+            })
+          } else {
+            proxy.$modal.msgError("任务规则不允许被删除");
+          }
+        } else {
+          thirdFormModels.value.formListData.splice(index, 1)
+        }
       }
       break;
   }
 }
 //保存并新增规则
-const saveFormAndAdd = async (index,type) => {
+const saveFormAndAdd = async (index, type) => {
   switch (tabValue.value) {
     case 'first' :
       let v = await firstForm.value.validate()
       if (v) {
         firstFormModels.value.formListData[index].eventId = props.eventId
-        addEventRule(firstFormModels.value.formListData[index])
-            .then(res => {
-              if (res.code === 200) {
-                proxy.$modal.msgSuccess("保存成功");
-                if(type==='saveAndAdd'){
-                  firstFormModels.value.formListData.push(resetFirstForm())
+        if (!firstFormModels.value.formListData[index].eventRuleId) {
+          openLoading()
+          addEventRule(firstFormModels.value.formListData[index])
+              .then(res => {
+                if (res.code === 200) {
+                  proxy.$modal.msgSuccess("新增规则成功");
+                  getActivityRules().then(res => {
+                    if (type === 'saveAndAdd') {
+                      firstFormModels.value.formListData.push(resetFirstForm())
+                    }
+                  })
                 }
-              }
-            })
-
+                closeLoading()
+              })
+        } else {
+          openLoading()
+          changeEventRule(firstFormModels.value.formListData[index])
+              .then(res => {
+                if (res.code === 200) {
+                  proxy.$modal.msgSuccess("修改规则成功");
+                  if (type === 'saveAndAdd') {
+                    firstFormModels.value.formListData.push(resetFirstForm())
+                  }
+                }
+                closeLoading()
+              })
+        }
       }
       break;
     case 'second' :
       let v1 = await firstForm.value.validate()
       if (v1) {
         secondFormModels.value.formListData[index].eventId = props.eventId
-        addEventRule(secondFormModels.value.formListData[index])
-            .then(res => {
-              if (res.code === 200) {
-                proxy.$modal.msgSuccess("保存成功");
-                if(type==='saveAndAdd'){
-                  secondFormModels.value.formListData.push(resetSecondForm())
+        if (!secondFormModels.value.formListData[index].eventRuleId) {
+          openLoading()
+          addEventRule(secondFormModels.value.formListData[index])
+              .then(res => {
+                if (res.code === 200) {
+                  proxy.$modal.msgSuccess("新增规则成功");
+                  getActivityRules().then(res => {
+                    if (type === 'saveAndAdd') {
+                      secondFormModels.value.formListData.push(resetSecondForm())
+                    }
+                  })
                 }
-              }
-            })
-
+                closeLoading()
+              })
+        } else {
+          openLoading()
+          changeEventRule(secondFormModels.value.formListData[index])
+              .then(res => {
+                if (res.code === 200) {
+                  proxy.$modal.msgSuccess("修改规则成功");
+                  if (type === 'saveAndAdd') {
+                    secondFormModels.value.formListData.push(resetSecondForm())
+                  }
+                }
+                closeLoading()
+              })
+        }
       }
       break;
     case 'third' :
       let v2 = await firstForm.value.validate()
       if (v2) {
         thirdFormModels.value.formListData[index].eventId = props.eventId
-        addEventRule(thirdFormModels.value.formListData[index])
-            .then(res => {
-              if (res.code === 200) {
-                proxy.$modal.msgSuccess("保存成功");
-                if(type==='saveAndAdd'){
-                  thirdFormModels.value.formListData.push(resetThirdForm())
+        if (!thirdFormModels.value.formListData[index].eventRuleId) {
+          openLoading()
+          addEventRule(thirdFormModels.value.formListData[index])
+              .then(res => {
+                if (res.code === 200) {
+                  proxy.$modal.msgSuccess("新增规则成功");
+                  getActivityRules().then(res => {
+                    if (type === 'saveAndAdd') {
+                      thirdFormModels.value.formListData.push(resetThirdForm())
+                    }
+                  })
                 }
-
-              }
-            })
+                closeLoading()
+              })
+        } else {
+          openLoading()
+          changeEventRule(thirdFormModels.value.formListData[index])
+              .then(res => {
+                if (res.code === 200) {
+                  proxy.$modal.msgSuccess("修改规则成功");
+                  if (type === 'saveAndAdd') {
+                    thirdFormModels.value.formListData.push(resetThirdForm())
+                  }
+                }
+                closeLoading()
+              })
+        }
       }
       break;
   }
 }
+//获取任务下的规则
+const getActivityRules = () => {
+  // openLoading()
+  return queryEventRule({eventId: props.eventId})
+      .then(res => {
+        if (res.code === 200) {
+          firstFormModels.value.formListData = []
+          secondFormModels.value.formListData = []
+          thirdFormModels.value.formListData = []
+          res.data.list.forEach(item => {
+            if (item.eventCalcRewardType === 1) {
+              firstFormModels.value.formListData.push(item)
+            } else if (item.eventCalcRewardType === 3) {
+              secondFormModels.value.formListData.push(item)
+            } else if (item.eventCalcRewardType === 2) {
+              thirdFormModels.value.formListData.push(item)
+            }
+          })
+          if (firstFormModels.value.formListData.length === 0) {
+            firstFormModels.value.formListData.push(resetFirstForm())
+          }
+          if (secondFormModels.value.formListData.length === 0) {
+            secondFormModels.value.formListData.push(resetSecondForm())
+          }
+          if (thirdFormModels.value.formListData.length === 0) {
+            thirdFormModels.value.formListData.push(resetThirdForm())
+          }
+        }
+        // closeLoading()
+      })
+
+
+}
+
+
 //门店弹出确定
 const onSuccessStoreDialog = () => {
   showStoreDialog.value = false
-  thirdFormModels.value.formListData[formStoreIndex.value].filter.storeIds = selectStoreRef.value.getStoreResultList()
+  thirdFormModels.value.formListData[formStoreIndex.value].filter.ids = selectStoreRef.value.getStoreResultList()
 }
 //门店弹窗关闭
 const onCancelStoreDialog = () => {
@@ -659,35 +819,80 @@ const props = defineProps({
     default: undefined
   }
 })
+//添加loading
+const openLoading = () => {
+  secondLoading.value = true
+}
+//移除loading
+const closeLoading = () => {
+  secondLoading.value = false
+}
+
 //加载任务规则
 const loadEventRule = () => {
-  if (props.handleType === 'query' ) {
+  if (props.handleType === 'query') {
+    secondLoading.value = true
     queryEventRule({eventId: props.eventId})
         .then(res => {
           if (res.code === 200) {
             firstFormModels.value.formListData = []
             secondFormModels.value.formListData = []
             thirdFormModels.value.formListData = []
-            res.data.list.forEach(item=>{
-              if(item.eventCalcRewardType === 1){
+            res.data.list.forEach(item => {
+              if (item.eventCalcRewardType === 1) {
                 firstFormModels.value.formListData.push(item)
-              }else if(item.eventCalcRewardType === 2){
+              } else if (item.eventCalcRewardType === 3) {
                 secondFormModels.value.formListData.push(item)
-              }else if(item.eventCalcRewardType === 3){
+              } else if (item.eventCalcRewardType === 2) {
                 thirdFormModels.value.formListData.push(item)
               }
             })
+            secondLoading.value = false
+            return Promise.resolve(true)
           }
+        })
+  } else {
+    openLoading()
+    queryEventRule({eventId: props.eventId})
+        .then(res => {
+          if (res.code === 200) {
+            firstFormModels.value.formListData = []
+            secondFormModels.value.formListData = []
+            thirdFormModels.value.formListData = []
+            res.data.list.forEach(item => {
+              if (item.eventCalcRewardType === 1) {
+                firstFormModels.value.formListData.push(item)
+              } else if (item.eventCalcRewardType === 3) {
+                secondFormModels.value.formListData.push(item)
+              } else if (item.eventCalcRewardType === 2) {
+                thirdFormModels.value.formListData.push(item)
+              }
+            })
+            if (firstFormModels.value.formListData.length === 0) {
+              firstFormModels.value.formListData.push(resetFirstForm())
+            }
+            if (secondFormModels.value.formListData.length === 0) {
+              secondFormModels.value.formListData.push(resetSecondForm())
+            }
+            if (thirdFormModels.value.formListData.length === 0) {
+              thirdFormModels.value.formListData.push(resetThirdForm())
+            }
+          }
+          closeLoading()
+          return Promise.resolve(true)
         })
   }
 }
-const publishActivity=()=>{
-  return publish(props.eventId)
+const publishActivity = () => {
+  return approvalActivityTask(props.eventId)
+  // return publish(props.eventId)
 }
 defineExpose({
   loadEventRule,
   getJobList,
-  publishActivity
+  publishActivity,
+  openLoading,
+  closeLoading
 })
 
 </script>

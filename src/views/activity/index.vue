@@ -5,7 +5,8 @@
         <el-input v-model="queryParams.keyword" placeholder="简称｜全称｜描述" clearable @keyup.enter="handleQuery"/>
       </el-form-item>
       <el-form-item label="任务时间" prop="name">
-        <el-date-picker v-model="betweenDates" type="daterange" clearable @keyup.enter="handleQuery"/>
+        <el-date-picker format="YYYY-MM-DD" value-format="YYYY-MM-DD" v-model="betweenDates" type="daterange" clearable
+                        @keyup.enter="handleQuery"/>
       </el-form-item>
       <el-form-item label="状态" prop="state">
         <el-select v-model="queryParams.state" clearable @change="handleQuery" @keyup.enter="handleQuery">
@@ -30,10 +31,13 @@
     <el-table v-loading="loading" :data="activityList">
       <el-table-column prop="eventId" label="任务ID"></el-table-column>
       <el-table-column prop="name" label="任务简称"></el-table-column>
-      <el-table-column prop="state" label="状态">
-        <template #default="scope">
-          <dict-tag :options="activity_type" :value="scope.row.state"/>
-        </template>
+      <!--      <el-table-column prop="state" label="状态">-->
+      <!--        <template #default="scope">-->
+      <!--          <dict-tag :options="activity_type" :value="scope.row.state"/>-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
+      <el-table-column prop="stateName" label="状态">
+
       </el-table-column>
       <el-table-column prop="beginTime" label="开始时间"/>
       <el-table-column prop="endTime" label="结束时间"/>
@@ -43,13 +47,20 @@
           <el-button type="text" icon="Search" @click="handleQueryInfo(scope.row)" v-hasPermi="['wecom:order:remove']">
             查看
           </el-button>
-          <el-button type="text" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['wecom:order:edit']">修改
+          <el-button v-if="scope.row.canEdit" type="text" icon="Edit" @click="handleUpdate(scope.row)"
+                     v-hasPermi="['wecom:order:edit']">修改
           </el-button>
-          <el-button type="text" icon="Edit" @click="handleEditInfo(scope.row)" v-hasPermi="['wecom:order:edit']">
-            编辑
-          </el-button>
-          <el-button type="text" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['wecom:order:remove']">
+          <el-button v-if="scope.row.canDelete" type="text" icon="Delete" @click="handleDelete(scope.row)"
+                     v-hasPermi="['wecom:order:remove']">
             删除
+          </el-button>
+          <el-button v-if="scope.row.canStop" type="text" icon="Delete" @click="handleTaskStop(scope.row)"
+                     v-hasPermi="['wecom:order:remove']">
+            停用
+          </el-button>
+          <el-button v-if="scope.row.canStart" type="text" icon="Delete" @click="handleTaskBegin(scope.row)"
+                     v-hasPermi="['wecom:order:remove']">
+            启用
           </el-button>
         </template>
       </el-table-column>
@@ -69,9 +80,10 @@
 import {
   delEventInfoByid,
   queryEventInfoList,
+  startActivityTask,
+  stopActivityTask
 } from "@/api/activity/eventInfo";
 import router from "@/router";
-
 
 const {proxy} = getCurrentInstance();
 const {activity_type} = proxy.useDict("activity_type");
@@ -83,7 +95,7 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
-const betweenDates = ref([])
+let betweenDates = ref([])
 
 const data = reactive({
   queryParams: {
@@ -98,6 +110,10 @@ const {queryParams} = toRefs(data);
 /** 查询DDI订单列表 */
 function getList() {
   loading.value = true;
+  if (betweenDates.value.length !== 0) {
+    queryParams.value.beginTime = betweenDates.value[0]
+    queryParams.value.endTime = betweenDates.value[1]
+  }
   queryEventInfoList(queryParams.value).then(response => {
     activityList.value = response.data.list;
     total.value = Number(response.data.total);
@@ -113,8 +129,21 @@ function handleQuery() {
 
 /** 重置按钮操作 */
 function resetQuery() {
+  betweenDates.value = []
+  queryParams.value.beginTime = undefined
+  queryParams.value.endTime = undefined
   proxy.resetForm("queryRef");
   handleQuery();
+}
+
+/** 任务停用 */
+const handleTaskStop = (row) => {
+  stopActivityTask(row.eventId)
+}
+
+/** 任务启用 */
+const handleTaskBegin = (row) => {
+  startActivityTask(row.eventId)
 }
 
 /** 修改按钮操作 */
@@ -126,10 +155,7 @@ function handleUpdate(row) {
 function handleAdd() {
   router.push({path: '/markteCenter/activityInfo', query: {handleType: 'add'}})
 }
-//编辑
-function handleEditInfo(row){
-  router.push({path: '/markteCenter/activityInfo', query: {handleType: 'edit', eventId: row.eventId}})
-}
+
 /** 查看按钮操作 */
 function handleQueryInfo(row) {
   router.push({path: '/markteCenter/activityInfo', query: {handleType: 'query', eventId: row.eventId}})

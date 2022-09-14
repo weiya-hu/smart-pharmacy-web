@@ -69,25 +69,26 @@
          </el-table-column>
          <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="200">
             <template #default="scope">
-              <el-button
-                  type="text"
-                  icon="Plus"
-                  size="small"
-                  @click="handleAdd(scope.row)"
-                  v-hasPermi="['system:dept:add']"
-              >新增</el-button>
+<!--              <el-button-->
+<!--                  type="text"-->
+<!--                  icon="Plus"-->
+<!--                  size="small"-->
+<!--                  @click="handleAdd(scope.row)"-->
+<!--                  v-hasPermi="['system:dept:add']"-->
+<!--              >新增</el-button>-->
                <el-button
                   type="text"
                   icon="Edit"
                   size="small"
+                  v-if="scope.row.parentId !== null"
                   @click="handleUpdate(scope.row)"
                   v-hasPermi="['system:dept:edit']"
                >修改</el-button>
                <el-button
-                  v-if="scope.row.parentId != 0"
                   type="text"
                   icon="Delete"
                   size="small"
+                  v-if="scope.row.parentId !== null"
                   @click="handleDelete(scope.row)"
                   v-hasPermi="['system:dept:remove']"
                >删除</el-button>
@@ -95,11 +96,19 @@
          </el-table-column>
       </el-table>
 
+     <pagination
+         v-show="total > 0"
+         :total="total"
+         v-model:page="queryParams.pageNum"
+         v-model:limit="queryParams.pageSize"
+         @pagination="getList"
+     />
+
       <!-- 添加或修改部门对话框 -->
       <el-dialog :title="title" v-model="open" width="750px" append-to-body>
          <el-form ref="deptRef" :model="form" :rules="rules" label-width="100px">
             <el-row>
-               <el-col :span="24" v-if="form.parentId !== 0">
+               <el-col :span="24">
                   <el-form-item label="上级部门" >
                      <el-tree-select
                         v-model="form.parentId"
@@ -162,6 +171,7 @@ const deptList = ref([]);
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
+const total = ref(0);
 const title = ref("");
 const deptOptions = ref([]);
 const isExpandAll = ref(true);
@@ -172,6 +182,8 @@ const data = reactive({
   queryParams: {
     name: undefined,
     state: undefined,
+    pageNum: 1,
+    pageSize: 10,
   },
   rules: {
     name: [{ required: true, message: "部门名称不能为空", trigger: "blur" }],
@@ -187,6 +199,7 @@ function getList() {
   loading.value = true;
   listDept(queryParams.value).then(response => {
     deptList.value = proxy.handleTree(response.data.list, "deptId");
+    total.value = Number(response.data.total);
     loading.value = false;
   });
 }
@@ -224,9 +237,9 @@ function handleAdd(row) {
     // deptOptions.value = proxy.handleTree(response.data.list, "id");
     deptOptions.value = response.data.list
   });
-  if (row != undefined) {
-    form.value.parentId = row.id;
-  }
+  // if (row != undefined) {
+  //   form.value.parentId = row.deptId;
+  // }
   open.value = true;
   title.value = "添加部门";
 }
@@ -246,7 +259,7 @@ function handleUpdate(row) {
   treeselect().then(response => {
     deptOptions.value = response.data.list
   });
-  getDept(row.id).then(response => {
+  getDept(row.deptId).then(response => {
     form.value = response.data;
     open.value = true;
     title.value = "修改部门";
@@ -275,7 +288,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   proxy.$modal.confirm('是否确认删除名称为"' + row.name + '"的数据项?').then(function() {
-    return delDept(row.id);
+    return delDept(row.deptId);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");

@@ -28,10 +28,10 @@
          <!--用户数据-->
          <el-col :span="20" :xs="24">
             <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-               <el-form-item label="用户名称" prop="userName">
+               <el-form-item label="成员名称" prop="userName">
                   <el-input
                      v-model="queryParams.userName"
-                     placeholder="请输入用户名称"
+                     placeholder="请输入成员名称"
                      clearable
                      style="width: 240px"
                      @keyup.enter="handleQuery"
@@ -49,7 +49,7 @@
                <el-form-item label="状态" prop="enable">
                   <el-select
                      v-model="queryParams.enable"
-                     placeholder="用户状态"
+                     placeholder="成员状态"
                      clearable
                      style="width: 240px"
                   >
@@ -110,20 +110,22 @@
                   >删除</el-button>
                </el-col>
                <el-col :span="1.5">
+                 <el-tooltip effect="dark" content="同步仅适用开通了企业微信的企业" placement="top">
                   <el-button
                       plain
-                      type="success"
+                      type="warning"
                       icon="Sort"
                       @click="handleSynchro"
                   >同步</el-button>
+                 </el-tooltip>
                </el-col>
                <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
             </el-row>
 
             <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
                <el-table-column type="selection" width="50" align="center" />
-               <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible" :show-overflow-tooltip="true" />
+               <el-table-column label="成员编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" :show-overflow-tooltip="true" />
+               <el-table-column label="成员名称" align="center" key="userName" prop="userName" v-if="columns[1].visible" :show-overflow-tooltip="true" />
                <el-table-column label="企业微信ID" align="center" key="weUserId" prop="weUserId" v-if="columns[2].visible" :show-overflow-tooltip="true" min-width="100" />
                <el-table-column label="部门" align="center" key="deptname" prop="deptname" v-if="columns[3].visible" :show-overflow-tooltip="true" />
                <el-table-column label="手机号码" align="center" key="mobile" prop="mobile" v-if="columns[4].visible" width="120" />
@@ -185,8 +187,8 @@
          <el-form :model="form" :rules="rules" ref="userRef" label-width="80px">
             <el-row>
                <el-col :span="12">
-                  <el-form-item label="用户昵称" prop="alias">
-                     <el-input v-model="form.alias" placeholder="请输入用户昵称" maxlength="30" />
+                  <el-form-item label="成员昵称" prop="alias">
+                     <el-input v-model="form.alias" placeholder="请输入成员昵称" maxlength="30" />
                   </el-form-item>
                </el-col>
               <el-col :span="12">
@@ -232,19 +234,19 @@
             </el-row>
             <el-row>
                <el-col :span="12">
-                  <el-form-item v-if="form.userId == undefined" label="用户名称" prop="userName">
-                     <el-input v-model="form.userName" placeholder="请输入用户名称" maxlength="30" />
+                  <el-form-item v-if="form.userId == undefined" label="成员名称" prop="userName">
+                     <el-input v-model="form.userName" placeholder="请输入成员名称" maxlength="30" />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item v-if="form.userId == undefined" label="用户密码" prop="password">
-                     <el-input v-model="form.password" placeholder="请输入用户密码" type="password" maxlength="20" show-password />
+                  <el-form-item v-if="form.userId == undefined" label="成员密码" prop="password">
+                     <el-input v-model="form.password" placeholder="请输入成员密码" type="password" maxlength="20" show-password />
                   </el-form-item>
                </el-col>
             </el-row>
             <el-row>
                <el-col :span="12">
-                  <el-form-item label="用户性别">
+                  <el-form-item label="成员性别">
                      <el-select v-model="form.gender" placeholder="请选择" style="width: 100%">
                         <el-option
                            v-for="dict in sys_user_sex"
@@ -317,7 +319,7 @@
             <template #tip>
                <div class="el-upload__tip text-center">
                   <div class="el-upload__tip">
-                     <el-checkbox v-model="upload.updateSupport" />是否更新已经存在的用户数据
+                     <el-checkbox v-model="upload.updateSupport" />是否更新已经存在的成员数据
                   </div>
                   <span>仅允许导入xls、xlsx格式文件。</span>
                   <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;" @click="importTemplate">下载模板</el-link>
@@ -379,9 +381,9 @@ const upload = reactive({
 });
 // 列显隐信息
 const columns = ref([
-  { key: 0, label: `用户编号`, visible: true },
-  { key: 1, label: `用户名称`, visible: true },
-  { key: 2, label: `用户昵称`, visible: true },
+  { key: 0, label: `成员编号`, visible: true },
+  { key: 1, label: `成员名称`, visible: true },
+  { key: 2, label: `成员昵称`, visible: true },
   { key: 3, label: `部门`, visible: true },
   { key: 4, label: `手机号码`, visible: true },
   { key: 5, label: `状态`, visible: true },
@@ -399,9 +401,9 @@ const data = reactive({
     deptIds: []
   },
   rules: {
-    userName: [{ required: true, message: "用户名称不能为空", trigger: "blur" }, { min: 2, max: 20, message: "用户名称长度必须介于 2 和 20 之间", trigger: "blur" }],
-    alias: [{ required: true, message: "用户昵称不能为空", trigger: "blur" }],
-    password: [{ required: true, message: "用户密码不能为空", trigger: "blur" }, { min: 5, max: 20, message: "用户密码长度必须介于 5 和 20 之间", trigger: "blur" }],
+    userName: [{ required: true, message: "成员名称不能为空", trigger: "blur" }, { min: 2, max: 20, message: "成员名称长度必须介于 2 和 20 之间", trigger: "blur" }],
+    alias: [{ required: true, message: "成员昵称不能为空", trigger: "blur" }],
+    password: [{ required: true, message: "成员密码不能为空", trigger: "blur" }, { min: 5, max: 20, message: "成员密码长度必须介于 5 和 20 之间", trigger: "blur" }],
     email: [{ type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }],
     mobile: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur" }]
   }
@@ -465,7 +467,7 @@ function resetQuery() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const userIds = row.userId || ids.value;
-  proxy.$modal.confirm('是否确认删除用户编号为"' + userIds + '"的数据项？').then(function () {
+  proxy.$modal.confirm('是否确认删除成员编号为"' + userIds + '"的数据项？').then(function () {
     return delUser(userIds);
   }).then(() => {
     getList();
@@ -556,7 +558,7 @@ function handleAdd() {
   reset();
   initTreeData();
   open.value = true;
-  title.value = "添加用户";
+  title.value = "添加成员";
   form.value.password = initPassword.value;
 };
 /** 修改按钮操作 */
@@ -571,7 +573,7 @@ function handleUpdate(row) {
   //   form.value.postIds = response.postIds;
   //   form.value.roleName = response.data.roleName;
     open.value = true;
-    title.value = "修改用户";
+    title.value = "修改成员";
     form.password = "";
   });
 

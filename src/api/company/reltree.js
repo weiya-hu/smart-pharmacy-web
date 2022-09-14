@@ -65,10 +65,10 @@ export function storeList() {
 }
 
 // 关系树列表
-export function listPage(data) {
+export function listPage(query) {
     return request({
         url: `/wecom/corpinfo/reltree/listPage`,
-        method: 'POST',
-        data
+        method: 'get',
+        params: query
     })
 }

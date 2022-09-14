@@ -48,7 +48,7 @@
       <el-table-column label="品类" prop="productType"/>
       <el-table-column label="品牌" prop="brand"/>
       <el-table-column label="规格" prop="specification" show-overflow-tooltip/>
-      <el-table-column label="数量" align="center" >
+      <el-table-column label="数量" align="center">
         <template #default="scope">
           <el-input type="number" v-model.number="scope.row.account"></el-input>
         </template>
@@ -72,7 +72,7 @@ const queryParam = ref({
   brands: '',
   pageNum: 1,
   pageSize: 10,
-  eventId:'',
+  eventId: '',
 })
 const loading = ref(false)
 const productList = ref([])
@@ -87,13 +87,13 @@ const handleQuery = () => {
 
 //搜索产品
 const getList = () => {
-  if(props.eventId){
+  if (props.eventId) {
     queryParam.value.eventId = props.eventId
     queryProductList(queryParam.value)
         .then(res => {
           if (res.code === 200) {
             productList.value = res.data.list
-            total.value = res.data.total
+            total.value = Number(res.data.total)
           }
         })
   }
@@ -106,9 +106,9 @@ const resetQuery = () => {
 }
 //选择商品
 const handleAdd = (row) => {
-  let isExists = productResultList.value.some(r=>r.productId === row.productId)
-  console.log('是否存在',isExists)
-  if(!isExists){
+  let isExists = productResultList.value.some(r => r.productId === row.productId)
+  console.log('是否存在', isExists)
+  if (!isExists) {
     row.account = 1
     productResultList.value.push(row)
   }
@@ -121,21 +121,25 @@ const handleDelete = (row) => {
   }
 }
 //获取已选择商品
-const getProductPackageResultList = ()=>{
-  return  productResultList.value.map(item=>({account:item.account,eventProductId:item.eventProductId,packageId:props.packageId}))
+const getProductPackageResultList = () => {
+  return productResultList.value.map(item => ({
+    account: item.account,
+    eventProductId: item.eventProductId,
+    packageId: props.packageId
+  }))
 }
-const getProductResultList = ()=>{
-  return  productResultList.value.map(item=>({account:item.account,eventProductId:item.eventProductId}))
+const getProductResultList = () => {
+  return productResultList.value.map(item => ({account: item.account, eventProductId: item.eventProductId}))
 }
 
 const props = defineProps({
-  eventId:{
-    type:String,
-    default:undefined
+  eventId: {
+    type: String,
+    default: undefined
   },
-  packageId:{
-    type:Number,
-    default:NaN
+  packageId: {
+    type: Number,
+    default: NaN
   }
 })
 

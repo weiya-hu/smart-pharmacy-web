@@ -23,14 +23,14 @@
         </el-tabs>
       </div>
     </div>
-    <el-dialog v-model="dialogVisible" title="注册" width="380px" :close-on-click-modal="false">
-      <div>
+    <el-dialog v-model="dialogVisible" title="扫码注册" width="400px" :close-on-click-modal="false">
+      <div class="wechat-url">
         <img src="@/assets/images/register.png" alt=""/>
       </div>
     </el-dialog>
-    <el-dialog v-model="dialogUrlVisible" title="注册" width="380px" :close-on-click-modal="false">
-      <div>
-        <img src="@/assets/images/register.png" alt=""/>
+    <el-dialog v-model="dialogUrlVisible" title="扫码添加" width="400px" :close-on-click-modal="false">
+      <div class="wecom-url">
+        <img src="@/assets/images/register-wecom.png" alt=""/>
       </div>
     </el-dialog>
   </div>
@@ -172,6 +172,17 @@ login()
         text-align: center;
       }
     }
+  }
+  :deep(.el-dialog__body) {
+    padding-top: 10px;
+  }
+  .wecom-url {
+    width: 240px;
+    margin: 0 auto;
+  }
+  .wechat-url {
+    width: 200px;
+    margin: 0 auto;
   }
 }
 

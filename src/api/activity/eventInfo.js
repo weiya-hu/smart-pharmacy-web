@@ -76,3 +76,54 @@ export function publishActivityTask(data) {
         method: 'get',
     })
 }
+
+//修改规则
+export function changeEventRule(data) {
+    return request({
+        url: `/sop/event/rule`,
+        method: 'PUT',
+        data: data
+    })
+}
+
+//删除规则
+export function deleteEventRule(data) {
+    return request({
+        url: `/sop/event/rule/${data}`,
+        method: 'DELETE',
+    })
+}
+
+//门店产品品牌/品类/规格控制
+
+export function filterGoods(data) {
+    return request({
+        url: `/product/chain/product/filter`,
+        method: 'get',
+        params: data
+    })
+}
+
+//审核任务
+export function approvalActivityTask(data) {
+    return request({
+        url: `/sop/event/info/approval/${data}`,
+        method: 'get',
+    })
+}
+
+//任务启用
+export function startActivityTask(data) {
+    return request({
+        url: `/sop/event/info/start/${data}`,
+        method: 'get',
+    })
+}
+
+//任务停用
+export function stopActivityTask(data) {
+    return request({
+        url: `/sop/event/info/stop/${data}`,
+        method: 'get',
+    })
+}
