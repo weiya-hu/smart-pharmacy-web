@@ -47,11 +47,11 @@
         :tree-props="{ children: 'children' }"
     >
       <el-table-column prop="name" label="部门名称" width="450" show-tooltip-when-overflow></el-table-column>
-<!--      <el-table-column prop="state" label="状态">-->
-<!--        <template #default="scope">-->
-<!--          <dict-tag :options="sys_normal_disable" :value="scope.row.state"/>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
+      <!--      <el-table-column prop="state" label="状态">-->
+      <!--        <template #default="scope">-->
+      <!--          <dict-tag :options="sys_normal_disable" :value="scope.row.state"/>-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
       <el-table-column label="创建时间" prop="createTime" show-tooltip-when-overflow>
         <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -59,14 +59,14 @@
       </el-table-column>
       <el-table-column label="操作" class-name="small-padding fixed-width" width="180">
         <template #default="scope">
-<!--          <el-button-->
-<!--              type="text"-->
-<!--              icon="Plus"-->
-<!--              size="small"-->
-<!--              @click="handleAdd(scope.row)"-->
-<!--              v-hasPermi="['system:dept:add']"-->
-<!--          >新增-->
-<!--          </el-button>-->
+          <!--          <el-button-->
+          <!--              type="text"-->
+          <!--              icon="Plus"-->
+          <!--              size="small"-->
+          <!--              @click="handleAdd(scope.row)"-->
+          <!--              v-hasPermi="['system:dept:add']"-->
+          <!--          >新增-->
+          <!--          </el-button>-->
           <el-button
               type="text"
               icon="Edit"
@@ -117,7 +117,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="类型" prop="type">
-              <el-select  v-model="form.type"  placeholder="类型" @change="handleChange" style="width: 100%" >
+              <el-select v-model="form.type" placeholder="类型" @change="handleChange" style="width: 100%">
                 <el-option
                     v-for="dict in wecom_reltree_type"
                     :key="dict.value"
@@ -129,7 +129,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="名称" prop="name">
-<!--              <el-input v-model="form.name" style="width: 100%" placeholder="请选择名称 / 如没有需要的供应商，请输入名称"/>-->
+              <!--              <el-input v-model="form.name" style="width: 100%" placeholder="请选择名称 / 如没有需要的供应商，请输入名称"/>-->
               <el-select
                   v-model="form.name"
                   filterable
@@ -140,8 +140,11 @@
                   clearable
                   style="width: 100%"
               >
-                <el-option v-for="item in nameList" :key="item.id" :label="item.name" :value="item.id" />
+                <el-option v-for="item in nameList" :key="item.id" :label="item.name" :value="item.id"/>
               </el-select>
+            </el-form-item>
+            <el-form-item label="业务方编码" prop="relationId">
+              <el-input v-model="form.relationId" style="width: 100%" placeholder="业务方编码"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -190,7 +193,17 @@
 </template>
 
 <script setup name="Dept">
-import {listReltree, listPage, getReltree, addReltree, updateReltree, delReltree, makerList, chainList, storeList} from "@/api/company/reltree";
+import {
+  listReltree,
+  listPage,
+  getReltree,
+  addReltree,
+  updateReltree,
+  delReltree,
+  makerList,
+  chainList,
+  storeList
+} from "@/api/company/reltree";
 import {listPost} from "@/api/system/post";
 import {listUser} from "@/api/system/user";
 
@@ -213,8 +226,8 @@ const selectUsers = ref([])
 const selectJobs = ref([])
 const formTableRef = ref()
 const rulesTable = ref({
-    userName: [{required: true, message: "请选择用户", trigger: "change"}],
-    job: [{required: true, message: "请选择职务", trigger: "change"}],
+  userName: [{required: true, message: "请选择用户", trigger: "change"}],
+  job: [{required: true, message: "请选择职务", trigger: "change"}],
 })
 const data = reactive({
   form: {},
@@ -278,6 +291,7 @@ function reset() {
   form.value = {
     nodeId: undefined,
     parentNodeId: undefined,
+    relationId:undefined,
     type: undefined,
     name: null,
   };
@@ -376,21 +390,21 @@ function handleDelete(row) {
 
 function handleChange(val) {
   if (val === 1) {
-    form.value.name= null
+    form.value.name = null
     makerList().then(res => {
       if (res.code === 200) {
         nameList.value = res.data.list
       }
     })
   } else if (val === 3) {
-    form.value.name= null
+    form.value.name = null
     chainList().then(res => {
       if (res.code === 200) {
         nameList.value = res.data.list
       }
     })
   } else if (val === 4) {
-    form.value.name= null
+    form.value.name = null
     storeList().then(res => {
       if (res.code === 200) {
         nameList.value = res.data.list
@@ -400,6 +414,7 @@ function handleChange(val) {
     nameList.value = []
   }
 }
+
 loadSelectJobs()
 loadSelectUsers()
 getList();
