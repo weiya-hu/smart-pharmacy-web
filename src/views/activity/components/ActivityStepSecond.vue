@@ -18,7 +18,7 @@
             <el-row>
               <el-form-item class="label" label="核算方式" :prop="'formListData.' + index + '.calcType'"
                             :rules="formRule.calcType">
-                <el-select v-model="firstFormModel.calcType">
+                <el-select :disabled="handleType=='query'" v-model="firstFormModel.calcType">
                   <el-option v-for="item in sop_calc_type" :key="item.value" :value="item.value" :label="item.label">
                     {{ item.label }}
                   </el-option>
@@ -26,7 +26,8 @@
               </el-form-item>
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             :rules="formRule.timeRangeUnit">
-                <el-input type="number" v-model="firstFormModel.timeRange" class="input-with-select">
+                <el-input :disabled="handleType=='query'" type="number" v-model="firstFormModel.timeRange"
+                          class="input-with-select">
                   <template #append>
                     <el-select v-model="firstFormModel.timeRangeUnit">
                       <el-option v-for="item in sop_time_range_unit" :key="item.value" :value="item.value"
@@ -41,13 +42,13 @@
             <el-row>
               <el-form-item class="label" label="奖励条件" :prop="'formListData.' + index + '.calcUnit'"
                             :rules="formRule.calcUnit">
-                <el-select v-model="firstFormModel.calcUnit">
+                <el-select :disabled="handleType=='query'" v-model="firstFormModel.calcUnit">
                   <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
               <el-form-item class="label" label="奖励方式" :prop="'formListData.' + index + '.rewardType'"
                             :rules="formRule.rewardType">
-                <el-select v-model="firstFormModel.rewardType">
+                <el-select :disabled="handleType=='query'" v-model="firstFormModel.rewardType">
                   <el-option v-for="item in sop_reward_type" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
@@ -66,6 +67,7 @@
               </el-form-item>
               <el-form-item class="label" label="奖励阈值">
                 <el-input
+                    :disabled="handleType=='query'"
                     v-model.number="item.targetRange"
                     class="input-with-select">
                   <template #append>
@@ -77,7 +79,7 @@
                 </el-input>
               </el-form-item>
               <el-form-item class="label" label="奖励金额">
-                <el-input v-model.number="item.price" class="input-with-select">
+                <el-input :disabled="handleType=='query'" v-model.number="item.price" class="input-with-select">
                 </el-input>
               </el-form-item>
             </el-row>
@@ -113,7 +115,7 @@
             <el-row>
               <el-form-item class="label" label="核算方式" :prop="'formListData.' + index + '.calcType'"
                             :rules="formRule.calcType">
-                <el-select v-model="secondFormModel.calcType">
+                <el-select :disabled="handleType=='query'" v-model="secondFormModel.calcType">
                   <el-option v-for="item in sop_calc_type" :key="item.value" :value="item.value" :label="item.label">
                     {{ item.label }}
                   </el-option>
@@ -121,7 +123,8 @@
               </el-form-item>
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             :rules="formRule.timeRangeUnit">
-                <el-input type="number" v-model="secondFormModel.timeRange" class="input-with-select">
+                <el-input :disabled="handleType=='query'" type="number" v-model="secondFormModel.timeRange"
+                          class="input-with-select">
                   <template #append>
                     <el-select v-model="secondFormModel.timeRangeUnit">
                       <el-option v-for="item in sop_time_range_unit" :key="item.value" :value="item.value"
@@ -136,13 +139,13 @@
             <el-row>
               <el-form-item class="label" label="奖励条件" :prop="'formListData.' + index + '.calcUnit'"
                             :rules="formRule.calcUnit">
-                <el-select v-model="secondFormModel.calcUnit">
+                <el-select :disabled="handleType=='query'" v-model="secondFormModel.calcUnit">
                   <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
               <el-form-item class="label" label="奖励方式" :prop="'formListData.' + index + '.rewardType'"
                             :rules="formRule.rewardType">
-                <el-select v-model="secondFormModel.rewardType">
+                <el-select :disabled="handleType=='query'" v-model="secondFormModel.rewardType">
                   <el-option v-for="item in sop_reward_type" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
@@ -159,6 +162,7 @@
               </el-form-item>
               <el-form-item class="label" label="奖励阈值">
                 <el-input
+                    :disabled="handleType=='query'"
                     v-model.number="item.targetRange"
                     class="input-with-select">
                   <template #append>
@@ -170,7 +174,7 @@
                 </el-input>
               </el-form-item>
               <el-form-item class="label" label="奖励金额">
-                <el-input v-model.number="item.price" class="input-with-select">
+                <el-input :disabled="handleType=='query'" v-model.number="item.price" class="input-with-select">
                 </el-input>
               </el-form-item>
             </el-row>
@@ -212,7 +216,7 @@
             <el-row>
               <el-form-item class="label" label="核算方式" :prop="'formListData.' + index + '.calcType'"
                             :rules="formRule.calcType">
-                <el-select v-model="thirdFormModel.calcType">
+                <el-select :disabled="handleType=='query'" v-model="thirdFormModel.calcType">
                   <el-option v-for="item in sop_calc_type" :key="item.value" :value="item.value" :label="item.label">
                     {{ item.label }}
                   </el-option>
@@ -220,7 +224,8 @@
               </el-form-item>
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             :rules="formRule.timeRangeUnit">
-                <el-input type="number" v-model="thirdFormModel.timeRange" class="input-with-select">
+                <el-input :disabled="handleType=='query'" type="number" v-model="thirdFormModel.timeRange"
+                          class="input-with-select">
                   <template #append>
                     <el-select v-model="thirdFormModel.timeRangeUnit">
                       <el-option v-for="item in sop_time_range_unit" :key="item.value" :value="item.value"
@@ -235,13 +240,13 @@
             <el-row>
               <el-form-item class="label" label="奖励条件" :prop="'formListData.' + index + '.calcUnit'"
                             :rules="formRule.calcUnit">
-                <el-select v-model="thirdFormModel.calcUnit">
+                <el-select :disabled="handleType=='query'" v-model="thirdFormModel.calcUnit">
                   <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
               <el-form-item class="label" label="奖励方式" :prop="'formListData.' + index + '.rewardType'"
                             :rules="formRule.rewardType">
-                <el-select v-model="thirdFormModel.rewardType">
+                <el-select :disabled="handleType=='query'" v-model="thirdFormModel.rewardType">
                   <el-option v-for="item in sop_reward_type" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
@@ -260,6 +265,7 @@
               </el-form-item>
               <el-form-item class="label" label="奖励阈值">
                 <el-input
+                    :disabled="handleType=='query'"
                     v-model.number="item.targetRange"
                     class="input-with-select">
                   <template #append>
@@ -271,7 +277,7 @@
                 </el-input>
               </el-form-item>
               <el-form-item class="label" label="奖励金额">
-                <el-input v-model.number="item.price" class="input-with-select">
+                <el-input :disabled="handleType=='query'" v-model.number="item.price" class="input-with-select">
                 </el-input>
               </el-form-item>
             </el-row>
@@ -590,11 +596,16 @@ const delForm = async (index) => {
   switch (tabValue.value) {
     case 'first' :
       if (firstFormModels.value.formListData.length > 1) {
-        if (firstFormModels.value.formListData[index].eventId) {
-          let {canEdit} = await getEventInfoByid(firstFormModels.value.formListData[index].eventId)
+        if (firstFormModels.value.formListData[index].eventRuleId) {
+          let {data: {canEdit}} = await getEventInfoByid(firstFormModels.value.formListData[index].eventId)
           // 存在规则id将规则进行删除
           if (canEdit) {
-            await deleteEventRule(firstFormModels.value.formListData[index].eventId)
+            await deleteEventRule(firstFormModels.value.formListData[index].eventRuleId).then(res => {
+              if (res.code == 200) {
+                proxy.$modal.msgSuccess("删除成功");
+                getActivityRules()
+              }
+            })
           } else {
             proxy.$modal.msgError("任务规则不允许被删除");
           }
@@ -608,10 +619,15 @@ const delForm = async (index) => {
     :
       if (secondFormModels.value.formListData.length > 1) {
         // 存在规则id将规则进行删除
-        if (secondFormModels.value.formListData[index].eventId) {
-          let {canEdit} = await getEventInfoByid(secondFormModels.value.formListData[index].eventId)
+        if (secondFormModels.value.formListData[index].eventRuleId) {
+          let {data: {canEdit}} = await getEventInfoByid(secondFormModels.value.formListData[index].eventId)
           if (canEdit) {
-            await deleteEventRule(secondFormModels.value.formListData[index].eventId)
+            await deleteEventRule(secondFormModels.value.formListData[index].eventRuleId).then(res => {
+              if (res.code == 200) {
+                proxy.$modal.msgSuccess("删除成功");
+                getActivityRules()
+              }
+            })
           } else {
             proxy.$modal.msgError("任务规则不允许被删除");
           }
@@ -625,10 +641,15 @@ const delForm = async (index) => {
     :
       if (thirdFormModels.value.formListData.length > 1) {
         // 存在规则id将规则进行删除
-        if (thirdFormModels.value.formListData[index].eventId && canEdit) {
-          let {canEdit} = await getEventInfoByid(thirdFormModels.value.formListData[index].eventId)
+        if (thirdFormModels.value.formListData[index].eventRuleId) {
+          let {data: {canEdit}} = await getEventInfoByid(thirdFormModels.value.formListData[index].eventId)
           if (canEdit) {
-            await deleteEventRule(thirdFormModels.value.formListData[index].eventId)
+            await deleteEventRule(thirdFormModels.value.formListData[index].eventRuleId).then(res => {
+              if (res.code == 200) {
+                proxy.$modal.msgSuccess("删除成功");
+                getActivityRules()
+              }
+            })
           } else {
             proxy.$modal.msgError("任务规则不允许被删除");
           }

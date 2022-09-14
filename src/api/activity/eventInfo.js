@@ -89,7 +89,7 @@ export function changeEventRule(data) {
 //删除规则
 export function deleteEventRule(data) {
     return request({
-        url: `/sop/event/info/${data}`,
+        url: `/sop/event/rule/${data}`,
         method: 'DELETE',
     })
 }
