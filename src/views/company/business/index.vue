@@ -270,6 +270,7 @@ function reset() {
     name: undefined,
     type: undefined,
   };
+  tableUsers.tableData = []
   proxy.resetForm("deptRef");
 }
 
@@ -292,7 +293,7 @@ function handleAdd(row) {
     deptOptions.value = response.data
   });
   if (row != undefined) {
-    form.value.parentNodeId = row.id;
+    form.value.parentNodeId = row.nodeId;
   }
   open.value = true;
   title.value = "添加部门";
@@ -315,7 +316,7 @@ function handleUpdate(row) {
     // deptOptions.value = proxy.handleTree(response.data, "id");
     deptOptions.value = response.data
   });
-  getReltree(row.id).then(response => {
+  getReltree(row.nodeId).then(response => {
     form.value = response.data;
     form.value.parentNodeId = response.data.parentId
     tableUsers.tableData = response.data.users
@@ -353,7 +354,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   proxy.$modal.confirm('是否确认删除名称为"' + row.name + '"的数据项?').then(function () {
-    return delReltree(row.id);
+    return delReltree(row.nodeId);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");

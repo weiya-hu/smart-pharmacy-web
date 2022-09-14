@@ -51,11 +51,11 @@
           <el-input v-model="form.name" :disabled="inputType==='readey'" />
         </el-form-item>
         <el-form-item label="企业类型">
-          <el-select v-model="form.corpType" :disabled="inputType==='readey'" placeholder="请选择" style="width: 350px;">
+          <el-select v-model="form.corpType" :disabled="inputType==='readey'" placeholder="请选择" filterable style="width: 350px;">
             <el-option v-for="item in corpTypeList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="门店编号" v-if="form.corpType !== 3">
+        <el-form-item label="门店编号" v-if="form.corpType == 4">
           <el-input v-model="form.code"
                     clearable
                     :disabled="inputType==='readey'"
