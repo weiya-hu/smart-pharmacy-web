@@ -15,12 +15,12 @@
 
       <el-form-item class="label" label="开始时间" prop="beginTime">
         <el-date-picker style="width: 400px;" v-model="form.beginTime" type="date" placeholder="开始时间"
-                        value-format="YYYY-MM-DD HH:mm:ss"
+                        value-format="YYYY-MM-DD"
                         :disabled="formDisabled"/>
       </el-form-item>
       <el-form-item class="label" label="结束时间" prop="endTime">
         <el-date-picker style="width: 400px;" v-model="form.endTime" type="date" placeholder="结束时间"
-                        value-format="YYYY-MM-DD HH:mm:ss"
+                        value-format="YYYY-MM-DD"
                         :disabled="formDisabled"/>
       </el-form-item>
       <el-form-item class="label" label="任务范围" prop="ruleScupes">
