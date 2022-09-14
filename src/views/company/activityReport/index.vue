@@ -17,7 +17,7 @@
           />
         </el-form-item>
         <el-form-item label="区域" label-width="120px">
-          <el-cascader filterable :options="options" :props="props" collapse-tags clearable/>
+          <el-cascader :collapse-tags="true" filterable :options="options" :props="props" collapse-tags clearable/>
         </el-form-item>
         <el-form-item label="条件查询" label-width="120px">
           <el-input v-model="queryParams.otherFilter" placeholder="请输入任务名/编号/商品名/商品ID/品牌"></el-input>
@@ -470,7 +470,7 @@ const chart_one_data = {
       show: true // 是否显示分隔线。默认数值轴显示
     },
     axisLine: { // 是否显示坐标轴轴线 默认显示
-      symbol: ['none', 'arrow'],
+      // symbol: ['none', 'arrow'],
       show: true, // 是否显示坐标轴轴线 默认显示
       lineStyle: { // 坐标轴线线的颜色
         color: '#6e7079'
@@ -616,7 +616,7 @@ const chart_two_data = {
       show: true // 是否显示分隔线。默认数值轴显示
     },
     axisLine: { // 是否显示坐标轴轴线 默认显示
-      symbol: ['arrow', 'none'],
+      // symbol: ['arrow', 'none'],
       show: true, // 是否显示坐标轴轴线 默认显示
       lineStyle: { // 坐标轴线线的颜色
         color: '#6e7079'
@@ -990,6 +990,11 @@ function innitSelectOption() {
 innitSelectOption()
 </script>
 <style scoped lang="scss">
+.outBox::v-deep(.el-loading-spinner) {
+  height: 20vh;
+  margin-top: 10vh;
+}
+
 //选中时样式设置
 .rewardList::v-deep(.el-tabs--card>.el-tabs__header .el-tabs__item.is-active) {
   background-color: #02a7f0;

@@ -64,6 +64,10 @@
 
 <script setup>
 import {queryProductList} from '@/api/activity/activityProduct'
+import {
+  queryEventRuleInfo
+} from '@/api/activity/eventInfo'
+import {watch} from "vue";
 
 const queryParam = ref({
   name: '',
@@ -87,6 +91,7 @@ const handleQuery = () => {
 
 //搜索产品
 const getList = () => {
+
   if (props.eventId) {
     queryParam.value.eventId = props.eventId
     queryProductList(queryParam.value)
@@ -107,7 +112,6 @@ const resetQuery = () => {
 //选择商品
 const handleAdd = (row) => {
   let isExists = productResultList.value.some(r => r.productId === row.productId)
-  console.log('是否存在', isExists)
   if (!isExists) {
     row.account = 1
     productResultList.value.push(row)
@@ -131,7 +135,6 @@ const getProductPackageResultList = () => {
 const getProductResultList = () => {
   return productResultList.value.map(item => ({account: item.account, eventProductId: item.eventProductId}))
 }
-
 const props = defineProps({
   eventId: {
     type: String,
@@ -140,15 +143,32 @@ const props = defineProps({
   packageId: {
     type: Number,
     default: NaN
+  },
+  eventRuleId: {
+    type: String,
+    default: null
   }
 })
+// const getSelectedGoods = () => {
+//   if (props.eventRuleId) {
+//     //  获取规则详情
+//     queryEventRuleInfo(props.eventRuleId).then(res => {
+//       if (res.code == 200) {
+//
+//       }
+//     })
+//   }
+// }
+// watch(props.eventRuleId, () => {
+//   getSelectedGoods()
+// })
 
 defineExpose({
   getProductResultList,
   getProductPackageResultList
 
 })
-
+// getSelectedGoods()
 getList()
 </script>
 

@@ -69,6 +69,14 @@ export function queryEventRule(data) {
     })
 }
 
+//查询活动任务规则
+export function queryEventRuleInfo(data) {
+    return request({
+        url: `/sop/event/rule/${data}`,
+        method: 'get',
+    })
+}
+
 //发布活动任务
 export function publishActivityTask(data) {
     return request({

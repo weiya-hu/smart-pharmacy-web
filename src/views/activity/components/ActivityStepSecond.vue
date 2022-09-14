@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container" v-loading="secondLoading" element-loading-text="加载中...">
+  <div class="app-container" v-loading="secondLoading" element-loading-text="请等待...">
     <el-tabs type="border-card" v-model="tabValue" @tab-change="changeTab">
       <el-tab-pane name="first" label="单品｜组合">
         <el-form ref="firstForm" :model="firstFormModels" :rules="formRule" inline label-width="100px">
@@ -88,11 +88,11 @@
               <div class="moudelTitle">参与商品</div>
             </el-row>
             <el-button v-show="firstFormModel.products.length === 0" type="primary" link
-                       @click="openProductsDialog(index)">添加商品
+                       @click="openProductsDialog(index,firstFormModel)">添加商品
             </el-button>
             <el-button type="primary" link>已选（{{ firstFormModel.products.length }}）个</el-button>
             <el-button v-show="firstFormModel.products.length > 0 " type="primary"
-                       @click="openProductsDialog(index)">点击查看商品列表
+                       @click="openProductsDialog(index,firstFormModel)">点击查看商品列表
             </el-button>
 
           </div>
@@ -303,7 +303,8 @@
     </el-tabs>
     <!-- 商品列表弹窗-->
     <el-dialog title="商品列表" v-model="showProductsDialog" width="70%">
-      <SelectProducts :eventId="props.eventId" :packageId="productPackageId" ref="selectProductsRef"></SelectProducts>
+      <SelectProducts :eventRuleId="itemRuleId" :eventId="props.eventId" :packageId="productPackageId"
+                      ref="selectProductsRef"></SelectProducts>
       <template #footer>
         <div class="dialog-footer">
           <el-button v-if="handleType!=='query'" type="primary" @click="onSuccessProductsDialog(0)">单品保存</el-button>
@@ -354,6 +355,7 @@ const jobList = ref([])
 let secondLoading = ref(false)
 const productPackageId = ref(NaN)
 const formStoreIndex = ref(NaN)
+let itemRuleId = ref(null)
 const firstFormModels = ref({
       formListData: [{
         eventCalcRewardType: 1,
@@ -362,14 +364,7 @@ const firstFormModels = ref({
         timeRangeUnit: 'everyday',
         rewardType: 1,
         calcUnit: 1,
-        jobs: [
-          {
-            targetRange: 0,
-            price: 0,
-            jobId: '',
-            jobName: '',
-          }
-        ],
+        jobs: jobList.value,
         products: []
       }]
     }
@@ -382,14 +377,7 @@ const resetFirstForm = () => {
     timeRangeUnit: 'everyday',
     rewardType: 1,
     calcUnit: 1,
-    jobs: [
-      {
-        targetRange: 0,
-        price: 0,
-        jobId: '',
-        jobName: '',
-      }
-    ],
+    jobs: jobList.value,
     products: []
   }
 }
@@ -412,14 +400,7 @@ const secondFormModels = ref({
     timeRangeUnit: 'everyday',
     rewardType: 1,
     calcUnit: 1,
-    jobs: [
-      {
-        targetRange: 0,
-        price: 0,
-        jobId: '',
-        jobName: '',
-      }
-    ],
+    jobs: jobList.value,
     filter: {
       brands: []
     }
@@ -436,14 +417,7 @@ const resetSecondForm = () => {
     timeRangeUnit: 'everyday',
     rewardType: 1,
     calcUnit: 1,
-    jobs: [
-      {
-        targetRange: 0,
-        price: 0,
-        jobId: '',
-        jobName: '',
-      }
-    ],
+    jobs: jobList.value,
     filter: {
       brands: []
     }
@@ -516,7 +490,6 @@ const getBrandList = () => {
         }
       })
 }
-
 //查询职务列表
 const getJobList = () => {
   queryJobList(props.eventId)
@@ -542,7 +515,12 @@ const getJobList = () => {
  * 打开产品列表
  * @param index 当前规则序号
  */
-const openProductsDialog = (index) => {
+const openProductsDialog = (index, row) => {
+  if (row.eventRuleId) {
+    itemRuleId.value = row.eventRuleId
+  } else {
+    itemRuleId.value = null
+  }
   productPackageId.value = index
   showProductsDialog.value = true
 }
