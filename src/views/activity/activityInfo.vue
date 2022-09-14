@@ -78,7 +78,7 @@ const handleNext = async () => {
         .then(res => {
           if (res.code !== 200 || res.data.list.length === 0) {
             proxy.$modal.msgError('请先保存规则')
-          } else if (isPresenceGoodsOrBrandOrStore(res.data.list)) {
+          } else {
             //判断规则当中是否有与规则类型匹配的商品/品牌/门店
             step.value++
             auditLoadiang.value = true
@@ -94,10 +94,12 @@ const handleNext = async () => {
                 }, rej => {
                   step.value--
                   auditLoadiang.value = false
+                  // proxy.$modal.msgError('请检查规则内容是否完整')
                 })
-          } else {
-            proxy.$modal.msgError('请检查规则内容是否完整')
           }
+          // else {
+          //   proxy.$modal.msgError('请检查规则内容是否完整')
+          // }
         })
   }
   activityStepSecondRef.value.getJobList()
