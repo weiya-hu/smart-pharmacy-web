@@ -59,14 +59,14 @@
       </el-table-column>
       <el-table-column label="操作" class-name="small-padding fixed-width" width="180">
         <template #default="scope">
-          <el-button
-              type="text"
-              icon="Plus"
-              size="small"
-              @click="handleAdd(scope.row)"
-              v-hasPermi="['system:dept:add']"
-          >新增
-          </el-button>
+<!--          <el-button-->
+<!--              type="text"-->
+<!--              icon="Plus"-->
+<!--              size="small"-->
+<!--              @click="handleAdd(scope.row)"-->
+<!--              v-hasPermi="['system:dept:add']"-->
+<!--          >新增-->
+<!--          </el-button>-->
           <el-button
               type="text"
               icon="Edit"
@@ -279,8 +279,8 @@ function reset() {
   form.value = {
     nodeId: undefined,
     parentNodeId: undefined,
-    name: undefined,
     type: undefined,
+    name: null,
   };
   tableUsers.tableData = []
   proxy.resetForm("deptRef");
@@ -304,9 +304,9 @@ function handleAdd(row) {
     // deptOptions.value = proxy.handleTree(response.data, "id");
     deptOptions.value = response.data
   });
-  if (row != undefined) {
-    form.value.parentNodeId = row.nodeId;
-  }
+  // if (row != undefined) {
+  //   form.value.parentNodeId = row.nodeId;
+  // }
   open.value = true;
   title.value = "添加部门";
 }
@@ -375,27 +375,29 @@ function handleDelete(row) {
 }
 
 function handleChange(val) {
-  console.log('val', val)
   if (val === 1) {
+    form.value.name= null
     makerList().then(res => {
       if (res.code === 200) {
         nameList.value = res.data.list
       }
     })
   } else if (val === 3) {
+    form.value.name= null
     chainList().then(res => {
       if (res.code === 200) {
         nameList.value = res.data.list
       }
     })
   } else if (val === 4) {
+    form.value.name= null
     storeList().then(res => {
       if (res.code === 200) {
         nameList.value = res.data.list
       }
     })
   } else {
-    nameList.value = null
+    nameList.value = []
   }
 }
 loadSelectJobs()
