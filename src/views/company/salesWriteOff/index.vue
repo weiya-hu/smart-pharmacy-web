@@ -1,0 +1,263 @@
+<template>
+  <div class="outBox">
+    <div class="search">
+      <div class="form">
+        <el-form v-show="showSearch">
+          <el-row>
+            <el-form-item label="时间">
+              <el-date-picker
+                  type="datetimerange"
+                  v-model="betweenTime"
+                  start-placeholder="开始时间"
+                  end-placeholder="结束时间"
+                  format="YYYY-MM-DD hh-mm-ss"
+                  value-format="YYYY-MM-DD hh:mm:ss"
+              />
+            </el-form-item>
+            <el-form-item style="marginLeft:20px" label="关键字">
+              <el-input
+                  style="width: 400px"
+                  v-model="queryParams.otherFilter"
+                  placeholder="请输入商品名/商品品牌"
+                  clearable
+              >
+                <template #prepend>
+                  <el-button :icon="Search"/>
+                </template>
+              </el-input>
+            </el-form-item>
+            <div class="handler">
+              <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+              <el-button
+                  type="info"
+                  plain
+                  icon="Upload"
+                  @click="handleImport"
+                  v-hasPermi="['system:user:import']"
+              >导入
+              </el-button>
+              <el-button type="primary" @click="getList">下一页</el-button>
+            </div>
+          </el-row>
+        </el-form>
+      </div>
+
+    </div>
+    <div style="display: flex;justifyContent:flex-end;marginBottom: 20px">
+      <right-toolbar v-model:showSearch="showSearch" @queryTable="refreshList" :columns="columns"></right-toolbar>
+    </div>
+    <el-dialog title="订单导入" v-model="upload.open" width="50%" append-to-body>
+      <el-upload
+          ref="uploadRef"
+          :limit="1"
+          accept=".xlsx, .xls"
+          :headers="upload.headers"
+          :action="upload.url + '?updateSupport=' + upload.updateSupport"
+          :disabled="upload.isUploading"
+          :on-progress="handleFileUploadProgress"
+          :on-success="handleFileSuccess"
+          :auto-upload="false"
+          drag
+      >
+        <el-icon class="el-icon--upload">
+          <upload-filled/>
+        </el-icon>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <template #tip>
+          <div class="el-upload__tip text-center">
+            <div class="el-upload__tip">
+              <el-checkbox v-model="upload.updateSupport"/>
+              是否更新已经存在的用户数据
+            </div>
+            <span>仅允许导入xls、xlsx格式文件。</span>
+            <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;"
+                     @click="importTemplate">下载模板
+            </el-link>
+          </div>
+        </template>
+      </el-upload>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitFileForm">确 定</el-button>
+          <el-button @click="upload.open = false">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
+    <div class="tableList">
+      <el-table v-loading="loading" :data="orderList">
+        <el-table-column width="200px" v-if="columns[0].visible" label="产品名" align="center" key="productName"
+                         prop="productName"/>
+        <el-table-column width="130px" v-if="columns[1].visible" label="销售金额" align="center" key="paidinAmount"
+                         prop="paidinAmount"/>
+        <el-table-column width="130px" v-if="columns[2].visible" label="销售数量" align="center" key="saleNumber"
+                         prop="saleNumber"/>
+        <el-table-column width="180px" v-if="columns[3].visible" label="销售时间" align="center" key="saleTime"
+                         prop="saleTime"/>
+        <el-table-column label="规格" v-if="columns[4].visible" align="center" key="specification"
+                         prop="specification"/>
+        <el-table-column label="门店ID" v-if="columns[5].visible" align="center" key="storeId" prop="storeId"/>
+        <el-table-column label="门店名" v-if="columns[6].visible" align="center" key="storeName" prop="storeName"/>
+        <el-table-column label="门店订单ID" v-if="columns[7].visible" align="center" key="storeOrderNumber"
+                         prop="storeOrderNumber"/>
+        <el-table-column width="120px" v-if="columns[8].visible" label="销售员" align="center" key="userName"
+                         prop="userName"/>
+      </el-table>
+      <div style="padding: 10px;display: flex;justifyContent: flex-end">
+        <!--        <span>总计:{{ total }}条</span>-->
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import {Search} from '@element-plus/icons-vue'
+import {getCurrentInstance, reactive, toRefs} from "vue";
+import {getToken} from "@/utils/auth";
+import {getOrderList} from "@/api/system/order";
+
+const showSearch = ref(true);
+const {proxy} = getCurrentInstance()
+let nextSearchAfter = ref([])
+let betweenTime = ref([])
+//搜索条件
+const data = reactive({
+  queryParams: {
+    pageNum: 1,
+    pageSize: 10,
+    otherFilter: undefined,
+  }
+});
+const orderList = ref([]);
+//列表loading
+let loading = ref(false)
+const total = ref(0);
+const {queryParams} = toRefs(data);
+/*** 用户导入参数 */
+const upload = reactive({
+  // 是否显示弹出层（订单导入）
+  open: false,
+  // 是否禁用上传
+  isUploading: false,
+  // 是否更新已经存在的用户数据
+  updateSupport: 0,
+  // 设置上传的请求头部
+  headers: {Authorization: "Bearer " + getToken()},
+  // 上传的地址
+  url: import.meta.env.VITE_APP_BASE_API + "/product/order/importOrder"
+});
+// 列显隐信息
+const columns = ref([
+  {key: 0, label: `产品名`, visible: true},
+  {key: 1, label: `销售金额`, visible: true},
+  {key: 2, label: `销售数量`, visible: true},
+  {key: 3, label: `销售时间`, visible: true},
+  {key: 4, label: `规格`, visible: true},
+  {key: 5, label: `门店ID`, visible: true},
+  {key: 6, label: `门店名`, visible: true},
+  {key: 7, label: `门店订单ID`, visible: true},
+  {key: 8, label: `销售员`, visible: true}
+]);
+/** 文件上传成功处理 */
+const handleFileSuccess = (response, file, fileList) => {
+  proxy.$refs["uploadRef"].handleRemove(file);
+  proxy.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入结果", {dangerouslyUseHTMLString: true});
+  upload.open = false
+  getList();
+};
+/**文件上传中处理 */
+const handleFileUploadProgress = (event, file, fileList) => {
+  upload.isUploading = true;
+};
+
+/** 提交上传文件 */
+function submitFileForm() {
+  proxy.$refs["uploadRef"].submit();
+};
+
+/** 导入按钮操作 */
+function handleImport() {
+  upload.title = "用户导入";
+  upload.open = true;
+};
+
+//刷新
+function refreshList() {
+  queryParams.value = {
+    pageNum: 1,
+    pageSize: 10,
+    otherFilter: undefined,
+  }
+  betweenTime.value = []
+  nextSearchAfter.value = undefined
+  getList()
+}
+
+/** 查询用订单列表 */  let timeObject = {
+  startTime: undefined,
+  endTime: undefined
+}
+if (betweenTime.value.length !== 0) {
+  timeObject = {
+    startTime: betweenTime.value[0],
+    endTime: betweenTime.value[1]
+  }
+}
+
+function getList() {
+
+  loading.value = true;
+  getOrderList({
+    ...timeObject,
+    ...queryParams.value,
+    nextSearchAfter: nextSearchAfter.value
+  }).then(res => {
+    if (res.code == 200) {
+      orderList.value = res.data.orders
+      nextSearchAfter.value = res.data.nextSearchAfter
+      total.value = Number(res.data.pageSize * res.data.pages);
+      loading.value = false;
+    }
+
+  })
+};
+
+/** 下载模板操作 */
+function importTemplate() {
+  proxy.downloadToGet("/product/order/downLoadDdiExcelTemplate", `order_template_${new Date().getTime()}.xlsx`);
+};
+
+/** 导出按钮操作 */
+function handleExport() {
+  proxy.download("system/user/export", {
+    ...queryParams.value,
+  }, `order_${new Date().getTime()}.xlsx`);
+};
+
+/** 搜索按钮操作 */
+function handleQuery() {
+  queryParams.value.pageNum = 1;
+  getList();
+};
+getList()
+</script>
+
+<style scoped lang="scss">
+.outBox {
+  padding: 20px;
+
+  .search {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+
+    .seach {
+      margin-left: 20px;
+
+    }
+
+    .handler {
+      margin-left: 20px;
+    }
+  }
+}
+</style>
