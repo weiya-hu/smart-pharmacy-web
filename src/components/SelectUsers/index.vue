@@ -14,6 +14,7 @@
         </div>
         <div class="head-container">
           <el-tree
+
               :data="deptOptions"
               :props="{ label: 'label', children: 'children' }"
               :expand-on-click-node="false"
@@ -52,7 +53,8 @@
           </el-form-item>
         </el-form>
 
-        <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
+        <el-table row-key="userId" ref="userListRef" v-loading="loading" :data="userList"
+                  @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="50" align="center"/>
           <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible"/>
           <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible"
@@ -76,7 +78,8 @@
 
 <script setup name="User">
 import {treeselect} from "@/api/system/dept";
-import {listUser } from "@/api/system/user";
+import {listUser} from "@/api/system/user";
+import {nextTick, watch} from "vue";
 
 const router = useRouter();
 const {proxy} = getCurrentInstance();
@@ -97,6 +100,9 @@ const deptOptions = ref(undefined);
 const initPassword = ref(undefined);
 const postOptions = ref([]);
 const roleOptions = ref([]);
+const userListRef = ref()
+//默认选中id
+const defineSelectedId = []
 // 列显隐信息
 const columns = ref([
   {key: 0, label: `用户编号`, visible: true},
@@ -194,12 +200,42 @@ function initTreeData() {
 //当前选择人员
 const selectUsers = ref([])
 //获取当前选择人员
-const getSelectUsers = ()=>{
+const getSelectUsers = () => {
   return selectUsers.value
 }
+//设置默认选中
+const defineSelected = () => {
+  nextTick(() => {
+    userList.value.forEach(row => {
+      if (defineSelectedId.value.indexOf(row.userId) >= 0) {
+        userListRef.value.toggleRowSelection(row, true);
+      }
+    })
+  })
+
+}
+//获取默认选中节点
+const selectedNodeId = () => {
+  defineSelectedId.value = props.data.map(item => {
+    return item.userId
+  })
+}
+watch(() => queryParams.value.pageNum, () => {
+  defineSelected()
+})
+watch(() => userList.value, () => {
+  defineSelected()
+})
+const props = defineProps({
+  data: {
+    type: Array,
+    default: undefined
+  }
+})
 defineExpose({
   getSelectUsers
 })
-getTreeselect();
 getList();
+getTreeselect();
+selectedNodeId()
 </script>

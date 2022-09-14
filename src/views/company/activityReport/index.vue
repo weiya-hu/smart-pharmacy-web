@@ -470,6 +470,7 @@ const chart_one_data = {
       show: true // 是否显示分隔线。默认数值轴显示
     },
     axisLine: { // 是否显示坐标轴轴线 默认显示
+      symbol: ['none', 'arrow'],
       show: true, // 是否显示坐标轴轴线 默认显示
       lineStyle: { // 坐标轴线线的颜色
         color: '#6e7079'
@@ -501,6 +502,7 @@ const chart_one_data = {
       show: false // 是否显示坐标轴刻度 默认显示
     },
     axisLine: { // 是否显示坐标轴轴线 默认显示
+      symbol: ['none', 'arrow'],
       show: true, // 是否显示坐标轴轴线 默认显示
       lineStyle: { // 坐标轴线线的颜色
         color: '#6e7079'
@@ -599,6 +601,7 @@ const chart_two_data = {
     data: ['奖励']
   },
   xAxis: {
+
     name: "金额",
     nameLocation: 'start',
     nameGap: 60,
@@ -612,6 +615,7 @@ const chart_two_data = {
       show: true // 是否显示分隔线。默认数值轴显示
     },
     axisLine: { // 是否显示坐标轴轴线 默认显示
+      symbol: ['none', 'arrow'],
       show: true, // 是否显示坐标轴轴线 默认显示
       lineStyle: { // 坐标轴线线的颜色
         color: '#6e7079'
@@ -644,6 +648,7 @@ const chart_two_data = {
       show: false // 是否显示坐标轴刻度 默认显示
     },
     axisLine: { // 是否显示坐标轴轴线 默认显示
+      symbol: ['none', 'arrow'],
       show: true, // 是否显示坐标轴轴线 默认显示
       lineStyle: { // 坐标轴线线的颜色
         color: '#6e7079'
@@ -769,156 +774,156 @@ function getList() {
   /**获取统计图数据*/
   getSalesHistogram({...queryParams.value, ...timeObject}).then(res => {
     if (res.code == 200) {
-      // innitBarChartData(res.data)
-      innitBarChartData([
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 10000,
-          saleAmount: 81549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 1000,
-          saleAmount: 81549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 8000,
-          saleAmount: 41549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 7000,
-          saleAmount: 81549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 6000,
-          saleAmount: 81549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 10000,
-          saleAmount: 61549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 10000,
-          saleAmount: 81549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 10000,
-          saleAmount: 71549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 10000,
-          saleAmount: 81549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 10000,
-          saleAmount: 81549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 10000,
-          saleAmount: 81549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 10000,
-          saleAmount: 81549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 10000,
-          saleAmount: 81549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 10000,
-          saleAmount: 81549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 10000,
-          saleAmount: 81549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 10000,
-          saleAmount: 81549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 10000,
-          saleAmount: 81549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 10000,
-          saleAmount: 81549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 10000,
-          saleAmount: 81549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 10000,
-          saleAmount: 81549051,
-        },
-        {
-          awardAmount: 58,
-          eventName: "不要删这条数据",
-          percentage: "0.58%",
-          prizePool: 10000,
-          saleAmount: 81549051,
-        },
-      ])
+      innitBarChartData(res.data)
+      // innitBarChartData([
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 10000,
+      //     saleAmount: 81549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 1000,
+      //     saleAmount: 81549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 8000,
+      //     saleAmount: 41549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 7000,
+      //     saleAmount: 81549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 6000,
+      //     saleAmount: 81549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 10000,
+      //     saleAmount: 61549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 10000,
+      //     saleAmount: 81549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 10000,
+      //     saleAmount: 71549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 10000,
+      //     saleAmount: 81549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 10000,
+      //     saleAmount: 81549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 10000,
+      //     saleAmount: 81549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 10000,
+      //     saleAmount: 81549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 10000,
+      //     saleAmount: 81549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 10000,
+      //     saleAmount: 81549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 10000,
+      //     saleAmount: 81549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 10000,
+      //     saleAmount: 81549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 10000,
+      //     saleAmount: 81549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 10000,
+      //     saleAmount: 81549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 10000,
+      //     saleAmount: 81549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 10000,
+      //     saleAmount: 81549051,
+      //   },
+      //   {
+      //     awardAmount: 58,
+      //     eventName: "不要删这条数据",
+      //     percentage: "0.58%",
+      //     prizePool: 10000,
+      //     saleAmount: 81549051,
+      //   },
+      // ])
     }
   })
   /**获取品牌销量 */
