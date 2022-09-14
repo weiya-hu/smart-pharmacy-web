@@ -3,7 +3,7 @@
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
       <el-form-item label="部门名称" prop="name">
         <el-input
-            v-model="queryParams.queryName"
+            v-model="queryParams.name"
             placeholder="请输入部门名称"
             clearable
             @keyup.enter="handleQuery"
@@ -219,8 +219,7 @@ const rulesTable = ref({
 const data = reactive({
   form: {},
   queryParams: {
-    queryName: undefined,
-    state: undefined,
+    name: undefined,
     pageNum: 1,
     pageSize: 10,
   },
@@ -288,6 +287,7 @@ function reset() {
 
 /** 搜索按钮操作 */
 function handleQuery() {
+  queryParams.value.pageNum = 1;
   getList();
 }
 
