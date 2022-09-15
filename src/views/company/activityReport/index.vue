@@ -81,6 +81,9 @@
       <div class="chart chart_two">
         <scaleChart ref="chart_two_ref" :dataOption="chart_two_data"></scaleChart>
       </div>
+      <!--      <div class="chart chart_three">-->
+      <!--        <scaleChart ref="chart_three_ref" :dataOption="chart_three_data"></scaleChart>-->
+      <!--      </div>-->
     </div>
     <!--    区域销售列表展示-->
     <div class="areaMarket">
@@ -112,7 +115,7 @@
                             :contentTableConfig="storeBrandTableConfig">
               <template #salesAmountSlot="{row}">
                 <div>
-                  {{ row.salesAmount }}万
+                  {{ row.salesAmount }}元
                 </div>
               </template>
               <template #yearOnYearSlot="{row}">
@@ -152,7 +155,7 @@
                             :contentTableConfig="storeProductTableConfig">
               <template #salesAmountSlot="{row}">
                 <div>
-                  {{ row.salesAmount }}万
+                  {{ row.salesAmount }}元
                 </div>
               </template>
               <template #yearOnYearSlot="{row}">
@@ -345,6 +348,7 @@ import useActivityReportStore from "@/store/modules/Company/activityReport.js";
 /**echarts实例*/
 let chart_one_ref = ref()
 let chart_two_ref = ref()
+let chart_three_ref = ref()
 let loading = ref()
 const salesBrand = ref('first')
 const salesSingle = ref('first')
@@ -415,27 +419,27 @@ const fastSelectDate = ref([
 /**图形一配置*/
 const chart_one_data = {
   color: ['#8fd5f3'],
-  // grid: {
-  //   x: 60, // 左间距
-  //   y: 80, // 上间距
-  //   x2: 60, // 右间距
-  //   y2: 40, // 下间距
-  //   containLabel: true // grid 区域是否包含坐标轴的刻度标签, 常用于『防止标签溢出』的场景
-  // },
-  // tooltip: {
-  //   trigger: 'axis', // 触发类型, axis: 坐标轴触发
-  //   axisPointer: {
-  //     // 指示器类型  'line' 直线指示器 'shadow' 阴影指示器 'none' 无指示器
-  //     // 'cross' 十字准星指示器 其实是种简写，表示启用两个正交的轴的 axisPointer
-  //     type: 'none'
-  //   },
-  //   textStyle: {
-  //     color: '#cdd3ee' // 文字颜色
-  //   },
-  //   // // 提示框浮层内容格式器，支持字符串模板和回调函数两种形式 折线（区域）图、柱状（条形）图、K线图
-  //   // // {a}（系列名称），{b}（类目值），{c}（数值）, {d}（无）
-  //   formatter: '{b}<br />{a0}: {c0}元'
-  // },
+  grid: {
+    x: 60, // 左间距
+    y: 80, // 上间距
+    x2: 60, // 右间距
+    y2: 40, // 下间距
+    containLabel: true // grid 区域是否包含坐标轴的刻度标签, 常用于『防止标签溢出』的场景
+  },
+  tooltip: {
+    trigger: 'axis', // 触发类型, axis: 坐标轴触发
+    axisPointer: {
+      // 指示器类型  'line' 直线指示器 'shadow' 阴影指示器 'none' 无指示器
+      // 'cross' 十字准星指示器 其实是种简写，表示启用两个正交的轴的 axisPointer
+      type: 'shadow'
+    },
+    textStyle: {
+      // color: '#cdd3ee' // 文字颜色
+    },
+    // // 提示框浮层内容格式器，支持字符串模板和回调函数两种形式 折线（区域）图、柱状（条形）图、K线图
+    // // {a}（系列名称），{b}（类目值），{c}（数值）, {d}（无）
+    formatter: '{b}<br />{a0}: {c0}元'
+  },
   dataZoom: [
     {
       type: 'slider',
@@ -443,7 +447,7 @@ const chart_one_data = {
       yAxisIndex: [0],
       left: '93%',
       start: 1,
-      end: 50
+      end: 100
     },
     {
       type: 'inside',
@@ -459,6 +463,9 @@ const chart_one_data = {
   //   data: ['销量']
   // },
   xAxis: {
+    min: 1,
+    logBase: 10,
+    type: 'log',
     name: "销售额",
     nameLocation: 'end',
     nameGap: 60,
@@ -487,9 +494,9 @@ const chart_one_data = {
       formatter: function (value) {
         if (value >= 10000) {
           return (value / 10000) + "万"
-        } else if (value < 10000 && value > 0) {
+        } else if (value < 10000 && value > 1) {
           return value + "元"
-        } else {
+        } else if (value == 1) {
           return 0
         }
       }
@@ -522,7 +529,7 @@ const chart_one_data = {
     data: []
   },
   series: [{
-    name: '销量',
+    name: '销售额',
     type: 'bar',
     stack: '总量',
     itemStyle: {
@@ -541,7 +548,7 @@ const chart_one_data = {
         if (value.data < 10000) {
           return value.data + '元'
         } else {
-          return ((String(value.data / 10000)).split('.')[0]) + '万元'
+          return (value.data / 10000).toFixed(2) + '万元'
         }
       },
 
@@ -565,7 +572,7 @@ const chart_two_data = {
       yAxisIndex: [0],
       right: '93%',  //滑动条位置
       start: 1,    //初始化时，滑动条宽度开始标度
-      end: 50
+      end: 100
     },   //初始化时，滑动条宽度结束标度 //y轴内置滑动
     {
       type: 'inside',  //内置滑动，随鼠标滚轮展示
@@ -574,27 +581,30 @@ const chart_two_data = {
       start: 1,//初始化时，滑动条宽度开始标度  end: 50  //初始化时，滑动条宽度结束标度　　　　　　　　　　　
     }
   ],
-  // grid: {
-  //   x: 60, // 左间距
-  //   y: 80, // 上间距
-  //   x2: 60, // 右间距
-  //   y2: 40, // 下间距
-  //   containLabel: true // grid 区域是否包含坐标轴的刻度标签, 常用于『防止标签溢出』的场景
-  // },
-  // tooltip: {
-  //   trigger: 'axis', // 触发类型, axis: 坐标轴触发
-  //   axisPointer: {
-  //     // 指示器类型  'line' 直线指示器 'shadow' 阴影指示器 'none' 无指示器
-  //     // 'cross' 十字准星指示器 其实是种简写，表示启用两个正交的轴的 axisPointer
-  //     type: 'none'
-  //   },
-  //   textStyle: {
-  //     color: '#cdd3ee' // 文字颜色
-  //   },
-  //   // // 提示框浮层内容格式器，支持字符串模板和回调函数两种形式 折线（区域）图、柱状（条形）图、K线图
-  //   // // {a}（系列名称），{b}（类目值），{c}（数值）, {d}（无）
-  //   formatter: '{b}<br />{a0}:{c0}'
-  // },
+  grid: {
+    x: 60, // 左间距
+    y: 80, // 上间距
+    x2: 60, // 右间距
+    y2: 40, // 下间距
+    containLabel: true // grid 区域是否包含坐标轴的刻度标签, 常用于『防止标签溢出』的场景
+  },
+  tooltip: {
+    trigger: 'axis', // 触发类型, axis: 坐标轴触发
+    axisPointer: {
+      // 指示器类型  'line' 直线指示器 'shadow' 阴影指示器 'none' 无指示器
+      // 'cross' 十字准星指示器 其实是种简写，表示启用两个正交的轴的 axisPointer
+      type: 'shadow'
+    },
+    textStyle: {
+      // color: '#cdd3ee' // 文字颜色
+    },
+    // // 提示框浮层内容格式器，支持字符串模板和回调函数两种形式 折线（区域）图、柱状（条形）图、K线图
+    // // {a}（系列名称），{b}（类目值），{c}（数值）, {d}（无）
+    // formatter: '{b}<br />{a0}:{c0}:{c1}'
+    formatter: function (params, ticket, callback) {
+      return params[0].name + '<br />' + "已奖励占比: " + (-params[0].value) / (-params[2].value) + "%"
+    }
+  },
   title: {
     text: '奖励'
   },
@@ -602,7 +612,6 @@ const chart_two_data = {
     data: ['奖励']
   },
   xAxis: {
-
     name: "金额",
     nameLocation: 'start',
     nameGap: 60,
@@ -688,6 +697,12 @@ const chart_two_data = {
         color: "#000"
       }
     },
+    itemStyle: {
+      normal: {
+        barBorderRadius: [8, 0, 0, 8], // （顺时针左上，右上，右下，左下）
+        color: '#82aed6'
+      }
+    },
     data: []
   },
     {
@@ -701,12 +716,12 @@ const chart_two_data = {
         // 标签的位置 left right bottom top inside  // 绝对的像素值 position: [10, 10]
         // 相对的百分比 position: ['50%', '50%']
         position: 'insideRight',
-        // formatter: function (value) { //把数据也转换成正数用的是负负为正，下面data里的数据就要是负数，如果需要负数把这段formatter删掉
-        //   return value.name
-        // },
-        formatter: function (params) {//设置显示的数据
-          return percentageData.value[params.dataIndex]
+        formatter: function (value) { //把数据也转换成正数用的是负负为正，下面data里的数据就要是负数，如果需要负数把这段formatter删掉
+          return ''
         },
+        // formatter: function (params) {//设置显示的数据
+        //   return percentageData.value[params.dataIndex]
+        // },
         textStyle: {
           fontSize: '14',
           color: "#000"
@@ -749,6 +764,159 @@ const chart_two_data = {
     }
   ]
 }
+/**图形三配置*/
+const chart_three_data = {
+  title: {
+    text: '奖励/销售额'
+  },
+  tooltip: {
+    trigger: 'axis', // 触发类型, axis: 坐标轴触发
+    axisPointer: {
+      // 指示器类型  'line' 直线指示器 'shadow' 阴影指示器 'none' 无指示器
+      // 'cross' 十字准星指示器 其实是种简写，表示启用两个正交的轴的 axisPointer
+      type: 'shadow'
+    },
+    textStyle: {
+      // color: '#cdd3ee' // 文字颜色
+    },
+    // // 提示框浮层内容格式器，支持字符串模板和回调函数两种形式 折线（区域）图、柱状（条形）图、K线图
+    // // {a}（系列名称），{b}（类目值），{c}（数值）, {d}（无）
+    // formatter: '{b}<br />{a0}:{c0}:{c1}'
+    formatter: function (params, ticket, callback) {
+      // return params[0].name + '<br />' + "已奖励占比: " + (-params[0].value) / (-params[2].value) + "%"
+      return "???"
+    }
+  },
+  // dataZoom: [                 //Y轴滑动条
+  //   {
+  //     type: 'slider', //滑动条
+  //     show: false,      //开启
+  //     yAxisIndex: [0],
+  //     right: '93%',  //滑动条位置
+  //     start: 1,    //初始化时，滑动条宽度开始标度
+  //     end: 100
+  //   },   //初始化时，滑动条宽度结束标度 //y轴内置滑动
+  //   {
+  //     type: 'inside',  //内置滑动，随鼠标滚轮展示
+  //     show: false,
+  //     yAxisIndex: [0],
+  //     start: 0,//初始化时，滑动条宽度开始标度  end: 50  //初始化时，滑动条宽度结束标度　　　　　　　　　　　
+  //   }
+  // ],
+  xAxis: [
+    {
+      show: true,
+      type: 'value',  //这里x轴类型设置为value
+      formatter: function (params) {
+        if (params < 0) {
+          return -params
+        } else {
+          return params
+        }
+      },
+      splitLine: {
+        show: false // 是否显示分隔线。默认数值轴显示
+      },
+      axisLine: { // 是否显示坐标轴轴线 默认显示
+        // symbol: ['arrow', 'none'],
+        show: true, // 是否显示坐标轴轴线 默认显示
+        lineStyle: { // 坐标轴线线的颜色
+          color: '#6e7079'
+        }
+      },
+    }
+  ],
+  yAxis: [
+    {
+      type: 'category',  //这里y轴类型设置为category
+      axisTick: {show: false},
+      axisLine: { // 是否显示坐标轴轴线 默认显示
+        // symbol: ['none', 'arrow'],
+        show: true, // 是否显示坐标轴轴线 默认显示
+        lineStyle: { // 坐标轴线线的颜色
+          color: '#6e7079'
+        }
+      },
+      axisLabel: {
+        type: 'value',
+        show: false, // 是否显示刻度标签 默认显示
+        // fontSize: 16, // 文字的字体大小
+        // color: '#cdd3ee', // 刻度标签文字的颜色
+        // 使用字符串模板，模板变量为刻度默认标签 {value}
+        formatter: '{value}'
+      },
+      splitLine: {
+        show: false // 是否显示分隔线。默认数值轴显示
+      },
+      data: ['分拣', '清洗', '抛光', '研磨', '脱膜', '切割', '压膜', '压膜分配', '光固化后处理', '光固化']
+    }
+  ],
+  series: [
+    {
+      barMaxWidth: 40,
+      type: 'bar',
+      stack: '总量',  //注意这里也要添加，要不然对不齐
+      label: {
+        normal: {
+          show: true
+        }
+      },
+      itemStyle: {
+        normal: {
+          barBorderRadius: [0, 8, 8, 0], // （顺时针左上，右上，右下，左下）
+          color: '#fdac9c'
+        }
+      },
+      data: [400, 241, 360, 320, 302, 341, 374, 390, 450, 420],
+    },
+    {
+      barMaxWidth: 40,
+      type: 'bar',
+      stack: '总量',  //注意这里也要添加，要不然对不齐
+      label: {
+        normal: {
+          show: true,
+          position: 'left',
+          data: [-120, -180, -120, -120, -132, -101, -134, -190, -230, -210],
+          formatter: function (params) {
+            return Math.abs(params.value)
+          }  //返回绝对值
+        }
+      },
+      itemStyle: {
+        normal: {
+          color: '#82add8'
+        }
+      },
+
+      data: [-120, -180, -120, -120, -132, -101, -134, -190, -230, -210],
+    },
+    {
+      barMaxWidth: 40,
+      type: 'bar',
+      stack: '总量',  //注意这里也要添加，要不然对不齐
+      label: {
+        normal: {
+          show: false,
+          data: [-220, -280, -220, -220, -232, -201, -234, -290, -330, -310],
+          formatter: function (params) {
+            // return Math.abs(params.value)
+            return ''
+          }  //返回绝对值
+        }
+      },
+      itemStyle: {
+        normal: {
+          barBorderRadius: [8, 0, 0, 8], // （顺时针左上，右上，右下，左下）
+          color: '#dbd9dc'
+        }
+      },
+      data: [-220, -280, -220, -220, -232, -201, -234, -290, -330, -310],
+    }
+  ]
+
+
+}
 
 /** 搜索按钮操作 */
 function handleQuery() {
@@ -778,155 +946,6 @@ function getList() {
   getSalesHistogram({...queryParams.value, ...timeObject}).then(res => {
     if (res.code == 200) {
       innitBarChartData(res.data)
-      // innitBarChartData([
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 10000,
-      //     saleAmount: 81549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 1000,
-      //     saleAmount: 81549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 8000,
-      //     saleAmount: 41549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 7000,
-      //     saleAmount: 81549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 6000,
-      //     saleAmount: 81549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 10000,
-      //     saleAmount: 61549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 10000,
-      //     saleAmount: 81549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 10000,
-      //     saleAmount: 71549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 10000,
-      //     saleAmount: 81549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 10000,
-      //     saleAmount: 81549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 10000,
-      //     saleAmount: 81549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 10000,
-      //     saleAmount: 81549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 10000,
-      //     saleAmount: 81549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 10000,
-      //     saleAmount: 81549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 10000,
-      //     saleAmount: 81549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 10000,
-      //     saleAmount: 81549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 10000,
-      //     saleAmount: 81549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 10000,
-      //     saleAmount: 81549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 10000,
-      //     saleAmount: 81549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 10000,
-      //     saleAmount: 81549051,
-      //   },
-      //   {
-      //     awardAmount: 58,
-      //     eventName: "不要删这条数据",
-      //     percentage: "0.58%",
-      //     prizePool: 10000,
-      //     saleAmount: 81549051,
-      //   },
-      // ])
     }
   })
   /**获取品牌销量 */
@@ -964,14 +983,20 @@ function innitBarChartData(data) {
   percentageData.value = percentageArray
   chart_one_data.yAxis.data = eventNameArray
   chart_two_data.yAxis.data = eventNameArray
+  chart_three_data.yAxis.data = eventNameArray
   chart_one_data.series[0].data = saleAmountArray
   // chart_one_data.series[1].data = saleAmountArray
   chart_two_data.series[0].data = awardAmountArray
   chart_two_data.series[1].data = remainingAwardAmountArray
   chart_two_data.series[2].data = prizePoolArray
+  //图三
+  // chart_three_data.series[0].data = saleAmountArray
+  // chart_three_data.series[1].data = awardAmountArray
+  // chart_three_data.series[2].data = remainingAwardAmountArray
   nextTick(() => {
     chart_one_ref.value.setOption(chart_one_data, true)
     chart_two_ref.value.setOption(chart_two_data, true)
+    // chart_three_ref.value.setOption(chart_three_data, true)
     loading.value = false
   })
 }
@@ -1126,7 +1151,9 @@ innitSelectOption()
     align-items: center;
     justify-content: space-between;
     margin: 20px 10px;
-    border: 1px solid #d9dad9;
+    border: 3px solid #d9dad9;
+    background-color: #fafafc;
+    border-radius: 8px;
 
     .chart {
       flex: 1;
