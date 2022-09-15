@@ -93,24 +93,23 @@ function getOauthLogin() {
   }
 }
 
+// console.log( router.currentRoute.value.query.auth_code)
 const wecomControlLogin = () => {
-  if (!getToken()) {
-    let params = {
-      authCode: GetQueryString('auth_code') ? GetQueryString('auth_code') : '',
-      state: 'oauthLoginsplit',
-    }
-    if (params.authCode !== '') {
-      oauthLogin(params).then(res => {
-        if (res.code === 200) {
-          setToken(res.data.access_token)
-          router.push({path: "/index"});
-        } else {
-          router.push({path: '/login'});
-        }
-      })
-    } else {
-      router.push({path: "/index"});
-    }
+  let params = {
+    authCode: GetQueryString('auth_code') ? GetQueryString('auth_code') : '',
+    state: 'oauthLoginsplit',
+  }
+  if (params.authCode !== '') {
+    oauthLogin(params).then(res => {
+      if (res.code === 200) {
+        setToken(res.data.access_token)
+        router.push({path: "/index"});
+      } else {
+        router.push({path: '/login'});
+      }
+    })
+  } else {
+    router.push({path: "/login"});
   }
 }
 
