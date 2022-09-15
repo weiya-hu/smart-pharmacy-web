@@ -93,7 +93,7 @@ service.interceptors.response.use(res => {
           });
         }
         return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
-      }else if (code === 400 && msg === "未取到登录信息" ) {
+      } else if (code === 400 && msg === "未取到登录信息" ) {
         removeToken()
         useUserStore().logOut().then(() => {
           location.href = '/login';

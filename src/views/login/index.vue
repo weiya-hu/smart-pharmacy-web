@@ -109,6 +109,7 @@ const wecomControlLogin = () => {
         }
       })
     } else {
+      router.push({path: "/index"});
     }
   }
 }
