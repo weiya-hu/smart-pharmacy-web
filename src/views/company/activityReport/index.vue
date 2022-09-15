@@ -534,6 +534,7 @@ const chart_one_data = {
     stack: '总量',
     itemStyle: {
       normal: {
+        color: '#ffaa9f',
         barBorderRadius: [0, 8, 8, 0], // （顺时针左上，右上，右下，左下）
       }
     },
@@ -602,7 +603,7 @@ const chart_two_data = {
     // // {a}（系列名称），{b}（类目值），{c}（数值）, {d}（无）
     // formatter: '{b}<br />{a0}:{c0}:{c1}'
     formatter: function (params, ticket, callback) {
-      return params[0].name + '<br />' + "已奖励占比: " + (-params[0].value) / (-params[2].value) + "%"
+      return params[0].name + '<br />' + "已奖励占比: " + (-params[0].value) / (-params[2].value) + "%"+'<br/>'
     }
   },
   title: {
@@ -700,7 +701,7 @@ const chart_two_data = {
     itemStyle: {
       normal: {
         barBorderRadius: [8, 0, 0, 8], // （顺时针左上，右上，右下，左下）
-        color: '#82aed6'
+        color: '#82aed4'
       }
     },
     data: []
@@ -770,6 +771,7 @@ const chart_three_data = {
     text: '奖励/销售额'
   },
   tooltip: {
+    show: true,
     trigger: 'axis', // 触发类型, axis: 坐标轴触发
     axisPointer: {
       // 指示器类型  'line' 直线指示器 'shadow' 阴影指示器 'none' 无指示器
@@ -777,14 +779,11 @@ const chart_three_data = {
       type: 'shadow'
     },
     textStyle: {
-      // color: '#cdd3ee' // 文字颜色
+      color: '#cdd3ee' // 文字颜色
     },
-    // // 提示框浮层内容格式器，支持字符串模板和回调函数两种形式 折线（区域）图、柱状（条形）图、K线图
-    // // {a}（系列名称），{b}（类目值），{c}（数值）, {d}（无）
-    // formatter: '{b}<br />{a0}:{c0}:{c1}'
     formatter: function (params, ticket, callback) {
       // return params[0].name + '<br />' + "已奖励占比: " + (-params[0].value) / (-params[2].value) + "%"
-      return "???"
+      return "???2222"
     }
   },
   // dataZoom: [                 //Y轴滑动条
@@ -848,7 +847,7 @@ const chart_three_data = {
       splitLine: {
         show: false // 是否显示分隔线。默认数值轴显示
       },
-      data: ['分拣', '清洗', '抛光', '研磨', '脱膜', '切割', '压膜', '压膜分配', '光固化后处理', '光固化']
+      data: []
     }
   ],
   series: [
@@ -858,7 +857,12 @@ const chart_three_data = {
       stack: '总量',  //注意这里也要添加，要不然对不齐
       label: {
         normal: {
-          show: true
+          show: true,
+          position: 'right',
+          formatter: function (params) {
+            // return Math.abs(params.value)
+            return params.value + "元"
+          }  //返回绝对值
         }
       },
       itemStyle: {
@@ -867,7 +871,7 @@ const chart_three_data = {
           color: '#fdac9c'
         }
       },
-      data: [400, 241, 360, 320, 302, 341, 374, 390, 450, 420],
+      data: [],
     },
     {
       barMaxWidth: 40,
@@ -877,9 +881,9 @@ const chart_three_data = {
         normal: {
           show: true,
           position: 'left',
-          data: [-120, -180, -120, -120, -132, -101, -134, -190, -230, -210],
           formatter: function (params) {
             return Math.abs(params.value)
+            // return ''
           }  //返回绝对值
         }
       },
@@ -889,7 +893,7 @@ const chart_three_data = {
         }
       },
 
-      data: [-120, -180, -120, -120, -132, -101, -134, -190, -230, -210],
+      data: [],
     },
     {
       barMaxWidth: 40,
@@ -898,7 +902,6 @@ const chart_three_data = {
       label: {
         normal: {
           show: false,
-          data: [-220, -280, -220, -220, -232, -201, -234, -290, -330, -310],
           formatter: function (params) {
             // return Math.abs(params.value)
             return ''
@@ -911,7 +914,7 @@ const chart_three_data = {
           color: '#dbd9dc'
         }
       },
-      data: [-220, -280, -220, -220, -232, -201, -234, -290, -330, -310],
+      data: [],
     }
   ]
 
@@ -983,7 +986,7 @@ function innitBarChartData(data) {
   percentageData.value = percentageArray
   chart_one_data.yAxis.data = eventNameArray
   chart_two_data.yAxis.data = eventNameArray
-  chart_three_data.yAxis.data = eventNameArray
+  // chart_three_data.yAxis.data = eventNameArray
   chart_one_data.series[0].data = saleAmountArray
   // chart_one_data.series[1].data = saleAmountArray
   chart_two_data.series[0].data = awardAmountArray

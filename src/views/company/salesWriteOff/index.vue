@@ -27,16 +27,39 @@
               </el-input>
             </el-form-item>
             <div class="handler">
-              <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-              <el-button
-                  type="info"
-                  plain
-                  icon="Upload"
-                  @click="handleImport"
-                  v-hasPermi="['system:user:import']"
-              >导入
-              </el-button>
-              <el-button type="primary" @click="getList">下一页</el-button>
+              <el-row>
+                <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+                <el-button
+                    type="info"
+                    plain
+                    icon="Upload"
+                    @click="handleImport"
+                >导入
+                </el-button>
+                <el-upload
+                    style="margin: 0 10px"
+                    ref="uploadCustomizeRef"
+                    :limit="1"
+                    accept=".xlsx, .xls"
+                    :disabled="formDisabled"
+                    :action="uploadData.customizeUrl"
+                    :headers="{'Authorization':uploadData.token}"
+                    :data="uploadData.customizeParam"
+                    method:="POST"
+                    :file-list="customizeList"
+                    :show-file-list="false"
+                    :on-success="handleCustomizeSuccess"
+                >
+                  <el-button
+                      type="info"
+                      plain
+                      icon="Upload"
+                      @click="customizeImport"
+                  >自定义导入(测试)
+                  </el-button>
+                </el-upload>
+                <el-button type="primary" @click="getList">下一页</el-button>
+              </el-row>
             </div>
           </el-row>
         </el-form>
@@ -113,8 +136,10 @@
 import {Search} from '@element-plus/icons-vue'
 import {getCurrentInstance, reactive, toRefs} from "vue";
 import {getToken} from "@/utils/auth";
-import {getOrderList} from "@/api/system/order";
-
+import {getOrderList, addDynamicHeaderExcelUrl} from "@/api/system/order";
+import {ElMessage} from "element-plus";
+//自定义导入列表
+const customizeList = ref([])
 const showSearch = ref(true);
 const {proxy} = getCurrentInstance()
 let nextSearchAfter = ref([])
@@ -145,6 +170,27 @@ const upload = reactive({
   // 上传的地址
   url: import.meta.env.VITE_APP_BASE_API + "/product/order/importOrder"
 });
+
+
+/*** 用户自定义导入 */
+let uploadData = reactive({
+  customizeUrl: import.meta.env.VITE_APP_BASE_API + '/file/file/upload',
+  customizeParam: {path: '/Company/Customize'},
+  token: getToken(),
+  parameter: {corpId: '', file: ''}
+})
+/**自定义上传成功的回调*/
+const handleCustomizeSuccess = function (res) {
+  customizeList.value = []
+  addDynamicHeaderExcelUrl(res.data.url).then(res => {
+    if (res.code == 200) {
+      proxy.$modal.msgSuccess("上传文件成功")
+    }
+  })
+
+}
+
+
 // 列显隐信息
 const columns = ref([
   {key: 0, label: `产品名`, visible: true},
@@ -179,6 +225,11 @@ function handleImport() {
   upload.title = "用户导入";
   upload.open = true;
 };
+
+//自定义上传
+function customizeImport() {
+  uploadData.open = true;
+}
 
 //刷新
 function refreshList() {

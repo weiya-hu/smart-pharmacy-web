@@ -8,3 +8,11 @@ export function getOrderList(query) {
         params: query
     })
 }
+
+// 自定义上传
+export function addDynamicHeaderExcelUrl(query) {
+    return request({
+        url: `/product/order/addDynamicHeaderExcelUrl?fileUrl=${query}`,
+        method: 'post',
+    })
+}
