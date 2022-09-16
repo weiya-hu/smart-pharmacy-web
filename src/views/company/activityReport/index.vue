@@ -470,7 +470,7 @@ let chart_one_data = {
     min: 1,
     logBase: 10,
     type: 'log',
-    name: "销售额",
+    // name: "销售额",
     nameLocation: 'end',
     nameGap: 60,
     nameTextStyle: {
@@ -780,7 +780,7 @@ let chart_two_data = {
     data: ['奖励']
   },
   xAxis: {
-    name: "奖金",
+    // name: "奖金",
     nameLocation: 'start',
     nameGap: 60,
     nameTextStyle: {
@@ -837,7 +837,7 @@ let chart_two_data = {
     axisLabel: {
       type: 'value',
       show: true, // 是否显示刻度标签 默认显示
-      // fontSize: 16, // 文字的字体大小
+      fontSize: 14, // 文字的字体大小
       // color: '#cdd3ee', // 刻度标签文字的颜色
       // 使用字符串模板，模板变量为刻度默认标签 {value}
       formatter: '{value}'
