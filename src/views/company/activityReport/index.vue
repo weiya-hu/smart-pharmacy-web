@@ -1116,7 +1116,7 @@ function getList() {
   /**获取统计图数据*/
   getSalesHistogram({...queryParams.value, ...timeObject}).then(res => {
     if (res.code == 200) {
-      if (res.data.length == 0) {
+      if (res.data.length !== 0) {
         innitBarChartData(res.data)
       } else {
         chart_one_data = chart_one_data_none
