@@ -479,7 +479,7 @@ let chart_one_data = {
     },
     // 坐标轴刻度标签
     splitLine: {
-      show: true // 是否显示分隔线。默认数值轴显示
+      show: false // 是否显示分隔线。默认数值轴显示
     },
     axisLine: { // 是否显示坐标轴轴线 默认显示
       // symbol: ['none', 'arrow'],
@@ -593,7 +593,7 @@ const chart_one_data_none = {
     },
     // 坐标轴刻度标签
     splitLine: {
-      show: true // 是否显示分隔线。默认数值轴显示
+      show: false // 是否显示分隔线。默认数值轴显示
     },
     axisLine: { // 是否显示坐标轴轴线 默认显示
       // symbol: ['none', 'arrow'],
@@ -673,7 +673,7 @@ const chart_two_data_none = {
     },
     // 坐标轴刻度标签
     splitLine: {
-      show: true // 是否显示分隔线。默认数值轴显示
+      show: false // 是否显示分隔线。默认数值轴显示
     },
     axisLine: { // 是否显示坐标轴轴线 默认显示
       // symbol: ['none', 'arrow'],
@@ -791,7 +791,7 @@ let chart_two_data = {
     // 坐标轴刻度标签
     // inverse
     splitLine: {
-      show: true // 是否显示分隔线。默认数值轴显示
+      show: false // 是否显示分隔线。默认数值轴显示
     },
     axisLine: { // 是否显示坐标轴轴线 默认显示
       // symbol: ['arrow', 'none'],
@@ -1353,12 +1353,12 @@ innitSelectOption()
     align-items: center;
     justify-content: space-between;
     margin: 20px 10px;
-    border: 3px solid #d9dad9;
+    border: 2px solid #d9dad9;
     background-color: #fafafc;
     border-radius: 8px;
 
     .chart_two {
-      border-right: 3px solid #d9dad9;
+      border-right: 2px solid #d9dad9;
     }
 
     .chart {
@@ -1379,7 +1379,7 @@ innitSelectOption()
 
     .area {
       flex: 1;
-      border: 1px solid #c9cacf;
+      border: 2px solid #d9dad9;
       text-align: center;
       border-radius: 5px;
       margin: 0 10px;
@@ -1395,7 +1395,7 @@ innitSelectOption()
     .sales {
       flex: 1;
       margin: 0 10px;
-      border: 1px solid #c9cacf;
+      border: 2px solid #d9dad9;
       border-radius: 5px;
     }
   }
@@ -1410,6 +1410,7 @@ innitSelectOption()
       flex: 1;
       margin: 0 10px;
       border-radius: 5px;
+
     }
 
 
