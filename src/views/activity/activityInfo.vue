@@ -31,7 +31,11 @@
     </div>
   </div>
 </template>
-
+<script>
+export default {
+  name: "ActivityInfo"
+};
+</script>
 <script setup>
 import ActivityStepFirst from './components/ActivityStepFirst'
 import ActivityStepSecond from './components/ActivityStepSecond'
