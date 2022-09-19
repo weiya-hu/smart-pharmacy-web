@@ -6,7 +6,6 @@
       </div>
       <div class="login-right">
         <el-tabs v-model="activeName" class="demo-tabs">
-          <el-button @click="login">11</el-button>
           <el-tab-pane label="微信扫码登录" name="first">
             <wxlogin
                 appid="wx3a6a5cc2924a2405"
