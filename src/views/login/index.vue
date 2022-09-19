@@ -68,7 +68,7 @@ function getWechatLogin() {
       }
     }).catch(e => {
       // dialogVisible.value = true
-      router.push({path: '/login', query: {showWxCode: true}})
+      router.push({name: 'Login', params: {showWxCode: true}})
     })
   } else {
     router.push({path: "/login"})
@@ -89,7 +89,7 @@ function getOauthLogin() {
       }
     }).catch(err => {
       // dialogUrlVisible.value = true
-      router.push({path: "/login",query:{showQrCode:true}})
+      router.push({name: 'Login',params:{showQrCode:true}})
     })
   } else {
     router.push({path: "/login"})
@@ -119,10 +119,10 @@ const wecomControlLogin = () => {
 const login = async () => {
   if (GetQueryString('state') === 'wecom') {
     await getOauthLogin()
-    dialogUrlVisible.value = route.query.showQrCode
+    dialogUrlVisible.value = route.params.showQrCode
   } else if (GetQueryString('state') === 'wechat') {
     await getWechatLogin()
-    dialogVisible.value = route.query.showWxCode
+    dialogVisible.value = route.params.showWxCode
   } else if (GetQueryString('state') === 'oauthLoginsplit') {
     wecomControlLogin()
   }

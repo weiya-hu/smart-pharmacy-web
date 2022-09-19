@@ -46,12 +46,13 @@ export const constantRoutes = [
         path: '/',
         component: () => import('@/views/login/index'),
         redirect: '/login',
-        hidden: true
+        hidden: true,
     },
     {
         path: '/login',
         component: () => import('@/views/login/index'),
-        hidden: true
+        hidden: true,
+        name: 'Login'
     },
     {
         path: "/:pathMatch(.*)*",
