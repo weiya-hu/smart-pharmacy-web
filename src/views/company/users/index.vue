@@ -152,7 +152,7 @@
                            type="text"
                            icon="Edit"
                            size="small"
-                           v-if="isWecomAccount == 1"
+                           v-if="isWecomAccount !== 1"
                            @click="handleUpdate(scope.row)"
                            v-hasPermi="['system:user:edit']"
                         >修改</el-button>
