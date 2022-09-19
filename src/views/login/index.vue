@@ -129,8 +129,7 @@ const login = async () => {
   }
 }
 
-
-// login()
+login()
 </script>
 
 <style lang="scss" scoped>
