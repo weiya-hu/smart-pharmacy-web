@@ -42,7 +42,7 @@ import {oauthLogin, wechatLogin} from "../../api/login";
 import {GetQueryString} from '@/utils/validate';
 import {setToken, getToken} from "../../utils/auth";
 
-const { proxy } = getCurrentInstance();
+const {proxy} = getCurrentInstance();
 const router = useRouter(), route = useRoute();
 const redirect = ref(undefined);
 const activeName = ref('first')
@@ -64,13 +64,16 @@ function getWechatLogin() {
     wechatLogin(params).then(res => {
       if (res.code === 200) {
         setToken(res.data.access_token)
+        console.log('res',res)
         router.push({path: "/index"});
       } else {
-        router.push({name: 'Login', params: {showWxCode: true}})
+        window.history.pushState(null,null,'/')
+        dialogVisible.value = true
       }
     }).catch(e => {
       // dialogVisible.value = true
-      router.push({name: 'Login', params: {showWxCode: true}})
+      window.history.pushState(null,null,'/')
+      dialogVisible.value = true
     })
   } else {
     router.push({path: "/login"})
@@ -89,11 +92,13 @@ function getOauthLogin() {
         setToken(res.data.access_token)
         router.push({path: "/index"});
       } else {
-        router.push({name: 'Login',params:{showQrCode:true}})
+        window.history.pushState(null,null,'/')
+        dialogUrlVisible.value = true
       }
     }).catch(err => {
       // dialogUrlVisible.value = true
-      router.push({name: 'Login',params:{showQrCode:true}})
+      window.history.pushState(null,null,'/')
+      dialogUrlVisible.value = true
     })
   } else {
     router.push({path: "/login"})
@@ -123,14 +128,13 @@ const wecomControlLogin = () => {
 const login = async () => {
   if (GetQueryString('state') === 'wecom') {
     await getOauthLogin()
-    dialogUrlVisible.value = route.params.showQrCode
   } else if (GetQueryString('state') === 'wechat') {
     await getWechatLogin()
-    dialogVisible.value = route.params.showWxCode
   } else if (GetQueryString('state') === 'oauthLoginsplit') {
     wecomControlLogin()
   }
 }
+
 
 login()
 </script>
@@ -182,13 +186,16 @@ login()
       }
     }
   }
+
   :deep(.el-dialog__body) {
     padding-top: 10px;
   }
+
   .wecom-url {
     width: 240px;
     margin: 0 auto;
   }
+
   .wechat-url {
     width: 200px;
     margin: 0 auto;
