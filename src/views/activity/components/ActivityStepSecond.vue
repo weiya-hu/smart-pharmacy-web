@@ -492,6 +492,7 @@ const getBrandList = () => {
 }
 //查询职务列表
 const getJobList = () => {
+  if(props.handleType === 'query') return
   queryJobList(props.eventId)
       .then(res => {
         if (res.code === 200) {

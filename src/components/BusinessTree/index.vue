@@ -27,7 +27,8 @@ const menuExpand = ref(true);
 const menuNodeAll = ref(false);
 const menuCheckStrictly = ref(true)
 const queryParams = ref({
-  name: ''
+  name: '',
+  allChild:true,
 })
 const loadTree = () => {
   listReltree(queryParams.value)

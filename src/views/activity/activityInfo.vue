@@ -73,6 +73,7 @@ const handleNext = async () => {
         }
       })
     }
+    activityStepSecondRef.value.getJobList()
   } else if (step.value === 2) {
     if (handleType.value === 'query') {
       return
@@ -106,7 +107,6 @@ const handleNext = async () => {
           // }
         })
   }
-  activityStepSecondRef.value.getJobList()
 }
 //判断规则当中是否存在商品/品牌/门店
 const isPresenceGoodsOrBrandOrStore = (dataList) => {

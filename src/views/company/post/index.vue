@@ -129,11 +129,19 @@
                  <el-input v-model="form.name" placeholder="请输入岗位名称" />
                </el-form-item>
              </el-col>
+             <el-col :span="24">
+               <el-form-item label="岗位类型" prop="code">
+                 <el-radio-group v-model.number="form.code">
+                   <el-radio :label="item.value" v-for="item in post_type" :key="item.value">{{item.label}}</el-radio>
+                 </el-radio-group>
+               </el-form-item>
+             </el-col>
              <el-col :span="12">
                <el-form-item label="岗位顺序" prop="sort">
                  <el-input-number v-model.number="form.sort" controls-position="right" :min="0" style="width: 100%" />
                </el-form-item>
              </el-col>
+
              <el-col :span="12">
                <el-form-item label="岗位状态" prop="state">
                  <el-radio-group v-model.number="form.state">
@@ -168,7 +176,7 @@
 import { listPost, addPost, delPost, getPost, updatePost } from "@/api/system/post";
 
 const { proxy } = getCurrentInstance();
-const { sys_normal_disable } = proxy.useDict("sys_normal_disable");
+const { sys_normal_disable,post_type } = proxy.useDict("sys_normal_disable",'post_type');
 const postList = ref([]);
 const open = ref(false);
 const loading = ref(true);
@@ -192,6 +200,7 @@ const data = reactive({
   rules: {
     name: [{ required: true, message: "岗位名称不能为空", trigger: "blur" }],
     sort: [{ required: true, message: "岗位顺序不能为空", trigger: "blur" }],
+    code: [{ required: true, message: "请选择岗位类型", trigger: "change" }],
   }
 });
 
@@ -214,6 +223,7 @@ function cancel() {
 /** 表单重置 */
 function reset() {
   form.value = {
+    code:NaN,
     jobId: undefined,
     name: undefined,
     sort: 99,
