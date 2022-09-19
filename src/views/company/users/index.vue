@@ -99,16 +99,16 @@
                      v-hasPermi="['system:user:edit']"
                   >修改</el-button>
                </el-col>
-               <el-col :span="1.5">
-                  <el-button
-                     type="danger"
-                     plain
-                     icon="Delete"
-                     :disabled="multiple"
-                     @click="handleDelete"
-                     v-hasPermi="['system:user:remove']"
-                  >删除</el-button>
-               </el-col>
+<!--               <el-col :span="1.5">-->
+<!--                  <el-button-->
+<!--                     type="danger"-->
+<!--                     plain-->
+<!--                     icon="Delete"-->
+<!--                     :disabled="multiple"-->
+<!--                     @click="handleDelete"-->
+<!--                     v-hasPermi="['system:user:remove']"-->
+<!--                  >删除</el-button>-->
+<!--               </el-col>-->
                <el-col :span="1.5">
                  <el-tooltip effect="dark" content="同步仅适用开通了企业微信的企业" placement="top">
                   <el-button
@@ -186,11 +186,11 @@
       <el-dialog :title="title" v-model="open" width="58%" append-to-body>
          <el-form :model="form" :rules="rules" ref="userRef" label-width="80px">
             <el-row>
-               <el-col :span="12">
-                  <el-form-item label="成员昵称" prop="alias">
-                     <el-input v-model="form.alias" placeholder="请输入成员昵称" maxlength="30" />
-                  </el-form-item>
-               </el-col>
+              <el-col :span="12">
+                <el-form-item label="成员名称" prop="userName">
+                  <el-input v-model="form.userName" placeholder="请输入成员名称" maxlength="30" />
+                </el-form-item>
+              </el-col>
               <el-col :span="12">
                 <el-form-item label="角色">
                   <el-select v-model="form.roleIds" multiple placeholder="请选择" style="width: 100%">
@@ -211,6 +211,7 @@
                  <el-tree-select
                      v-model="form.deptIds"
                      :data="deptOptions"
+                     check-strictly=true
                      :props="{ value: 'id', label: 'label', children: 'children' }"
                      value-key="id"
                      multiple
@@ -229,18 +230,6 @@
                <el-col :span="12">
                   <el-form-item label="邮箱" prop="email">
                      <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
-                  </el-form-item>
-               </el-col>
-            </el-row>
-            <el-row>
-               <el-col :span="12">
-                  <el-form-item v-if="form.userId == undefined" label="成员名称" prop="userName">
-                     <el-input v-model="form.userName" placeholder="请输入成员名称" maxlength="30" />
-                  </el-form-item>
-               </el-col>
-               <el-col :span="12">
-                  <el-form-item v-if="form.userId == undefined" label="成员密码" prop="password">
-                     <el-input v-model="form.password" placeholder="请输入成员密码" type="password" maxlength="20" show-password />
                   </el-form-item>
                </el-col>
             </el-row>
@@ -361,7 +350,6 @@ const title = ref("");
 const dateRange = ref([]);
 const deptName = ref("");
 const deptOptions = ref(undefined);
-const initPassword = ref(undefined);
 const postOptions = ref([]);
 const roleOptions = ref([]);
 /*** 用户导入参数 */
@@ -383,7 +371,7 @@ const upload = reactive({
 const columns = ref([
   { key: 0, label: `成员编号`, visible: true },
   { key: 1, label: `成员名称`, visible: true },
-  { key: 2, label: `成员昵称`, visible: true },
+  { key: 2, label: `企业微信ID`, visible: true },
   { key: 3, label: `部门`, visible: true },
   { key: 4, label: `手机号码`, visible: true },
   { key: 5, label: `状态`, visible: true },
@@ -403,7 +391,6 @@ const data = reactive({
   rules: {
     userName: [{ required: true, message: "成员名称不能为空", trigger: "blur" }, { min: 2, max: 20, message: "成员名称长度必须介于 2 和 20 之间", trigger: "blur" }],
     alias: [{ required: true, message: "成员昵称不能为空", trigger: "blur" }],
-    password: [{ required: true, message: "成员密码不能为空", trigger: "blur" }, { min: 5, max: 20, message: "成员密码长度必须介于 5 和 20 之间", trigger: "blur" }],
     email: [{ type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }],
     mobile: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur" }]
   }
@@ -466,7 +453,8 @@ function resetQuery() {
 };
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const userIds = row.userId || ids.value;
+  // const userIds = row.userId || ids.value;
+  const userIds = row.userId
   proxy.$modal.confirm('是否确认删除成员编号为"' + userIds + '"的数据项？').then(function () {
     return delUser(userIds);
   }).then(() => {
@@ -537,7 +525,6 @@ function reset() {
     deptIds: undefined,
     userName: undefined,
     alias: undefined,
-    password: undefined,
     mobile: undefined,
     email: undefined,
     gender: undefined,
@@ -559,7 +546,6 @@ function handleAdd() {
   initTreeData();
   open.value = true;
   title.value = "添加成员";
-  form.value.password = initPassword.value;
 };
 /** 修改按钮操作 */
 function handleUpdate(row) {
@@ -574,7 +560,6 @@ function handleUpdate(row) {
   //   form.value.roleName = response.data.roleName;
     open.value = true;
     title.value = "修改成员";
-    form.password = "";
   });
 
 };

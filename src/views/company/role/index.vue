@@ -69,16 +69,16 @@
                v-hasPermi="['system:role:edit']"
             >修改</el-button>
          </el-col>
-         <el-col :span="1.5">
-            <el-button
-               type="danger"
-               plain
-               icon="Delete"
-               :disabled="multiple"
-               @click="handleDelete"
-               v-hasPermi="['system:role:remove']"
-            >删除</el-button>
-         </el-col>
+<!--         <el-col :span="1.5">-->
+<!--            <el-button-->
+<!--               type="danger"-->
+<!--               plain-->
+<!--               icon="Delete"-->
+<!--               :disabled="multiple"-->
+<!--               @click="handleDelete"-->
+<!--               v-hasPermi="['system:role:remove']"-->
+<!--            >删除</el-button>-->
+<!--         </el-col>-->
 <!--         <el-col :span="1.5">-->
 <!--            <el-button-->
 <!--               type="warning"-->
@@ -387,7 +387,8 @@ function resetQuery() {
 }
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const roleIds = row.roleId || ids.value;
+  // const roleIds = row.roleId || ids.value;
+  const roleIds = row.roleId;
   proxy.$modal.confirm('是否确认删除角色编号为"' + roleIds + '"的数据项?').then(function () {
     return delRole(roleIds);
   }).then(() => {
