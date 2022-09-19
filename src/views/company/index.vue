@@ -6,7 +6,7 @@
       <el-button v-if="inputType!=='readey'" @click="handelRead('cancel')">取消</el-button>
     </div>
     <div class="form-box">
-      <el-form v-model="form" label-position="left">
+      <el-form v-model="form" label-position="left" label-width="85px">
         <el-form-item label="企业logo" prop="logo">
           <div>
             <el-upload
@@ -40,10 +40,10 @@
           </div>
         </el-form-item>
         <el-form-item label="企微ID" prop="plainCorpId">
-          <el-input v-model="form.plainCorpId" :disabled="inputType==='readey'" style="width: 364px;" />
+          <el-input v-model="form.plainCorpId" :disabled="inputType==='readey'" />
         </el-form-item>
         <el-form-item label="法定代表人" prop="legalPersonId">
-          <el-select v-model="form.legalPersonId" :disabled="inputType==='readey'" style="width: 336px;">
+          <el-select v-model="form.legalPersonId" :disabled="inputType==='readey'" style="width: 350px;">
             <el-option v-for="item in legalPersonList" :key="item.userId" :label="item.userName" :value="item.userId" />
           </el-select>
         </el-form-item>
@@ -60,6 +60,9 @@
                     clearable
                     :disabled="inputType==='readey'"
                     />
+        </el-form-item>
+        <el-form-item label="企业电话">
+          <el-input v-model="form.phone" clearable :disabled="inputType==='readey'" />
         </el-form-item>
         <el-form-item label="详细地址">
           <el-input v-model="form.address" placeholder="请输入详细地址" :disabled="inputType==='readey'"></el-input>
@@ -86,13 +89,13 @@
 <!--          </el-select>-->
 <!--        </el-form-item>-->
         <el-divider />
-        <el-form-item label="企业成员">
+        <el-form-item label="成员数量">
           <span>{{ form.userCount }}个成员</span>
         </el-form-item>
-        <el-form-item label="企业部门">
+        <el-form-item label="部门数量">
           <span>{{ form.deptCount }}个部门</span>
         </el-form-item>
-        <el-form-item label="已使用 / 人数上限">
+        <el-form-item label="员工规模">
           <span>{{ form.userCount }}/{{ form.corpUserMax }}</span>
         </el-form-item>
         <el-divider />
@@ -140,6 +143,7 @@ const form = ref({
   corpType: '', // 企业类型:1厂家,2代理商,3连锁药房,4药店
   address: '', // 详细地址
   code: '', // 门店编码
+  phone: '', // 企业电话
   // brandType: '', // 连锁品牌：1和平，2鑫斛，3 等等其他的
   userCount: '', // 企业人数
   deptCount: '', // 企业部门数

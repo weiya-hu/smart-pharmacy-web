@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
-      <el-form-item label="部门名称" prop="name">
+      <el-form-item label="机构名称" prop="name">
         <el-input
             v-model="queryParams.name"
-            placeholder="请输入部门名称"
+            placeholder="请输入机构名称"
             clearable
             @keyup.enter="handleQuery"
         />
@@ -46,7 +46,7 @@
         row-key="nodeId"
         :tree-props="{ children: 'children' }"
     >
-      <el-table-column prop="name" label="部门名称" width="450" show-tooltip-when-overflow></el-table-column>
+      <el-table-column prop="name" label="机构名称" width="450" show-tooltip-when-overflow></el-table-column>
       <!--      <el-table-column prop="state" label="状态">-->
       <!--        <template #default="scope">-->
       <!--          <dict-tag :options="sys_normal_disable" :value="scope.row.state"/>-->
@@ -237,7 +237,7 @@ const data = reactive({
     pageSize: 10,
   },
   rules: {
-    name: [{required: true, message: "部门名称不能为空", trigger: "blur"}],
+    name: [{required: true, message: "机构名称不能为空", trigger: "blur"}],
     type: [{required: true, message: "类型不能为空", trigger: "change"}],
   },
 });

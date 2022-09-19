@@ -6,6 +6,7 @@
       </div>
       <div class="login-right">
         <el-tabs v-model="activeName" class="demo-tabs">
+          <el-button @click="login">11</el-button>
           <el-tab-pane label="微信扫码登录" name="first">
             <wxlogin
                 appid="wx3a6a5cc2924a2405"
@@ -41,8 +42,9 @@ import wxlogin from 'vue-wxlogin';
 import {oauthLogin, wechatLogin} from "../../api/login";
 import {GetQueryString} from '@/utils/validate';
 import {setToken, getToken} from "../../utils/auth";
+
 const { proxy } = getCurrentInstance();
-const router = useRouter();
+const router = useRouter(), route = useRoute();
 const redirect = ref(undefined);
 const activeName = ref('first')
 const dialogVisible = ref(false)
@@ -66,7 +68,8 @@ function getWechatLogin() {
         router.push({path: "/index"});
       }
     }).catch(e => {
-      dialogVisible.value = true
+      // dialogVisible.value = true
+      router.push({path: '/login', query: {showWxCode: true}})
     })
   } else {
     router.push({path: "/login"})
@@ -86,7 +89,8 @@ function getOauthLogin() {
         router.push({path: "/index"});
       }
     }).catch(err => {
-      dialogUrlVisible.value = true
+      // dialogUrlVisible.value = true
+      router.push({path: "/login",query:{showQrCode:true}})
     })
   } else {
     router.push({path: "/login"})
@@ -113,17 +117,20 @@ const wecomControlLogin = () => {
   }
 }
 
-const login = () => {
+const login = async () => {
   if (GetQueryString('state') === 'wecom') {
-    getOauthLogin()
+    await getOauthLogin()
+    dialogUrlVisible.value = route.query.showQrCode
   } else if (GetQueryString('state') === 'wechat') {
-    getWechatLogin()
+    await getWechatLogin()
+    dialogVisible.value = route.query.showWxCode
   } else if (GetQueryString('state') === 'oauthLoginsplit') {
     wecomControlLogin()
   }
 }
 
-login()
+
+// login()
 </script>
 
 <style lang="scss" scoped>
