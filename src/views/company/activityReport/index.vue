@@ -1,7 +1,7 @@
 <template>
   <div class="outBox" v-loading="loading">
     <div class="desc">
-      <span>自营任务 —— 连锁商户自己发起的营销激励任务</span>
+      <span>激励活动报表 —— 对激励活动所产生的数据做基础的统计和分析</span>
     </div>
     <!--    搜索条件-->
     <div class="serachParams">
@@ -17,10 +17,12 @@
           />
         </el-form-item>
         <el-form-item label="区域" label-width="120px">
-          <el-cascader :collapse-tags="true" filterable :options="options" :props="props" collapse-tags clearable/>
+          <el-cascader :collapse-tags="true" style="width: 300px" :options="options" :props="props"
+                       clearable/>
         </el-form-item>
         <el-form-item label="条件查询" label-width="120px">
-          <el-input v-model="queryParams.otherFilter" placeholder="请输入任务名/编号/商品名/商品ID/品牌"></el-input>
+          <el-input style="width: 300px" v-model="queryParams.otherFilter"
+                    placeholder="请输入任务名/编号/商品名/商品ID/品牌"></el-input>
         </el-form-item>
         <el-form-item label="任务状态" label-width="120px">
           <el-select v-model="queryParams.state" placeholder="请选择要查看的区域" clearable>
@@ -37,50 +39,51 @@
       <el-row>
         <el-col :span="4">
           <div class="totalItem">
-            <div>当前活动</div>
-            <div>{{ reportTotalNumber.eventNumber }}</div>
+            <div class="data">{{ reportTotalNumber.eventNumber }}</div>
+            <div class="title">当前活动</div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="totalItem">
-            <div>参与店铺</div>
-            <div>{{ reportTotalNumber.storeNumber }}</div>
+            <div class="data">{{ reportTotalNumber.storeNumber }}</div>
+            <div class="title">参与店铺</div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="totalItem">
-            <div>参与人次</div>
-            <div>{{ reportTotalNumber.userNumber }}</div>
+            <div class="data">{{ reportTotalNumber.userNumber }}</div>
+            <div class="title">参与人次</div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="totalItem">
-            <div>销售额(元)</div>
-            <div>{{ reportTotalNumber.saleAmount }}</div>
+            <div class="data">{{ reportTotalNumber.saleAmount }}</div>
+            <div class="title">销售额(元)</div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="totalItem">
-            <div>合计奖池(元)</div>
-            <div>{{ reportTotalNumber.totalPrizePool }}</div>
+            <div class="data">{{ reportTotalNumber.totalPrizePool }}</div>
+            <div class="title">合计奖池(元)</div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="totalItem">
-            <div>累计发放(元)</div>
-            <div>{{ reportTotalNumber.awardMoney }}</div>
+            <div class="data">{{ reportTotalNumber.awardMoney }}</div>
+            <div class="title">累计发放(元)</div>
           </div>
         </el-col>
       </el-row>
     </div>
     <!--    图形统计-->
     <div class="barChart">
-      <div class="chart chart_one">
-        <scaleChart ref="chart_one_ref" :dataOption="chart_one_data"></scaleChart>
-      </div>
       <div class="chart chart_two">
         <scaleChart ref="chart_two_ref" :dataOption="chart_two_data"></scaleChart>
       </div>
+      <div class="chart chart_one">
+        <scaleChart ref="chart_one_ref" :dataOption="chart_one_data"></scaleChart>
+      </div>
+
       <!--      <div class="chart chart_three">-->
       <!--        <scaleChart ref="chart_three_ref" :dataOption="chart_three_data"></scaleChart>-->
       <!--      </div>-->
@@ -417,15 +420,15 @@ const fastSelectDate = ref([
 
 ])
 /**图形一配置*/
-const chart_one_data = {
+let chart_one_data = {
   color: ['#8fd5f3'],
-  grid: {
-    x: 60, // 左间距
-    y: 80, // 上间距
-    x2: 60, // 右间距
-    y2: 40, // 下间距
-    containLabel: true // grid 区域是否包含坐标轴的刻度标签, 常用于『防止标签溢出』的场景
-  },
+  // grid: {
+  //   x: 60, // 左间距
+  //   y: 80, // 上间距
+  //   x2: 60, // 右间距
+  //   y2: 40, // 下间距
+  //   containLabel: true // grid 区域是否包含坐标轴的刻度标签, 常用于『防止标签溢出』的场景
+  // },
   tooltip: {
     trigger: 'axis', // 触发类型, axis: 坐标轴触发
     axisPointer: {
@@ -457,7 +460,8 @@ const chart_one_data = {
     }
   ],
   title: {
-    text: '销售额'
+    text: '销售额',
+    padding: [20, 20, 100, 100],
   },
   // legend: {
   //   data: ['销量']
@@ -466,15 +470,16 @@ const chart_one_data = {
     min: 1,
     logBase: 10,
     type: 'log',
-    name: "销售额",
+    // name: "销售额",
     nameLocation: 'end',
     nameGap: 60,
     nameTextStyle: {
-      fontSize: 18
+      fontSize: 18,
+      color: "#282828"
     },
     // 坐标轴刻度标签
     splitLine: {
-      show: true // 是否显示分隔线。默认数值轴显示
+      show: false // 是否显示分隔线。默认数值轴显示
     },
     axisLine: { // 是否显示坐标轴轴线 默认显示
       // symbol: ['none', 'arrow'],
@@ -563,8 +568,168 @@ const chart_one_data = {
   },
   ]
 }
+const chart_one_data_none = {
+  title: {
+    text: '暂无销售数据',
+    x: 'center',
+    y: 'center',
+    textStyle: {
+      color: '#606266',
+      fontWeight: 'normal',
+      fontSize: 20,
+    }
+  },
+  xAxis: {
+    show: false,
+    min: 1,
+    logBase: 10,
+    type: 'log',
+    name: "销售额",
+    nameLocation: 'end',
+    nameGap: 60,
+    nameTextStyle: {
+      fontSize: 18,
+      color: "#282828"
+    },
+    // 坐标轴刻度标签
+    splitLine: {
+      show: false // 是否显示分隔线。默认数值轴显示
+    },
+    axisLine: { // 是否显示坐标轴轴线 默认显示
+      // symbol: ['none', 'arrow'],
+      show: true, // 是否显示坐标轴轴线 默认显示
+      lineStyle: { // 坐标轴线线的颜色
+        color: '#6e7079'
+      }
+    },
+    axisTick: {
+      show: false // 是否显示坐标轴刻度 默认显示
+    },
+    axisLabel: {
+      show: true, // 是否显示刻度标签 默认显示
+      fontSize: 14, // 文字的字体大小
+      // color: '#cdd3ee', // 刻度标签文字的颜色
+      // 使用字符串模板，模板变量为刻度默认标签 {value}
+      formatter: function (value) {
+        if (value >= 10000) {
+          return (value / 10000) + "万"
+        } else if (value < 10000 && value > 1) {
+          return value + "元"
+        } else if (value == 1) {
+          return 0
+        }
+      }
+    },
+  },
+  yAxis: {
+    type: "category",
+    show: false,
+    axisTick: {
+      show: false // 是否显示坐标轴刻度 默认显示
+    },
+    axisLine: { // 是否显示坐标轴轴线 默认显示
+      symbol: ['none', 'arrow'],
+      show: true, // 是否显示坐标轴轴线 默认显示
+      lineStyle: { // 坐标轴线线的颜色
+        color: '#6e7079'
+      }
+    },
+    axisLabel: {
+      type: 'value',
+      show: true, // 是否显示刻度标签 默认显示
+      fontSize: 14, // 文字的字体大小
+      // color: '#cdd3ee', // 刻度标签文字的颜色
+      // 使用字符串模板，模板变量为刻度默认标签 {value}
+      formatter: '{value}'
+    },
+    splitLine: {
+      show: false // 是否显示分隔线。默认数值轴显示
+    },
+    data: []
+  },
+}
+const chart_two_data_none = {
+  title: {
+    text: '暂无奖励数据',
+    x: 'center',
+    y: 'center',
+    textStyle: {
+      color: '#606266',
+      fontWeight: 'normal',
+      fontSize: 20,
+    }
+  },
+  xAxis: {
+    show: false,
+    min: 1,
+    logBase: 10,
+    type: 'log',
+    name: "销售额",
+    nameLocation: 'end',
+    nameGap: 60,
+    nameTextStyle: {
+      fontSize: 18,
+      color: "#282828"
+    },
+    // 坐标轴刻度标签
+    splitLine: {
+      show: false // 是否显示分隔线。默认数值轴显示
+    },
+    axisLine: { // 是否显示坐标轴轴线 默认显示
+      // symbol: ['none', 'arrow'],
+      show: true, // 是否显示坐标轴轴线 默认显示
+      lineStyle: { // 坐标轴线线的颜色
+        color: '#6e7079'
+      }
+    },
+    axisTick: {
+      show: false // 是否显示坐标轴刻度 默认显示
+    },
+    axisLabel: {
+      show: true, // 是否显示刻度标签 默认显示
+      fontSize: 14, // 文字的字体大小
+      // color: '#cdd3ee', // 刻度标签文字的颜色
+      // 使用字符串模板，模板变量为刻度默认标签 {value}
+      formatter: function (value) {
+        if (value >= 10000) {
+          return (value / 10000) + "万"
+        } else if (value < 10000 && value > 1) {
+          return value + "元"
+        } else if (value == 1) {
+          return 0
+        }
+      }
+    },
+  },
+  yAxis: {
+    type: "category",
+    show: false,
+    axisTick: {
+      show: false // 是否显示坐标轴刻度 默认显示
+    },
+    axisLine: { // 是否显示坐标轴轴线 默认显示
+      symbol: ['none', 'arrow'],
+      show: true, // 是否显示坐标轴轴线 默认显示
+      lineStyle: { // 坐标轴线线的颜色
+        color: '#6e7079'
+      }
+    },
+    axisLabel: {
+      type: 'value',
+      show: true, // 是否显示刻度标签 默认显示
+      fontSize: 14, // 文字的字体大小
+      // color: '#cdd3ee', // 刻度标签文字的颜色
+      // 使用字符串模板，模板变量为刻度默认标签 {value}
+      formatter: '{value}'
+    },
+    splitLine: {
+      show: false // 是否显示分隔线。默认数值轴显示
+    },
+    data: []
+  },
+}
 /**图形二配置*/
-const chart_two_data = {
+let chart_two_data = {
   color: ['#8fd5f3'],
   dataZoom: [                 //Y轴滑动条
     {
@@ -582,13 +747,13 @@ const chart_two_data = {
       start: 1,//初始化时，滑动条宽度开始标度  end: 50  //初始化时，滑动条宽度结束标度　　　　　　　　　　　
     }
   ],
-  grid: {
-    x: 60, // 左间距
-    y: 80, // 上间距
-    x2: 60, // 右间距
-    y2: 40, // 下间距
-    containLabel: true // grid 区域是否包含坐标轴的刻度标签, 常用于『防止标签溢出』的场景
-  },
+  // grid: {
+  //   x: 60, // 左间距
+  //   y: 80, // 上间距
+  //   x2: 60, // 右间距
+  //   y2: 40, // 下间距
+  //   containLabel: true // grid 区域是否包含坐标轴的刻度标签, 常用于『防止标签溢出』的场景
+  // },
   tooltip: {
     trigger: 'axis', // 触发类型, axis: 坐标轴触发
     axisPointer: {
@@ -603,27 +768,30 @@ const chart_two_data = {
     // // {a}（系列名称），{b}（类目值），{c}（数值）, {d}（无）
     // formatter: '{b}<br />{a0}:{c0}:{c1}'
     formatter: function (params, ticket, callback) {
-      return params[0].name + '<br />' + "已奖励占比: " + (-params[0].value) / (-params[2].value) + "%"+'<br/>'
+      return params[0].name + '<br />' + "已奖励占比: " + (-params[0].value) / (-params[2].value) + "%" + '<br/>' + "已奖励金额: " + (-params[0].value) + "元"
     }
   },
   title: {
-    text: '奖励'
+    text: '奖励',
+    x: 'right',
+    padding: [20, 100, 20, 100],
   },
   legend: {
     data: ['奖励']
   },
   xAxis: {
-    name: "金额",
+    // name: "奖金",
     nameLocation: 'start',
     nameGap: 60,
     nameTextStyle: {
-      fontSize: 18
+      fontSize: 18,
+      color: "#282828"
     },
     show: true,
     // 坐标轴刻度标签
     // inverse
     splitLine: {
-      show: true // 是否显示分隔线。默认数值轴显示
+      show: false // 是否显示分隔线。默认数值轴显示
     },
     axisLine: { // 是否显示坐标轴轴线 默认显示
       // symbol: ['arrow', 'none'],
@@ -658,6 +826,10 @@ const chart_two_data = {
     axisTick: {
       show: false // 是否显示坐标轴刻度 默认显示
     },
+    nameTextStyle: {
+      fontSize: 18,
+      color: "#282828",
+    },
     axisLine: { // 是否显示坐标轴轴线 默认显示
       symbol: ['none', 'arrow'],
       show: true, // 是否显示坐标轴轴线 默认显示
@@ -669,7 +841,7 @@ const chart_two_data = {
     axisLabel: {
       type: 'value',
       show: true, // 是否显示刻度标签 默认显示
-      // fontSize: 16, // 文字的字体大小
+      fontSize: 14, // 文字的字体大小
       // color: '#cdd3ee', // 刻度标签文字的颜色
       // 使用字符串模板，模板变量为刻度默认标签 {value}
       formatter: '{value}'
@@ -948,7 +1120,17 @@ function getList() {
   /**获取统计图数据*/
   getSalesHistogram({...queryParams.value, ...timeObject}).then(res => {
     if (res.code == 200) {
-      innitBarChartData(res.data)
+      if (res.data.length !== 0) {
+        innitBarChartData(res.data)
+      } else {
+        chart_one_data = chart_one_data_none
+        chart_two_data = chart_two_data_none
+        nextTick(() => {
+          chart_one_ref.value.setOption(chart_one_data, true)
+          chart_two_ref.value.setOption(chart_two_data, true)
+          loading.value = false
+        })
+      }
     }
   })
   /**获取品牌销量 */
@@ -1025,8 +1207,8 @@ innitSelectOption()
 
 //选中时样式设置
 .rewardList::v-deep(.el-tabs--card>.el-tabs__header .el-tabs__item.is-active) {
-  background-color: #02a7f0;
-  color: black;
+  background-color: #ff5940;
+  color: #fffeff;
 }
 
 // 先把整体的线去掉
@@ -1052,11 +1234,14 @@ innitSelectOption()
   border: 1px solid #c9cacf;
   border-left: 1px solid #c9cacf !important;
   margin-left: 10px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #ff5940;
 }
 
 //选中时样式设置
 .salesBrandAndSingle::v-deep(.el-tabs--card>.el-tabs__header .el-tabs__item.is-active) {
-  background-color: #02a7f0;
+  background-color: #ff5940;
   color: black;
 }
 
@@ -1076,11 +1261,15 @@ innitSelectOption()
 
 .salesBrandAndSingle ::v-deep(.el-tabs__active-bar) {
   background-color: transparent !important;
+
 }
 
 .salesBrandAndSingle::v-deep(.el-tabs__item ) {
   margin-left: 10px;
   line-height: 60px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #ff5940;
 }
 
 
@@ -1126,25 +1315,39 @@ innitSelectOption()
 
   .desc {
     color: #999;
-    font-size: 14px;
+    font-size: 16px;
     font-family: Source Han Sans CN;
     font-weight: 400;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
   }
 
   .statistic {
     margin: 20px 10px;
+    border-top: 2px solid #d6dde4;
+    padding-top: 20px;
 
     .totalItem {
       flex: 1;
       width: 150px;
       height: 100px;
       border-radius: 5px;
-      border: 1px solid #c9cacf;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
+
+      .data {
+        color: #474747;
+        font-weight: 800;
+        font-size: 20px;
+      }
+
+      .title {
+        margin-top: 5px;
+        color: #999999;
+        font-weight: 600;
+        font-size: 16px;
+      }
     }
   }
 
@@ -1154,15 +1357,18 @@ innitSelectOption()
     align-items: center;
     justify-content: space-between;
     margin: 20px 10px;
-    border: 3px solid #d9dad9;
+    border: 2px solid #d9dad9;
     background-color: #fafafc;
     border-radius: 8px;
 
+    .chart_two {
+      border-right: 2px solid #d9dad9;
+    }
+
     .chart {
       flex: 1;
-      margin: 0 10px;
-      height: 600px;
-      //border: 1px dashed #d9dad9;
+      //margin: 0 10px;
+      height: 750px;
       text-align: center;
     }
 
@@ -1177,7 +1383,7 @@ innitSelectOption()
 
     .area {
       flex: 1;
-      border: 1px solid #c9cacf;
+      border: 2px solid #d9dad9;
       text-align: center;
       border-radius: 5px;
       margin: 0 10px;
@@ -1193,7 +1399,7 @@ innitSelectOption()
     .sales {
       flex: 1;
       margin: 0 10px;
-      border: 1px solid #c9cacf;
+      border: 2px solid #d9dad9;
       border-radius: 5px;
     }
   }
@@ -1208,6 +1414,7 @@ innitSelectOption()
       flex: 1;
       margin: 0 10px;
       border-radius: 5px;
+
     }
 
 

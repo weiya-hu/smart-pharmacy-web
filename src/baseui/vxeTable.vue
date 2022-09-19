@@ -117,13 +117,13 @@ export default defineComponent({
   background-color: #FFFFFF;
 }
 
-.ll-table::v-deep(.vxe-header--column) {
-  background-color: #fff !important;
-}
-
-.ll-table::v-deep(.vxe-header--gutter) {
-  background-color: #fff !important;
-}
+//.ll-table::v-deep(.vxe-header--column) {
+//  background-color: #fff !important;
+//}
+//
+//.ll-table::v-deep(.vxe-header--gutter) {
+//  background-color: #fff !important;
+//}
 
 .header {
   display: flex;
