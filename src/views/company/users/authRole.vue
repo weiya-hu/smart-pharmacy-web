@@ -4,15 +4,15 @@
       <el-form :model="form" label-width="80px">
          <el-row>
             <el-col :span="8" :offset="2">
-               <el-form-item label="用户昵称" prop="nickName">
-                  <el-input v-model="form.nickName" disabled />
-               </el-form-item>
-            </el-col>
-            <el-col :span="8" :offset="2">
-               <el-form-item label="登录账号" prop="userName">
+               <el-form-item label="用户名称" prop="nickName">
                   <el-input v-model="form.userName" disabled />
                </el-form-item>
             </el-col>
+<!--            <el-col :span="8" :offset="2">-->
+<!--               <el-form-item label="登录账号" prop="userName">-->
+<!--                  <el-input v-model="form.userName" disabled />-->
+<!--               </el-form-item>-->
+<!--            </el-col>-->
          </el-row>
       </el-form>
 
@@ -47,7 +47,7 @@
 
 <script setup name="AuthRole">
 import { getAuthRole, updateAuthRole } from "@/api/system/user";
-
+import {listRole} from "@/api/system/role";
 const route = useRoute();
 const { proxy } = getCurrentInstance();
 
@@ -99,14 +99,29 @@ function submitForm() {
 
 function getList() {
   getAuthRole({userId: route.query.userId}).then(res => {
-    if (res.code === 200) {
-      loading.value = false
-      userInfoData.value = res.data
+    if (res.code === 200 && res.data.length >0) {
+      res.data.forEach((row) => {
+        proxy.$refs["roleRef"].toggleRowSelection(row,undefined);
+      })
+    }
+  })
+}
+function getRoleList(){
+  listRole().then(res=>{
+    if(res.code === 200){
+      userInfoData.value = res.data.list
     }
   })
 }
 
-getList()
+async function loadPage  (){
+  form.value.userName = route.query.userName
+  await getRoleList()
+  await getList()
+  loading.value = false
+
+}
+loadPage()
 // (() => {
 //   const userId = route.query.userId;
 //   // console.log('userId',userId)

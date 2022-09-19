@@ -89,16 +89,16 @@
                      v-hasPermi="['system:user:add']"
                   >新增</el-button>
                </el-col>
-               <el-col :span="1.5">
-                  <el-button
-                     type="success"
-                     plain
-                     icon="Edit"
-                     :disabled="single"
-                     @click="handleUpdate"
-                     v-hasPermi="['system:user:edit']"
-                  >修改</el-button>
-               </el-col>
+<!--               <el-col :span="1.5">-->
+<!--                  <el-button-->
+<!--                     type="success"-->
+<!--                     plain-->
+<!--                     icon="Edit"-->
+<!--                     :disabled="single"-->
+<!--                     @click="handleUpdate"-->
+<!--                     v-hasPermi="['system:user:edit']"-->
+<!--                  >修改</el-button>-->
+<!--               </el-col>-->
 <!--               <el-col :span="1.5">-->
 <!--                  <el-button-->
 <!--                     type="danger"-->
@@ -148,13 +148,13 @@
                </el-table-column>
                <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
                   <template #default="scope">
-                        <el-button
-                           type="text"
-                           icon="Edit"
-                           size="small"
-                           @click="handleUpdate(scope.row)"
-                           v-hasPermi="['system:user:edit']"
-                        >修改</el-button>
+<!--                        <el-button-->
+<!--                           type="text"-->
+<!--                           icon="Edit"-->
+<!--                           size="small"-->
+<!--                           @click="handleUpdate(scope.row)"-->
+<!--                           v-hasPermi="['system:user:edit']"-->
+<!--                        >修改</el-button>-->
                         <el-button
                            type="text"
                            icon="Delete"
@@ -479,7 +479,7 @@ function handleCommand(command, row) {
 function handleAuthRole(row) {
   router.push({
     path:"/enterpriseCenter/company/users/authRole",
-    query: {userId: row.userId}
+    query: {userId: row.userId,userName:row.userName}
   })
 };
 /** 选择条数  */
