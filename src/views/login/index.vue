@@ -65,6 +65,8 @@ function getWechatLogin() {
       if (res.code === 200) {
         setToken(res.data.access_token)
         router.push({path: "/index"});
+      } else {
+        router.push({name: 'Login', params: {showWxCode: true}})
       }
     }).catch(e => {
       // dialogVisible.value = true
@@ -86,6 +88,8 @@ function getOauthLogin() {
       if (res.code === 200) {
         setToken(res.data.access_token)
         router.push({path: "/index"});
+      } else {
+        router.push({name: 'Login',params:{showQrCode:true}})
       }
     }).catch(err => {
       // dialogUrlVisible.value = true
