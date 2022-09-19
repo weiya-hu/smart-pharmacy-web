@@ -43,10 +43,10 @@ const init = () => {
   //5.传入数据
   myEcharts.setOption(props.dataOption);
 
-  //additional：图表大小自适应窗口大小变化
-  window.onresize = () => {
+  window.addEventListener("resize", function () {
     myEcharts.resize();
-  }
+  });
+
 }
 const setOption = function (option) {
   myEcharts.setOption(option);

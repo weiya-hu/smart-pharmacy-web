@@ -826,6 +826,10 @@ let chart_two_data = {
     axisTick: {
       show: false // 是否显示坐标轴刻度 默认显示
     },
+    nameTextStyle: {
+      fontSize: 18,
+      color: "#282828",
+    },
     axisLine: { // 是否显示坐标轴轴线 默认显示
       symbol: ['none', 'arrow'],
       show: true, // 是否显示坐标轴轴线 默认显示
