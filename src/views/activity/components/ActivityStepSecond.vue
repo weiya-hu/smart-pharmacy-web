@@ -90,7 +90,7 @@
             <el-button v-show="firstFormModel.products.length === 0" type="primary" link
                        @click="openProductsDialog(index,firstFormModel)">添加商品
             </el-button>
-            <el-button type="primary" link>已选（{{ firstFormModel.products.length }}）个</el-button>
+            <el-button type="primary" link>已选（{{ firstFormModel.products && firstFormModel.products.length }}）个</el-button>
             <el-button v-show="firstFormModel.products.length > 0 " type="primary"
                        @click="openProductsDialog(index,firstFormModel)">点击查看商品列表
             </el-button>
@@ -257,7 +257,7 @@
                 参与职务列表
               </div>
             </el-row>
-            <el-row v-for="(item,index) in thirdFormModel.jobs">
+            <el-row v-for="(item,index) in thirdFormModel.jobs" :key="index">
               <el-form-item class="label" label="职务">
                 <div style="width: 70px !important;fontWeight: bold;color: #606266;">
                   {{ item.jobName }}
@@ -364,8 +364,11 @@ const firstFormModels = ref({
         timeRangeUnit: 'everyday',
         rewardType: 1,
         calcUnit: 1,
+        products: [],
         jobs: jobList.value,
-        products: []
+        filter: {
+          ids:[], specifications: [], brands: [], productTypes: []
+        }
       }]
     }
 )
@@ -377,8 +380,11 @@ const resetFirstForm = () => {
     timeRangeUnit: 'everyday',
     rewardType: 1,
     calcUnit: 1,
+    products: [],
     jobs: jobList.value,
-    products: []
+    filter: {
+      ids:[], specifications: [], brands: [], productTypes: []
+    }
   }
 }
 
@@ -402,7 +408,7 @@ const secondFormModels = ref({
     calcUnit: 1,
     jobs: jobList.value,
     filter: {
-      brands: []
+      ids:[], specifications: [], brands: [], productTypes: []
     }
   }]
 })
@@ -419,7 +425,7 @@ const resetSecondForm = () => {
     calcUnit: 1,
     jobs: jobList.value,
     filter: {
-      brands: []
+      ids:[], specifications: [], brands: [], productTypes: []
     }
   }
 }
@@ -436,7 +442,7 @@ const thirdFormModels = ref({
     calcUnit: 1,
     jobs: jobList.value,
     filter: {
-      ids: []
+      ids:[], specifications: [], brands: [], productTypes: []
     }
   }]
 })
@@ -450,7 +456,7 @@ const resetThirdForm = () => {
     calcUnit: 1,
     jobs: jobList.value,
     filter: {
-      ids: []
+      ids:[], specifications: [], brands: [], productTypes: []
     }
   }
 
@@ -826,6 +832,7 @@ const loadEventRule = () => {
                 thirdFormModels.value.formListData.push(item)
               }
             })
+            console.log('thirdFormModels.value',thirdFormModels.value)
             secondLoading.value = false
             return Promise.resolve(true)
           }

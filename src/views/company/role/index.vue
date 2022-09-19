@@ -203,32 +203,32 @@
                  </el-radio-group>
                </el-form-item>
              </el-col>
-             <el-col :span="12">
-               <el-form-item label="超级管理员">
-                 <el-radio-group v-model="form.admin">
-<!--                   <el-radio-->
-<!--                       v-for="dict in sys_yes_no"-->
-<!--                       :key="dict.value"-->
-<!--                       :label="dict.value"-->
-<!--                   >{{ dict.label }}</el-radio>-->
-                   <el-radio :label="1">是</el-radio>
-                   <el-radio :label="0">否</el-radio>
-                 </el-radio-group>
-               </el-form-item>
-             </el-col>
-             <el-col :span="12">
-               <el-form-item label="系统内置">
-                 <el-radio-group v-model="form.sysDefault">
-<!--                   <el-radio-->
-<!--                       v-for="dict in sys_yes_no"-->
-<!--                       :key="dict.value"-->
-<!--                       :label="dict.value"-->
-<!--                   >{{ dict.label }}</el-radio>-->
-                   <el-radio :label="1">是</el-radio>
-                   <el-radio :label="0">否</el-radio>
-                 </el-radio-group>
-               </el-form-item>
-             </el-col>
+<!--             <el-col :span="12">-->
+<!--               <el-form-item label="超级管理员">-->
+<!--                 <el-radio-group v-model="form.admin">-->
+<!--&lt;!&ndash;                   <el-radio&ndash;&gt;-->
+<!--&lt;!&ndash;                       v-for="dict in sys_yes_no"&ndash;&gt;-->
+<!--&lt;!&ndash;                       :key="dict.value"&ndash;&gt;-->
+<!--&lt;!&ndash;                       :label="dict.value"&ndash;&gt;-->
+<!--&lt;!&ndash;                   >{{ dict.label }}</el-radio>&ndash;&gt;-->
+<!--                   <el-radio :label="1">是</el-radio>-->
+<!--                   <el-radio :label="0">否</el-radio>-->
+<!--                 </el-radio-group>-->
+<!--               </el-form-item>-->
+<!--             </el-col>-->
+<!--             <el-col :span="12">-->
+<!--               <el-form-item label="系统内置">-->
+<!--                 <el-radio-group v-model="form.sysDefault">-->
+<!--&lt;!&ndash;                   <el-radio&ndash;&gt;-->
+<!--&lt;!&ndash;                       v-for="dict in sys_yes_no"&ndash;&gt;-->
+<!--&lt;!&ndash;                       :key="dict.value"&ndash;&gt;-->
+<!--&lt;!&ndash;                       :label="dict.value"&ndash;&gt;-->
+<!--&lt;!&ndash;                   >{{ dict.label }}</el-radio>&ndash;&gt;-->
+<!--                   <el-radio :label="1">是</el-radio>-->
+<!--                   <el-radio :label="0">否</el-radio>-->
+<!--                 </el-radio-group>-->
+<!--               </el-form-item>-->
+<!--             </el-col>-->
              <el-col :span="24">
                <el-form-item label="菜单权限">
                  <el-checkbox v-model="menuExpand" @change="handleCheckedTreeExpand($event, 'menu')">展开/折叠</el-checkbox>

@@ -128,10 +128,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="名称" prop="name">
+            <el-form-item label="名称" prop="relationId">
               <!--              <el-input v-model="form.name" style="width: 100%" placeholder="请选择名称 / 如没有需要的供应商，请输入名称"/>-->
               <el-select
-                  v-model="form.name"
+                  v-model="form.relationId"
                   filterable
                   allow-create
                   default-first-option
@@ -143,8 +143,8 @@
                 <el-option v-for="item in nameList" :key="item.id" :label="item.name" :value="item.id"/>
               </el-select>
             </el-form-item>
-            <el-form-item label="业务方编码" prop="relationId">
-              <el-input v-model="form.relationId" style="width: 100%" placeholder="业务方编码"/>
+            <el-form-item label="业务方编码" prop="code">
+              <el-input v-model="form.code" style="width: 100%" placeholder="业务方编码"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -237,7 +237,7 @@ const data = reactive({
     pageSize: 10,
   },
   rules: {
-    name: [{required: true, message: "机构名称不能为空", trigger: "blur"}],
+    relationId: [{required: true, message: "机构名称不能为空", trigger: "blur"}],
     type: [{required: true, message: "类型不能为空", trigger: "change"}],
   },
 });
@@ -290,6 +290,7 @@ function cancel() {
 function reset() {
   form.value = {
     nodeId: undefined,
+    code:undefined,
     parentNodeId: undefined,
     relationId:undefined,
     type: undefined,
@@ -314,7 +315,7 @@ function resetQuery() {
 /** 新增按钮操作 */
 function handleAdd(row) {
   reset();
-  listReltree().then(response => {
+  listReltree({allChild:true}).then(response => {
     // deptOptions.value = proxy.handleTree(response.data, "id");
     deptOptions.value = response.data
   });
@@ -355,6 +356,16 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["deptRef"].validate(valid => {
     if (valid) {
+      if(form.value.relationId){
+        //判断是否存在于集合中
+        let exists = nameList.value.filter(item=> item.id ===form.value.relationId)
+        if(exists.length >0){
+          form.value.name = exists[0].name
+        }else{
+          form.value.name = form.value.relationId
+          form.value.relationId = undefined
+        }
+      }
       formTableRef.value.validate((v) => {
         if (v) {
           form.value.users = tableUsers.tableData
