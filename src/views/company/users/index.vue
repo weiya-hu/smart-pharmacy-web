@@ -123,7 +123,7 @@
             </el-row>
 
             <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
-               <el-table-column type="selection" width="50" align="center" />
+<!--               <el-table-column type="selection" width="50" align="center" />-->
                <el-table-column label="成员编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" :show-overflow-tooltip="true" />
                <el-table-column label="成员名称" align="center" key="userName" prop="userName" v-if="columns[1].visible" :show-overflow-tooltip="true" />
                <el-table-column label="企业微信ID" align="center" key="weUserId" prop="weUserId" v-if="columns[2].visible" :show-overflow-tooltip="true" min-width="100" />
@@ -148,13 +148,14 @@
                </el-table-column>
                <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
                   <template #default="scope">
-<!--                        <el-button-->
-<!--                           type="text"-->
-<!--                           icon="Edit"-->
-<!--                           size="small"-->
-<!--                           @click="handleUpdate(scope.row)"-->
-<!--                           v-hasPermi="['system:user:edit']"-->
-<!--                        >修改</el-button>-->
+                        <el-button
+                           type="text"
+                           icon="Edit"
+                           size="small"
+                           v-if="isWecomAccount == 1"
+                           @click="handleUpdate(scope.row)"
+                           v-hasPermi="['system:user:edit']"
+                        >修改</el-button>
                         <el-button
                            type="text"
                            icon="Delete"
@@ -331,6 +332,7 @@ import { treeselect } from "@/api/system/dept";
 import { listRole} from "@/api/system/role";
 import { listPost} from "@/api/system/post";
 import { changeUserStatus, listUser, delUser, getUser, updateUser, addUser, synchWeUser } from "@/api/system/user";
+import {getCurrUserBaseInfo} from '@/api/company/info';
 import {reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
 
@@ -352,6 +354,8 @@ const deptName = ref("");
 const deptOptions = ref(undefined);
 const postOptions = ref([]);
 const roleOptions = ref([]);
+
+const isWecomAccount = ref('')
 /*** 用户导入参数 */
 const upload = reactive({
   // 是否显示弹出层（用户导入）
@@ -591,8 +595,16 @@ function handleSynchro() {
     }
   })
 }
+function getBaseInfo () {
+  getCurrUserBaseInfo().then(res => {
+    if (res.code === 200) {
+      isWecomAccount.value = res.data.isWecomAccount
+    }
+  })
+}
 
 getTreeselect();
 getList();
 loadRolePost()
+getBaseInfo()
 </script>
