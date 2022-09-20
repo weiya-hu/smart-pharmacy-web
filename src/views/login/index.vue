@@ -126,7 +126,7 @@ const wecomControlLogin = () => {
 }
 
 const login = async () => {
-  // setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcxODg1Nzg1ODM1Njc5NzQ0LCJ1c2VyX2tleSI6IjQwMDNiMjM1MDU2MDQ4NzZiMTE4YWI3NzgyMmUwMzVjIiwidXNlcm5hbWUiOiLnpZ3luIUifQ.5n9tDz_WGd7rfU2hnXv_uD2FXHIJZPpFNFoR2mBLZ1sl_hsHt7eVqTPVdoqC9WWnfjRJhErna96py1QICgxpOw')
+  // setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcxODg1Nzg1ODM1Njc5NzQ0LCJ1c2VyX2tleSI6ImM2M2UyODc2ZDEzNjQxNWY4NTI1NGRmNjg1NmE2OGQ3IiwidXNlcm5hbWUiOiLnpZ3luIUifQ.TJr2kR8ML9wpVhnOZI5XQHWOcNsiCbq8O1-nnf0jLZnrt3l7ROFKDq6e4l9KoRFAAkTrxu-9TnRX9BNq7Jgv2w')
   removeToken()
   if (GetQueryString('state') === 'wecom') {
     await getOauthLogin()

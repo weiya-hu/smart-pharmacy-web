@@ -130,12 +130,16 @@
                            :show-overflow-tooltip="true"/>
           <el-table-column label="成员名称" align="center" key="userName" prop="userName" v-if="columns[1].visible"
                            :show-overflow-tooltip="true"/>
-          <el-table-column label="企业微信ID" align="center" key="weUserId" prop="weUserId" v-if="columns[2].visible"
-                           :show-overflow-tooltip="true" min-width="100"/>
           <el-table-column label="部门" align="center" key="deptname" prop="deptname" v-if="columns[3].visible"
                            :show-overflow-tooltip="true"/>
           <el-table-column label="手机号码" align="center" key="mobile" prop="mobile" v-if="columns[4].visible"
                            width="120"/>
+          <el-table-column label="微信OpenId" align="center" key="enable" v-if="isWecomAccount===0" width="200">
+            <template #default="scope">
+              <span v-if="scope.row.wechatOpenid">{{scope.row.wechatOpenid}}</span>
+              <el-button v-else  type="primary" link @click="showQrCode=true">请使用微信扫码激活</el-button>
+            </template>
+          </el-table-column>
           <el-table-column label="状态" align="center" key="enable" v-if="columns[5].visible">
             <template #default="scope">
               <!--                     <el-switch-->
@@ -339,7 +343,7 @@
         </div>
       </template>
     </el-dialog>
-    <el-dialog v-model="showQrCode" title="扫码创建" width="400px" :close-on-click-modal="false">
+    <el-dialog v-model="showQrCode" title="扫码加入" width="400px" :close-on-click-modal="false">
       <div class="wecom-url">
         <span >企业成员扫以下二维码加入企业</span>
         <img :src="qrCodeUrl" alt="" style="width: 100%;margin-top: 10px"/>
@@ -591,17 +595,10 @@ function cancel() {
 
 /** 新增按钮操作 */
 function handleAdd() {
-  // reset();
-  // initTreeData();
-  // open.value = true;
-  // title.value = "添加成员";
-  getInviteQrcode({suiteId: 'wx638b6577cf54981f'})
-      .then(res => {
-        if (res.code === 200) {
-          qrCodeUrl.value = res.data
-          showQrCode.value = true
-        }
-      })
+  reset();
+  initTreeData();
+  open.value = true;
+  title.value = "添加成员";
 };
 
 /** 修改按钮操作 */
@@ -652,24 +649,30 @@ function handleSynchro() {
 }
 
 function getBaseInfo() {
-  let userStore = useUserStore()
-  if (userStore.corpInfo) {
-    isWecomAccount.value = userStore.corpInfo.isWecomAccount
-  } else {
     getCurrUserBaseInfo().then(res => {
       if (res.code === 200) {
-        data.value = res.data
-        userStore.setCorpInfo(data.value)
-        isWecomAccount.value = userStore.corpInfo.isWecomAccount
+        isWecomAccount.value = res.data.isWecomAccount
+        getList();
       }
     })
-  }
+}
+
+
+const getQrCode = ()=>{
+  getInviteQrcode({suiteId: 'wx638b6577cf54981f'})
+      .then(res => {
+        if (res.code === 200) {
+          qrCodeUrl.value = res.data
+          // showQrCode.value = true
+        }
+      })
 }
 
 getTreeselect();
-getList();
 loadRolePost()
 getBaseInfo()
+getQrCode()
+
 </script>
 <style lang="scss" scoped>
 .wecom-url {
