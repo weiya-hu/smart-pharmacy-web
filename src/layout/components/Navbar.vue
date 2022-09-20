@@ -65,6 +65,7 @@ function getInfo() {
   getCurrUserBaseInfo().then(res =>{
     if (res.code === 200) {
       data.value = res.data
+      userStore.setCorpInfo(data.value)
     }
   })
 }

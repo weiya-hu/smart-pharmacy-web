@@ -139,11 +139,14 @@
                   placeholder="请选择名称 / 如没有需要的供应商，请输入名称"
                   clearable
                   style="width: 100%"
+                  v-if="form.type !==5 "
               >
                 <el-option v-for="item in nameList" :key="item.id" :label="item.name" :value="item.id"/>
               </el-select>
+
+              <el-input v-if="form.type === 5" v-model="form.name"></el-input>
             </el-form-item>
-            <el-form-item label="业务方编码" prop="code">
+            <el-form-item label="业务方编码" prop="code" v-show="form.type !== 5">
               <el-input v-model="form.code" style="width: 100%" placeholder="业务方编码"/>
             </el-form-item>
           </el-col>
@@ -237,7 +240,6 @@ const data = reactive({
     pageSize: 10,
   },
   rules: {
-    relationId: [{required: true, message: "机构名称不能为空", trigger: "blur"}],
     type: [{required: true, message: "类型不能为空", trigger: "change"}],
   },
 });

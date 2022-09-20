@@ -22,3 +22,13 @@ export function getCurrUserBaseInfo() {
         method: 'GET',
     })
 }
+
+//获取邀请成员二维码
+export function getInviteQrcode(data){
+    return request({
+        url: `/wecom/corpinfo/info/getInviteQrcode`,
+        method: 'GET',
+        params:data
+    })
+}
+

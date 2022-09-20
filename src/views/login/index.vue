@@ -40,7 +40,7 @@
 import wxlogin from 'vue-wxlogin';
 import {oauthLogin, wechatLogin} from "../../api/login";
 import {GetQueryString} from '@/utils/validate';
-import {setToken, getToken} from "../../utils/auth";
+import {setToken, getToken,removeToken} from "../../utils/auth";
 
 const {proxy} = getCurrentInstance();
 const router = useRouter(), route = useRoute();
@@ -126,7 +126,8 @@ const wecomControlLogin = () => {
 }
 
 const login = async () => {
-  setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcxODg2MTMzMDA2NjEwNDMyLCJ1c2VyX2tleSI6IjZkNDQ2MWEwMGFlMTQyNDhiZjFiYTQ5Y2ZkMGM4MmU4IiwidXNlcm5hbWUiOiJ3b0FmbVNEd0FBXzhpaGpfNFE1V2llcVZFeS1WR25ldyJ9.Z5smnD9xHiIAa1Lyucfd19LnA6ZbLBR4DTZAzi7ajzCmpXnLAHMpvxx1JgX3E3zWN5Edvrm1dJGyyJxW8vH8Og')
+  // setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcxODg1Nzg1ODM1Njc5NzQ0LCJ1c2VyX2tleSI6IjQwMDNiMjM1MDU2MDQ4NzZiMTE4YWI3NzgyMmUwMzVjIiwidXNlcm5hbWUiOiLnpZ3luIUifQ.5n9tDz_WGd7rfU2hnXv_uD2FXHIJZPpFNFoR2mBLZ1sl_hsHt7eVqTPVdoqC9WWnfjRJhErna96py1QICgxpOw')
+  removeToken()
   if (GetQueryString('state') === 'wecom') {
     await getOauthLogin()
   } else if (GetQueryString('state') === 'wechat') {
