@@ -8,35 +8,64 @@
     <div class="form-box">
       <el-form v-model="form" label-position="left" label-width="85px">
         <el-form-item label="企业logo" prop="logo">
+<!--          <div class="logo">-->
+<!--            <el-upload-->
+<!--               style="width:350px;height:180px;border: 1px dashed #ddd;"-->
+<!--               v-if="inputType!=='readey'"-->
+<!--               class="avatar-uploader"-->
+<!--               accept="image/*"-->
+<!--               :file-list="fileList"-->
+<!--               :action="uploadData.uploadUrl"-->
+<!--               :headers="{ 'Authorization': uploadData.token }"-->
+<!--               :show-file-list="true"-->
+<!--               :on-success="handleAvatarSuccess"-->
+<!--               :before-upload="beforeAvatarUpload"-->
+<!--               :on-change="handleChange">-->
+<!--            <div style="textAlign: center;width: 350px;height:180px;line-height: 180px">-->
+<!--                <el-icon size="32px">-->
+<!--                  <Plus/>-->
+<!--                </el-icon>-->
+<!--              </div>-->
+<!--            </el-upload>-->
+
+<!--            <div v-if="inputType==='readey'" class="demo-image__preview">-->
+<!--              <el-image style="width:350px;height:180px;" :src="uploadData.url" :initial-index="4" fit="cover"/>-->
+<!--            </div>-->
+<!--            <div class="item_logoDes">推荐尺寸350*180</div>-->
+<!--          </div>-->
           <div>
             <el-upload
-             v-if="inputType!=='readey'"
-             class="avatar-uploader"
-             accept="image/*"
-             :file-list="fileList"
-             :action="uploadData.uploadUrl"
-             :headers="{ 'Authorization': uploadData.token }"
-             :show-file-list="false"
-             :on-success="handleAvatarSuccess"
-             :before-upload="beforeAvatarUpload"
-             :on-change="handleChange"
-             style="width:180px;height:180px;"
-            >
-              <div style="textAlign: center;width:180px;height:180px;border: 1px dashed #ddd;">
-                <el-icon style="marginTop:50px" size="80px">
-                  <Plus/>
-                </el-icon>
-              </div>
-            </el-upload>
-
-            <div v-if="inputType==='readey'" class="demo-image__preview">
-              <el-image
-                  :src="form.logo"
-                  :initial-index="4"
-                  fit="cover"
-                  style="width:210px;height:100px;"/>
-            </div>
-            <div class="form-tips">推荐尺寸702*180</div>
+                  :disabled="inputType==='readey'"
+                  :action="uploadData.uploadUrl"
+                  :headers="{'Authorization':uploadData.token}"
+                  :data="uploadData.imgBannerParam"
+                  method:="POST"
+                  accept="image/*"
+                  :limit="1"
+                  :file-list="fileList"
+                  :show-file-list="false"
+                  :on-success="handleAvatarSuccess"
+                  :before-upload="beforeAvatarUpload">
+                <div class="demo-image__placeholder">
+                  <div class="block">
+                    <el-image :src="form.logo" v-if="form.logo !== ''" style="width: 350px;height: 150px;border: 1px solid #c0c4cc;">
+                      <template #placeholder>
+                        <div class="image-slot">Loading<span class="dot">...</span></div>
+                      </template>
+                    </el-image>
+                    <el-image v-if="form.logo == ''" style="width: 350px;height: 150px;border: 1px solid #c0c4cc">
+                      <template #error>
+                        <div class="image-slot" style="display: flex;justify-content:center;align-items:center;height: 150px">
+                          <el-icon :size="48">
+                            <Picture/>
+                          </el-icon>
+                        </div>
+                      </template>
+                    </el-image>
+                  </div>
+                </div>
+              </el-upload>
+            <div class="form-tips">推荐尺寸350*180</div>
           </div>
         </el-form-item>
         <el-form-item label="企微ID" prop="plainCorpId">
@@ -60,6 +89,9 @@
                     clearable
                     :disabled="inputType==='readey'"
                     />
+        </el-form-item>
+        <el-form-item label="发票抬头">
+          <el-input v-model="form.invoiceTitle" :disabled="inputType==='readey'" />
         </el-form-item>
         <el-form-item label="企业电话">
           <el-input v-model="form.phone" clearable :disabled="inputType==='readey'" />
@@ -129,10 +161,11 @@ const userStore = useUserStore(), corpId = userStore.userInfo.corpId
 let inputType = ref('readey')
 let store = useStore()
 let uploadData = reactive({
-  uploadUrl: import.meta.env.VITE_APP_BASE_API + '/file/file/upload?path=temp&corpId=' + corpId,
+  uploadUrl: import.meta.env.VITE_APP_BASE_API + '/file/file/upload',
   token: getToken(),
   dialogVisible: false,
-  url: ''
+  url: '',
+  imgBannerParam: {path: 'corpInfo/corpImage/'},
 })
 const fileList = ref([])
 const form = ref({
@@ -143,6 +176,7 @@ const form = ref({
   corpType: '', // 企业类型:1厂家,2代理商,3连锁药房,4药店
   address: '', // 详细地址
   code: '', // 门店编码
+  invoiceTitle: '', // 发票抬头
   phone: '', // 企业电话
   // brandType: '', // 连锁品牌：1和平，2鑫斛，3 等等其他的
   userCount: '', // 企业人数
@@ -217,7 +251,6 @@ function getFormData() {
   getCorpInfo(corpId).then(res => {
     if (res.code === 200) {
       form.value = res.data
-      console.log('form', form.value)
     }
   })
 }

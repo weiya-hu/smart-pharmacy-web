@@ -1,24 +1,24 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-         <el-form-item label="岗位编码" prop="jobId">
+         <el-form-item label="职务编码" prop="jobId">
             <el-input
                v-model="queryParams.jobId"
-               placeholder="请输入岗位编码"
+               placeholder="请输入职务编码"
                clearable
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="岗位名称" prop="name">
+         <el-form-item label="职务名称" prop="name">
             <el-input
                v-model="queryParams.name"
-               placeholder="请输入岗位名称"
+               placeholder="请输入职务名称"
                clearable
                @keyup.enter="handleQuery"
             />
          </el-form-item>
          <el-form-item label="状态" prop="state">
-            <el-select v-model="queryParams.state" placeholder="岗位状态" clearable>
+            <el-select v-model="queryParams.state" placeholder="职务状态" clearable>
                <el-option
                   v-for="dict in sys_normal_disable"
                   :key="dict.value"
@@ -77,9 +77,9 @@
 
       <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="55" />
-         <el-table-column label="岗位编号" prop="jobId" show-tooltip-when-overflow />
-         <el-table-column label="岗位名称" prop="name" />
-         <el-table-column label="岗位排序" prop="sort" />
+         <el-table-column label="职务编号" prop="jobId" show-tooltip-when-overflow />
+         <el-table-column label="职务名称" prop="name" />
+         <el-table-column label="职务排序" prop="sort" />
          <el-table-column label="状态" prop="state">
             <template #default="scope">
 <!--               <dict-tag :options="sys_normal_disable" :value="scope.row.state" />-->
@@ -120,30 +120,30 @@
          @pagination="getList"
       />
 
-      <!-- 添加或修改岗位对话框 -->
+      <!-- 添加或修改职务对话框 -->
       <el-dialog :title="title" v-model="open" width="50%" append-to-body>
          <el-form ref="postRef" :model="form" :rules="rules" label-width="100px">
            <el-row>
              <el-col :span="24">
-               <el-form-item label="岗位名称" prop="name">
-                 <el-input v-model="form.name" placeholder="请输入岗位名称" />
+               <el-form-item label="职务名称" prop="name">
+                 <el-input v-model="form.name" placeholder="请输入职务名称" />
                </el-form-item>
              </el-col>
              <el-col :span="24">
-               <el-form-item label="岗位类型" prop="code">
+               <el-form-item label="职务性质" prop="code">
                  <el-radio-group v-model.number="form.code">
                    <el-radio :label="item.value" v-for="item in post_type" :key="item.value">{{item.label}}</el-radio>
                  </el-radio-group>
                </el-form-item>
              </el-col>
              <el-col :span="12">
-               <el-form-item label="岗位顺序" prop="sort">
+               <el-form-item label="职务顺序" prop="sort">
                  <el-input-number v-model.number="form.sort" controls-position="right" :min="0" style="width: 100%" />
                </el-form-item>
              </el-col>
 
              <el-col :span="12">
-               <el-form-item label="岗位状态" prop="state">
+               <el-form-item label="职务状态" prop="state">
                  <el-radio-group v-model.number="form.state">
 <!--                   <el-radio-->
 <!--                       v-for="dict in sys_normal_disable"-->
@@ -198,15 +198,15 @@ const data = reactive({
     jobId:'',
   },
   rules: {
-    name: [{ required: true, message: "岗位名称不能为空", trigger: "blur" }],
-    sort: [{ required: true, message: "岗位顺序不能为空", trigger: "blur" }],
-    code: [{ required: true, message: "请选择岗位类型", trigger: "change" }],
+    name: [{ required: true, message: "职务名称不能为空", trigger: "blur" }],
+    sort: [{ required: true, message: "职务顺序不能为空", trigger: "blur" }],
+    code: [{ required: true, message: "请选择职务性质", trigger: "change" }],
   }
 });
 
 const { queryParams, form, rules } = toRefs(data);
 
-/** 查询岗位列表 */
+/** 查询职务列表 */
 function getList() {
   loading.value = true;
   listPost(queryParams.value).then(response => {
@@ -255,7 +255,7 @@ function handleSelectionChange(selection) {
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = "添加岗位";
+  title.value = "添加职务";
 }
 /** 修改按钮操作 */
 function handleUpdate(row) {
@@ -265,7 +265,7 @@ function handleUpdate(row) {
   getPost({id: jobIds}).then(response => {
     form.value = response.data;
     open.value = true;
-    title.value = "修改岗位";
+    title.value = "修改职务";
   });
 }
 /** 提交按钮 */
@@ -291,7 +291,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const jobIds = row.jobId || ids.value;
-  proxy.$modal.confirm('是否确认删除岗位编号为"' + jobIds + '"的数据项？').then(function() {
+  proxy.$modal.confirm('是否确认删除职务编号为"' + jobIds + '"的数据项？').then(function() {
     return delPost(jobIds);
   }).then(() => {
     getList();

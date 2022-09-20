@@ -11,15 +11,15 @@
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="手机号码" prop="mobile">
-            <el-input
-               v-model="queryParams.mobile"
-               placeholder="请输入手机号码"
-               clearable
-               style="width: 240px"
-               @keyup.enter="handleQuery"
-            />
-         </el-form-item>
+<!--         <el-form-item label="手机号码" prop="mobile">-->
+<!--            <el-input-->
+<!--               v-model="queryParams.mobile"-->
+<!--               placeholder="请输入手机号码"-->
+<!--               clearable-->
+<!--               style="width: 240px"-->
+<!--               @keyup.enter="handleQuery"-->
+<!--            />-->
+<!--         </el-form-item>-->
          <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -117,7 +117,7 @@ const queryParams = reactive({
   pageSize: 10,
   roleIds: route.query.roleId,
   userName: undefined,
-  mobile: undefined,
+  // mobile: undefined,
 });
 
 /** 查询授权用户列表 */

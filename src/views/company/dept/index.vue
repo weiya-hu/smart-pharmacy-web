@@ -1,16 +1,16 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
-         <el-form-item label="部门名称" prop="name">
+         <el-form-item label="机构名称" prop="name">
             <el-input
                v-model="queryParams.name"
-               placeholder="请输入部门名称"
+               placeholder="请输入机构名称"
                clearable
                @keyup.enter="handleQuery"
             />
          </el-form-item>
          <el-form-item label="状态" prop="state">
-            <el-select v-model="queryParams.state" placeholder="部门状态" clearable>
+            <el-select v-model="queryParams.state" placeholder="机构状态" clearable>
                <el-option
                   v-for="dict in sys_normal_disable"
                   :key="dict.value"
@@ -54,8 +54,8 @@
          :default-expand-all="isExpandAll"
          :tree-props="{ children: 'children' }"
       >
-         <el-table-column prop="name" label="部门名称" min-width="200px" show-tooltip-when-overflow></el-table-column>
-         <el-table-column prop="fullname" label="部门全称"></el-table-column>
+         <el-table-column prop="name" label="机构名称" min-width="200px" show-tooltip-when-overflow></el-table-column>
+         <el-table-column prop="fullname" label="机构全称"></el-table-column>
          <el-table-column prop="sort" label="排序" ></el-table-column>
          <el-table-column prop="state" label="状态" >
             <template #default="scope">
@@ -109,7 +109,7 @@
          <el-form ref="deptRef" :model="form" :rules="rules" label-width="100px">
             <el-row>
                <el-col :span="24">
-                  <el-form-item label="上级部门" >
+                  <el-form-item label="上级机构" >
                      <el-tree-select
                         v-model="form.parentId"
                         :data="deptOptions"
@@ -117,20 +117,20 @@
                         :props="{ value: 'id', label: 'name', children: 'children' }"
                         value-key="id"
                         clearable
-                        placeholder="选择上级部门"
+                        placeholder="选择上级机构"
                         check-strictly
                         style="width: 100%"
                      />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="部门简称" prop="name">
-                     <el-input v-model="form.name" placeholder="请输入部门名称" />
+                  <el-form-item label="机构名称" prop="name">
+                     <el-input v-model="form.name" placeholder="请输入机构名称" />
                   </el-form-item>
                </el-col>
               <el-col :span="12">
-                <el-form-item label="部门全称" prop="fullname">
-                  <el-input v-model="form.fullname" placeholder="请输入部门全称" />
+                <el-form-item label="机构全称" prop="fullname">
+                  <el-input v-model="form.fullname" placeholder="请输入机构全称" />
                 </el-form-item>
               </el-col>
                <el-col :span="12">
@@ -139,7 +139,7 @@
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="部门状态">
+                  <el-form-item label="机构状态">
                      <el-radio-group v-model="form.state">
                         <el-radio
                            v-for="dict in sys_normal_disable"
@@ -186,8 +186,8 @@ const data = reactive({
     pageSize: 10,
   },
   rules: {
-    name: [{ required: true, message: "部门名称不能为空", trigger: "blur" }],
-    fullname: [{ required: true, message: "部门全称不能为空", trigger: "blur" }],
+    name: [{ required: true, message: "机构名称不能为空", trigger: "blur" }],
+    fullname: [{ required: true, message: "机构全称不能为空", trigger: "blur" }],
     sort: [{ required: true, message: "显示排序不能为空", trigger: "blur" }],
   },
 });
@@ -241,7 +241,7 @@ function handleAdd(row) {
   //   form.value.parentId = row.deptId;
   // }
   open.value = true;
-  title.value = "添加部门";
+  title.value = "添加机构";
 }
 /** 展开/折叠操作 */
 function toggleExpandAll() {
@@ -262,7 +262,7 @@ function handleUpdate(row) {
   getDept(row.deptId).then(response => {
     form.value = response.data;
     open.value = true;
-    title.value = "修改部门";
+    title.value = "修改机构";
   });
 }
 /** 提交按钮 */

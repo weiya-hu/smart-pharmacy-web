@@ -10,15 +10,15 @@
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="权限字符" prop="roleKey">
-            <el-input
-               v-model="queryParams.roleKey"
-               placeholder="请输入权限字符"
-               clearable
-               style="width: 240px"
-               @keyup.enter="handleQuery"
-            />
-         </el-form-item>
+<!--         <el-form-item label="权限字符" prop="roleKey">-->
+<!--            <el-input-->
+<!--               v-model="queryParams.roleKey"-->
+<!--               placeholder="请输入权限字符"-->
+<!--               clearable-->
+<!--               style="width: 240px"-->
+<!--               @keyup.enter="handleQuery"-->
+<!--            />-->
+<!--         </el-form-item>-->
          <el-form-item label="状态" prop="status">
             <el-select
                v-model="queryParams.status"
@@ -96,7 +96,7 @@
          <el-table-column type="selection" width="55" />
          <el-table-column label="角色编号" prop="roleId" :show-overflow-tooltip="true" />
          <el-table-column label="角色名称" prop="name" :show-overflow-tooltip="true" />
-         <el-table-column label="权限字符" prop="roleKey" :show-overflow-tooltip="true" />
+<!--         <el-table-column label="权限字符" prop="roleKey" :show-overflow-tooltip="true" />-->
          <el-table-column label="显示顺序" prop="sort" />
          <el-table-column label="状态">
             <template #default="scope">
@@ -172,19 +172,19 @@
                  <el-input v-model="form.name" placeholder="请输入角色名称" />
                </el-form-item>
              </el-col>
-             <el-col :span="24">
-               <el-form-item prop="roleKey">
-                 <template #label>
-                  <span>
-                     <el-tooltip content="控制器中定义的权限字符，如：@PreAuthorize(`@ss.hasRole('admin')`)" placement="top">
-                        <el-icon><question-filled /></el-icon>
-                     </el-tooltip>
-                     权限字符
-                  </span>
-                 </template>
-                 <el-input v-model="form.roleKey" placeholder="请输入权限字符" />
-               </el-form-item>
-             </el-col>
+<!--             <el-col :span="24">-->
+<!--               <el-form-item prop="roleKey">-->
+<!--                 <template #label>-->
+<!--                  <span>-->
+<!--                     <el-tooltip content="控制器中定义的权限字符，如：@PreAuthorize(`@ss.hasRole('admin')`)" placement="top">-->
+<!--                        <el-icon><question-filled /></el-icon>-->
+<!--                     </el-tooltip>-->
+<!--                     权限字符-->
+<!--                  </span>-->
+<!--                 </template>-->
+<!--                 <el-input v-model="form.roleKey" placeholder="请输入权限字符" />-->
+<!--               </el-form-item>-->
+<!--             </el-col>-->
              <el-col :span="12">
                <el-form-item label="角色顺序" prop="sort">
                  <el-input-number v-model="form.sort" controls-position="right" :min="0" style="width: 100%" />
@@ -263,14 +263,14 @@
       </el-dialog>
 
       <!-- 分配角色数据权限对话框 -->
-      <el-dialog :title="title" v-model="openDataScope" width="750px" append-to-body>
+      <el-dialog :title="title" v-model="openDataScope" width="650px" append-to-body>
          <el-form :model="form" label-width="80px" class="dialog-form2">
             <el-form-item label="角色名称">
               <el-input v-model="form.name" :disabled="true" />
             </el-form-item>
-            <el-form-item label="权限字符">
-              <el-input v-model="form.roleKey" :disabled="true" />
-            </el-form-item>
+<!--            <el-form-item label="权限字符">-->
+<!--              <el-input v-model="form.roleKey" :disabled="true" />-->
+<!--            </el-form-item>-->
             <el-form-item label="权限范围">
               <el-select v-model="form.dataScope" @change="dataScopeSelectChange" style="width: 100%">
                 <el-option
@@ -353,12 +353,12 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     name: undefined,
-    roleKey: undefined,
+    // roleKey: undefined,
     status: undefined
   },
   rules: {
     name: [{ required: true, message: "角色名称不能为空", trigger: "blur" }],
-    roleKey: [{ required: true, message: "权限字符不能为空", trigger: "blur" }],
+    // roleKey: [{ required: true, message: "权限字符不能为空", trigger: "blur" }],
     sort: [{ required: true, message: "角色顺序不能为空", trigger: "blur" }]
   },
 });
@@ -470,16 +470,16 @@ function reset() {
   form.value = {
     roleId: undefined,
     name: undefined,
-    roleKey: undefined,
+    // roleKey: undefined,
     sort: 0,
     status: 1,
     menuIds: [],
     deptIds: [],
-    admin:0,
+    // admin:0,
     menuCheckStrictly: true,
     deptCheckStrictly: true,
     note: undefined,
-    sysDefault:0,
+    // sysDefault:0,
     dataScope: undefined
   };
   proxy.resetForm("roleRef");
