@@ -230,6 +230,7 @@
                   :props="{ value: 'id', label: 'label', children: 'children' }"
                   value-key="id"
                   multiple
+                  default-expand-all
                   placeholder="请选择归属部门"
                   style="width: 100%"
               />
@@ -359,7 +360,7 @@ import {listRole} from "@/api/system/role";
 import {listPost} from "@/api/system/post";
 import {changeUserStatus, listUser, delUser, getUser, updateUser, addUser, synchWeUser} from "@/api/system/user";
 import {getCurrUserBaseInfo, getInviteQrcode} from '@/api/company/info';
-import {reactive, ref} from "vue";
+import {nextTick, reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
 import useUserStore from '@/store/modules/user'
 
@@ -602,12 +603,13 @@ function handleAdd() {
 };
 
 /** 修改按钮操作 */
-function handleUpdate(row) {
+async function handleUpdate(row) {
+  console.log('sys_user_sex',sys_user_sex)
   reset();
-  initTreeData();
+  await initTreeData();
   const userId = row.userId || ids.value;
-  getUser(userId).then(response => {
-    form.value = response.data;
+  await getUser(userId).then(response => {
+      form.value = response.data;
     //   postOptions.value = response.posts;
     //   roleOptions.value = response.roles;
     //   form.value.postIds = response.postIds;
