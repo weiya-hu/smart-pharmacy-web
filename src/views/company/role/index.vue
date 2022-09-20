@@ -113,13 +113,13 @@
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="操作" class-name="small-padding fixed-width" width="280">
+         <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="280">
             <template #default="scope">
                 <el-button
                   type="text"
                   icon="Edit"
                   size="small"
-                  v-if="scope.row.name !== '超级管理员'"
+                  v-if="scope.row.admin !== 1"
                   @click="handleUpdate(scope.row)"
                   v-hasPermi="['system:role:edit']"
                 >修改
@@ -128,7 +128,7 @@
                   type="text"
                   icon="Delete"
                   size="small"
-                  v-if="scope.row.name !== '超级管理员'"
+                  v-if="scope.row.admin !== 1"
                   @click="handleDelete(scope.row)"
                   v-hasPermi="['system:role:remove']"
                 >删除
@@ -137,7 +137,6 @@
                   type="text"
                   icon="CircleCheck"
                   size="small"
-                  v-if="scope.row.name !== '超级管理员'"
                   @click="handleDataScope(scope.row)"
                   v-hasPermi="['system:role:edit']"
                 >数据权限
@@ -146,7 +145,6 @@
                   type="text"
                   icon="User"
                   size="small"
-                  v-if="scope.row.name !== '超级管理员'"
                   @click="handleAuthUser(scope.row)"
                   v-hasPermi="['system:role:edit']"
                 >分配用户
@@ -164,7 +162,7 @@
       />
 
       <!-- 添加或修改角色配置对话框 -->
-      <el-dialog :title="title" v-model="open" width="700px" append-to-body>
+      <el-dialog :title="title" v-model="open" width="700px" append-to-body :close-on-click-modal="false" draggable>
          <el-form ref="roleRef" :model="form" :rules="rules" label-width="100px" class="dialog-form">
            <el-row>
              <el-col :span="24">
@@ -263,7 +261,7 @@
       </el-dialog>
 
       <!-- 分配角色数据权限对话框 -->
-      <el-dialog :title="title" v-model="openDataScope" width="650px" append-to-body>
+      <el-dialog :title="title" v-model="openDataScope" width="650px" append-to-body :close-on-click-modal="false" draggable>
          <el-form :model="form" label-width="80px" class="dialog-form2">
             <el-form-item label="角色名称">
               <el-input v-model="form.name" :disabled="true" />

@@ -97,7 +97,7 @@
     />
 
     <!-- 添加或修改部门对话框 -->
-    <el-dialog :title="title" v-model="open" width="60%" append-to-body>
+    <el-dialog :title="title" v-model="open" width="60%" append-to-body :close-on-click-modal="false" draggable>
       <el-form ref="deptRef" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="24" v-if="form.parentNodeId !== 0">

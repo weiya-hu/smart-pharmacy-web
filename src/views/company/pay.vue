@@ -16,10 +16,11 @@
           <p class="form-tips">获取路径：企业管理 — 应用管理 — 企业支付 — Secret <el-button size="small" type="primary" link @click="openUrl('https://work.weixin.qq.com/wework_admin/frame#hongbao/guide/hongbaoGuideEntry')">前往复制</el-button></p>
         </el-form-item>
         <el-divider />
-        <el-form-item label="商户号">
-          <el-input v-model="form.payMchId" :disabled="inputType==='readey'" />
-          <p class="form-tips">获取途径：<el-button size="small" type="primary" link @click="openUrl('https://work.weixin.qq.com/wework_admin/frame#hongbao/guide/hongbaoGuideEntry')">企业微信后台</el-button> — 应用管理 — 支付 — 商号管理（如未户户绑定，清绑定后获取）</p>
-        </el-form-item>
+        <p class="form-tips">获取途径：<el-button size="small" type="primary" link @click="openUrl('https://work.weixin.qq.com/wework_admin/frame#hongbao/guide/hongbaoGuideEntry')">企业微信后台</el-button> — 应用管理 — 支付 — 商号管理（如未户户绑定，清绑定后获取）</p>
+<!--        <el-form-item label="商户号">-->
+<!--          <el-input v-model="form.payMchId" :disabled="inputType==='readey'" />-->
+<!--          <p class="form-tips">获取途径：<el-button size="small" type="primary" link @click="openUrl('https://work.weixin.qq.com/wework_admin/frame#hongbao/guide/hongbaoGuideEntry')">企业微信后台</el-button> — 应用管理 — 支付 — 商号管理（如未户户绑定，清绑定后获取）</p>-->
+<!--        </el-form-item>-->
 <!--        <el-form-item label="商户密钥">-->
 <!--          <el-input v-model="form.payMchKey" :disabled="inputType==='readey'" />-->
 <!--          <p class="form-tips">获取路径 ：<el-button size="small" type="primary" link @click="openUrl('https://pay.weixin.qq.com')">微信支付商户平台 </el-button>— 账户中心 — 账户设置 — API安全 — 设置APIv2密钥</p>-->
@@ -74,7 +75,7 @@ const form = ref({
   corpId: undefined,
   payAgentId: undefined,
   payAgentSecret: undefined,
-  payMchId: undefined,
+  // payMchId: undefined,
   // payMchKey: undefined,
   // existsPayKeyPath: undefined
 }) // 表单

@@ -55,7 +55,7 @@
          :tree-props="{ children: 'children' }"
       >
          <el-table-column prop="name" label="机构名称" min-width="200px" show-tooltip-when-overflow></el-table-column>
-         <el-table-column prop="fullname" label="机构全称"></el-table-column>
+         <el-table-column prop="fullname"  min-width="200px" label="机构全称" show-tooltip-when-overflow></el-table-column>
          <el-table-column prop="sort" label="排序" ></el-table-column>
          <el-table-column prop="state" label="状态" >
             <template #default="scope">
@@ -105,7 +105,7 @@
      />
 
       <!-- 添加或修改部门对话框 -->
-      <el-dialog :title="title" v-model="open" width="750px" append-to-body>
+      <el-dialog :title="title" v-model="open" width="750px" append-to-body :close-on-click-modal="false" draggable>
          <el-form ref="deptRef" :model="form" :rules="rules" label-width="100px">
             <el-row>
                <el-col :span="24">

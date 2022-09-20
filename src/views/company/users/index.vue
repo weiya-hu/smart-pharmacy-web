@@ -198,7 +198,7 @@
     </el-row>
 
     <!-- 添加或修改用户配置对话框 -->
-    <el-dialog :title="title" v-model="open" width="58%" append-to-body>
+    <el-dialog :title="title" v-model="open" width="58%" append-to-body :close-on-click-modal="false" draggable>
       <el-form :model="form" :rules="rules" ref="userRef" label-width="80px">
         <el-row>
           <el-col :span="12">
@@ -306,7 +306,7 @@
     </el-dialog>
 
     <!-- 用户导入对话框 -->
-    <el-dialog :title="upload.title" v-model="upload.open" width="50%" append-to-body>
+    <el-dialog :title="upload.title" v-model="upload.open" width="50%" append-to-body :close-on-click-modal="false" draggable>
       <el-upload
           ref="uploadRef"
           :limit="1"
@@ -343,7 +343,7 @@
         </div>
       </template>
     </el-dialog>
-    <el-dialog v-model="showQrCode" title="扫码加入" width="400px" :close-on-click-modal="false">
+    <el-dialog v-model="showQrCode" title="扫码加入" width="400px" :close-on-click-modal="false" draggable>
       <div class="wecom-url">
         <span >企业成员扫以下二维码加入企业</span>
         <img :src="qrCodeUrl" alt="" style="width: 100%;margin-top: 10px"/>
