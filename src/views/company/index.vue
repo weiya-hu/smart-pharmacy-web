@@ -134,6 +134,9 @@
           <span>{{ form.userCount }}/{{ form.corpUserMax }}</span>
         </el-form-item>
         <el-divider />
+        <el-form-item label="企业ID">
+          <span>{{ corpId }}</span>
+        </el-form-item>
         <el-form-item label="注册号">
           <span>{{ form.registrationNumber }}</span>
         </el-form-item>
