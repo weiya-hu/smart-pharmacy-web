@@ -10,7 +10,8 @@ const useUserStore = defineStore(
         avatar: '',
         roles: [],
         permissions: [],
-        userInfo:{}
+        userInfo:{},
+        corpInfo:undefined
       }),
       actions: {
         // 登录
@@ -65,6 +66,9 @@ const useUserStore = defineStore(
               reject(error)
             })
           })
+        },
+        setCorpInfo(corpInfo){
+          this.corpInfo = corpInfo
         }
       }
     })
