@@ -76,8 +76,11 @@
             <el-option v-for="item in legalPersonList" :key="item.userId" :label="item.userName" :value="item.userId" />
           </el-select>
         </el-form-item>
-        <el-form-item label="企业名称">
+        <el-form-item label="企业名称" prop="name">
           <el-input v-model="form.name" :disabled="inputType==='readey'" />
+        </el-form-item>
+        <el-form-item label="企业全称" prop="fullname">
+          <el-input v-model="form.fullname" :disabled="inputType==='readey'" />
         </el-form-item>
         <el-form-item label="企业类型">
           <el-select v-model="form.corpType" :disabled="inputType==='readey'" placeholder="请选择" filterable style="width: 350px;">
@@ -173,6 +176,7 @@ const form = ref({
   plainCorpId: '', // 企微ID
   legalPersonId: '', // 法定代表人
   name: '', // 企业名称
+  fullname: '', // 企业全称
   corpType: '', // 企业类型:1厂家,2代理商,3连锁药房,4药店
   address: '', // 详细地址
   code: '', // 门店编码
