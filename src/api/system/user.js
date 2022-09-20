@@ -31,8 +31,8 @@ export function addUser(data) {
 // 修改用户
 export function updateUser(data) {
   return request({
-    url: '/wecom/corpinfo/user',
-    method: 'put',
+    url: '/wecom/corpinfo/user/edit',
+    method: 'POST',
     data: data
   })
 }

@@ -1,20 +1,20 @@
 <template>
    <div class="app-container">
-      <h4 class="form-header h4">基本信息</h4>
-      <el-form :model="form" label-width="80px">
-         <el-row>
-            <el-col :span="8" :offset="2">
-               <el-form-item label="用户名称" prop="nickName">
-                  <el-input v-model="form.userName" disabled />
-               </el-form-item>
-            </el-col>
+<!--      <h4 class="form-header h4">基本信息</h4>-->
+<!--      <el-form :model="form" label-width="80px">-->
+<!--         <el-row>-->
 <!--            <el-col :span="8" :offset="2">-->
-<!--               <el-form-item label="登录账号" prop="userName">-->
+<!--               <el-form-item label="用户名称" prop="nickName">-->
 <!--                  <el-input v-model="form.userName" disabled />-->
 <!--               </el-form-item>-->
 <!--            </el-col>-->
-         </el-row>
-      </el-form>
+<!--&lt;!&ndash;            <el-col :span="8" :offset="2">&ndash;&gt;-->
+<!--&lt;!&ndash;               <el-form-item label="登录账号" prop="userName">&ndash;&gt;-->
+<!--&lt;!&ndash;                  <el-input v-model="form.userName" disabled />&ndash;&gt;-->
+<!--&lt;!&ndash;               </el-form-item>&ndash;&gt;-->
+<!--&lt;!&ndash;            </el-col>&ndash;&gt;-->
+<!--         </el-row>-->
+<!--      </el-form>-->
 
       <h4 class="form-header h4">角色信息</h4>
 <!--      <el-table v-loading="loading" :row-key="getRowKey" @row-click="clickRow" ref="roleRef" @selection-change="handleSelectionChange" :data="roles.slice((pageNum - 1) * pageSize, pageNum * pageSize)">-->
@@ -28,7 +28,7 @@
              <span v-if="scope.row.admin == 0">否</span>
            </template>
          </el-table-column>
-         <el-table-column label="权限字符" prop="roleKey" />
+<!--         <el-table-column label="权限字符" prop="roleKey" />-->
          <el-table-column label="创建时间" prop="createTime" width="180">
             <template #default="scope">
                <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -58,8 +58,8 @@ const pageSize = ref(10);
 const roleIds = ref([]);
 const roles = ref([]);
 const form = ref({
-  nickName: undefined,
-  userName: undefined,
+  // nickName: undefined,
+  // userName: undefined,
   userId: undefined
 });
 
@@ -115,7 +115,7 @@ function getRoleList(){
 }
 
 async function loadPage  (){
-  form.value.userName = route.query.userName
+  // form.value.userName = route.query.userName
   await getRoleList()
   await getList()
   loading.value = false
