@@ -252,15 +252,16 @@ function toggleExpandAll() {
   });
 }
 /** 修改按钮操作 */
-function handleUpdate(row) {
+async function handleUpdate(row) {
   reset();
   // treeselect({nodeId:row.id}).then(response => {
   // deptOptions.value = proxy.handleTree(response.data.list, "id");
-  treeselect().then(response => {
+  await treeselect().then(response => {
     deptOptions.value = response.data.list
   });
-  getDept(row.deptId).then(response => {
+  await getDept(row.deptId).then(response => {
     form.value = response.data;
+    form.value.parentId = form.value.parentId.toString()
     open.value = true;
     title.value = "修改机构";
   });
