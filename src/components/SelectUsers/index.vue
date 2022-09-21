@@ -14,7 +14,6 @@
         </div>
         <div class="head-container">
           <el-tree
-
               :data="deptOptions"
               :props="{ label: 'label', children: 'children' }"
               :expand-on-click-node="false"
@@ -23,7 +22,13 @@
               highlight-current
               default-expand-all
               @node-click="handleNodeClick"
-          />
+          >
+            <template #default="{ node, data }">
+              <el-tooltip placement="top" :content="node.label">
+                <span class="text-nowrap">{{ node.label }}</span>
+              </el-tooltip>
+            </template>
+          </el-tree>
         </div>
       </el-col>
       <!--用户数据-->
@@ -239,3 +244,10 @@ getList();
 getTreeselect();
 selectedNodeId()
 </script>
+<style lang="scss" scoped>
+.text-nowrap {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+</style>

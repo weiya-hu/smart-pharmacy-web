@@ -22,7 +22,15 @@
               highlight-current
               default-expand-all
               @node-click="handleNodeClick"
-          />
+          >
+            <template #default="{ node, data }">
+              <el-tooltip placement="top" :content="node.label" :disabled="!showTip">
+                <div ref="isOverflow" class="text-nowrap">
+                  <span>{{ node.label }}</span>
+                </div>
+              </el-tooltip>
+            </template>
+          </el-tree>
         </div>
       </el-col>
       <!--用户数据-->
@@ -670,6 +678,10 @@ const getQrCode = ()=>{
         }
       })
 }
+const showTip = ref(true)
+function isShow() {
+  showTip.value = proxy.$refs.isOverflow.clientWidth < proxy.$refs.isOverflow.scrollWidth
+}
 
 getTreeselect();
 loadRolePost()
@@ -682,5 +694,11 @@ getQrCode()
   text-align: center;
   width: 240px;
   margin: 0 auto;
+}
+.text-nowrap {
+  //width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>
