@@ -1,7 +1,7 @@
 
 <template>
    <div class="app-container">
-      <el-form :model="queryParams" ref="queryRef" v-show="showSearch" :inline="true">
+      <el-form :model="queryParams" ref="queryRef" v-show="showSearch" :inline="true" @submit.native.prevent>
          <el-form-item label="用户名称" prop="userName">
             <el-input
                v-model="queryParams.userName"

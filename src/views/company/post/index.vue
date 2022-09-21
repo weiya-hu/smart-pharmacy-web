@@ -53,16 +53,16 @@
                v-hasPermi="['system:post:edit']"
             >修改</el-button>
          </el-col>
-         <el-col :span="1.5">
-            <el-button
-               type="danger"
-               plain
-               icon="Delete"
-               :disabled="multiple"
-               @click="handleDelete"
-               v-hasPermi="['system:post:remove']"
-            >删除</el-button>
-         </el-col>
+<!--         <el-col :span="1.5">-->
+<!--            <el-button-->
+<!--               type="danger"-->
+<!--               plain-->
+<!--               icon="Delete"-->
+<!--               :disabled="multiple"-->
+<!--               @click="handleDelete"-->
+<!--               v-hasPermi="['system:post:remove']"-->
+<!--            >删除</el-button>-->
+<!--         </el-col>-->
 <!--         <el-col :span="1.5">-->
 <!--            <el-button-->
 <!--               type="warning"-->
@@ -290,7 +290,8 @@ function submitForm() {
 }
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const jobIds = row.jobId || ids.value;
+  // const jobIds = row.jobId || ids.value;
+  const jobIds = row.jobId;
   proxy.$modal.confirm('是否确认删除职务编号为"' + jobIds + '"的数据项？').then(function() {
     return delPost(jobIds);
   }).then(() => {

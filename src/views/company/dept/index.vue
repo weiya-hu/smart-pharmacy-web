@@ -6,6 +6,7 @@
                v-model="queryParams.name"
                placeholder="请输入机构名称"
                clearable
+               style="width: 240px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>

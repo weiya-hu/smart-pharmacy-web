@@ -97,13 +97,14 @@ function handelRead(type) {
     inputType.value='readey'
   } else if (type === 'cancel') {
     inputType.value='readey'
+    getFormData()
   }
 }
 function onSubmit() {
   corpEdit(form.value).then(res =>{
     if (res.code === 200) {
       ElMessage.success("修改成功");
-
+      getFormData()
     }
   })
 }

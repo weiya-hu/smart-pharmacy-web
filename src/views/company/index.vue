@@ -72,7 +72,7 @@
           <el-input v-model="form.plainCorpId" :disabled="inputType==='readey'" />
         </el-form-item>
         <el-form-item label="法定代表人" prop="legalPersonId">
-          <el-select v-model="form.legalPersonId" :disabled="inputType==='readey'" style="width: 350px;">
+          <el-select v-model="form.legalPersonId" :disabled="inputType==='readey'" placeholder=" " style="width: 350px;">
             <el-option v-for="item in legalPersonList" :key="item.userId" :label="item.userName" :value="item.userId" />
           </el-select>
         </el-form-item>
@@ -83,7 +83,7 @@
           <el-input v-model="form.fullname" :disabled="inputType==='readey'" />
         </el-form-item>
         <el-form-item label="企业类型">
-          <el-select v-model="form.corpType" :disabled="inputType==='readey'" placeholder="请选择" filterable style="width: 350px;">
+          <el-select v-model="form.corpType" :disabled="inputType==='readey'" placeholder=" " filterable style="width: 350px;">
             <el-option v-for="item in corpTypeList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -100,7 +100,7 @@
           <el-input v-model="form.phone" clearable :disabled="inputType==='readey'" />
         </el-form-item>
         <el-form-item label="详细地址">
-          <el-input v-model="form.address" placeholder="请输入详细地址" :disabled="inputType==='readey'"></el-input>
+          <el-input v-model="form.address" clearable :disabled="inputType==='readey'"></el-input>
         </el-form-item>
 <!--          <el-form-item label="归属连锁" v-if="form.corpType == 4">-->
 <!--            <el-select-->
@@ -270,6 +270,7 @@ function handelRead(type) {
     onSubmit()
   } else if (type === 'cancel') {
     inputType.value='readey'
+    getFormData()
   }
 }
 function onSubmit() {

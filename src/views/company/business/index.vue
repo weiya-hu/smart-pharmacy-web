@@ -1,11 +1,12 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
+    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" @submit.native.prevent>
       <el-form-item label="机构名称" prop="name">
         <el-input
             v-model="queryParams.name"
             placeholder="请输入机构名称"
             clearable
+            style="width: 240px"
             @keyup.enter="handleQuery"
         />
       </el-form-item>
@@ -88,17 +89,17 @@
       </el-table-column>
     </el-table>
 
-    <pagination
-        v-show="total > 0"
-        :total="total"
-        v-model:page="queryParams.pageNum"
-        v-model:limit="queryParams.pageSize"
-        @pagination="getList"
-    />
+<!--    <pagination-->
+<!--        v-show="total > 0"-->
+<!--        :total="total"-->
+<!--        v-model:page="queryParams.pageNum"-->
+<!--        v-model:limit="queryParams.pageSize"-->
+<!--        @pagination="getList"-->
+<!--    />-->
 
     <!-- 添加或修改部门对话框 -->
     <el-dialog :title="title" v-model="open" width="60%" append-to-body :close-on-click-modal="false" draggable>
-      <el-form ref="deptRef" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="deptRef" :model="form" :rules="rules" label-width="100px">
         <el-row>
           <el-col :span="24" v-if="form.parentNodeId !== 0">
             <el-form-item label="上级部门" prop="parentNodeId">
@@ -109,7 +110,7 @@
                   :render-after-expand="false"
                   :props="{ value: 'id', label: 'name', children: 'children' }"
                   value-key="id"
-                  placeholder="选择上级部门"
+                  placeholder="请选择上级部门"
                   check-strictly
                   clearable
               />
@@ -117,7 +118,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="类型" prop="type">
-              <el-select v-model="form.type" placeholder="类型" @change="handleChange" style="width: 100%">
+              <el-select v-model="form.type" placeholder="请选择类型" @change="handleChange" style="width: 100%">
                 <el-option
                     v-for="dict in wecom_reltree_type"
                     :key="dict.value"
@@ -146,8 +147,16 @@
 
               <el-input v-if="form.type === 5" v-model="form.name"></el-input>
             </el-form-item>
-            <el-form-item label="业务方编码" prop="code" v-show="form.type !== 5">
-              <el-input v-model="form.code" style="width: 100%" placeholder="业务方编码"/>
+            <el-form-item prop="code" v-show="form.type !== 5">
+              <template #label>
+                <span>
+                  <el-tooltip content="业务方编码说明" placement="top">
+                    <el-icon><question-filled /></el-icon>
+                  </el-tooltip>
+                   业务方编码
+                </span>
+              </template>
+              <el-input v-model="form.code" style="width: 100%" placeholder="请输入业务方编码"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -237,7 +246,7 @@ const data = reactive({
   queryParams: {
     name: undefined,
     pageNum: 1,
-    pageSize: 10,
+    pageSize: 1000,
   },
   rules: {
     type: [{required: true, message: "类型不能为空", trigger: "change"}],
@@ -277,7 +286,6 @@ function getList() {
   loading.value = true;
   listPage(queryParams.value).then(response => {
     deptList.value = proxy.handleTree(response.data.list, "nodeId", "parentNodeId");
-    total.value = Number(response.data.total);
     loading.value = false;
   });
 }
