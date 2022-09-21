@@ -74,7 +74,7 @@ const getHeaderTitle = () => {
   queryProductOrderDynamicHeaderData().then(res => {
     if (res.code == 200) {
       let cacheData = JSON.parse(localStorage.getItem("headerTitle"))
-      if (cacheData && res.data.length == 0) {
+      if (!cacheData && res.data.length == 0) {
         changeHeader()
       } else {
         innitHeader(res.data)
