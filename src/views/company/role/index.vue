@@ -34,16 +34,16 @@
                />
             </el-select>
          </el-form-item>
-         <el-form-item label="创建时间" style="width: 308px">
-            <el-date-picker
-               v-model="dateRange"
-               value-format="YYYY-MM-DD"
-               type="daterange"
-               range-separator="-"
-               start-placeholder="开始日期"
-               end-placeholder="结束日期"
-            ></el-date-picker>
-         </el-form-item>
+<!--         <el-form-item label="创建时间" style="width: 308px">-->
+<!--            <el-date-picker-->
+<!--               v-model="dateRange"-->
+<!--               value-format="YYYY-MM-DD"-->
+<!--               type="daterange"-->
+<!--               range-separator="-"-->
+<!--               start-placeholder="开始日期"-->
+<!--               end-placeholder="结束日期"-->
+<!--            ></el-date-picker>-->
+<!--         </el-form-item>-->
          <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -325,7 +325,7 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
-const dateRange = ref([]);
+// const dateRange = ref([]);
 const menuOptions = ref([]);
 const menuExpand = ref(true);
 const menuNodeAll = ref(false);
@@ -366,7 +366,8 @@ const { queryParams, form, rules } = toRefs(data);
 /** 查询角色列表 */
 function getList() {
   loading.value = true;
-  listRole(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
+  // listRole(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
+  listRole(queryParams.value).then(response => {
     roleList.value = response.data.list;
     total.value = Number(response.data.total);
     loading.value = false;
@@ -379,7 +380,7 @@ function handleQuery() {
 }
 /** 重置按钮操作 */
 function resetQuery() {
-  dateRange.value = [];
+  // dateRange.value = [];
   proxy.resetForm("queryRef");
   handleQuery();
 }
@@ -402,13 +403,16 @@ function handleExport() {
 }
 /** 多选框选中数据 */
 function handleSelectionChange(selection) {
+  let admin = ''
   ids.value = selection.map(item => item.roleId);
-  single.value = selection.length != 1;
+  selection.map(item => {
+    admin = item.admin
+  })
+  single.value = selection.length != 1 || admin == 1;
   multiple.value = !selection.length;
 }
 /** 角色状态修改 */
 function handleStatusChange(row) {
-  console.log(row.roleId)
   let text = row.status === 1 ? "启用" : "停用";
   proxy.$modal.confirm('确认要"' + text + '""' + row.name + '"角色吗?').then(function () {
     return changeRoleStatus({roleId:row.roleId, status:row.status});

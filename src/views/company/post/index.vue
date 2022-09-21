@@ -6,6 +6,7 @@
                v-model="queryParams.jobId"
                placeholder="请输入职务编码"
                clearable
+               style="width: 220px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
@@ -14,6 +15,7 @@
                v-model="queryParams.name"
                placeholder="请输入职务名称"
                clearable
+               style="width: 220px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
