@@ -78,6 +78,7 @@
     <el-table v-loading="loading" :data="storeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="69码" prop="barCode" show-tooltip-when-overflow/>
+      <el-table-column label="产品ID" prop="productId" show-tooltip-when-overflow/>
       <el-table-column label="产品编号" prop="code" show-tooltip-when-overflow/>
       <el-table-column label="产品简称" prop="name" show-tooltip-when-overflow/>
       <el-table-column label="产品全称" prop="fullname" show-tooltip-when-overflow/>
