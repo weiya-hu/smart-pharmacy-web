@@ -126,8 +126,8 @@ const wecomControlLogin = () => {
 }
 
 const login = async () => {
-  setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcxODg1Nzg1ODM1Njc5NzQ0LCJ1c2VyX2tleSI6IjY0Y2RhZmVhMmVkMjRjZmJhMTZjYzBlY2VjNTZjYTdiIiwidXNlcm5hbWUiOiLnpZ3luIUifQ.F0jvuEoTWd3sI5Xu8nGrDDxA9p-bMm2_mDg4Gl6I8DrI90RO3UZthaijdk7H3_XVJK5YlxE5ybPsL-OS4WixnA')
-  // removeToken()
+  // setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcxODg1Nzg1ODM1Njc5NzQ0LCJ1c2VyX2tleSI6IjY0Y2RhZmVhMmVkMjRjZmJhMTZjYzBlY2VjNTZjYTdiIiwidXNlcm5hbWUiOiLnpZ3luIUifQ.F0jvuEoTWd3sI5Xu8nGrDDxA9p-bMm2_mDg4Gl6I8DrI90RO3UZthaijdk7H3_XVJK5YlxE5ybPsL-OS4WixnA')
+  removeToken()
   if (GetQueryString('state') === 'wecom') {
     await getOauthLogin()
   } else if (GetQueryString('state') === 'wechat') {
