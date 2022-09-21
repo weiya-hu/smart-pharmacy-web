@@ -16,3 +16,28 @@ export function addDynamicHeaderExcelUrl(query) {
         method: 'post',
     })
 }
+
+//获取映射关系
+export function getMapping() {
+    return request({
+        url: `/product/dynamicddi/getMapping`,
+        method: 'get',
+    })
+}
+
+//提交映射关系
+export function setConvertMapping(data) {
+    return request({
+        url: `/product/dynamicddi/setConvertMapping`,
+        method: 'post',
+        data: data
+    })
+}
+
+//获取自定义表头数据
+export function queryProductOrderDynamicHeaderData() {
+    return request({
+        url: `/product/dynamicddi/queryProductOrderDynamicHeaderData`,
+        method: 'get',
+    })
+}

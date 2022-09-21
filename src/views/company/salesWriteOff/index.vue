@@ -29,35 +29,27 @@
             <div class="handler">
               <el-row>
                 <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+                <!--                <el-button-->
+                <!--                    type="info"-->
+                <!--                    plain-->
+                <!--                    icon="Upload"-->
+                <!--                    @click="handleImport"-->
+                <!--                >导入-->
+                <!--                </el-button>-->
+
                 <el-button
                     type="info"
                     plain
                     icon="Upload"
-                    @click="handleImport"
-                >导入
+                    @click="customizeImport"
+                >自定义导入
                 </el-button>
-                <el-upload
-                    style="margin: 0 10px"
-                    ref="uploadCustomizeRef"
-                    :limit="1"
-                    accept=".xlsx, .xls"
-                    :disabled="formDisabled"
-                    :action="uploadData.customizeUrl"
-                    :headers="{'Authorization':uploadData.token}"
-                    :data="uploadData.customizeParam"
-                    method:="POST"
-                    :file-list="customizeList"
-                    :show-file-list="false"
-                    :on-success="handleCustomizeSuccess"
-                >
-                  <el-button
-                      type="info"
-                      plain
-                      icon="Upload"
-                      @click="customizeImport"
-                  >自定义导入(测试)
-                  </el-button>
-                </el-upload>
+                <el-button
+                    type="info"
+                    plain
+                    @click="matchFormHeader"
+                >匹配表头
+                </el-button>
                 <el-button type="primary" @click="getList">下一页</el-button>
               </el-row>
             </div>
@@ -106,6 +98,45 @@
         </div>
       </template>
     </el-dialog>
+    <!--    自定义导入-->
+    <el-dialog title="导入销售清单" v-model="uploadData.open" width="50%" append-to-body>
+      <el-upload
+          style="margin: 0 10px"
+          :limit="1"
+          accept=".xlsx, .xls"
+          :disabled="formDisabled"
+          :action="uploadData.customizeUrl"
+          :headers="{'Authorization':uploadData.token}"
+          :data="uploadData.customizeParam"
+          method:="POST"
+          :file-list="customizeList"
+          :show-file-list="false"
+          :on-success="handleCustomizeSuccess"
+          drag
+      >
+        <el-icon class="el-icon--upload">
+          <upload-filled/>
+        </el-icon>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <template #tip>
+          <div class="el-upload__tip text-center">
+            <span>温馨提示请确认，在上传清单以前，已经完成您销售清单的表头与系统表头的匹配
+              如没有匹配，请点击：</span>
+            <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;"
+                     @click="matchFormHeader">去匹配表头
+            </el-link>
+          </div>
+        </template>
+      </el-upload>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitFileForm">确 定</el-button>
+          <el-button @click="uploadData.open = false">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+
     <div class="tableList">
       <el-table v-loading="loading" :data="orderList">
         <el-table-column width="200px" v-if="columns[0].visible" label="产品名" align="center" key="productName"
@@ -138,6 +169,7 @@ import {getCurrentInstance, reactive, toRefs} from "vue";
 import {getToken} from "@/utils/auth";
 import {getOrderList, addDynamicHeaderExcelUrl} from "@/api/system/order";
 import {ElMessage} from "element-plus";
+import router from "@/router";
 //自定义导入列表
 const customizeList = ref([])
 const showSearch = ref(true);
@@ -174,6 +206,10 @@ const upload = reactive({
 
 /*** 用户自定义导入 */
 let uploadData = reactive({
+  // 是否显示弹出层（订单导入）
+  open: false,
+  // 是否禁用上传
+  isUploading: false,
   customizeUrl: import.meta.env.VITE_APP_BASE_API + '/file/file/upload',
   customizeParam: {path: '/Company/Customize'},
   token: getToken(),
@@ -229,6 +265,11 @@ function handleImport() {
 //自定义上传
 function customizeImport() {
   uploadData.open = true;
+}
+
+//匹配表头
+const matchFormHeader = () => {
+  router.push({path: '/enterpriseCenter/order/customizeImportSecond'})
 }
 
 //刷新

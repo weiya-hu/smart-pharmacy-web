@@ -1,5 +1,8 @@
 <template>
   <div class="app-container">
+    <div class="desc">
+      <span>所有商品 —— 用户管理自己归属的所有商品</span>
+    </div>
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="产品编辑" prop="code">
         <el-input v-model="queryParams.code" placeholder="请输入产品编号" clearable @keyup.enter="handleQuery"/>
@@ -8,10 +11,10 @@
         <el-input v-model="queryParams.name" placeholder="请输入产品简称" clearable @keyup.enter="handleQuery"/>
       </el-form-item>
       <el-form-item label="产品类别" prop="productType">
-        <el-input v-model="queryParams.productType" placeholder="请输入产品简称" clearable @keyup.enter="handleQuery"/>
+        <el-input v-model="queryParams.productType" placeholder="请输入产品类别" clearable @keyup.enter="handleQuery"/>
       </el-form-item>
       <el-form-item label="品牌" prop="brands">
-        <el-input v-model="queryParams.brands" placeholder="请输入产品简称" clearable @keyup.enter="handleQuery"/>
+        <el-input v-model="queryParams.brands" placeholder="请输入产品品牌" clearable @keyup.enter="handleQuery"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -383,3 +386,16 @@ function handleExport() {
 
 getList();
 </script>
+<style lang="scss">
+.app-container {
+  .desc {
+    color: #999;
+    font-size: 16px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    margin-bottom: 30px;
+  }
+}
+
+
+</style>
