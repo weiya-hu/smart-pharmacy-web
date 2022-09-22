@@ -6,7 +6,7 @@
         <div class="head-container">
           <el-input
               v-model="deptName"
-              placeholder="请输入部门名称"
+              placeholder="请输入机构名称"
               clearable
               prefix-icon="Search"
               style="margin-bottom: 20px"
@@ -678,10 +678,7 @@ const getQrCode = ()=>{
         }
       })
 }
-const showTip = ref(true)
-function isShow() {
-  showTip.value = proxy.$refs.isOverflow.clientWidth < proxy.$refs.isOverflow.scrollWidth
-}
+
 
 getTreeselect();
 loadRolePost()
@@ -696,7 +693,6 @@ getQrCode()
   margin: 0 auto;
 }
 .text-nowrap {
-  //width: 160px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

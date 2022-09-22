@@ -64,11 +64,19 @@ export function storeList() {
     })
 }
 
-// 关系树列表
+// 关系树列表（分页）
 export function listPage(query) {
     return request({
         url: `/wecom/corpinfo/reltree/listPage`,
         method: 'get',
         params: query
+    })
+}
+// 关系树列表
+export function reltreeList(data) {
+    return request({
+        url: `/wecom/corpinfo/reltree/list`,
+        method: 'POST',
+        data
     })
 }

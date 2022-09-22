@@ -102,7 +102,7 @@
       <el-form ref="deptRef" :model="form" :rules="rules" label-width="100px">
         <el-row>
           <el-col :span="24" v-if="form.parentNodeId !== 0">
-            <el-form-item label="上级部门" prop="parentNodeId">
+            <el-form-item label="上级机构" prop="parentNodeId">
               <el-tree-select
                   style="width: 100%"
                   v-model="form.parentNodeId"
@@ -110,7 +110,7 @@
                   :render-after-expand="false"
                   :props="{ value: 'id', label: 'name', children: 'children' }"
                   value-key="id"
-                  placeholder="请选择上级部门"
+                  placeholder="请选择上级机构"
                   check-strictly
                   clearable
               />
@@ -129,7 +129,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="名称" prop="relationId">
+            <el-form-item label="名称" prop="id">
               <!--              <el-input v-model="form.name" style="width: 100%" placeholder="请选择名称 / 如没有需要的供应商，请输入名称"/>-->
               <el-select
                   v-model="form.relationId"
@@ -140,9 +140,10 @@
                   placeholder="请选择名称 / 如没有需要的供应商，请输入名称"
                   clearable
                   style="width: 100%"
-                  v-if="form.type !==5 "
+                  v-if="form.type !==5"
+                  @change="isAdd"
               >
-                <el-option v-for="item in nameList" :key="item.id" :label="item.name" :value="item.id"/>
+                <el-option v-for="item in nameList" :key="item.relationId" :label="item.name" :value="item.relationId"/>
               </el-select>
 
               <el-input v-if="form.type === 5" v-model="form.name"></el-input>
@@ -168,6 +169,16 @@
       </el-divider>
       <el-form ref="formTableRef" :rules="rulesTable" :model="tableUsers">
         <el-table :data="tableUsers.tableData" style="width: 100%" height="350px" class="table-data">
+          <el-table-column prop="code" label="编码">
+            <template #default="{ row, column, $index }">
+              <el-form-item :prop=" 'tableData.' + $index + '.code' " :rules="rulesTable.code">
+<!--                <el-select v-model="row.jobId" filterable placeholder="请选择职务" style="width: 90%">-->
+<!--                  <el-option v-for="item in selectJobs" :key="item.jobId" :label="item.name" :value="item.jobId"/>-->
+<!--                </el-select>-->
+                <el-input v-model="row.code" placeholder="请输入编码" style="width: 90%;" />
+              </el-form-item>
+            </template>
+          </el-table-column>
           <el-table-column prop="userName" label="人员">
             <template #default="{ row, column, $index }">
               <el-form-item :prop=" 'tableData.' + $index + '.userId' " :rules="rulesTable.userName">
@@ -214,10 +225,12 @@ import {
   delReltree,
   makerList,
   chainList,
-  storeList
+  storeList,
+  reltreeList
 } from "@/api/company/reltree";
 import {listPost} from "@/api/system/post";
 import {listUser} from "@/api/system/user";
+// import {watch} from "vue";
 
 const {proxy} = getCurrentInstance();
 const {sys_normal_disable, wecom_reltree_type} = proxy.useDict("sys_normal_disable", "wecom_reltree_type");
@@ -238,8 +251,9 @@ const selectUsers = ref([])
 const selectJobs = ref([])
 const formTableRef = ref()
 const rulesTable = ref({
+  code: [{required: true, message: "请输入编码", trigger: "blur"}],
   userName: [{required: true, message: "请选择用户", trigger: "change"}],
-  job: [{required: true, message: "请选择职务", trigger: "change"}],
+  job: [{required: true, message: "请选择职务", trigger: "change"}]
 })
 const data = reactive({
   form: {},
@@ -323,7 +337,7 @@ function resetQuery() {
 }
 
 /** 新增按钮操作 */
-function handleAdd(row) {
+function handleAdd() {
   reset();
   listReltree({allChild:true}).then(response => {
     // deptOptions.value = proxy.handleTree(response.data, "id");
@@ -333,7 +347,7 @@ function handleAdd(row) {
   //   form.value.parentNodeId = row.nodeId;
   // }
   open.value = true;
-  title.value = "添加部门";
+  title.value = "添加机构";
 }
 
 /** 展开/折叠操作 */
@@ -348,6 +362,7 @@ function toggleExpandAll() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
+  getNameData(row)
   // listReltree({nodeId: row.id}).then(response => {
   listReltree().then(response => {
     // deptOptions.value = proxy.handleTree(response.data, "id");
@@ -358,7 +373,7 @@ function handleUpdate(row) {
     form.value.parentNodeId = response.data.parentId
     tableUsers.tableData = response.data.users
     open.value = true;
-    title.value = "修改部门";
+    title.value = "修改机构";
   });
 }
 
@@ -379,6 +394,7 @@ function submitForm() {
       formTableRef.value.validate((v) => {
         if (v) {
           form.value.users = tableUsers.tableData
+          // console.log('name', form.value.name)
           if (form.value.nodeId != undefined) {
             updateReltree(form.value).then(response => {
               proxy.$modal.msgSuccess("修改成功");
@@ -409,31 +425,57 @@ function handleDelete(row) {
   });
 }
 
+// function handleChange(val) {
+//   if (val === 1) {
+//     form.value.name = null
+//     makerList().then(res => {
+//       if (res.code === 200) {
+//         nameList.value = res.data.list
+//       }
+//     })
+//   } else if (val === 3) {
+//     form.value.name = null
+//     chainList().then(res => {
+//       if (res.code === 200) {
+//         nameList.value = res.data.list
+//       }
+//     })
+//   } else if (val === 4) {
+//     form.value.name = null
+//     storeList().then(res => {
+//       if (res.code === 200) {
+//         nameList.value = res.data.list
+//       }
+//     })
+//   } else {
+//     nameList.value = []
+//   }
+// }
+
 function handleChange(val) {
-  if (val === 1) {
-    form.value.name = null
-    makerList().then(res => {
-      if (res.code === 200) {
-        nameList.value = res.data.list
-      }
-    })
-  } else if (val === 3) {
-    form.value.name = null
-    chainList().then(res => {
-      if (res.code === 200) {
-        nameList.value = res.data.list
-      }
-    })
-  } else if (val === 4) {
-    form.value.name = null
-    storeList().then(res => {
-      if (res.code === 200) {
-        nameList.value = res.data.list
-      }
-    })
-  } else {
-    nameList.value = []
+  form.value.name = null
+  form.value.relationId = undefined
+  let data = {
+    allChild: true,
+    type: val
   }
+  reltreeList(data).then(res => {
+    if (res.code === 200) {
+      nameList.value = res.data
+    }
+  })
+}
+
+function getNameData(row) {
+  let data = {
+    allChild: true,
+    type: row.type
+  }
+  reltreeList(data).then(res => {
+    if (res.code === 200) {
+      nameList.value = res.data
+    }
+  })
 }
 
 loadSelectJobs()
