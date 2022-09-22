@@ -60,12 +60,12 @@ const handleNext = async () => {
       activityStepSecondRef.value.loadEventRule()
     } else {
       await activityStepFirstRef.value.submitForm().then(res => {
+        activityStepFirstRef.value.closeLoading()
         if (res.code === 200) {
           if (res.data) {
             eventId.value = res.data
           }
           step.value++
-          activityStepFirstRef.value.closeLoading()
           proxy.$modal.msgSuccess("保存成功");
           if (handleType.value === 'query' || handleType.value === 'edit') {
             activityStepSecondRef.value.loadEventRule()
@@ -90,9 +90,9 @@ const handleNext = async () => {
             //发布任务
             activityStepSecondRef.value.publishActivity()
                 .then(res => {
+                  auditLoadiang.value = false
                   if (res.code === 200) {
                     proxy.$modal.msgSuccess("已提交审核");
-                    auditLoadiang.value = false
                     step.value++
                   }
 

@@ -19,7 +19,7 @@
             {{ item.excelTitle }}
           </div>
           <div class="select">
-            <el-select @change="((item)=>{changeOption(item,index)})" style="width: 300px" :model-value="item.name">
+            <el-select @change="((item)=>{changeOption(item,index)})" style="width: 300px"  :model-value="item.name">
               <el-option v-for="(nextItem,nextIndex) in selectOption" :value="nextItem" :label="nextItem.name"
                          :key="nextIndex"></el-option>
             </el-select>

@@ -126,8 +126,14 @@ const wecomControlLogin = () => {
 }
 
 const login = async () => {
-  // setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcxODg1Nzg1ODM1Njc5NzQ0LCJ1c2VyX2tleSI6IjY0Y2RhZmVhMmVkMjRjZmJhMTZjYzBlY2VjNTZjYTdiIiwidXNlcm5hbWUiOiLnpZ3luIUifQ.F0jvuEoTWd3sI5Xu8nGrDDxA9p-bMm2_mDg4Gl6I8DrI90RO3UZthaijdk7H3_XVJK5YlxE5ybPsL-OS4WixnA')
-  removeToken()
+  if (process.env.NODE_ENV == "development") {
+    setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcyMzg4ODE3MjA3ODY1MzQ0LCJ1c2VyX2tleSI6Ijk2MGU5MTNlMGU1ODQ5MTZhYmFhZTlmM2Y1OTRmMmNlIiwidXNlcm5hbWUiOiLlkJHnq6MifQ.tNx8Gz3yQNviwLb7BAyouDkJPFbA-DHz2AdvI3DCaqu3ib4cOQGM_FHVrEhS00YsKDRhCimtlCR8DpCRG1-XlA')
+    //开发环境
+  } else if (process.env.NODE_ENV == "production") {
+    //生产环境
+    removeToken()
+  }
+
   if (GetQueryString('state') === 'wecom') {
     await getOauthLogin()
   } else if (GetQueryString('state') === 'wechat') {
