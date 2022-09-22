@@ -171,10 +171,7 @@
         <el-table :data="tableUsers.tableData" style="width: 100%" height="350px" class="table-data">
           <el-table-column prop="code" label="编码">
             <template #default="{ row, column, $index }">
-              <el-form-item :prop=" 'tableData.' + $index + '.code' " :rules="rulesTable.code">
-<!--                <el-select v-model="row.jobId" filterable placeholder="请选择职务" style="width: 90%">-->
-<!--                  <el-option v-for="item in selectJobs" :key="item.jobId" :label="item.name" :value="item.jobId"/>-->
-<!--                </el-select>-->
+              <el-form-item >
                 <el-input v-model="row.code" placeholder="请输入编码" style="width: 90%;" />
               </el-form-item>
             </template>
@@ -182,8 +179,8 @@
           <el-table-column prop="userName" label="人员">
             <template #default="{ row, column, $index }">
               <el-form-item :prop=" 'tableData.' + $index + '.userId' " :rules="rulesTable.userName">
-                <el-select v-model="row.userId" filterable placeholder="请选择人员" style="width: 90%">
-                  <el-option v-for="item in selectUsers" :key="item.userId" :label="item.userName"
+                <el-select v-model="row.userId" filterable placeholder="请选择人员" style="width: 90%" @change="changeUser">
+                  <el-option v-for="item in selectUsers" :key="item.userId" :label="item.userName" :disabled="item.disabled"
                              :value="item.userId"/>
                 </el-select>
               </el-form-item>
@@ -230,6 +227,7 @@ import {
 } from "@/api/company/reltree";
 import {listPost} from "@/api/system/post";
 import {listUser} from "@/api/system/user";
+import {nextTick} from "vue";
 // import {watch} from "vue";
 
 const {proxy} = getCurrentInstance();
@@ -251,7 +249,6 @@ const selectUsers = ref([])
 const selectJobs = ref([])
 const formTableRef = ref()
 const rulesTable = ref({
-  code: [{required: true, message: "请输入编码", trigger: "blur"}],
   userName: [{required: true, message: "请选择用户", trigger: "change"}],
   job: [{required: true, message: "请选择职务", trigger: "change"}]
 })
@@ -278,14 +275,25 @@ const handleAddUser = () => {
 //删除人员
 const handleDelUser = (index) => {
   tableUsers.tableData.splice(index, 1)
+  changeUser()
 }
 //加载人员
 const loadSelectUsers = () => {
   listUser({pageNum: 1, pageSize: 10000})
       .then(res => {
-        selectUsers.value = res.data.list
+        selectUsers.value = res.data.list.map(m=>{return{...m,disabled:false}})
       })
 }
+const changeUser = ()=>{
+  selectUsers.value.forEach(item=>{
+    let exists = tableUsers.tableData.some(s=>item.userId === s.userId)
+    nextTick(()=>{
+      if(exists) item.disabled = true
+      else item.disabled = false
+    })
+  })
+}
+
 // 加载岗位
 const loadSelectJobs = () => {
   listPost({pageNum: 1, pageSize: 10000})
@@ -374,6 +382,7 @@ function handleUpdate(row) {
     tableUsers.tableData = response.data.users
     open.value = true;
     title.value = "修改机构";
+    changeUser()
   });
 }
 
@@ -383,7 +392,7 @@ function submitForm() {
     if (valid) {
       if(form.value.relationId){
         //判断是否存在于集合中
-        let exists = nameList.value.filter(item=> item.id ===form.value.relationId)
+        let exists = nameList.value.filter(item=> item.relationId ===form.value.relationId)
         if(exists.length >0){
           form.value.name = exists[0].name
         }else{
