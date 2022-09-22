@@ -14,6 +14,7 @@ export function addDynamicHeaderExcelUrl(query) {
     return request({
         url: `/product/order/addDynamicHeaderExcelUrl?fileUrl=${query}`,
         method: 'post',
+        timeout:120000
     })
 }
 
@@ -22,6 +23,7 @@ export function getMapping() {
     return request({
         url: `/product/dynamicddi/getMapping`,
         method: 'get',
+        timeout:120000
     })
 }
 

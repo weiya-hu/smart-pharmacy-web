@@ -665,7 +665,7 @@ const saveFormAndAdd = async (index, type) => {
                   })
                 }
                 closeLoading()
-              })
+              }).catch(e=>closeLoading())
         } else {
           openLoading()
           changeEventRule(firstFormModels.value.formListData[index])
@@ -677,7 +677,7 @@ const saveFormAndAdd = async (index, type) => {
                   }
                 }
                 closeLoading()
-              })
+              }).catch(e=>closeLoading())
         }
       }
       break;
@@ -698,7 +698,7 @@ const saveFormAndAdd = async (index, type) => {
                   })
                 }
                 closeLoading()
-              })
+              }).catch(e=>closeLoading())
         } else {
           openLoading()
           changeEventRule(secondFormModels.value.formListData[index])
@@ -710,7 +710,7 @@ const saveFormAndAdd = async (index, type) => {
                   }
                 }
                 closeLoading()
-              })
+              }).catch(e=>closeLoading())
         }
       }
       break;
@@ -731,7 +731,7 @@ const saveFormAndAdd = async (index, type) => {
                   })
                 }
                 closeLoading()
-              })
+              }).catch(e=>closeLoading())
         } else {
           openLoading()
           changeEventRule(thirdFormModels.value.formListData[index])
@@ -743,7 +743,7 @@ const saveFormAndAdd = async (index, type) => {
                   }
                 }
                 closeLoading()
-              })
+              }).catch(e=>closeLoading())
         }
       }
       break;

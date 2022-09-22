@@ -2,12 +2,12 @@
   <div class="app-container" v-loading="firstLoading" element-loading-text="加载中...">
     <el-form ref="activityRef" :model="form" :rules="rules" label-width="120px">
       <!--      <el-form-item class="label" label="任务简称" prop="name">-->
-      <el-form-item class="label" label="任务简称">
+      <el-form-item class="label" label="任务名称">
         <el-input style="width: 400px;" v-model="form.name" placeholder="请输入任务简称" :disabled="formDisabled"/>
       </el-form-item>
-      <el-form-item class="label" label="任务全称" prop="fullname">
-        <el-input style="width: 400px;" v-model="form.fullname" placeholder="请输入任务全称" :disabled="formDisabled"/>
-      </el-form-item>
+<!--      <el-form-item class="label" label="任务全称" prop="fullname">-->
+<!--        <el-input style="width: 400px;" v-model="form.fullname" placeholder="请输入任务全称" :disabled="formDisabled"/>-->
+<!--      </el-form-item>-->
       <el-form-item class="label" label="任务奖励预算" prop="moneyRange">
         <el-input style="width: 400px;" type="number" v-model.number="form.moneyRange" placeholder="请输入任务奖励预算"
                   :disabled="formDisabled"/>
@@ -52,6 +52,13 @@
           <span v-show="handleType === 'add'">新增<span
               v-show="form.participants.length>0">已选择（{{ form.participants.length }}）个</span></span>
         </el-button>
+      </el-form-item>
+      <el-form-item class="label" label="任务描述" prop="comment">
+      <el-input
+          v-model="form.comment"
+          :autosize="{ minRows: 2, maxRows: 8 }"
+          type="textarea"
+          placeholder="请输入任务描述"/>
       </el-form-item>
       <!--      <el-form-item label="任务截止类型" prop="endType">-->
       <!--        <el-select v-model="form.endType" clearablestyle="width: 100%">-->
@@ -236,10 +243,10 @@ const data = reactive({
     beginTime: [{required: true, message: "请选择开始时间", trigger: "change"}],
     endTime: [{required: true, message: "请选择结束时间", trigger: "change"}],
     name: [{required: true, message: "请输入简称", trigger: "blur"}],
-    fullname: [{required: true, message: "请输入全称", trigger: "blur"}],
     moneyRange: [{required: true, message: "请输入任务奖励预算", trigger: "blur"}],
     ruleScupes: [{required: true, validator: ruleScupes}],
     ruleResponsibleUsers: [{required: true, validator: ruleResponsibleUsers}],
+    comment: [{required: true, message: "请输入任务描述", trigger: "blur"}],
   }
 });
 
