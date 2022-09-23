@@ -372,6 +372,7 @@
     <!-- 商品列表弹窗-->
     <el-dialog title="商品列表" v-model="showProductsDialog" width="70%">
       <SelectProducts :eventRuleId="itemRuleId" :eventId="props.eventId" :packageId="productPackageId"
+                      :productIds="productList"
                       ref="selectProductsRef"></SelectProducts>
       <template #footer>
         <div class="dialog-footer">
@@ -425,6 +426,7 @@ let secondLoading = ref(false)
 const productPackageId = ref(NaN)
 const formStoreIndex = ref(NaN)
 let itemRuleId = ref(null)
+const productList = ref([])
 const firstFormModels = ref({
       formListData: [{
         eventCalcRewardType: 1,
@@ -592,6 +594,7 @@ const getJobList = () => {
 const openProductsDialog = (index, row) => {
   if (row.eventRuleId) {
     itemRuleId.value = row.eventRuleId
+    productList.value = row.products.map(m=> {return m.eventProductId})
   } else {
     itemRuleId.value = null
   }

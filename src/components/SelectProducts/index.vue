@@ -30,6 +30,9 @@
           <el-button type="text" @click="handleAdd(scope.row)">添加</el-button>
         </template>
       </el-table-column>
+      <template #empty>
+        <span>暂无可选择数据</span>
+      </template>
     </el-table>
     <pagination
         v-show="total>0"
@@ -108,22 +111,29 @@ const clearSelected = () => {
 const getList = () => {
   if (props.eventId) {
     queryParam.value.eventId = props.eventId
-    queryProductList(queryParam.value)
-        .then(res => {
-          if (res.code === 200) {
-            productList.value = res.data.list
-            total.value = Number(res.data.total)
-          }
-        })
+    queryProductList(queryParam.value).then(res => {
+      if (res.code === 200) {
+        productList.value = res.data.list
+        total.value = Number(res.data.total)
+        if(props.productIds.length >0){
+          props.productIds.forEach(item=>{
+           let exists = productList.value.filter(f=> item === f.eventProductId)
+            exists.forEach(e=>{
+              handleAdd(e)
+            })
+          })
+        }
+      }
+    })
   }
 }
-const getSelect = () => {
-  queryEventRuleInfo(props.eventRuleId).then(res => {
-    if (res.code === 200) {
-      productResultList.value = res.data.products
-    }
-  })
-}
+// const getSelect = () => {
+//   queryEventRuleInfo(props.eventRuleId).then(res => {
+//     if (res.code === 200) {
+//       productResultList.value = res.data.products
+//     }
+//   })
+// }
 
 //重置搜索
 const resetQuery = () => {
@@ -171,6 +181,10 @@ const props = defineProps({
   eventRuleId: {
     type: String,
     default: null
+  },
+  productIds:{
+    type:Array,
+    default:[]
   }
 })
 // const getSelectedGoods = () => {
@@ -195,7 +209,7 @@ defineExpose({
 })
 // getSelectedGoods()
 getList()
-getSelect()
+// getSelect()
 </script>
 
 <style scoped lang="scss">
