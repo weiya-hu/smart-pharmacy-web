@@ -6,23 +6,20 @@
           <el-input v-model="queryParam.name"></el-input>
         </el-form-item>
         <el-form-item label="品类">
-          <el-input v-model="queryParam.productTypes"></el-input>
+          <el-input v-model="queryParam.productType"></el-input>
         </el-form-item>
         <el-form-item label="品牌">
-          <el-input v-model="queryParam.brands"></el-input>
+          <el-input v-model="queryParam.brand"></el-input>
         </el-form-item>
-
         <el-form-item label="规格">
-          <el-input v-model="queryParam.specifications"></el-input>
+          <el-input v-model="queryParam.specification"></el-input>
         </el-form-item>
-
         <el-form-item>
           <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
           <el-button icon="Refresh" @click="resetQuery">重置</el-button>
         </el-form-item>
       </el-row>
     </el-form>
-
     <el-table v-loading="loading" :data="productList" height="200">
       <el-table-column label="名称" prop="name"/>
       <el-table-column label="品类" prop="productType"/>
@@ -42,6 +39,9 @@
         @pagination="getList"
     />
     <el-divider content-position="left">已选择产品</el-divider>
+    <div class="handler">
+      <el-button @click="clearSelected" link type="primary">清空已选</el-button>
+    </div>
     <el-table v-loading="loading" :data="productResultList" height="200">
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="名称" prop="name"/>
@@ -69,11 +69,11 @@ import {
 } from '@/api/activity/eventInfo'
 import {watch} from "vue";
 
-const queryParam = ref({
+let queryParam = ref({
   name: '',
-  productTypes: '',
-  specifications: '',
-  brands: '',
+  productType: '',
+  specification: '',
+  brand: '',
   pageNum: 1,
   pageSize: 10,
   eventId: '',
@@ -88,10 +88,24 @@ const handleQuery = () => {
   queryParam.pageNum = 1
   getList()
 }
-
+//重置搜索参数
+const restQueryParam = () => {
+  queryParam.value = {
+    name: '',
+    productType: '',
+    specification: '',
+    brand: '',
+    pageNum: 1,
+    pageSize: 10,
+    eventId: '',
+  }
+}
+//清空已选择商品
+const clearSelected = () => {
+  productResultList.value = []
+}
 //搜索产品
 const getList = () => {
-
   if (props.eventId) {
     queryParam.value.eventId = props.eventId
     queryProductList(queryParam.value)
@@ -106,6 +120,7 @@ const getList = () => {
 
 //重置搜索
 const resetQuery = () => {
+  restQueryParam()
   queryForm.value.resetFields()
   getList()
 }
@@ -165,6 +180,7 @@ const props = defineProps({
 //   getSelectedGoods()
 // })
 
+
 defineExpose({
   getProductResultList,
   getProductPackageResultList
@@ -174,6 +190,12 @@ defineExpose({
 getList()
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.app-container {
+  .handler {
+    margin: 10px 0;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
 </style>

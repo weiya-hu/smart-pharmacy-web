@@ -1,9 +1,14 @@
 <template>
+
   <div class="app-container" v-loading="secondLoading" element-loading-text="请等待...">
     <el-tabs type="border-card" v-model="tabValue" @tab-change="changeTab">
       <el-tab-pane name="first" label="单品｜组合">
         <el-form ref="firstForm" :model="firstFormModels" :rules="formRule" inline label-width="100px">
           <div class="form-div" v-for="(firstFormModel,index) in firstFormModels.formListData" :key="index">
+            <div class="rulerStatus">
+              <div v-if="firstFormModel.eventRuleId" class="save">已保存</div>
+              <div v-if="!firstFormModel.eventRuleId&&index!==0" class="notSave">未保存</div>
+            </div>
             <div class="handler">
               <div v-if="handleType!=='query'">
                 <el-button type="primary" @click="delForm(index)">删除</el-button>
@@ -59,15 +64,18 @@
                 参与职务列表
               </div>
             </el-row>
-            <el-row v-for="(item,index) in firstFormModel.jobs">
+            <el-row v-for="(item,i) in firstFormModel.jobs" :key="i">
               <el-form-item class="label" label="职务">
                 <div style="width: 70px !important;fontWeight: bold;color: #606266;">
                   {{ item.jobName }}
                 </div>
               </el-form-item>
-              <el-form-item class="label" label="奖励阈值">
+              <el-form-item v-if="firstFormModel.calcUnit==1"
+                            class="label" label="奖励阈值" :rules="formRule.targetRange">
                 <el-input
                     :disabled="handleType=='query'"
+                    type="number"
+                    oninput="value=value.replace(/[^\d]/g,'')"
                     v-model.number="item.targetRange"
                     class="input-with-select">
                   <template #append>
@@ -78,8 +86,25 @@
                   </template>
                 </el-input>
               </el-form-item>
+              <el-form-item v-if="firstFormModel.calcUnit==2" class="label" label="奖励阈值">
+                <el-input
+                    :disabled="handleType=='query'"
+                    oninput="value=value.replace(/[^0-9.]/g,'')"
+                    v-model="item.targetRange"
+                    class="input-with-select">
+                  <template #append>
+                    <el-select v-model="firstFormModel.calcUnit" disabled style="width: 80px">
+                      <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value"
+                                 :label="item.label"/>
+                    </el-select>
+                  </template>
+                </el-input>
+              </el-form-item>
               <el-form-item class="label" label="奖励金额">
-                <el-input :disabled="handleType=='query'" v-model.number="item.price" class="input-with-select">
+                <el-input oninput="value=value.replace(/[^0-9.]/g,'')"
+                          :disabled="handleType=='query'"
+                          v-model="item.price"
+                          class="input-with-select">
                 </el-input>
               </el-form-item>
             </el-row>
@@ -90,7 +115,10 @@
             <el-button v-show="firstFormModel.products.length === 0" type="primary" link
                        @click="openProductsDialog(index,firstFormModel)">添加商品
             </el-button>
-            <el-button type="primary" link>已选（{{ firstFormModel.products && firstFormModel.products.length }}）个</el-button>
+            <el-button type="primary" link>已选（{{
+                firstFormModel.products && firstFormModel.products.length
+              }}）个
+            </el-button>
             <el-button v-show="firstFormModel.products.length > 0 " type="primary"
                        @click="openProductsDialog(index,firstFormModel)">点击查看商品列表
             </el-button>
@@ -101,6 +129,10 @@
       <el-tab-pane name="second" label="品牌">
         <el-form ref="secondForm" v-model="secondFormModels" :rules="formRule" inline label-width="100px">
           <div class="form-div" v-for="(secondFormModel,index) in secondFormModels.formListData" :key="index">
+            <div class="rulerStatus">
+              <div v-if="secondFormModel.eventRuleId" class="save">已保存</div>
+              <div v-if="!secondFormModel.eventRuleId&&index!==0" class="notSave">未保存</div>
+            </div>
             <div class="handler">
               <div v-if="handleType!=='query'">
                 <el-button type="primary" @click="delForm(index)">删除</el-button>
@@ -160,9 +192,10 @@
                   {{ item.jobName }}
                 </div>
               </el-form-item>
-              <el-form-item class="label" label="奖励阈值">
+              <el-form-item v-if="secondFormModel.calcUnit==1" class="label" label="奖励阈值">
                 <el-input
                     :disabled="handleType=='query'"
+                    oninput="value=value.replace(/[^\d]/g,'')"
                     v-model.number="item.targetRange"
                     class="input-with-select">
                   <template #append>
@@ -173,8 +206,23 @@
                   </template>
                 </el-input>
               </el-form-item>
+              <el-form-item v-if="secondFormModel.calcUnit==2" class="label" label="奖励阈值">
+                <el-input
+                    :disabled="handleType=='query'"
+                    v-model.number="item.targetRange"
+                    oninput="value=value.replace(/[^0-9.]/g,'')"
+                    class="input-with-select">
+                  <template #append>
+                    <el-select v-model="secondFormModel.calcUnit" disabled style="width: 80px">
+                      <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value"
+                                 :label="item.label"/>
+                    </el-select>
+                  </template>
+                </el-input>
+              </el-form-item>
               <el-form-item class="label" label="奖励金额">
-                <el-input :disabled="handleType=='query'" v-model.number="item.price" class="input-with-select">
+                <el-input oninput="value=value.replace(/[^0-9.]/g,'')" :disabled="handleType=='query'"
+                          v-model="item.price" class="input-with-select">
                 </el-input>
               </el-form-item>
             </el-row>
@@ -200,6 +248,10 @@
       <el-tab-pane name="third" label="门店">
         <el-form ref="thirdForm" v-model="thirdFormModels" :rules="formRule" inline label-width="100px">
           <div class="form-div" v-for="(thirdFormModel,index) in thirdFormModels.formListData" :key="index">
+            <div class="rulerStatus">
+              <div v-if="thirdFormModel.eventRuleId" class="save">已保存</div>
+              <div v-if="!thirdFormModel.eventRuleId&&index!==0" class="notSave">未保存</div>
+            </div>
             <div class="handler">
               <div v-if="handleType!=='query'">
                 <el-button type="primary" @click="delForm(index)">删除</el-button>
@@ -263,10 +315,25 @@
                   {{ item.jobName }}
                 </div>
               </el-form-item>
-              <el-form-item class="label" label="奖励阈值">
+              <el-form-item v-if="thirdFormModel.calcUnit==1" class="label" label="奖励阈值">
                 <el-input
                     :disabled="handleType=='query'"
                     v-model.number="item.targetRange"
+                    oninput="value=value.replace(/[^\d]/g,'')"
+                    class="input-with-select">
+                  <template #append>
+                    <el-select v-model="thirdFormModel.calcUnit" disabled style="width: 80px">
+                      <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value"
+                                 :label="item.label"/>
+                    </el-select>
+                  </template>
+                </el-input>
+              </el-form-item>
+              <el-form-item v-if="thirdFormModel.calcUnit==2" class="label" label="奖励阈值">
+                <el-input
+                    :disabled="handleType=='query'"
+                    v-model.number="item.targetRange"
+                    oninput="value=value.replace(/[^0-9.]/g,'')"
                     class="input-with-select">
                   <template #append>
                     <el-select v-model="thirdFormModel.calcUnit" disabled style="width: 80px">
@@ -277,7 +344,8 @@
                 </el-input>
               </el-form-item>
               <el-form-item class="label" label="奖励金额">
-                <el-input :disabled="handleType=='query'" v-model.number="item.price" class="input-with-select">
+                <el-input oninput="value=value.replace(/[^0-9.]/g,'')" :disabled="handleType=='query'"
+                          v-model="item.price" class="input-with-select">
                 </el-input>
               </el-form-item>
             </el-row>
@@ -343,6 +411,7 @@ import {
 import SelectProducts from '@/components/SelectProducts/index'
 import SelectStore from '@/components/SelectStore/index'
 import {nextTick} from "vue";
+import {cloneFunction} from "@/utils/globalFunction";
 
 const {proxy} = getCurrentInstance();
 const {
@@ -350,7 +419,7 @@ const {
   sop_reward_type, sop_time_range_unit
 } = proxy.useDict("sop_calc_type", 'sop_calc_unit', 'sop_event_calc_reward_type', 'sop_reward_type', 'sop_time_range_unit');
 const tabValue = ref('first')
-const firstForm = ref()
+let firstForm = ref()
 const jobList = ref([])
 let secondLoading = ref(false)
 const productPackageId = ref(NaN)
@@ -367,7 +436,7 @@ const firstFormModels = ref({
         products: [],
         jobs: jobList.value,
         filter: {
-          ids:[], specifications: [], brands: [], productTypes: []
+          ids: [], specifications: [], brands: [], productTypes: []
         }
       }]
     }
@@ -381,20 +450,18 @@ const resetFirstForm = () => {
     rewardType: 1,
     calcUnit: 1,
     products: [],
-    jobs: jobList.value,
+    jobs: cloneFunction(jobList.value),
     filter: {
-      ids:[], specifications: [], brands: [], productTypes: []
+      ids: [], specifications: [], brands: [], productTypes: []
     }
   }
 }
-
 const formRule = {
   calcType: [{required: true, message: "请选择奖励结算方式", trigger: "change"}],
   timeRange: [{required: true, message: "请选择核算周期", trigger: "blur"}],
   calcUnit: [{required: true, message: "请选择奖励条件", trigger: "change"}],
   rewardType: [{required: true, message: "请选择奖励方式", trigger: "change"}],
 }
-
 const secondForm = ref()
 const secondFormModels = ref({
   formListData: [{
@@ -406,9 +473,9 @@ const secondFormModels = ref({
     timeRangeUnit: 'everyday',
     rewardType: 1,
     calcUnit: 1,
-    jobs: jobList.value,
+    jobs: cloneFunction(jobList.value),
     filter: {
-      ids:[], specifications: [], brands: [], productTypes: []
+      ids: [], specifications: [], brands: [], productTypes: []
     }
   }]
 })
@@ -423,9 +490,9 @@ const resetSecondForm = () => {
     timeRangeUnit: 'everyday',
     rewardType: 1,
     calcUnit: 1,
-    jobs: jobList.value,
+    jobs: cloneFunction(jobList.value),
     filter: {
-      ids:[], specifications: [], brands: [], productTypes: []
+      ids: [], specifications: [], brands: [], productTypes: []
     }
   }
 }
@@ -442,7 +509,7 @@ const thirdFormModels = ref({
     calcUnit: 1,
     jobs: jobList.value,
     filter: {
-      ids:[], specifications: [], brands: [], productTypes: []
+      ids: [], specifications: [], brands: [], productTypes: []
     }
   }]
 })
@@ -456,7 +523,7 @@ const resetThirdForm = () => {
     calcUnit: 1,
     jobs: jobList.value,
     filter: {
-      ids:[], specifications: [], brands: [], productTypes: []
+      ids: [], specifications: [], brands: [], productTypes: []
     }
   }
 
@@ -498,7 +565,7 @@ const getBrandList = () => {
 }
 //查询职务列表
 const getJobList = () => {
-  if(props.handleType === 'query') return
+  if (props.handleType === 'query') return
   queryJobList(props.eventId)
       .then(res => {
         if (res.code === 200) {
@@ -580,7 +647,7 @@ const addForm = () => {
 const delForm = async (index) => {
   switch (tabValue.value) {
     case 'first' :
-      if (firstFormModels.value.formListData.length > 1) {
+      if (firstFormModels.value.formListData.length > 0) {
         if (firstFormModels.value.formListData[index].eventRuleId) {
           let {data: {canEdit}} = await getEventInfoByid(firstFormModels.value.formListData[index].eventId)
           // 存在规则id将规则进行删除
@@ -589,6 +656,9 @@ const delForm = async (index) => {
               if (res.code == 200) {
                 proxy.$modal.msgSuccess("删除成功");
                 getActivityRules()
+                if (firstFormModels.value.formListData.length == 0) {
+                  firstFormModels.value.formListData.push(resetFirstForm())
+                }
               }
             })
           } else {
@@ -602,7 +672,7 @@ const delForm = async (index) => {
     case
     'second'
     :
-      if (secondFormModels.value.formListData.length > 1) {
+      if (secondFormModels.value.formListData.length > 0) {
         // 存在规则id将规则进行删除
         if (secondFormModels.value.formListData[index].eventRuleId) {
           let {data: {canEdit}} = await getEventInfoByid(secondFormModels.value.formListData[index].eventId)
@@ -611,8 +681,12 @@ const delForm = async (index) => {
               if (res.code == 200) {
                 proxy.$modal.msgSuccess("删除成功");
                 getActivityRules()
+                if (secondFormModels.value.formListData.length == 0) {
+                  secondFormModels.value.formListData.push(resetSecondForm())
+                }
               }
             })
+
           } else {
             proxy.$modal.msgError("任务规则不允许被删除");
           }
@@ -624,7 +698,7 @@ const delForm = async (index) => {
     case
     'third'
     :
-      if (thirdFormModels.value.formListData.length > 1) {
+      if (thirdFormModels.value.formListData.length > 0) {
         // 存在规则id将规则进行删除
         if (thirdFormModels.value.formListData[index].eventRuleId) {
           let {data: {canEdit}} = await getEventInfoByid(thirdFormModels.value.formListData[index].eventId)
@@ -633,6 +707,9 @@ const delForm = async (index) => {
               if (res.code == 200) {
                 proxy.$modal.msgSuccess("删除成功");
                 getActivityRules()
+                if (thirdFormModels.value.formListData.length == 0) {
+                  thirdFormModels.value.formListData.push(resetThirdForm())
+                }
               }
             })
           } else {
@@ -832,7 +909,7 @@ const loadEventRule = () => {
                 thirdFormModels.value.formListData.push(item)
               }
             })
-            console.log('thirdFormModels.value',thirdFormModels.value)
+            console.log('thirdFormModels.value', thirdFormModels.value)
             secondLoading.value = false
             return Promise.resolve(true)
           }
@@ -869,6 +946,18 @@ const loadEventRule = () => {
         })
   }
 }
+//校验输入框当中的内容是否正确
+const verifyForm = () => {
+  firstForm.value.validate(async (valid) => {
+    if (valid) {
+      alert("校验成功")
+    } else {
+      alert("校验失败")
+    }
+  })
+}
+
+
 const publishActivity = () => {
   return approvalActivityTask(props.eventId)
   // return publish(props.eventId)
@@ -901,6 +990,28 @@ defineExpose({
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 20px;
+}
+
+.rulerStatus {
+  width: 60px;
+
+  .save {
+    padding: 5px;
+    width: 100%;
+    height: 100%;
+    background-color: #8acf6a;
+    color: #fff;
+    border-radius: 10px 0 0 0;
+  }
+
+  .notSave {
+    padding: 5px;
+    width: 100%;
+    height: 100%;
+    background-color: #ff806c;
+    color: #fff;
+    border-radius: 10px 0 0 0;
+  }
 }
 
 .handler {

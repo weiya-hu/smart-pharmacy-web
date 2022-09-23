@@ -1,6 +1,7 @@
 <template>
   <div class="outBox" v-loading="isLoading">
     <div class="header">
+      <customizeImportFirst @uploadSuccess="uploadSuccess" ref="uploadRef"/>
       <div class="desc">
         <span>请把您需要导入的表的表头与系统的标准表头名关联起来，系统用以判定对应的数据代表的意义。</span>
         <span
@@ -13,24 +14,29 @@
       </div>
     </div>
     <div class="container">
-      <template v-for="(item,index) in dataList" :key="index">
-        <div class="itemInfo">
-          <div class="title">
-            {{ item.excelTitle }}
-          </div>
-          <div class="select">
-            <el-select @change="((item)=>{changeOption(item,index)})" style="width: 300px"  :model-value="item.name">
-              <el-option v-for="(nextItem,nextIndex) in selectOption" :value="nextItem" :label="nextItem.name"
-                         :key="nextIndex"></el-option>
-            </el-select>
-          </div>
-          <div class="desc">
-            {{ item.desc }}
-          </div>
-        </div>
-      </template>
+      <el-form :model="allHeader" label-width="15vw" ref="formRef">
+        <template v-for="(itemHeader,index) in allHeader.data">
+          <el-form-item class="label" :label="itemHeader.name" :prop="'data.'+index+'.excelTitle'" :rules="itemHeader.required=='y'?{
+            required: true,
+             message: '该选项为必选',
+              trigger: 'change',
+            }:null">
+            <div class="labelInfo">
+              <el-select clearable style="width: 300px" v-model="itemHeader.excelTitle">
+                <el-option v-for="(nextItem,nextIndex) in selectOption" :value="nextItem" :label="nextItem"
+                           :key="nextIndex"></el-option>
+              </el-select>
+              <div class="desc">
+                {{ itemHeader.desc }}
+              </div>
+            </div>
+          </el-form-item>
+        </template>
+      </el-form>
 
     </div>
+
+
     <div class="footer">
 
     </div>
@@ -43,105 +49,79 @@ import {getMapping, setConvertMapping, queryProductOrderDynamicHeaderData} from 
 import {onMounted} from "vue";
 import {ElMessage} from "element-plus";
 import router from "@/router";
+import customizeImportFirst from './customizeImportFirst'
 
 let isLoading = ref(false)
 let dataList = ref([])
 let selectOption = ref([])
-const changeOption = (item, index) => {
-  dataList.value[index].desc = item.desc
-  dataList.value[index].objField = item.field
-  dataList.value[index].name = item.name
-}
+let matchHeaderInfo = ref([])
+let allHeader = ref({data: []})
+let uploadRef = ref()
+const formRef = ref()
 onMounted(() => {
-  innitCacheData()
-  getHeaderTitle()
+  innitBaseInfo()
 })
-//初始化缓存数据
-const innitCacheData = () => {
-  let cacheData = JSON.parse(localStorage.getItem("headerTitle"))
-  if (cacheData && cacheData.length !== 0) {
-    dataList.value = cacheData.map(item => {
-      return {
-        excelTitle: item,
-        objField: '',
-        desc: '',
-        name: '',
-      }
-    })
-  }
-}
-const getHeaderTitle = () => {
+//数据初始化
+const innitBaseInfo = () => {
+  isLoading.value = true
   queryProductOrderDynamicHeaderData().then(res => {
     if (res.code == 200) {
-      let cacheData = JSON.parse(localStorage.getItem("headerTitle"))
-      if (!cacheData && res.data.length == 0) {
-        changeHeader()
+      isLoading.value = false
+      let cacheHeaderOption = JSON.parse(localStorage.getItem("headerTitle"))
+      if (cacheHeaderOption) {
+        selectOption.value = cacheHeaderOption
+      }
+      if (!cacheHeaderOption && res.data[1].length !== 0) {
+        selectOption.value = res.data[1]
+      }
+      matchHeaderInfo.value = res.data[2]
+      allHeader.value.data = res.data[0]
+      console.log(res.data[1].length, cacheHeaderOption)
+      if (res.data[1].length == 0 && !cacheHeaderOption) {
+        // router.push({path: '/enterpriseCenter/order/customizeImportFirst'})
+        uploadRef.value.showDialog()
       } else {
-        innitHeader(res.data)
+        formatBaseInfo()
       }
     }
-  })
-}
-const innitHeader = (data) => {
-  innitDataList(data)
-}
-const innitDataList = (data) => {
-  let cacheData = JSON.parse(localStorage.getItem("headerTitle"))
-  if (!cacheData && data.length !== 0) {
-    dataList.value = data.map(item => {
-      return {
-        excelTitle: item.excelTitle,
-        objField: '',
-        desc: '',
-        name: '',
-      }
-    })
-  }
-  //初始化回显数据
-  if (data.length !== 0) {
-    data.forEach((item, index) => {
-      dataList.value.forEach(dataItem => {
-        if (dataItem.excelTitle == item.excelTitle) {
-          dataItem.objField = item.objField
-          dataItem.name = item.name
-          dataItem.desc = item.desc
-        }
-      })
-    })
-  }
-}
-const innitData = (data) => {
-  selectOption.value = data.map(item => {
-    return {
-      name: item.name,
-      field: item.field,
-      desc: item.desc
-    }
+  }, rej => {
+    ElMessage.error(rej.message)
   })
 }
 
-const onLoad = () => {
-//  加载映射数据
-  isLoading.value = true
-  getMapping().then(res => {
-    if (res.code == 200) {
-      innitData(res.data)
-      isLoading.value = false
-    }
+//如果上传的header长度不为零格式化基础信息
+const formatBaseInfo = () => {
+//在allheader当中新增字段名称objField 值为field 初始化一个excelTitle值为空
+  allHeader.value.data.forEach(item => {
+    item.objField = item.field
+    item.excelTitle = ''
   })
+//将映射过的表头信息格式化到allheader当中
+  matchHeaderInfo.value.forEach((item, index) => {
+    allHeader.value.data.forEach(dataItem => {
+      if (dataItem.objField == item.objField) {
+        dataItem.excelTitle = item.excelTitle
+      }
+    })
+  })
+
+}
+const uploadSuccess = () => {
+  innitBaseInfo()
 }
 
 //提交表头映射
-const saveMatchHeader = () => {
-  setConvertMapping(dataList.value).then(res => {
-    if (res.code == 200) {
-      ElMessage({type: 'success', message: res.msg})
-      localStorage.removeItem("headerTitle")
-    }
-  }, rej => {
-    ElMessage({type: 'warning', message: res.msg})
-  })
-
+const saveMatchHeader = async () => {
+  let isSend = await formRef.value.validate()
+  if (isSend) {
+    setConvertMapping(allHeader.value.data).then(res => {
+      if (res.code == 200) {
+        ElMessage({type: 'success', message: res.msg})
+      }
+    }, rej => {
+      ElMessage({type: 'warning', message: res.msg})
+    })
+  }
 }
 //返回
 const comeBack = () => {
@@ -149,13 +129,24 @@ const comeBack = () => {
 }
 //修改表头
 const changeHeader = () => {
-  router.push({path: '/enterpriseCenter/order/customizeImportFirst'})
+  uploadRef.value.showDialog()
+  // router.push({path: '/enterpriseCenter/order/customizeImportFirst'})
 }
-onLoad()
+// onLoad()
 
 </script>
 
 <style scoped lang="scss">
+.label::v-deep( .el-form-item__label) {
+  color: #606266;
+  font-weight: 600;
+  justify-content: flex-start !important;
+}
+
+.label::v-deep(.el-form-item__error) {
+  margin-left: 10vw;
+}
+
 .outBox {
   padding: 40px;
 
@@ -173,6 +164,17 @@ onLoad()
 
   .container {
     margin-top: 50px;
+
+    .labelInfo {
+      padding: 0 10vw;
+      flex: 1;
+      display: flex;
+
+      .desc {
+        width: 40vw;
+        margin-left: 10vw;
+      }
+    }
 
     .itemInfo {
       margin: 15px;

@@ -4,7 +4,7 @@
       <div class="form">
         <el-form v-show="showSearch">
           <el-row>
-            <el-form-item label="时间">
+            <el-form-item class="label" label="时间">
               <el-date-picker
                   type="datetimerange"
                   v-model="betweenTime"
@@ -14,7 +14,7 @@
                   value-format="YYYY-MM-DD hh:mm:ss"
               />
             </el-form-item>
-            <el-form-item style="marginLeft:20px" label="关键字">
+            <el-form-item class="label" style="marginLeft:20px" label="关键字">
               <el-input
                   style="width: 400px"
                   v-model="queryParams.otherFilter"
@@ -44,12 +44,12 @@
                     @click="customizeImport"
                 >自定义导入
                 </el-button>
-                <el-button
-                    type="info"
-                    plain
-                    @click="matchFormHeader"
-                >匹配表头
-                </el-button>
+                <!--                <el-button-->
+                <!--                    type="info"-->
+                <!--                    plain-->
+                <!--                    @click="matchFormHeader"-->
+                <!--                >匹配表头-->
+                <!--                </el-button>-->
                 <el-button type="primary" @click="getList">下一页</el-button>
               </el-row>
             </div>
@@ -160,6 +160,11 @@
         <!--        <span>总计:{{ total }}条</span>-->
       </div>
     </div>
+    <div>
+
+    </div>
+
+
   </div>
 </template>
 
@@ -168,6 +173,9 @@ import {Search} from '@element-plus/icons-vue'
 import {getCurrentInstance, reactive, toRefs} from "vue";
 import {getToken} from "@/utils/auth";
 import {getOrderList, addDynamicHeaderExcelUrl} from "@/api/system/order";
+import customizeImportFirst from './component/customizeImportFirst'
+
+
 import {ElMessage} from "element-plus";
 import router from "@/router";
 //自定义导入列表
@@ -334,6 +342,12 @@ getList()
 </script>
 
 <style scoped lang="scss">
+.label::v-deep( .el-form-item__label) {
+  color: #606266;
+  width: 70px;
+  justify-content: flex-start !important;
+}
+
 .outBox {
   padding: 20px;
 

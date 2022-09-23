@@ -2,17 +2,19 @@
   <div class="app-container" v-loading="firstLoading" element-loading-text="加载中...">
     <el-form ref="activityRef" :model="form" :rules="rules" label-width="120px">
       <!--      <el-form-item class="label" label="任务简称" prop="name">-->
-      <el-form-item class="label" label="任务名称">
-        <el-input style="width: 400px;" v-model="form.name" placeholder="请输入任务简称" :disabled="formDisabled"/>
+      <!--      <el-form-item class="label" label="任务简称">-->
+      <!--        <el-input style="width: 400px;" v-model="form.name" placeholder="请输入任务简称" :disabled="formDisabled"/>-->
+      <!--      </el-form-item>-->
+      <!--      <el-form-item class="label" label="任务全称" prop="fullname">-->
+      <!--        <el-input style="width: 400px;" v-model="form.fullname" placeholder="请输入任务全称" :disabled="formDisabled"/>-->
+      <!--      </el-form-item>-->
+      <el-form-item class="label" label="活动名称" prop="name">
+        <el-input style="width: 400px;" v-model="form.name" placeholder="请输入任务名称" :disabled="formDisabled"/>
       </el-form-item>
-<!--      <el-form-item class="label" label="任务全称" prop="fullname">-->
-<!--        <el-input style="width: 400px;" v-model="form.fullname" placeholder="请输入任务全称" :disabled="formDisabled"/>-->
-<!--      </el-form-item>-->
-      <el-form-item class="label" label="任务奖励预算" prop="moneyRange">
+      <el-form-item class="label" label="活动奖励预算" prop="moneyRange">
         <el-input style="width: 400px;" type="number" v-model.number="form.moneyRange" placeholder="请输入任务奖励预算"
                   :disabled="formDisabled"/>
       </el-form-item>
-
       <el-form-item class="label" label="开始时间" prop="beginTime">
         <el-date-picker style="width: 400px;" v-model="form.beginTime" type="date" placeholder="开始时间"
                         value-format="YYYY-MM-DD HH:mm:ss"
@@ -23,29 +25,29 @@
                         value-format="YYYY-MM-DD HH:mm:ss"
                         :disabled="formDisabled"/>
       </el-form-item>
-      <el-form-item class="label" label="任务范围" prop="ruleScupes">
+      <el-form-item class="label" label="活动范围" prop="ruleScupes">
         <el-button @click="showRuleScupes = !showRuleScupes" link type="primary">
           <span v-show="handleType === 'query'">查看<span
               v-show="form.ruleScupes.length>0">已选择（{{ form.ruleScupes.length }}）个</span></span>
-          <span v-show="handleType === 'edit'">编辑 <span
+          <span v-show="handleType === 'edit'">编辑<span
               v-show="form.ruleScupes.length>0">已选择（{{ form.ruleScupes.length }}）个</span></span>
-          <span v-show="handleType === 'add'">新增 <span
+          <span v-show="handleType === 'add'">新增<span
               v-show="form.ruleScupes.length>0">已选择（{{ form.ruleScupes.length }}）个</span></span>
         </el-button>
       </el-form-item>
-      <el-form-item class="label" label="任务负责人" prop="ruleResponsibleUsers">
+      <el-form-item class="label" label="活动负责人" prop="ruleResponsibleUsers">
         <el-button @click="showResponsibleUsers = !showResponsibleUsers" link type="primary">
-          <span v-show="handleType === 'query'">查看 <span
+          <span v-show="handleType === 'query'">查看<span
               v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
-          <span v-show="handleType === 'edit'">编辑 <span
+          <span v-show="handleType === 'edit'">编辑<span
               v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
           <span v-show="handleType === 'add'">新增<span
               v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
         </el-button>
       </el-form-item>
-      <el-form-item class="label" label="任务参与方" prop="participants">
+      <el-form-item class="label" label="活动参与方" prop="participants">
         <el-button @click="showRarticipants = !showRarticipants" link type="primary">
-          <span v-show="handleType === 'query'">查看  <span
+          <span v-show="handleType === 'query'">查看 <span
               v-show="form.participants.length>0">已选择（{{ form.participants.length }}）个</span></span>
           <span v-show="handleType === 'edit'">编辑<span
               v-show="form.participants.length>0">已选择（{{ form.participants.length }}）个</span></span>
@@ -54,12 +56,13 @@
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="任务描述" prop="comment">
-      <el-input
-          v-model="form.comment"
-          :autosize="{ minRows: 2, maxRows: 8 }"
-          type="textarea"
-          placeholder="请输入任务描述"/>
+        <el-input
+            v-model="form.comment"
+            :autosize="{ minRows: 2, maxRows: 8 }"
+            type="textarea"
+            placeholder="请输入任务描述"/>
       </el-form-item>
+
       <!--      <el-form-item label="任务截止类型" prop="endType">-->
       <!--        <el-select v-model="form.endType" clearablestyle="width: 100%">-->
       <!--          <el-option v-for="item in activity_type" :value="item.value" :key="item.value" :label="item.label">-->
@@ -67,7 +70,7 @@
       <!--          </el-option>-->
       <!--        </el-select>-->
       <!--      </el-form-item>-->
-      <el-form-item class="label" label="任务附件" prop="filesInfos">
+      <el-form-item class="label" label="活动附件" prop="filesInfos">
         <el-upload
             :disabled="formDisabled"
             :action="uploadData.imgBannerUrl"
@@ -229,6 +232,7 @@ const businessTreeParticipantsRef = ref()
 const responsibleUsersRef = ref()
 const data = reactive({
   form: {
+    comment: '',
     files: [],
     ruleScupes: [],
     participants: [],
@@ -242,10 +246,12 @@ const data = reactive({
   rules: {
     beginTime: [{required: true, message: "请选择开始时间", trigger: "change"}],
     endTime: [{required: true, message: "请选择结束时间", trigger: "change"}],
-    name: [{required: true, message: "请输入简称", trigger: "blur"}],
+    name: [{required: true, message: "请输入名称", trigger: "blur"}],
+    fullname: [{required: true, message: "请输入全称", trigger: "blur"}],
     moneyRange: [{required: true, message: "请输入任务奖励预算", trigger: "blur"}],
     ruleScupes: [{required: true, validator: ruleScupes}],
     ruleResponsibleUsers: [{required: true, validator: ruleResponsibleUsers}],
+    // taskName: [{required: true, message: "请输入名称", trigger: "blur"}],
     comment: [{required: true, message: "请输入任务描述", trigger: "blur"}],
   }
 });
@@ -255,10 +261,11 @@ const {form, rules} = toRefs(data);
 // 表单重置
 function reset() {
   form.value = {
+    comment: '',
     canEdit: false,
     activityJoint: false,
     moneyRange: 0,//任务奖励预算
-    name: '', //简称
+    name: '',//名称
     fullname: '', //全称
     beginTime: '', //开始时间
     endTime: '', //结束时间
@@ -305,7 +312,6 @@ const handleImgBannerSuccess = (res) => {
     ElMessage({type: 'warning', message: res.msg})
   }
 }
-console.log(import.meta.env.VITE_APP_BASE_API, "???")
 
 /** 提交按钮 */
 async function submitForm() {
@@ -424,6 +430,8 @@ const queryActivityEventId = async (eventId) => {
     data.form = resultData
   }
 }
+
+
 //添加loading
 const openLoading = () => {
   firstLoading.value = true

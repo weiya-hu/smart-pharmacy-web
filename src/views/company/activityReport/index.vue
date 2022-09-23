@@ -6,32 +6,42 @@
     <!--    搜索条件-->
     <div class="serachParams">
       <el-form :inline="true" :model="queryParams" class="demo-form-inline">
-        <el-form-item label="任务时间" label-width="120px">
+        <el-form-item class="label" label="任务时间">
           <el-date-picker
+              style="width: 300px;"
               v-model="queryParams.betweenDate"
-              type="datetimerange"
+              type="daterange"
               start-placeholder="开始时间"
               end-placeholder="结束时间"
-              format="YYYY-MM-DD hh-mm-ss"
+              format="YYYY-MM-DD"
               value-format="YYYY-MM-DD hh:mm:ss"
           />
         </el-form-item>
-        <el-form-item label="区域" label-width="120px">
-          <el-cascader :collapse-tags="true" style="width: 300px" :options="options" :props="props"
+        <el-form-item class="label" label="区域">
+          <el-cascader style="width: 300px;" placeholder="请选择区域" :collapse-tags="true" :options="options"
+                       :props="props"
                        clearable/>
         </el-form-item>
-        <el-form-item label="条件查询" label-width="120px">
-          <el-input style="width: 300px" v-model="queryParams.otherFilter"
+        <el-form-item class="label" label="条件查询">
+          <el-input style="width: 300px;" v-model="queryParams.otherFilter"
                     placeholder="请输入任务名/编号/商品名/商品ID/品牌"></el-input>
         </el-form-item>
-        <el-form-item label="任务状态" label-width="120px">
-          <el-select v-model="queryParams.state" placeholder="请选择要查看的区域" clearable>
+        <el-form-item class="label" label="任务状态">
+          <el-select style="width: 300px;" v-model="queryParams.state" placeholder="请选择任务状态" clearable>
             <el-option v-for="(item,key) in statusOption" :key="key" :label="item.label" :value="item.value"/>
           </el-select>
         </el-form-item>
-        <el-form-item label-width="120px" label="">
-          <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-          <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+        <el-form-item class="label" label="时间范围">
+          <el-select style="width: 300px;" v-model="queryParams.timeRangeQuickSelection"
+                     placeholder="请选择要查看的区域" clearable>
+            <el-option v-for="(item,key) in fastSelectDate" :key="key" :label="item.label" :value="item.value"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item class="label" label=" ">
+          <div style="width: 300px;">
+            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+          </div>
         </el-form-item>
       </el-form>
     </div>
@@ -396,6 +406,7 @@ const data = reactive({
     nodeId: [],
     otherFilter: undefined,
     betweenDate: [],
+    timeRangeQuickSelection: ''
   },
 })
 const {queryParams} = toRefs(data);
@@ -1200,6 +1211,13 @@ function innitSelectOption() {
 innitSelectOption()
 </script>
 <style scoped lang="scss">
+.label::v-deep( .el-form-item__label) {
+  color: #606266;
+  font-weight: 600;
+  width: 70px;
+  justify-content: flex-start !important;
+}
+
 .outBox::v-deep(.el-loading-spinner) {
   height: 20vh;
   margin-top: 10vh;

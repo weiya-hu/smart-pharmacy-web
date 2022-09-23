@@ -1,14 +1,20 @@
 <template>
   <div class="app-container">
+    <div class="desc">
+      <span>激励活动 —— 连锁商户自己发起的营销激励活动</span>
+    </div>
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="关键字" prop="name">
-        <el-input v-model="queryParams.keyword" placeholder="简称｜全称｜描述" clearable @keyup.enter="handleQuery"/>
+      <el-form-item class="label" label="关键字" prop="name">
+        <el-input v-model="queryParams.keyword" placeholder="名称｜描述" clearable @keyup.enter="handleQuery"/>
       </el-form-item>
-      <el-form-item label="任务时间" prop="name">
-        <el-date-picker format="YYYY-MM-DD" value-format="YYYY-MM-DD" v-model="betweenDates" type="daterange" clearable
+      <el-form-item class="label" label="任务时间" prop="name">
+        <el-date-picker format="YYYY-MM-DD" value-format="YYYY-MM-DD" v-model="betweenDates"
+                        type="daterange" clearable
+                        start-placeholder="开始时间"
+                        end-placeholder="结束时间"
                         @keyup.enter="handleQuery"/>
       </el-form-item>
-      <el-form-item label="状态" prop="state">
+      <el-form-item class="label" label="状态" prop="state">
         <el-select v-model="queryParams.state" clearable @change="handleQuery" @keyup.enter="handleQuery">
           <el-option v-for="item in activity_type" :value="item.value" :key="item.value"
                      :label="item.label">{{ item.label }}
@@ -29,8 +35,8 @@
     </el-row>
 
     <el-table v-loading="loading" :data="activityList">
-      <el-table-column prop="eventId" label="任务ID"></el-table-column>
-      <el-table-column prop="name" label="任务简称"></el-table-column>
+      <el-table-column prop="eventId" label="活动ID"></el-table-column>
+      <el-table-column prop="name" label="活动名称"></el-table-column>
       <!--      <el-table-column prop="state" label="状态">-->
       <!--        <template #default="scope">-->
       <!--          <dict-tag :options="activity_type" :value="scope.row.state"/>-->
@@ -61,6 +67,9 @@
           <el-button v-if="scope.row.canStart" type="text" icon="Delete" @click="handleTaskBegin(scope.row)"
                      v-hasPermi="['wecom:order:remove']">
             启用
+          </el-button>
+          <el-button type="text">
+            电子签约
           </el-button>
         </template>
       </el-table-column>
@@ -138,12 +147,26 @@ function resetQuery() {
 
 /** 任务停用 */
 const handleTaskStop = (row) => {
-  stopActivityTask(row.eventId)
+  stopActivityTask(row.eventId).then(res => {
+    if (res.code == 200) {
+      proxy.$modal.msgSuccess("停用成功")
+      getList();
+    }
+  }, rej => {
+    proxy.$modal.msgError("停用失败")
+  })
 }
 
 /** 任务启用 */
 const handleTaskBegin = (row) => {
-  startActivityTask(row.eventId)
+  startActivityTask(row.eventId).then(res => {
+    if (res.code == 200) {
+      proxy.$modal.msgSuccess("启用成功")
+      getList();
+    }
+  }, rej => {
+    proxy.$modal.msgError("启用失败")
+  })
 }
 
 /** 修改按钮操作 */
@@ -174,3 +197,21 @@ function handleDelete(row) {
 
 getList();
 </script>
+<style lang="scss">
+.label::v-deep( .el-form-item__label) {
+  color: #606266;
+  font-weight: 600;
+  justify-content: flex-start !important;
+}
+
+.app-container {
+  .desc {
+    color: #999;
+    font-size: 16px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    margin-bottom: 30px;
+  }
+}
+
+</style>

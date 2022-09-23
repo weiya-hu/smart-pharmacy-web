@@ -193,7 +193,7 @@ const updataCount = function (param) {
 }
 //图一基本配置
 const chart_one_Option = ref({
-  color: ['#8fd5f3', '#5470c6'],
+  color: ['#e4e4e6', '#ffab9c'],
   // 设置图表的位置
   grid: {
     x: 60, // 左间距
@@ -295,7 +295,7 @@ const chart_one_Option = ref({
       name: '活动', // 系列名称, 用于tooltip的显示, legend 的图例筛选
       // 数据堆叠，同个类目轴上系列配置相同的stack值后，后一个系列的值会在前一个系列的值上相加
       stack: '总量',
-      barMaxWidth: 60, // 柱条的最大宽度，不设时自适应
+      barMaxWidth: 55, // 柱条的最大宽度，不设时自适应
       // 图形上的文本标签
       label: {
         show: true,
@@ -317,7 +317,7 @@ const chart_one_Option = ref({
       name: '日常', // 系列名称, 用于tooltip的显示, legend 的图例筛选
       // 数据堆叠，同个类目轴上系列配置相同的stack值后，后一个系列的值会在前一个系列的值上相加
       stack: '总量',
-      barMaxWidth: 60, // 柱条的最大宽度，不设时自适应
+      barMaxWidth: 55, // 柱条的最大宽度，不设时自适应
       // 图形上的文本标签
       label: {
         show: true,
@@ -329,6 +329,12 @@ const chart_one_Option = ref({
           fontWeight: "bolder",
           fontSize: '12',
           color: "#fff"
+        }
+      },
+
+      itemStyle: {
+        normal: {
+          barBorderRadius: [12, 12, 0, 0], // （顺时针左上，右上，右下，左下）
         }
       },
       data: [60, 30, 20, 10, 45, 30] // 系列中的数据内容数组
