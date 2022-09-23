@@ -48,12 +48,12 @@
                   :before-upload="beforeAvatarUpload">
                 <div class="demo-image__placeholder">
                   <div class="block">
-                    <el-image :src="form.logo" v-if="form.logo !== ''" style="width: 350px;height: 150px;border: 1px solid #c0c4cc;">
+                    <el-image :src="form.logo" v-if="form.logo !== null && form.logo !== ''" style="width: 350px;height: 150px;border: 1px solid var(--el-border-color);border-radius: 4px; overflow: hidden">
                       <template #placeholder>
                         <div class="image-slot">Loading<span class="dot">...</span></div>
                       </template>
                     </el-image>
-                    <el-image v-if="form.logo == ''" style="width: 350px;height: 150px;border: 1px solid #c0c4cc">
+                    <el-image v-if="form.logo == null || form.logo == '' || form.logo == undefined" style="width: 350px;height: 150px;border: 1px solid var(--el-border-color);border-radius: 4px; overflow: hidden">
                       <template #error>
                         <div class="image-slot" style="display: flex;justify-content:center;align-items:center;height: 150px">
                           <el-icon :size="48">

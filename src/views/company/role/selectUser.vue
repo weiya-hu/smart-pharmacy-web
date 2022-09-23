@@ -8,6 +8,7 @@
                placeholder="请输入用户名称"
                clearable
                @keyup.enter="handleQuery"
+               style="width: 220px"
             />
          </el-form-item>
 <!--         <el-form-item label="手机号码" prop="mobile">-->

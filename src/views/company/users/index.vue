@@ -350,12 +350,14 @@
         </div>
       </template>
     </el-dialog>
-    <el-dialog v-model="showQrCode" title="扫码加入" width="400px" :close-on-click-modal="false" draggable>
-      <div class="wecom-url">
-        <span >企业成员扫以下二维码加入企业</span>
-        <img :src="qrCodeUrl" alt="" style="width: 100%;margin-top: 10px"/>
-      </div>
-    </el-dialog>
+    <div class="code-dialog">
+      <el-dialog v-model="showQrCode" title="扫码加入" width="400px" :close-on-click-modal="false" draggable>
+        <div class="wecom-url">
+          <span>企业成员扫以下二维码加入企业</span>
+          <img :src="qrCodeUrl" alt="" />
+        </div>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -681,6 +683,8 @@ const getQrCode = ()=>{
 function onShowTips(e){
   let textLength = e.target.clientWidth
   let containerLength = e.target.scrollWidth
+  // console.log('textLength', textLength)
+  // console.log('containerLength', containerLength)
   if (textLength < containerLength) {
     showTitle.value = false
   } else {
@@ -695,14 +699,23 @@ getQrCode()
 
 </script>
 <style lang="scss" scoped>
-.wecom-url {
-  text-align: center;
-  width: 240px;
-  margin: 0 auto;
-}
 .text-nowrap {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.code-dialog {
+  :deep(.el-dialog__body) {
+    padding-top: 7px;
+  }
+  .wecom-url {
+     text-align: center;
+     width: 240px;
+     margin: 0 auto;
+   }
+  img {
+   width: 100%;
+    margin-top: 15px;
+  }
 }
 </style>
