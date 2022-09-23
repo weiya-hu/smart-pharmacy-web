@@ -136,17 +136,17 @@
                            :show-overflow-tooltip="true"/>
           <el-table-column label="成员名称" align="center" key="userName" prop="userName" v-if="columns[1].visible"
                            :show-overflow-tooltip="true"/>
-          <el-table-column label="部门" align="center" key="deptname" prop="deptname" v-if="columns[3].visible"
+          <el-table-column label="部门" align="center" key="deptname" prop="deptname" v-if="columns[2].visible"
                            :show-overflow-tooltip="true"/>
-          <el-table-column label="手机号码" align="center" key="mobile" prop="mobile" v-if="columns[4].visible"
+          <el-table-column label="手机号码" align="center" key="mobile" prop="mobile" v-if="columns[3].visible"
                            width="120"/>
-          <el-table-column label="微信OpenId" align="center" key="enable" v-if="isWecomAccount===0" width="200">
+          <el-table-column label="微信OpenId" align="center" v-if="isWecomAccount===0" width="200">
             <template #default="scope">
               <span v-if="scope.row.wechatOpenid">{{scope.row.wechatOpenid}}</span>
               <el-button v-else  type="primary" link @click="showQrCode=true">请使用微信扫码激活</el-button>
             </template>
           </el-table-column>
-          <el-table-column label="状态" align="center" key="enable" v-if="columns[5].visible">
+          <el-table-column label="状态" align="center" key="enable" prop="enable" v-if="columns[4].visible">
             <template #default="scope">
               <!--                     <el-switch-->
               <!--                        v-model="scope.row.enable"-->
@@ -154,11 +154,11 @@
               <!--                        :inactive-value="0"-->
               <!--                        @click="handleStatusChange(scope.row)"-->
               <!--                     ></el-switch>-->
-              <span v-if="scope.row.enable == 1">启用</span>
-              <span v-if="scope.row.enable == 0">禁用</span>
+              <el-tag v-if="scope.row.enable == 1">正常</el-tag>
+              <el-tag v-if="scope.row.enable == 0" type="danger">停用</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[6].visible" width="160">
+          <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[5].visible" width="160">
             <template #default="scope">
               <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
@@ -391,7 +391,7 @@ const deptOptions = ref(undefined);
 const postOptions = ref([]);
 const roleOptions = ref([]);
 const showQrCode = ref(false)
-const isWecomAccount = ref('')
+const isWecomAccount = ref(undefined)
 const qrCodeUrl = ref('')
 const showTitle = ref(true)
 
@@ -414,11 +414,10 @@ const upload = reactive({
 const columns = ref([
   {key: 0, label: `成员编号`, visible: true},
   {key: 1, label: `成员名称`, visible: true},
-  {key: 2, label: `企业微信ID`, visible: true},
-  {key: 3, label: `部门`, visible: true},
-  {key: 4, label: `手机号码`, visible: true},
-  {key: 5, label: `状态`, visible: true},
-  {key: 6, label: `创建时间`, visible: true}
+  {key: 2, label: `部门`, visible: true},
+  {key: 3, label: `手机号码`, visible: true},
+  {key: 4, label: `状态`, visible: true},
+  {key: 5, label: `创建时间`, visible: true}
 ]);
 
 const data = reactive({

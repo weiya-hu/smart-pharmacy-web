@@ -111,6 +111,7 @@ const resetQuery = () => {
 }
 //选择商品
 const handleAdd = (row) => {
+  productList.value.splice(productList.value.indexOf(row), 1)
   let isExists = productResultList.value.some(r => r.productId === row.productId)
   if (!isExists) {
     row.account = 1
@@ -123,6 +124,7 @@ const handleDelete = (row) => {
   if (index !== -1) {
     productResultList.value.splice(index, 1)
   }
+  productList.value.push(row)
 }
 //获取已选择商品
 const getProductPackageResultList = () => {

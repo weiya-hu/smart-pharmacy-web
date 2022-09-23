@@ -394,7 +394,6 @@ const onCancelRuleScupes = () => {
 const onSuccessResponsibleUsers = () => {
   showResponsibleUsers.value = false
   form.value.responsibleUsers = responsibleUsersRef.value.getSelectUsers().map(item => {
-    console.log(item)
     return {
       userId: item.userId,
       name: item.userName
