@@ -67,7 +67,6 @@ import {queryProductList} from '@/api/activity/activityProduct'
 import {
   queryEventRuleInfo
 } from '@/api/activity/eventInfo'
-import {watch} from "vue";
 
 let queryParam = ref({
   name: '',
@@ -103,6 +102,7 @@ const restQueryParam = () => {
 //清空已选择商品
 const clearSelected = () => {
   productResultList.value = []
+  getList()
 }
 //搜索产品
 const getList = () => {
@@ -116,6 +116,13 @@ const getList = () => {
           }
         })
   }
+}
+const getSelect = () => {
+  queryEventRuleInfo(props.eventRuleId).then(res => {
+    if (res.code === 200) {
+      productResultList.value = res.data.products
+    }
+  })
 }
 
 //重置搜索
@@ -188,6 +195,7 @@ defineExpose({
 })
 // getSelectedGoods()
 getList()
+getSelect()
 </script>
 
 <style scoped lang="scss">
