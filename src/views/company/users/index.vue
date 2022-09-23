@@ -24,10 +24,8 @@
               @node-click="handleNodeClick"
           >
             <template #default="{ node, data }">
-              <el-tooltip placement="top" :content="node.label" :disabled="!showTip">
-                <div ref="isOverflow" class="text-nowrap">
-                  <span>{{ node.label }}</span>
-                </div>
+              <el-tooltip placement="top" :content="node.label" :disabled="showTitle">
+                <span class="text-nowrap" @mouseover="onShowTips">{{ node.label }}</span>
               </el-tooltip>
             </template>
           </el-tree>
@@ -393,6 +391,7 @@ const roleOptions = ref([]);
 const showQrCode = ref(false)
 const isWecomAccount = ref('')
 const qrCodeUrl = ref('')
+const showTitle = ref(true)
 
 /*** 用户导入参数 */
 const upload = reactive({
@@ -679,6 +678,15 @@ const getQrCode = ()=>{
       })
 }
 
+function onShowTips(e){
+  let textLength = e.target.clientWidth
+  let containerLength = e.target.scrollWidth
+  if (textLength < containerLength) {
+    showTitle.value = false
+  } else {
+    showTitle.value = true
+  }
+}
 
 getTreeselect();
 loadRolePost()

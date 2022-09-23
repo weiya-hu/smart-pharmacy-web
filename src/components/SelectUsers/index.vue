@@ -24,8 +24,8 @@
               @node-click="handleNodeClick"
           >
             <template #default="{ node, data }">
-              <el-tooltip placement="top" :content="node.label">
-                <span class="text-nowrap">{{ node.label }}</span>
+              <el-tooltip placement="top" :content="node.label" :disabled="showTitle">
+                <span class="text-nowrap" @mouseover="onShowTips">{{ node.label }}</span>
               </el-tooltip>
             </template>
           </el-tree>
@@ -106,6 +106,8 @@ const initPassword = ref(undefined);
 const postOptions = ref([]);
 const roleOptions = ref([]);
 const userListRef = ref()
+const showTitle = ref(true)
+
 //默认选中id
 const defineSelectedId = []
 // 列显隐信息
@@ -240,6 +242,17 @@ const props = defineProps({
 defineExpose({
   getSelectUsers
 })
+
+function onShowTips(e){
+  let textLength = e.target.clientWidth
+  let containerLength = e.target.scrollWidth
+  if (textLength < containerLength) {
+    showTitle.value = false
+  } else {
+    showTitle.value = true
+  }
+}
+
 getList();
 getTreeselect();
 selectedNodeId()

@@ -129,7 +129,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="名称" prop="id">
+            <el-form-item label="名称" prop="relationId">
               <!--              <el-input v-model="form.name" style="width: 100%" placeholder="请选择名称 / 如没有需要的供应商，请输入名称"/>-->
               <el-select
                   v-model="form.relationId"
@@ -141,7 +141,6 @@
                   clearable
                   style="width: 100%"
                   v-if="form.type !==5"
-                  @change="isAdd"
               >
                 <el-option v-for="item in nameList" :key="item.relationId" :label="item.name" :value="item.relationId"/>
               </el-select>
