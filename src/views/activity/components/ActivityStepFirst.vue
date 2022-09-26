@@ -12,7 +12,9 @@
         <el-input style="width: 400px;" v-model="form.name" placeholder="请输入任务名称" :disabled="formDisabled"/>
       </el-form-item>
       <el-form-item class="label" label="活动奖励预算" prop="moneyRange">
-        <el-input style="width: 400px;" type="number" v-model.number="form.moneyRange" placeholder="请输入任务奖励预算"
+        <el-input style="width: 400px;" type="number"
+                  oninput="value=value.replace(/[^0-9.]/g,'')"
+                  v-model.number="form.moneyRange" placeholder="请输入任务奖励预算"
                   :disabled="formDisabled"/>
       </el-form-item>
       <el-form-item class="label" label="开始时间" prop="beginTime">
