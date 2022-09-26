@@ -55,6 +55,7 @@ const queryParam = ref({
   pageNum: 1,
   pageSize: 10,
   eventId: '',
+
 })
 const loading = ref(false)
 const storeList = ref([])
