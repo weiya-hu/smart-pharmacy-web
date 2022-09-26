@@ -28,6 +28,9 @@
               </el-select>
               <div class="desc">
                 {{ itemHeader.desc }}
+                <span style="color:#ff5a40">
+                  {{ '(' + itemHeader.dataFormat + ')' }}
+                </span>
               </div>
             </div>
           </el-form-item>
