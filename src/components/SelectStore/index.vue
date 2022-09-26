@@ -67,11 +67,15 @@ const handleQuery = () => {
 //搜索产品
 const getList = () => {
   if (props.eventId) {
-    queryStoreList(props.eventId)
+    queryStoreList(props.eventId, {
+      pageNum: queryParam.value.pageNum,
+      pageSize: queryParam.value.pageSize,
+      keyword: queryParam.value.name
+    })
         .then(res => {
           if (res.code === 200) {
             storeList.value = res.data.list
-            total.value = res.data.total
+            total.value = Number(res.data.total)
           }
         })
   }
