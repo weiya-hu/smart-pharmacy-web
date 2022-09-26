@@ -29,6 +29,9 @@
         @pagination="getList"
     />
     <el-divider content-position="left">已选择产品</el-divider>
+    <div class="handler">
+      <el-button @click="cleanAllStore" link type="primary">清空已选</el-button>
+    </div>
     <el-table v-loading="loading" :data="storeResultList" height="250">
       <el-table-column label="门店编号" prop="storeId"/>
       <el-table-column label="门店名称" prop="name" show-overflow-tooltip/>
@@ -80,6 +83,11 @@ const getList = () => {
         })
   }
 }
+//清空全部门店
+const cleanAllStore = () => {
+  storeResultList.value = []
+}
+
 
 //重置搜索
 const resetQuery = () => {
@@ -120,6 +128,12 @@ defineExpose({
 getList()
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.app-container {
+  .handler {
+    margin: 10px 0;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
 </style>
