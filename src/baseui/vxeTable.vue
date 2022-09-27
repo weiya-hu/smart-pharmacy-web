@@ -3,11 +3,12 @@
   <div class="ll-table">
     <vxe-table
         :data="listData"
-        :border="isShowBorder"
+        border="none"
         style="width: 100%;height: 100%"
         v-bind="childrenProps"
         :height="tableHeight"
         align="center"
+        :header-cell-style="{background: '#efefef'}"
         class="mytable-scrollbar"
     >
       <vxe-column type="seq" title="序号">
@@ -36,10 +37,10 @@ export default defineComponent({
       type: String,
       default: ''
     },
-    isShowBorder: {
-      type: Boolean,
-      default: false
-    },
+    // isShowBorder: {
+    //   type: Boolean,
+    //   default: false
+    // },
     listData: {
       type: Array,
       required: true
@@ -78,6 +79,8 @@ export default defineComponent({
     const handleSelectionChange = (value) => {
       emit('selectionChange', value)
     }
+
+
 
     return {handleSelectionChange}
   }
