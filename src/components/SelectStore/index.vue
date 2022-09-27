@@ -55,7 +55,6 @@ const queryParam = ref({
   pageNum: 1,
   pageSize: 10,
   eventId: '',
-
 })
 const loading = ref(false)
 const storeList = ref([])
@@ -75,18 +74,33 @@ const getList = () => {
       pageNum: queryParam.value.pageNum,
       pageSize: queryParam.value.pageSize,
       keyword: queryParam.value.name
-    })
-        .then(res => {
-          if (res.code === 200) {
-            storeList.value = res.data.list
-            total.value = Number(res.data.total)
-          }
+    }).then(res => {
+      if (res.code === 200) {
+        storeList.value = res.data.list
+        total.value = Number(res.data.total)
+
+        // console.log('filterIds', props.filterIds)
+        // console.log('storeList', storeList.value)
+        // if (props.filterIds.length > 0) {
+        //   storeList.value.forEach(item => {
+        //     if (props.filterIds.indexOf(item.storeId) > -1) {
+        //       handleAdd(item)
+        //     }
+        //   })
+        // }
+        let obj = storeList.value.filter(item => props.filterIds.indexOf(item.storeId) > -1)
+        obj.forEach(items => {
+          handleAdd(items)
         })
+      }
+    })
   }
 }
+
 //清空全部门店
 const cleanAllStore = () => {
   storeResultList.value = []
+  getList()
 }
 
 
@@ -97,6 +111,7 @@ const resetQuery = () => {
 }
 //选择门店
 const handleAdd = (row) => {
+  storeList.value.splice(storeList.value.indexOf(row), 1)
   let isExists = storeResultList.value.some(r => r.storeId === row.storeId)
   if (!isExists) {
     row.account = 1
@@ -109,6 +124,7 @@ const handleDelete = (row) => {
   if (index !== -1) {
     storeResultList.value.splice(index, 1)
   }
+  storeList.value.push(row)
 }
 //获取已选择门店
 const getStoreResultList = () => {
@@ -120,6 +136,10 @@ const props = defineProps({
     type: String,
     default: undefined
   },
+  filterIds: {
+    type: Array,
+    default: []
+  }
 })
 
 defineExpose({

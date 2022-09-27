@@ -355,14 +355,14 @@
               <div class="moudelTitle">参与门店</div>
             </el-row>
             <el-button v-if="thirdFormModels.formListData[index].filter.ids.length==0" type="primary" link
-                       @click="openStoreDialog(index)">添加门店
+                       @click="openStoreDialog(index, thirdFormModel)">添加门店
             </el-button>
             <el-button type="primary" link>已选（{{
                 thirdFormModels.formListData[index].filter.ids.length
               }}）个
             </el-button>
             <el-button v-if="thirdFormModels.formListData[index].filter.ids.length!==0" type="primary"
-                       @click="openStoreDialog(index)">点击查看门店列表
+                       @click="openStoreDialog(index, thirdFormModel)">点击查看门店列表
             </el-button>
           </div>
 
@@ -384,7 +384,7 @@
     </el-dialog>
     <!-- 门店列表弹窗-->
     <el-dialog title="门店列表" v-model="showStoreDialog" width="70%">
-      <SelectStore :eventId="props.eventId" ref="selectStoreRef"></SelectStore>
+      <SelectStore :eventId="props.eventId" :filterIds="storeList" ref="selectStoreRef"></SelectStore>
       <template #footer>
         <div class="dialog-footer">
           <el-button v-if="handleType!=='query'" type="primary" @click="onSuccessStoreDialog">保 存</el-button>
@@ -427,6 +427,7 @@ const productPackageId = ref(NaN)
 const formStoreIndex = ref(NaN)
 let itemRuleId = ref(null)
 const productList = ref([])
+const storeList = ref([])
 const firstFormModels = ref({
       formListData: [{
         eventCalcRewardType: 1,
@@ -602,7 +603,8 @@ const openProductsDialog = (index, row) => {
   showProductsDialog.value = true
 }
 
-const openStoreDialog = (index) => {
+const openStoreDialog = (index, data) => {
+  storeList.value = data.filter.ids
   showStoreDialog.value = true
   formStoreIndex.value = index
 }
@@ -912,7 +914,6 @@ const loadEventRule = () => {
                 thirdFormModels.value.formListData.push(item)
               }
             })
-            console.log('thirdFormModels.value', thirdFormModels.value)
             secondLoading.value = false
             return Promise.resolve(true)
           }

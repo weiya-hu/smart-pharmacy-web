@@ -127,13 +127,6 @@ const getList = () => {
     })
   }
 }
-// const getSelect = () => {
-//   queryEventRuleInfo(props.eventRuleId).then(res => {
-//     if (res.code === 200) {
-//       productResultList.value = res.data.products
-//     }
-//   })
-// }
 
 //重置搜索
 const resetQuery = () => {
