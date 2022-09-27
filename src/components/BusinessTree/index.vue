@@ -1,19 +1,21 @@
 <template>
   <el-checkbox v-model="menuExpand" @change="handleCheckedTreeExpand($event, )">展开/折叠</el-checkbox>
   <el-checkbox v-model="menuNodeAll" @change="handleCheckedTreeNodeAll($event, )">全选/全不选</el-checkbox>
-  <el-checkbox v-model="menuCheckStrictly" @change="handleCheckedTreeConnect($event, )">父子联动</el-checkbox>
+  <el-checkbox v-if="isShowMenuCheckStrictly" v-model="menuCheckStrictly" @change="handleCheckedTreeConnect($event, )">
+    父子联动
+  </el-checkbox>
   <el-scrollbar style="height: 450px;">
-      <el-tree
-          class="tree-border"
-          :data="treeData"
-          show-checkbox
-          ref="menuRef"
-          node-key="id"
-          default-expand-all
-          :check-strictly="!menuCheckStrictly"
-          empty-text="加载中，请稍候"
-          :props="{ label: 'name', children: 'children' }"
-      ></el-tree>
+    <el-tree
+        class="tree-border"
+        :data="treeData"
+        show-checkbox
+        ref="menuRef"
+        node-key="id"
+        default-expand-all
+        :check-strictly="!menuCheckStrictly"
+        empty-text="加载中，请稍候"
+        :props="{ label: 'name', children: 'children' }"
+    ></el-tree>
   </el-scrollbar>
 
 </template>
@@ -21,6 +23,7 @@
 <script setup>
 import {listReltree} from '@/api/company/reltree'
 import {nextTick} from "vue";
+
 const menuRef = ref()
 const treeData = ref([]);
 const menuExpand = ref(true);
@@ -28,16 +31,16 @@ const menuNodeAll = ref(false);
 const menuCheckStrictly = ref(true)
 const queryParams = ref({
   name: '',
-  allChild:true,
+  allChild: true,
 })
 const loadTree = () => {
   listReltree(queryParams.value)
       .then(res => {
         if (res.code === 200) {
           treeData.value = res.data
-          if(props.handelType === 'query' ||props.handelType === 'edit'){
-            nextTick(()=>{
-              menuRef.value.setCheckedKeys( props.data.map(m=>m.nodeId));
+          if (props.handelType === 'query' || props.handelType === 'edit') {
+            nextTick(() => {
+              menuRef.value.setCheckedKeys(props.data.map(m => m.nodeId));
             })
           }
         }
@@ -81,10 +84,15 @@ const props = defineProps({
     type: String,
     default: undefined
   },
-  data:{
-    type:Array,
+  data: {
+    type: Array,
     default: undefined
+  },
+  isShowMenuCheckStrictly: {
+    type: Boolean,
+    default: true
   }
+
 })
 
 loadTree()

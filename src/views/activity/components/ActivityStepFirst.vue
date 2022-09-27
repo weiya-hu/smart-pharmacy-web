@@ -138,7 +138,7 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <BusinessTree ref="businessTreeParticipantsRef" :handelType="props.handleType"
+      <BusinessTree :isShowMenuCheckStrictly="false" ref="businessTreeParticipantsRef" :handelType="props.handleType"
                     :data="data.form.ruleScupes"></BusinessTree>
       <template #footer>
         <div class="dialog-footer">

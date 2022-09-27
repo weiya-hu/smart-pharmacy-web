@@ -18,7 +18,10 @@
           />
         </el-form-item>
         <el-form-item class="label" label="区域">
-          <el-cascader style="width: 300px;" placeholder="请选择区域" :collapse-tags="true" :options="options"
+          <el-cascader v-model="queryParams.nodeId" @change="changeArea" style="width: 300px;"
+                       placeholder="请选择区域"
+                       :collapse-tags="true"
+                       :options="options"
                        :props="props"
                        clearable/>
         </el-form-item>
@@ -357,6 +360,7 @@ import {
 import {getActivityReportNumbers, getSalesHistogram, getAreaTree, getRegionSaleInfo} from '@/api/activityReport.js'
 import scaleChart from "@/components/scale-Chart/scale-Chart.vue"
 import useActivityReportStore from "@/store/modules/Company/activityReport.js";
+import {cloneFunction} from "@/utils/globalFunction";
 
 /**echarts实例*/
 let chart_one_ref = ref()
@@ -377,8 +381,10 @@ const reportTotalNumber = ref({
   totalPrizePool: '',
   userNumber: ''
 })
+
+
 //区域级联下拉
-let props = ref({multiple: true, label: 'name', value: 'id'})
+let props = ref({multiple: true, label: 'name', value: 'id', checkStrictly: false})
 let options = ref([])
 const size = {
   width: '90vw',
@@ -410,6 +416,11 @@ const data = reactive({
   },
 })
 const {queryParams} = toRefs(data);
+const changeArea = () => {
+  console.log(queryParams.value.nodeId)
+}
+
+
 const fastSelectDate = ref([
   {
     label: "今日",
@@ -1122,14 +1133,16 @@ function getList() {
       endTime: queryParams.value.betweenDate[1]
     }
   }
+  queryParams.value.nodeId = Array.from(new Set(queryParams.value.nodeId.flat()));
+  console.log({...cloneFunction(queryParams.value), ...timeObject})
   /**获取首页的数字*/
-  getActivityReportNumbers({...queryParams.value, ...timeObject}).then(res => {
+  getActivityReportNumbers({...cloneFunction(queryParams.value), ...timeObject}).then(res => {
     if (res.code == 200) {
       reportTotalNumber.value = Object.assign(reportTotalNumber.value, res.data)
     }
   })
   /**获取统计图数据*/
-  getSalesHistogram({...queryParams.value, ...timeObject}).then(res => {
+  getSalesHistogram({...cloneFunction(queryParams.value), ...timeObject}).then(res => {
     if (res.code == 200) {
       if (res.data.length !== 0) {
         innitBarChartData(res.data)
@@ -1145,11 +1158,11 @@ function getList() {
     }
   })
   /**获取品牌销量 */
-  store.getActivityReportBrandList({...queryParams.value, ...timeObject})
+  store.getActivityReportBrandList({...cloneFunction(queryParams.value), ...timeObject})
 //  获取单品销量
-  store.getActivityReportProductList({...queryParams.value, ...timeObject})
+  store.getActivityReportProductList({...cloneFunction(queryParams.value), ...timeObject})
 //获取区域销售情况
-  store.getActivityReportAreaList({...queryParams.value, ...timeObject})
+  store.getActivityReportAreaList({...cloneFunction(queryParams.value), ...timeObject})
 }
 
 let percentageData = ref([])
