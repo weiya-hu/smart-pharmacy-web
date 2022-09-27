@@ -77,7 +77,9 @@
                     type="number"
                     oninput="value=value.replace(/[^\d]/g,'')"
                     v-model.number="item.targetRange"
-                    class="input-with-select">
+                    class="input-with-select"
+                @change="()=>{if(!item.targetRange) firstFormModel.jobs[i].targetRange=0}"
+                >
                   <template #append>
                     <el-select v-model="firstFormModel.calcUnit" disabled style="width: 80px">
                       <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value"
@@ -91,7 +93,8 @@
                     :disabled="handleType=='query'"
                     oninput="value=value.replace(/[^0-9.]/g,'')"
                     v-model="item.targetRange"
-                    class="input-with-select">
+                    class="input-with-select"
+                    @change="()=>{if(!item.targetRange) firstFormModel.jobs[i].targetRange=0}">
                   <template #append>
                     <el-select v-model="firstFormModel.calcUnit" disabled style="width: 80px">
                       <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value"
@@ -104,6 +107,7 @@
                 <el-input oninput="value=value.replace(/[^0-9.]/g,'')"
                           :disabled="handleType=='query'"
                           v-model="item.price"
+                          @change="()=>{if(!item.price) firstFormModel.jobs[i].price=0}"
                           class="input-with-select">
                 </el-input>
               </el-form-item>
@@ -197,6 +201,7 @@
                     :disabled="handleType=='query'"
                     oninput="value=value.replace(/[^\d]/g,'')"
                     v-model.number="item.targetRange"
+                    @change="()=>{if(!item.targetRange) secondFormModel.jobs[index].targetRange=0}"
                     class="input-with-select">
                   <template #append>
                     <el-select v-model="secondFormModel.calcUnit" disabled style="width: 80px">
@@ -211,6 +216,7 @@
                     :disabled="handleType=='query'"
                     v-model.number="item.targetRange"
                     oninput="value=value.replace(/[^0-9.]/g,'')"
+                    @change="()=>{if(!item.targetRange) secondFormModel.jobs[index].targetRange=0}"
                     class="input-with-select">
                   <template #append>
                     <el-select v-model="secondFormModel.calcUnit" disabled style="width: 80px">
@@ -222,6 +228,7 @@
               </el-form-item>
               <el-form-item class="label" label="奖励金额">
                 <el-input oninput="value=value.replace(/[^0-9.]/g,'')" :disabled="handleType=='query'"
+                          @change="()=>{if(!item.price) secondFormModel.jobs[index].price=0}"
                           v-model="item.price" class="input-with-select">
                 </el-input>
               </el-form-item>
@@ -319,6 +326,7 @@
                 <el-input
                     :disabled="handleType=='query'"
                     v-model.number="item.targetRange"
+                    @change="()=>{if(!item.targetRange) thirdFormModel.jobs[index].targetRange=0}"
                     oninput="value=value.replace(/[^\d]/g,'')"
                     class="input-with-select">
                   <template #append>
@@ -334,6 +342,7 @@
                     :disabled="handleType=='query'"
                     v-model.number="item.targetRange"
                     oninput="value=value.replace(/[^0-9.]/g,'')"
+                    @change="()=>{if(!item.targetRange) thirdFormModel.jobs[index].targetRange=0}"
                     class="input-with-select">
                   <template #append>
                     <el-select v-model="thirdFormModel.calcUnit" disabled style="width: 80px">
@@ -345,6 +354,7 @@
               </el-form-item>
               <el-form-item class="label" label="奖励金额">
                 <el-input oninput="value=value.replace(/[^0-9.]/g,'')" :disabled="handleType=='query'"
+                          @change="()=>{if(!item.price) thirdFormModel.jobs[index].price=0}"
                           v-model="item.price" class="input-with-select">
                 </el-input>
               </el-form-item>
@@ -965,6 +975,13 @@ const publishActivity = () => {
   return approvalActivityTask(props.eventId)
   // return publish(props.eventId)
 }
+
+const clearJobValue = (value)=>{
+  if(!value){
+    value = 0
+  }
+}
+
 defineExpose({
   loadEventRule,
   getJobList,
