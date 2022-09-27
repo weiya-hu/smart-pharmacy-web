@@ -50,7 +50,8 @@
                 <!--                    @click="matchFormHeader"-->
                 <!--                >匹配表头-->
                 <!--                </el-button>-->
-                <el-button type="primary" @click="getList">下一页</el-button>
+                <el-button type="primary" @click="queryNextpage(true)">上一页</el-button>
+                <el-button type="primary" @click="queryNextpage(false)">下一页</el-button>
               </el-row>
             </div>
           </el-row>
@@ -157,7 +158,7 @@
                          prop="userName"/>
       </el-table>
       <div style="padding: 10px;display: flex;justifyContent: flex-end">
-        <!--        <span>总计:{{ total }}条</span>-->
+        <span>当前页:{{ currentPage + 1 }}</span>
       </div>
     </div>
     <div>
@@ -174,8 +175,6 @@ import {getCurrentInstance, reactive, toRefs} from "vue";
 import {getToken} from "@/utils/auth";
 import {getOrderList, addDynamicHeaderExcelUrl} from "@/api/system/order";
 import customizeImportFirst from './component/customizeImportFirst'
-
-
 import {ElMessage} from "element-plus";
 import router from "@/router";
 //自定义导入列表
@@ -184,6 +183,14 @@ const showSearch = ref(true);
 const {proxy} = getCurrentInstance()
 let nextSearchAfter = ref([])
 let betweenTime = ref([])
+//存储当前页数
+let currentPage = ref(0)
+//保存每一页的查询参数
+let pageQueryParams = ref([[
+  undefined
+]
+])
+
 //搜索条件
 const data = reactive({
   queryParams: {
@@ -210,7 +217,13 @@ const upload = reactive({
   // 上传的地址
   url: import.meta.env.VITE_APP_BASE_API + "/product/order/importOrder"
 });
-
+/*** 重置每一页的查询参数*/
+const restPageQueryParams = () => {
+  pageQueryParams.value = [[
+    undefined
+  ]
+  ]
+}
 
 /*** 用户自定义导入 */
 let uploadData = reactive({
@@ -292,33 +305,95 @@ function refreshList() {
   getList()
 }
 
-/** 查询用订单列表 */  let timeObject = {
-  startTime: undefined,
-  endTime: undefined
-}
-if (betweenTime.value.length !== 0) {
-  timeObject = {
-    startTime: betweenTime.value[0],
-    endTime: betweenTime.value[1]
+/**查询下一页*/
+function queryNextpage(type) {
+
+  let timeObject = {
+    startTime: undefined,
+    endTime: undefined
+  }
+  if (betweenTime.value.length !== 0) {
+    timeObject = {
+      startTime: betweenTime.value[0],
+      endTime: betweenTime.value[1]
+    }
+  }
+  if (type) {
+    let previousIndex = currentPage.value - 1
+    if (previousIndex < 0) {
+      proxy.$modal.msgError("已经是第一页")
+      return;
+    } else {
+      getOrderList({
+        ...timeObject,
+        ...queryParams.value,
+        nextSearchAfter: pageQueryParams.value[previousIndex]
+      }).then(res => {
+        if (res.code == 200) {
+          currentPage.value = currentPage.value - 1
+          orderList.value = res.data.orders
+          total.value = Number(res.data.pageSize * res.data.pages);
+          loading.value = false;
+        }
+      })
+    }
+  } else {
+    let nextIndex = currentPage.value + 1
+    if (pageQueryParams.value[nextIndex] == null) {
+      proxy.$modal.msgError("已经是最后一页")
+      return
+    } else {
+      getOrderList({
+        ...timeObject,
+        ...queryParams.value,
+        nextSearchAfter: pageQueryParams.value[nextIndex]
+      }).then(res => {
+        if (res.code == 200) {
+          currentPage.value = currentPage.value + 1
+          orderList.value = res.data.orders
+          nextSearchAfter.value = res.data.nextSearchAfter
+          let nextIndex = currentPage.value + 1
+          pageQueryParams.value[nextIndex] = res.data.nextSearchAfter
+          total.value = Number(res.data.pageSize * res.data.pages);
+          loading.value = false;
+        }
+      })
+    }
   }
 }
 
+
+/** 查询用订单列表 */
 function getList() {
 
-  loading.value = true;
-  getOrderList({
-    ...timeObject,
-    ...queryParams.value,
-    nextSearchAfter: nextSearchAfter.value
-  }).then(res => {
-    if (res.code == 200) {
-      orderList.value = res.data.orders
-      nextSearchAfter.value = res.data.nextSearchAfter
-      total.value = Number(res.data.pageSize * res.data.pages);
-      loading.value = false;
+  let timeObject = {
+    startTime: undefined,
+    endTime: undefined
+  }
+  if (betweenTime.value.length !== 0) {
+    timeObject = {
+      startTime: betweenTime.value[0],
+      endTime: betweenTime.value[1]
     }
+  }
+  loading.value = true;
+  if (currentPage.value == 0) {
+    getOrderList({
+      ...timeObject,
+      ...queryParams.value,
+      nextSearchAfter: pageQueryParams.value[currentPage.value].nextSearchAfter
+    }).then(res => {
+      if (res.code == 200) {
+        orderList.value = res.data.orders
+        nextSearchAfter.value = res.data.nextSearchAfter
+        let nextIndex = currentPage.value + 1
+        pageQueryParams.value[nextIndex] = res.data.nextSearchAfter
+        total.value = Number(res.data.pageSize * res.data.pages);
+        loading.value = false;
+      }
 
-  })
+    })
+  }
 };
 
 /** 下载模板操作 */
@@ -336,6 +411,8 @@ function handleExport() {
 /** 搜索按钮操作 */
 function handleQuery() {
   queryParams.value.pageNum = 1;
+  nextSearchAfter.value = undefined
+  restPageQueryParams()
   getList();
 };
 getList()
