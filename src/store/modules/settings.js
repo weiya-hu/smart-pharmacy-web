@@ -8,6 +8,7 @@ const storageSetting = JSON.parse(localStorage.getItem('layout-setting')) || ''
 const useSettingsStore = defineStore(
     'settings',
     {
+
         state: () => ({
             title: '',
             theme: storageSetting.theme || '#ff5a40',
