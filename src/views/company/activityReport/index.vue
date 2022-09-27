@@ -109,6 +109,7 @@
             height="600px"
             border="none"
             class="mytable-scrollbar"
+            :header-cell-style="{background: '#efefef'}"
             :data="item.saleList">
           <vxe-column type="seq" title="序号" width="60"></vxe-column>
           <vxe-column field="name" title="名称"></vxe-column>
@@ -1513,7 +1514,8 @@ innitSelectOption()
       flex: 1;
       margin: 0 10px;
       border: 1px solid #D6D6D6;
-      border-radius: 5px;
+      border-radius: 10px;
+      overflow: hidden;
 
       .sales-header {
         display: flex;
@@ -1550,9 +1552,6 @@ innitSelectOption()
           //background: #FAFAFA;
           padding: 0;
         }
-      }
-      .vxe-table--render-default.border--default .vxe-header--column{
-        background-color: #0000ff;
       }
 
     }
