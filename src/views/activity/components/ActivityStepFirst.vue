@@ -254,7 +254,7 @@ const data = reactive({
     ruleScupes: [{required: true, validator: ruleScupes}],
     ruleResponsibleUsers: [{required: true, validator: ruleResponsibleUsers}],
     // taskName: [{required: true, message: "请输入名称", trigger: "blur"}],
-    comment: [{required: true, message: "请输入任务描述", trigger: "blur"}],
+    comment: [{required: true, message: "请输入任务描述", trigger: "blur"}, {min: 4, max: 1028, message: "任务描述不得低于4字符，不得超过1028字符", trigger: "blur"}],
   }
 });
 

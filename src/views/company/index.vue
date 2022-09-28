@@ -7,34 +7,11 @@
     </div>
     <div class="form-box">
       <el-form v-model="form" label-position="left" label-width="85px">
-        <el-form-item label="企业logo" prop="logo">
-<!--          <div class="logo">-->
-<!--            <el-upload-->
-<!--               style="width:350px;height:180px;border: 1px dashed #ddd;"-->
-<!--               v-if="inputType!=='readey'"-->
-<!--               class="avatar-uploader"-->
-<!--               accept="image/*"-->
-<!--               :file-list="fileList"-->
-<!--               :action="uploadData.uploadUrl"-->
-<!--               :headers="{ 'Authorization': uploadData.token }"-->
-<!--               :show-file-list="true"-->
-<!--               :on-success="handleAvatarSuccess"-->
-<!--               :before-upload="beforeAvatarUpload"-->
-<!--               :on-change="handleChange">-->
-<!--            <div style="textAlign: center;width: 350px;height:180px;line-height: 180px">-->
-<!--                <el-icon size="32px">-->
-<!--                  <Plus/>-->
-<!--                </el-icon>-->
-<!--              </div>-->
-<!--            </el-upload>-->
-
-<!--            <div v-if="inputType==='readey'" class="demo-image__preview">-->
-<!--              <el-image style="width:350px;height:180px;" :src="uploadData.url" :initial-index="4" fit="cover"/>-->
-<!--            </div>-->
-<!--            <div class="item_logoDes">推荐尺寸350*180</div>-->
-<!--          </div>-->
-          <div>
-            <el-upload
+        <div class="form-top">
+          <el-form-item label="企业logo" prop="logo">
+            <div>
+              <el-upload
+                  class="back-box"
                   :disabled="inputType==='readey'"
                   :action="uploadData.uploadUrl"
                   :headers="{'Authorization':uploadData.token}"
@@ -46,83 +23,64 @@
                   :show-file-list="false"
                   :on-success="handleAvatarSuccess"
                   :before-upload="beforeAvatarUpload">
-                <div class="demo-image__placeholder">
-                  <div class="block">
-                    <el-image :src="form.logo" v-if="form.logo !== null && form.logo !== ''" style="width: 350px;height: 150px;border: 1px solid var(--el-border-color);border-radius: 4px; overflow: hidden">
-                      <template #placeholder>
-                        <div class="image-slot">Loading<span class="dot">...</span></div>
-                      </template>
-                    </el-image>
-                    <el-image v-if="form.logo == null || form.logo == '' || form.logo == undefined" style="width: 350px;height: 150px;border: 1px solid var(--el-border-color);border-radius: 4px; overflow: hidden">
-                      <template #error>
-                        <div class="image-slot" style="display: flex;justify-content:center;align-items:center;height: 150px">
-                          <el-icon :size="48">
-                            <Picture/>
-                          </el-icon>
-                        </div>
-                      </template>
-                    </el-image>
+                  <div class="demo-image__placeholder">
+                    <div class="block">
+                      <el-image :src="form.logo" v-if="form.logo !== null && form.logo !== ''" style="width: 350px;height: 150px;border: 1px solid var(--el-border-color);border-radius: 4px; overflow: hidden">
+                        <template #placeholder>
+                          <div class="image-slot">Loading<span class="dot">...</span></div>
+                        </template>
+                      </el-image>
+                      <el-image v-if="form.logo == null || form.logo == '' || form.logo == undefined" style="width: 350px;height: 150px;border: 1px solid var(--el-border-color);border-radius: 4px; overflow: hidden">
+                        <template #error>
+                          <div class="image-slot" style="display: flex;justify-content:center;align-items:center;height: 150px">
+                            <el-icon :size="48">
+                              <Picture/>
+                            </el-icon>
+                          </div>
+                        </template>
+                      </el-image>
+                    </div>
                   </div>
-                </div>
-              </el-upload>
-            <div class="form-tips">推荐尺寸350*180</div>
-          </div>
-        </el-form-item>
-        <el-form-item label="企微ID" prop="plainCorpId">
-          <el-input v-model="form.plainCorpId" :disabled="inputType==='readey'" />
-        </el-form-item>
-        <el-form-item label="法定代表人" prop="legalPersonId">
-          <el-select v-model="form.legalPersonId" :disabled="inputType==='readey'" placeholder=" " style="width: 350px;">
-            <el-option v-for="item in legalPersonList" :key="item.userId" :label="item.userName" :value="item.userId" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="企业名称" prop="name">
-          <el-input v-model="form.name" :disabled="inputType==='readey'" />
-        </el-form-item>
-        <el-form-item label="企业全称" prop="fullname">
-          <el-input v-model="form.fullname" :disabled="inputType==='readey'" />
-        </el-form-item>
-        <el-form-item label="企业类型">
-          <el-select v-model="form.corpType" :disabled="inputType==='readey'" placeholder=" " filterable style="width: 350px;">
-            <el-option v-for="item in corpTypeList" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="门店编号" v-if="form.corpType == 4">
-          <el-input v-model="form.code"
-                    clearable
-                    :disabled="inputType==='readey'"
-                    />
-        </el-form-item>
-        <el-form-item label="发票抬头">
-          <el-input v-model="form.invoiceTitle" :disabled="inputType==='readey'" />
-        </el-form-item>
-        <el-form-item label="企业电话">
-          <el-input v-model="form.phone" clearable :disabled="inputType==='readey'" />
-        </el-form-item>
-        <el-form-item label="详细地址">
-          <el-input v-model="form.address" clearable :disabled="inputType==='readey'"></el-input>
-        </el-form-item>
-<!--          <el-form-item label="归属连锁" v-if="form.corpType == 4">-->
-<!--            <el-select-->
-<!--                v-model="form.parentId"-->
-<!--                :disabled="inputType==='readey'"-->
-<!--                clearable-->
-<!--                placeholder="请选择"-->
-<!--                style="width: 300px;"-->
-<!--                @change="handelParent($event)">-->
-<!--              <el-option v-for="(item,index) in form.corpInfoList" :key="index" :label="item.companyName" :value="item.id"/>-->
-<!--            </el-select>-->
-<!--          </el-form-item>-->
-<!--        <el-form-item label="连锁品牌">-->
-<!--          <el-select-->
-<!--              v-model="form.brandType"-->
-<!--              :disabled="inputType==='readey'"-->
-<!--              clearable-->
-<!--              placeholder="请选择"-->
-<!--              style="width: 300px;">-->
-<!--            <el-option v-for="item in sourceList" :key="item.value" :label="item.label" :value="item.value"/>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
+                <div :class="inputType==='readey'? 'hide-back' : 'show-back'">点击上传 / 替换logo</div>
+                </el-upload>
+              <div class="form-tips">推荐尺寸350*150</div>
+            </div>
+          </el-form-item>
+          <el-form-item label="企微ID" prop="plainCorpId">
+            <el-input v-model="form.plainCorpId" :disabled="inputType==='readey'" />
+          </el-form-item>
+          <el-form-item label="法定代表人" prop="legalPersonId">
+            <el-select v-model="form.legalPersonId" :disabled="inputType==='readey'" placeholder=" " style="width: 350px;">
+              <el-option v-for="item in legalPersonList" :key="item.userId" :label="item.userName" :value="item.userId" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="企业名称" prop="name">
+            <el-input v-model="form.name" :disabled="inputType==='readey'" />
+          </el-form-item>
+          <el-form-item label="企业全称" prop="fullname">
+            <el-input v-model="form.fullname" :disabled="inputType==='readey'" />
+          </el-form-item>
+          <el-form-item label="企业类型">
+            <el-select v-model="form.corpType" :disabled="inputType==='readey'" placeholder=" " filterable style="width: 350px;">
+              <el-option v-for="item in corpTypeList" :key="item.value" :label="item.label" :value="item.value" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="门店编号" v-if="form.corpType == 4">
+            <el-input v-model="form.code"
+                      clearable
+                      :disabled="inputType==='readey'"
+                      />
+          </el-form-item>
+          <el-form-item label="发票抬头">
+            <el-input v-model="form.invoiceTitle" :disabled="inputType==='readey'" />
+          </el-form-item>
+          <el-form-item label="企业电话">
+            <el-input v-model="form.phone" clearable :disabled="inputType==='readey'" />
+          </el-form-item>
+          <el-form-item label="详细地址">
+            <el-input v-model="form.address" clearable :disabled="inputType==='readey'"></el-input>
+          </el-form-item>
+        </div>
         <el-divider />
         <el-form-item label="成员数量">
           <span>{{ form.userCount }}个成员</span>
@@ -286,10 +244,26 @@ getFormData()
 </script>
 <style lang="scss" scoped>
 .app-container {
+  position: relative;
   .btn-box {
-    float: right;
+    position: absolute;
+    left: 535px;
+    z-index: 999;
   }
   .form-box {
+    .form-top {
+      position: relative;
+      &:after {
+        content: '';
+        display: block;
+        background: var(--el-border-color);
+        width: 1px;
+        height: 100%;
+        position: absolute;
+        left: 485px;
+        top: 0;
+      }
+    }
     .form-tips {
       font-size: 12px;
       color: #787878;
@@ -297,6 +271,27 @@ getFormData()
     }
     .el-input {
       width: 350px;
+    }
+    :deep(.el-form-item--default) .el-form-item__label {
+      font-weight: 700;
+    }
+    .back-box {
+      position: relative;
+      .hide-back {
+        display: none;
+      }
+      .show-back {
+        width: 100%;
+        height: 150px;
+        text-align: center;
+        line-height: 150px;
+        color: #fff;
+        background: rgba(0,0,0,.5);
+        position: absolute;
+        left: 0;
+        top: 0;
+        border-radius: 4px;
+      }
     }
   }
 }

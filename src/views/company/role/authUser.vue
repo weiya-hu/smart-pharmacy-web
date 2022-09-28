@@ -26,36 +26,39 @@
          </el-form-item>
       </el-form>
 
-      <el-row :gutter="10" class="mb8">
+     <div class="btn-back">
+       <el-row :gutter="10" class="mb8">
          <el-col :span="1.5">
-            <el-button
+           <el-button
                type="primary"
                plain
                icon="Plus"
                @click="openSelectUser"
                v-hasPermi="['system:role:add']"
-            >添加用户</el-button>
+           >添加用户</el-button>
          </el-col>
          <el-col :span="1.5">
-            <el-button
+           <el-button
                type="danger"
                plain
                icon="CircleClose"
                :disabled="multiple"
                @click="cancelAuthUserAll"
                v-hasPermi="['system:role:remove']"
-            >批量取消授权</el-button>
+           >批量取消授权</el-button>
          </el-col>
          <el-col :span="1.5">
-            <el-button 
-               type="warning" 
-               plain 
+           <el-button
+               type="warning"
+               plain
                icon="Close"
                @click="handleClose"
-            >关闭</el-button>
+           >关闭</el-button>
          </el-col>
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
-      </el-row>
+       </el-row>
+     </div>
+
 
       <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="55" align="center" />
@@ -75,13 +78,15 @@
          </el-table-column>
          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button
-                  type="text"
-                  icon="CircleClose"
-                  size="small"
-                  @click="cancelAuthUser(scope.row)"
-                  v-hasPermi="['system:role:remove']"
-               >取消授权</el-button>
+              <div class="btn-col">
+                <el-button
+                    type="text"
+                    icon="CircleClose"
+                    size="small"
+                    @click="cancelAuthUser(scope.row)"
+                    v-hasPermi="['system:role:remove']"
+                >取消授权</el-button>
+              </div>
             </template>
          </el-table-column>
       </el-table>

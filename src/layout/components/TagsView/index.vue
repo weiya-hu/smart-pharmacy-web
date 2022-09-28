@@ -263,9 +263,9 @@ function handleScroll() {
         margin-right: 15px;
       }
       &.active {
-        background-color: #42b983;
+        background-color: #333333 !important;
         color: #fff;
-        border-color: #42b983;
+        border-color: #333333 !important;
         &::before {
           content: "";
           background: #fff;

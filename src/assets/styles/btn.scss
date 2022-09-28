@@ -97,3 +97,50 @@
   font-size: 14px;
   border-radius: 4px;
 }
+
+.btn-back {
+  .el-button {
+    background: 0;
+    border: 1px solid #dcdfe6;
+  }
+}
+.btn-col {
+  .el-button {
+    color: #427eb0 !important;
+  }
+  .el-button--text:not(.is-disabled):focus, .el-button--text:not(.is-disabled):hover {
+    color: #427eb0;
+  }
+}
+.state-item1 {
+  position: relative;
+  padding-left: 10px;
+  &:before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background: #7bba59;
+    display: inline-block;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+  }
+}
+.state-item2 {
+  position: relative;
+  padding-left: 10px;
+  &:before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background: #7e7e7e;
+    display: inline-block;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+  }
+}

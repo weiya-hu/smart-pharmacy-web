@@ -129,6 +129,7 @@
 
           </div>
         </el-form>
+        <el-empty description="暂无数据" v-if="firstFormModels.formListData.length == 0" />
       </el-tab-pane>
       <el-tab-pane name="second" label="品牌">
         <el-form ref="secondForm" v-model="secondFormModels" :rules="formRule" inline label-width="100px">
@@ -251,6 +252,7 @@
           </div>
 
         </el-form>
+        <el-empty description="暂无数据" v-if="secondFormModels.formListData.length == 0" />
       </el-tab-pane>
       <el-tab-pane name="third" label="门店">
         <el-form ref="thirdForm" v-model="thirdFormModels" :rules="formRule" inline label-width="100px">
@@ -377,6 +379,7 @@
           </div>
 
         </el-form>
+        <el-empty description="暂无数据" v-if="thirdFormModels.formListData.length == 0" />
       </el-tab-pane>
     </el-tabs>
     <!-- 商品列表弹窗-->
@@ -394,7 +397,7 @@
     </el-dialog>
     <!-- 门店列表弹窗-->
     <el-dialog title="门店列表" v-model="showStoreDialog" width="70%">
-      <SelectStore :eventId="props.eventId" :filterIds="storeList" ref="selectStoreRef"></SelectStore>
+      <SelectStore :eventId="props.eventId" :handleType="props.handleType" :filterIds="storeList" ref="selectStoreRef"></SelectStore>
       <template #footer>
         <div class="dialog-footer">
           <el-button v-if="handleType!=='query'" type="primary" @click="onSuccessStoreDialog">保 存</el-button>

@@ -27,12 +27,14 @@
       </el-form-item>
     </el-form>
 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button type="primary" plain icon="Plus" @click="handleAdd" v-hasPermi="['wecom:order:add']">新增</el-button>
-      </el-col>
-      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
+    <div class="btn-back">
+      <el-row :gutter="10" class="mb8">
+        <el-col :span="1.5">
+          <el-button type="primary" plain icon="Plus" @click="handleAdd" v-hasPermi="['wecom:order:add']">新增</el-button>
+        </el-col>
+        <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+      </el-row>
+    </div>
 
     <el-table v-loading="loading" :data="activityList">
       <el-table-column prop="eventId" label="活动ID"></el-table-column>
@@ -48,29 +50,31 @@
       <el-table-column prop="beginTime" label="开始时间"/>
       <el-table-column prop="endTime" label="结束时间"/>
 
-      <el-table-column label="操作" class-name="small-padding fixed-width" :width="350">
+      <el-table-column label="操作" class-name="small-padding fixed-width" :width="300">
         <template #default="scope">
-          <el-button type="text" icon="Search" @click="handleQueryInfo(scope.row)" v-hasPermi="['wecom:order:remove']">
-            查看
-          </el-button>
-          <el-button v-if="scope.row.canEdit" type="text" icon="Edit" @click="handleUpdate(scope.row)"
-                     v-hasPermi="['wecom:order:edit']">修改
-          </el-button>
-          <el-button v-if="scope.row.canDelete" type="text" icon="Delete" @click="handleDelete(scope.row)"
-                     v-hasPermi="['wecom:order:remove']">
-            删除
-          </el-button>
-          <el-button v-if="scope.row.canStop" type="text" icon="Delete" @click="handleTaskStop(scope.row)"
-                     v-hasPermi="['wecom:order:remove']">
-            停用
-          </el-button>
-          <el-button v-if="scope.row.canStart" type="text" icon="Delete" @click="handleTaskBegin(scope.row)"
-                     v-hasPermi="['wecom:order:remove']">
-            启用
-          </el-button>
-          <el-button type="text">
-            电子签约
-          </el-button>
+          <div class="btn-col">
+            <el-button type="text" size="small" icon="Search" @click="handleQueryInfo(scope.row)" v-hasPermi="['wecom:order:remove']">
+              查看
+            </el-button>
+            <el-button v-if="scope.row.canEdit" type="text" size="small" icon="Edit" @click="handleUpdate(scope.row)"
+                       v-hasPermi="['wecom:order:edit']">修改
+            </el-button>
+            <el-button v-if="scope.row.canDelete" type="text" size="small" icon="Delete" @click="handleDelete(scope.row)"
+                       v-hasPermi="['wecom:order:remove']">
+              删除
+            </el-button>
+            <el-button v-if="scope.row.canStop" type="text" size="small" icon="Delete" @click="handleTaskStop(scope.row)"
+                       v-hasPermi="['wecom:order:remove']">
+              停用
+            </el-button>
+            <el-button v-if="scope.row.canStart" type="text" size="small" icon="Delete" @click="handleTaskBegin(scope.row)"
+                       v-hasPermi="['wecom:order:remove']">
+              启用
+            </el-button>
+            <el-button type="text" size="small">
+              电子签约
+            </el-button>
+          </div>
         </template>
       </el-table-column>
     </el-table>

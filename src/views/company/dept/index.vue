@@ -26,6 +26,7 @@
          </el-form-item>
       </el-form>
 
+     <div class="btn-back">
       <el-row :gutter="10" class="mb8">
          <el-col :span="1.5">
             <el-button
@@ -46,6 +47,7 @@
          </el-col>
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
+     </div>
 
       <el-table
          v-if="refreshTable"
@@ -60,7 +62,9 @@
          <el-table-column prop="sort" label="排序" ></el-table-column>
          <el-table-column prop="state" label="状态" >
             <template #default="scope">
-               <dict-tag :options="sys_normal_disable" :value="scope.row.state" />
+<!--               <dict-tag :options="sys_normal_disable" :value="scope.row.state" />-->
+              <span v-if="scope.row.state == 1" class="state-item1">正常</span>
+              <span v-if="scope.row.state == 0" class="state-item2">停用</span>
             </template>
          </el-table-column>
          <el-table-column label="创建时间" align="center" prop="createTime" show-tooltip-when-overflow>
@@ -77,22 +81,24 @@
 <!--                  @click="handleAdd(scope.row)"-->
 <!--                  v-hasPermi="['system:dept:add']"-->
 <!--              >新增</el-button>-->
-               <el-button
-                  type="text"
-                  icon="Edit"
-                  size="small"
-                  v-if="scope.row.parentId !== null"
-                  @click="handleUpdate(scope.row)"
-                  v-hasPermi="['system:dept:edit']"
-               >修改</el-button>
-               <el-button
-                  type="text"
-                  icon="Delete"
-                  size="small"
-                  v-if="scope.row.parentId !== null"
-                  @click="handleDelete(scope.row)"
-                  v-hasPermi="['system:dept:remove']"
-               >删除</el-button>
+              <div class="btn-col">
+                <el-button
+                    type="text"
+                    icon="Edit"
+                    size="small"
+                    v-if="scope.row.parentId !== null"
+                    @click="handleUpdate(scope.row)"
+                    v-hasPermi="['system:dept:edit']"
+                >修改</el-button>
+                <el-button
+                    type="text"
+                    icon="Delete"
+                    size="small"
+                    v-if="scope.row.parentId !== null"
+                    @click="handleDelete(scope.row)"
+                    v-hasPermi="['system:dept:remove']"
+                >删除</el-button>
+              </div>
             </template>
          </el-table-column>
       </el-table>

@@ -85,50 +85,32 @@
           </el-form-item>
         </el-form>
 
-        <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5" v-show="isWecomAccount === 0">
-            <el-button
-                type="primary"
-                plain
-                icon="Plus"
-                @click="handleAdd"
-                v-hasPermi="['system:user:add']"
-            >新增
-            </el-button>
-          </el-col>
-          <!--               <el-col :span="1.5">-->
-          <!--                  <el-button-->
-          <!--                     type="success"-->
-          <!--                     plain-->
-          <!--                     icon="Edit"-->
-          <!--                     :disabled="single"-->
-          <!--                     @click="handleUpdate"-->
-          <!--                     v-hasPermi="['system:user:edit']"-->
-          <!--                  >修改</el-button>-->
-          <!--               </el-col>-->
-          <!--               <el-col :span="1.5">-->
-          <!--                  <el-button-->
-          <!--                     type="danger"-->
-          <!--                     plain-->
-          <!--                     icon="Delete"-->
-          <!--                     :disabled="multiple"-->
-          <!--                     @click="handleDelete"-->
-          <!--                     v-hasPermi="['system:user:remove']"-->
-          <!--                  >删除</el-button>-->
-          <!--               </el-col>-->
-          <el-col :span="1.5" v-show="isWecomAccount === 1">
-            <el-tooltip effect="dark" content="同步仅适用开通了企业微信的企业" placement="top">
+        <div class="btn-back">
+          <el-row :gutter="10" class="mb8">
+            <el-col :span="1.5" v-show="isWecomAccount === 0">
               <el-button
+                  type="primary"
                   plain
-                  type="warning"
-                  icon="Sort"
-                  @click="handleSynchro"
-              >同步
+                  icon="Plus"
+                  @click="handleAdd"
+                  v-hasPermi="['system:user:add']"
+              >新增
               </el-button>
-            </el-tooltip>
-          </el-col>
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
-        </el-row>
+            </el-col>
+            <el-col :span="1.5" v-show="isWecomAccount === 1">
+              <el-tooltip effect="dark" content="同步仅适用开通了企业微信的企业" placement="top">
+                <el-button
+                    plain
+                    type="warning"
+                    icon="Sort"
+                    @click="handleSynchro"
+                >同步
+                </el-button>
+              </el-tooltip>
+            </el-col>
+            <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
+          </el-row>
+        </div>
 
         <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
           <!--               <el-table-column type="selection" width="50" align="center" />-->
@@ -165,31 +147,33 @@
           </el-table-column>
           <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
             <template #default="scope">
-              <el-button
-                  type="text"
-                  icon="Edit"
-                  size="small"
-                  v-if="isWecomAccount !== 1"
-                  @click="handleUpdate(scope.row)"
-                  v-hasPermi="['system:user:edit']"
-              >修改
-              </el-button>
-              <el-button
-                  type="text"
-                  icon="Delete"
-                  size="small"
-                  @click="handleDelete(scope.row)"
-                  v-hasPermi="['system:user:remove']"
-              >删除
-              </el-button>
-              <el-button
-                  type="text"
-                  icon="CircleCheck"
-                  size="small"
-                  @click="handleAuthRole(scope.row)"
-                  v-hasPermi="['system:user:edit']"
-              >分配角色
-              </el-button>
+              <div class="btn-col">
+                <el-button
+                    type="text"
+                    icon="Edit"
+                    size="small"
+                    v-if="isWecomAccount !== 1"
+                    @click="handleUpdate(scope.row)"
+                    v-hasPermi="['system:user:edit']"
+                >修改
+                </el-button>
+                <el-button
+                    type="text"
+                    icon="Delete"
+                    size="small"
+                    @click="handleDelete(scope.row)"
+                    v-hasPermi="['system:user:remove']"
+                >删除
+                </el-button>
+                <el-button
+                    type="text"
+                    icon="CircleCheck"
+                    size="small"
+                    @click="handleAuthRole(scope.row)"
+                    v-hasPermi="['system:user:edit']"
+                >分配角色
+                </el-button>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -702,6 +686,13 @@ getQrCode()
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 14px;
+  line-height: 30px;
+}
+.head-container {
+  :deep(.el-tree-node__content):hover {
+    background: #f9f9f9;
+  }
 }
 .code-dialog {
   :deep(.el-dialog__body) {

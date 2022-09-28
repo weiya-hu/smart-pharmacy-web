@@ -16,28 +16,30 @@
       </el-form-item>
     </el-form>
 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-            type="primary"
-            plain
-            icon="Plus"
-            @click="handleAdd"
-            v-hasPermi="['system:dept:add']"
-        >新增
-        </el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-            type="info"
-            plain
-            icon="Sort"
-            @click="toggleExpandAll"
-        >展开/折叠
-        </el-button>
-      </el-col>
-      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
+    <div class="btn-back">
+      <el-row :gutter="10" class="mb8">
+        <el-col :span="1.5">
+          <el-button
+              type="primary"
+              plain
+              icon="Plus"
+              @click="handleAdd"
+              v-hasPermi="['system:dept:add']"
+          >新增
+          </el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button
+              type="info"
+              plain
+              icon="Sort"
+              @click="toggleExpandAll"
+          >展开/折叠
+          </el-button>
+        </el-col>
+        <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+      </el-row>
+    </div>
 
     <el-table
         v-if="refreshTable"
@@ -68,23 +70,25 @@
           <!--              v-hasPermi="['system:dept:add']"-->
           <!--          >新增-->
           <!--          </el-button>-->
-          <el-button
-              type="text"
-              icon="Edit"
-              size="small"
-              @click="handleUpdate(scope.row)"
-              v-hasPermi="['system:dept:edit']"
-          >修改
-          </el-button>
-          <el-button
-              v-if="scope.row.parentNodeId != 0"
-              type="text"
-              icon="Delete"
-              size="small"
-              @click="handleDelete(scope.row)"
-              v-hasPermi="['system:dept:remove']"
-          >删除
-          </el-button>
+          <div class="btn-col">
+            <el-button
+                type="text"
+                icon="Edit"
+                size="small"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['system:dept:edit']"
+            >修改
+            </el-button>
+            <el-button
+                v-if="scope.row.parentNodeId != 0"
+                type="text"
+                icon="Delete"
+                size="small"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['system:dept:remove']"
+            >删除
+            </el-button>
+          </div>
         </template>
       </el-table-column>
     </el-table>

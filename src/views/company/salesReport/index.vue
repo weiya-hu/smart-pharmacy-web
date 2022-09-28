@@ -1,11 +1,11 @@
 <template>
   <div class="outBox">
     <!--    搜索区域-->
-    <el-form :model="queryParams" ref="queryRef" :inline="true" label-width="68px">
+    <el-form :model="queryParams" ref="queryRef" :inline="true">
       <el-form-item label="任务时间" prop="name">
         <el-date-picker v-model="queryParams.betweenDates" type="daterange" clearable @keyup.enter="handleQuery"/>
       </el-form-item>
-      <el-form-item>
+<!--      <el-form-item>-->
         <el-form-item label="快捷时间" prop="name">
           <el-radio-group v-model="queryParams.fastTime">
             <el-radio :label="1">昨日</el-radio>
@@ -32,32 +32,38 @@
         <el-form-item label="关键字" prop="name">
           <el-input v-model="queryParams.keyWords" placeholder="请输入商品名称|商品ID"></el-input>
         </el-form-item>
-        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-      </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+          <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+        </el-form-item>
+
+<!--      </el-form-item>-->
     </el-form>
+
+    <el-divider />
+
     <!--    总数统计-->
     <div class="totalStatistics">
       <div class="totalItem">
-        <div>销售总额(元)</div>
-        <div>500000</div>
+        <div class="title">销售总额(元)</div>
+        <div class="data">500000</div>
       </div>
       <div class="totalItem">
-        <div>激励活动销售额(元)</div>
-        <div>320000</div>
+        <div class="title">激励活动销售额(元)</div>
+        <div class="data">320000</div>
       </div>
 
       <div class="totalItem">
-        <div>动销店铺(家)</div>
-        <div>2323</div>
+        <div class="title">动销店铺(家)</div>
+        <div class="data">2323</div>
       </div>
       <div class="totalItem">
-        <div>动销品牌(个)</div>
-        <div>1532</div>
+        <div class="title">动销品牌(个)</div>
+        <div class="data">1532</div>
       </div>
       <div class="totalItem">
-        <div>动销商品(个/套)</div>
-        <div>328.30</div>
+        <div class="title">动销商品(个/套)</div>
+        <div class="data">328.30</div>
       </div>
 
     </div>
@@ -152,6 +158,7 @@ import scaleChart from '@/components/scale-Chart/scale-Chart.vue'
 import * as echarts from "echarts";
 import columnChart from "@/components/column-Chart/column-Chart.vue"
 import pagevxeContent from "@/components/page-vxeContent/page-vxeContent.vue";
+import {Back} from "@element-plus/icons-vue";
 
 const data = reactive({
   queryParams: {
@@ -193,7 +200,7 @@ const updataCount = function (param) {
 }
 //图一基本配置
 const chart_one_Option = ref({
-  color: ['#e4e4e6', '#ffab9c'],
+  color: ['#d3dae1', '#ffab9d'],
   // 设置图表的位置
   grid: {
     x: 60, // 左间距
@@ -212,11 +219,11 @@ const chart_one_Option = ref({
     },
 
     textStyle: {
-      color: '#cdd3ee' // 文字颜色
+      color: '#333333' // 文字颜色
     },
     // // 提示框浮层内容格式器，支持字符串模板和回调函数两种形式 折线（区域）图、柱状（条形）图、K线图
     // // {a}（系列名称），{b}（类目值），{c}（数值）, {d}（无）
-    formatter: '{b}日<br />{a0}: {c0}%<br />{a1}: {c1}%<br />'
+    formatter: '{a0}: {c0}%<br />{a1}: {c1}%<br />'
   },
   // 图例组件
   legend: {
@@ -238,7 +245,7 @@ const chart_one_Option = ref({
     axisLine: { // 是否显示坐标轴轴线 默认显示
       show: true, // 是否显示坐标轴轴线 默认显示
       lineStyle: { // 坐标轴线线的颜色
-        color: '#6e7079'
+        color: '#deddede'
       }
     },
     // 坐标轴在图表区域中的分隔线
@@ -250,7 +257,7 @@ const chart_one_Option = ref({
       type: 'value',
       show: true, // 是否显示刻度标签 默认显示
       // fontSize: 16, // 文字的字体大小
-      // color: '#cdd3ee', // 刻度标签文字的颜色
+      color: '#6e7079', // 刻度标签文字的颜色
       // 使用字符串模板，模板变量为刻度默认标签 {value}
       formatter: '{value}'
     }
@@ -269,7 +276,7 @@ const chart_one_Option = ref({
       axisLine: { // 是否显示坐标轴轴线 默认显示
         show: true, // 是否显示坐标轴轴线 默认显示
         lineStyle: { // 坐标轴线线的颜色
-          color: '#6e7079'
+          color: '#dedede'
         }
       },
       // 坐标轴在图表区域中的分隔线
@@ -280,7 +287,7 @@ const chart_one_Option = ref({
       axisLabel: {
         show: true, // 是否显示刻度标签 默认显示
         // fontSize: 16, // 文字的字体大小
-        // color: '#cdd3ee', // 刻度标签文字的颜色
+        color: '#6e7079', // 刻度标签文字的颜色
         // 使用字符串模板，模板变量为刻度默认标签 {value}
         formatter: '{value}日'
       },
@@ -298,7 +305,7 @@ const chart_one_Option = ref({
       barMaxWidth: 55, // 柱条的最大宽度，不设时自适应
       // 图形上的文本标签
       label: {
-        show: true,
+        show: false,
         // 标签的位置 left right bottom top inside  // 绝对的像素值 position: [10, 10]
         // 相对的百分比 position: ['50%', '50%']
         position: 'inside',
@@ -317,10 +324,10 @@ const chart_one_Option = ref({
       name: '日常', // 系列名称, 用于tooltip的显示, legend 的图例筛选
       // 数据堆叠，同个类目轴上系列配置相同的stack值后，后一个系列的值会在前一个系列的值上相加
       stack: '总量',
-      barMaxWidth: 55, // 柱条的最大宽度，不设时自适应
+      barMaxWidth: 30, // 柱条的最大宽度，不设时自适应
       // 图形上的文本标签
       label: {
-        show: true,
+        show: false,
         // 标签的位置 left right bottom top inside  // 绝对的像素值 position: [10, 10]
         // 相对的百分比
         position: 'inside',
@@ -334,7 +341,7 @@ const chart_one_Option = ref({
 
       itemStyle: {
         normal: {
-          barBorderRadius: [12, 12, 0, 0], // （顺时针左上，右上，右下，左下）
+          barBorderRadius: [8, 8, 0, 0], // （顺时针左上，右上，右下，左下）
         }
       },
       data: [60, 30, 20, 10, 45, 30] // 系列中的数据内容数组
@@ -552,27 +559,40 @@ const innitSelectOption = function () {
   padding: 40px;
 
   .totalStatistics {
-    margin-top: 40px;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
 
     .totalItem {
-      width: 150px;
-      height: 100px;
-      border-radius: 5px;
-      border: 1px solid #c9cacf;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      flex: 1;
+      width: 150px;
+      height: 100px;
+      text-align: center;
+      .data {
+        color: #474747;
+        font-weight: 800;
+        font-size: 20px;
+        margin-top: 5px;
+      }
+      .title {
+        margin-top: 5px;
+        color: #999;
+        font-weight: 600;
+        font-size: 16px;
+      }
     }
   }
 
   .chartShow {
     margin-top: 40px;
-    border: 1px solid #d9dad9;
+    border: 1px solid #D6D6D6;
+    border-radius: 10px;
     padding: 10px;
+    background: #fafafa;
 
     .itemChart {
       width: 90vw;
@@ -581,7 +601,10 @@ const innitSelectOption = function () {
   }
 
   .areaStatistical {
-    border: 1px solid #d9dad9;
+    border: 1px solid #D6D6D6;
+    border-radius: 10px;
+    background: #fafafa;
+    overflow: hidden;
     margin-top: 40px;
 
     .tableList {
