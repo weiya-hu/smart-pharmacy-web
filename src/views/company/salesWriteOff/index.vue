@@ -219,6 +219,7 @@ const upload = reactive({
 });
 /*** 重置每一页的查询参数*/
 const restPageQueryParams = () => {
+  currentPage.value = 0
   pageQueryParams.value = [[
     undefined
   ]
@@ -365,7 +366,6 @@ function queryNextpage(type) {
 
 /** 查询用订单列表 */
 function getList() {
-
   let timeObject = {
     startTime: undefined,
     endTime: undefined
@@ -377,23 +377,19 @@ function getList() {
     }
   }
   loading.value = true;
-  if (currentPage.value == 0) {
-    getOrderList({
-      ...timeObject,
-      ...queryParams.value,
-      nextSearchAfter: pageQueryParams.value[currentPage.value].nextSearchAfter
-    }).then(res => {
-      if (res.code == 200) {
-        orderList.value = res.data.orders
-        nextSearchAfter.value = res.data.nextSearchAfter
-        let nextIndex = currentPage.value + 1
-        pageQueryParams.value[nextIndex] = res.data.nextSearchAfter
-        total.value = Number(res.data.pageSize * res.data.pages);
-        loading.value = false;
-      }
+  getOrderList({
+    ...timeObject,
+    ...queryParams.value,
+    nextSearchAfter: pageQueryParams.value[currentPage.value].nextSearchAfter
+  }).then(res => {
+    orderList.value = res.data.orders
+    nextSearchAfter.value = res.data.nextSearchAfter
+    let nextIndex = currentPage.value + 1
+    pageQueryParams.value[nextIndex] = res.data.nextSearchAfter
+    total.value = Number(res.data.pageSize * res.data.pages);
+    loading.value = false;
 
-    })
-  }
+  })
 };
 
 /** 下载模板操作 */
