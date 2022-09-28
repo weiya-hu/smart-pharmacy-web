@@ -157,7 +157,8 @@
         <el-table-column width="120px" v-if="columns[8].visible" label="销售员" align="center" key="userName"
                          prop="userName"/>
       </el-table>
-      <div style="padding: 10px;display: flex;justifyContent: flex-end">
+      <div style="padding: 20px;display: flex;justifyContent: flex-end">
+        <span style="marginRight:10px">共{{ total }}页 </span>
         <span>当前页:{{ currentPage + 1 }}</span>
       </div>
     </div>
@@ -386,7 +387,7 @@ function getList() {
     nextSearchAfter.value = res.data.nextSearchAfter
     let nextIndex = currentPage.value + 1
     pageQueryParams.value[nextIndex] = res.data.nextSearchAfter
-    total.value = Number(res.data.pageSize * res.data.pages);
+    total.value = Number(res.data.pages);
     loading.value = false;
 
   })
