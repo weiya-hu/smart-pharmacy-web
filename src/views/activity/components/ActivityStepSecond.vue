@@ -396,7 +396,7 @@
       </template>
     </el-dialog>
     <!-- 门店列表弹窗-->
-    <el-dialog title="门店列表" v-model="showStoreDialog" width="70%">
+    <el-dialog title="门店列表" v-model="showStoreDialog" width="70%" append-to-body :close-on-click-modal="false" draggable destroy-on-close>
       <SelectStore :eventId="props.eventId" :handleType="props.handleType" :filterIds="storeList" ref="selectStoreRef"></SelectStore>
       <template #footer>
         <div class="dialog-footer">
@@ -887,6 +887,7 @@ const onSuccessStoreDialog = () => {
 //门店弹窗关闭
 const onCancelStoreDialog = () => {
   showStoreDialog.value = false
+  storeList.value = []
 }
 
 const props = defineProps({
