@@ -1,31 +1,29 @@
 <template>
   <div class="app-container">
-    <el-form v-model="queryParam" ref="queryForm" label-width="50px">
-      <el-row>
-        <el-form-item label="名称">
-          <el-input v-model="queryParam.name"></el-input>
-        </el-form-item>
-        <el-form-item label="品类">
-          <el-input v-model="queryParam.productType"></el-input>
-        </el-form-item>
-        <el-form-item label="品牌">
-          <el-input v-model="queryParam.brand"></el-input>
-        </el-form-item>
-        <el-form-item label="规格">
-          <el-input v-model="queryParam.specification"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-          <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-        </el-form-item>
-      </el-row>
+    <el-form v-model="queryParam" ref="queryForm" :inline="true">
+      <el-form-item label="名称">
+        <el-input v-model="queryParam.name" placeholder="请输入商品名称"></el-input>
+      </el-form-item>
+      <el-form-item label="品类">
+        <el-input v-model="queryParam.productType" placeholder="请输入商品品类"></el-input>
+      </el-form-item>
+      <el-form-item label="品牌">
+        <el-input v-model="queryParam.brand" placeholder="请输入商品品牌"></el-input>
+      </el-form-item>
+      <el-form-item label="规格">
+        <el-input v-model="queryParam.specification" placeholder="请输入商品规格"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+      </el-form-item>
     </el-form>
     <el-table v-loading="loading" :data="productList" height="200">
       <el-table-column label="名称" prop="name"/>
       <el-table-column label="品类" prop="productType"/>
       <el-table-column label="品牌" prop="brand"/>
       <el-table-column label="规格" prop="specification" show-overflow-tooltip/>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="props.handleType !== 'query'">
         <template #default="scope">
           <el-button type="text" @click="handleAdd(scope.row)">添加</el-button>
         </template>
@@ -43,7 +41,7 @@
     />
     <el-divider content-position="left">已选择产品</el-divider>
     <div class="handler">
-      <el-button @click="clearSelected" link type="primary">清空已选</el-button>
+      <el-button @click="clearSelected" link type="primary" v-if="props.handleType !== 'query'">清空已选</el-button>
     </div>
     <el-table v-loading="loading" :data="productResultList" height="200">
       <el-table-column type="selection" width="55" align="center"/>
@@ -56,7 +54,7 @@
           <el-input type="number" v-model.number="scope.row.account"></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="props.handleType !== 'query'">
         <template #default="scope">
           <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
         </template>
@@ -105,7 +103,12 @@ const restQueryParam = () => {
 //清空已选择商品
 const clearSelected = () => {
   productResultList.value = []
-  getList()
+  queryProductList(queryParam.value).then(res => {
+    if (res.code === 200) {
+      productList.value = res.data.list
+      total.value = Number(res.data.total)
+    }
+  })
 }
 //搜索产品
 const getList = () => {
@@ -178,6 +181,10 @@ const props = defineProps({
   productIds:{
     type:Array,
     default:[]
+  },
+  handleType: {
+    type: String,
+  default: undefined
   }
 })
 // const getSelectedGoods = () => {

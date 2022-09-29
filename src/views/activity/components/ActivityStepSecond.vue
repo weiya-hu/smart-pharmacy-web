@@ -383,9 +383,9 @@
       </el-tab-pane>
     </el-tabs>
     <!-- 商品列表弹窗-->
-    <el-dialog title="商品列表" v-model="showProductsDialog" width="70%">
+    <el-dialog title="商品列表" v-model="showProductsDialog" width="70%" append-to-body :close-on-click-modal="false" draggable destroy-on-close>
       <SelectProducts :eventRuleId="itemRuleId" :eventId="props.eventId" :packageId="productPackageId"
-                      :productIds="productList"
+                      :productIds="productList" :handleType="props.handleType"
                       ref="selectProductsRef"></SelectProducts>
       <template #footer>
         <div class="dialog-footer">
@@ -632,6 +632,7 @@ const onSuccessProductsDialog = (e) => {
 }
 const onCancelProductsDialog = () => {
   showProductsDialog.value = false
+  productList.value = []
 }
 
 //Tab 选择事件
