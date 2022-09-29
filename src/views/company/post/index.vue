@@ -46,16 +46,16 @@
                v-hasPermi="['system:post:add']"
            >新增</el-button>
          </el-col>
-         <el-col :span="1.5">
-           <el-button
-               type="success"
-               plain
-               icon="Edit"
-               :disabled="single"
-               @click="handleUpdate"
-               v-hasPermi="['system:post:edit']"
-           >修改</el-button>
-         </el-col>
+<!--         <el-col :span="1.5">-->
+<!--           <el-button-->
+<!--               type="success"-->
+<!--               plain-->
+<!--               icon="Edit"-->
+<!--               :disabled="single"-->
+<!--               @click="handleUpdate"-->
+<!--               v-hasPermi="['system:post:edit']"-->
+<!--           >修改</el-button>-->
+<!--         </el-col>-->
          <!--         <el-col :span="1.5">-->
          <!--            <el-button-->
          <!--               type="danger"-->
@@ -80,7 +80,7 @@
      </div>
 
       <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
-         <el-table-column type="selection" width="55" />
+<!--         <el-table-column type="selection" width="55" />-->
          <el-table-column label="职务编号" prop="jobId" show-tooltip-when-overflow />
          <el-table-column label="职务名称" prop="name" />
          <el-table-column label="职务排序" prop="sort" />

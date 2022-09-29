@@ -7,19 +7,10 @@
                v-model="queryParams.userName"
                placeholder="请输入用户名称"
                clearable
-               style="width: 240px"
+               style="width: 220px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-<!--         <el-form-item label="手机号码" prop="mobile">-->
-<!--            <el-input-->
-<!--               v-model="queryParams.mobile"-->
-<!--               placeholder="请输入手机号码"-->
-<!--               clearable-->
-<!--               style="width: 240px"-->
-<!--               @keyup.enter="handleQuery"-->
-<!--            />-->
-<!--         </el-form-item>-->
          <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -39,7 +30,6 @@
          </el-col>
          <el-col :span="1.5">
            <el-button
-               type="danger"
                plain
                icon="CircleClose"
                :disabled="multiple"
@@ -63,14 +53,6 @@
       <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="55" align="center" />
          <el-table-column label="用户名称" prop="userName" :show-overflow-tooltip="true" />
-<!--         <el-table-column label="用户昵称" prop="alias" :show-overflow-tooltip="true" />-->
-<!--         <el-table-column label="邮箱" prop="email" :show-overflow-tooltip="true" />-->
-<!--         <el-table-column label="手机" prop="mobile" :show-overflow-tooltip="true" />-->
-<!--         <el-table-column label="状态" align="center" prop="enable">-->
-<!--            <template #default="scope">-->
-<!--               <dict-tag :options="sys_normal_disable" :value="scope.row.enable" />-->
-<!--            </template>-->
-<!--         </el-table-column>-->
          <el-table-column label="创建时间" prop="createTime">
             <template #default="scope">
                <span>{{ parseTime(scope.row.createTime) }}</span>

@@ -1,12 +1,12 @@
 <template>
    <div class="app-container">
-      <el-form :model="queryParams" ref="queryRef" v-show="showSearch" :inline="true">
+      <el-form :model="queryParams" ref="queryRef" v-show="showSearch" :inline="true" label-width="68px">
          <el-form-item label="角色名称" prop="name">
             <el-input
                v-model="queryParams.name"
                placeholder="请输入角色名称"
                clearable
-               style="width: 240px"
+               style="width: 220px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
@@ -60,16 +60,16 @@
                v-hasPermi="['system:role:add']"
            >新增</el-button>
          </el-col>
-         <el-col :span="1.5">
-           <el-button
-               type="success"
-               plain
-               icon="Edit"
-               :disabled="single"
-               @click="handleUpdate"
-               v-hasPermi="['system:role:edit']"
-           >修改</el-button>
-         </el-col>
+<!--         <el-col :span="1.5">-->
+<!--           <el-button-->
+<!--               type="success"-->
+<!--               plain-->
+<!--               icon="Edit"-->
+<!--               :disabled="single"-->
+<!--               @click="handleUpdate"-->
+<!--               v-hasPermi="['system:role:edit']"-->
+<!--           >修改</el-button>-->
+<!--         </el-col>-->
          <!--         <el-col :span="1.5">-->
          <!--            <el-button-->
          <!--               type="danger"-->
@@ -95,7 +95,6 @@
 
       <!-- 表格数据 -->
       <el-table v-loading="loading" :data="roleList" @selection-change="handleSelectionChange">
-         <el-table-column type="selection" width="55" />
          <el-table-column label="角色编号" prop="roleId" :show-overflow-tooltip="true" />
          <el-table-column label="角色名称" prop="name" :show-overflow-tooltip="true" />
 <!--         <el-table-column label="权限字符" prop="roleKey" :show-overflow-tooltip="true" />-->

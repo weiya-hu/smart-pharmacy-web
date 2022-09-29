@@ -3,7 +3,7 @@
   <div class="app-container" v-loading="secondLoading" element-loading-text="请等待...">
     <el-tabs type="border-card" v-model="tabValue" @tab-change="changeTab">
       <el-tab-pane name="first" label="单品｜组合">
-        <el-form ref="firstForm" :model="firstFormModels" :rules="formRule" inline label-width="100px">
+        <el-form ref="firstForm" :model="firstFormModels" :rules="formRule" inline label-width="80px">
           <div class="form-div" v-for="(firstFormModel,index) in firstFormModels.formListData" :key="index">
             <div class="rulerStatus">
               <div v-if="firstFormModel.eventRuleId" class="save">已保存</div>
@@ -32,9 +32,9 @@
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             :rules="formRule.timeRangeUnit">
                 <el-input :disabled="handleType=='query'" type="number" v-model="firstFormModel.timeRange"
-                          class="input-with-select">
+                          class="input-with-select" style="width: 220px">
                   <template #append>
-                    <el-select v-model="firstFormModel.timeRangeUnit">
+                    <el-select v-model="firstFormModel.timeRangeUnit" style="width: 100px">
                       <el-option v-for="item in sop_time_range_unit" :key="item.value" :value="item.value"
                                  :label="item.label">
                         {{ item.label }}
@@ -43,8 +43,6 @@
                   </template>
                 </el-input>
               </el-form-item>
-            </el-row>
-            <el-row>
               <el-form-item class="label" label="奖励条件" :prop="'formListData.' + index + '.calcUnit'"
                             :rules="formRule.calcUnit">
                 <el-select :disabled="handleType=='query'" v-model="firstFormModel.calcUnit">
@@ -66,7 +64,7 @@
             </el-row>
             <el-row v-for="(item,i) in firstFormModel.jobs" :key="i">
               <el-form-item class="label" label="职务">
-                <div style="width: 70px !important;fontWeight: bold;color: #606266;">
+                <div style="width: 220px !important;fontWeight: bold;color: #606266;">
                   {{ item.jobName }}
                 </div>
               </el-form-item>
@@ -78,12 +76,13 @@
                     oninput="value=value.replace(/[^\d]/g,'')"
                     v-model.number="item.targetRange"
                     class="input-with-select"
+                    style="width: 220px"
                 @change="()=>{if(!item.targetRange) firstFormModel.jobs[i].targetRange=0}"
                 >
                   <template #append>
                     <el-select v-model="firstFormModel.calcUnit" disabled style="width: 80px">
                       <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value"
-                                 :label="item.label"/>
+                                 :label="item.label" />
                     </el-select>
                   </template>
                 </el-input>
@@ -132,7 +131,7 @@
         <el-empty description="暂无数据" v-if="firstFormModels.formListData.length == 0" />
       </el-tab-pane>
       <el-tab-pane name="second" label="品牌">
-        <el-form ref="secondForm" v-model="secondFormModels" :rules="formRule" inline label-width="100px">
+        <el-form ref="secondForm" v-model="secondFormModels" :rules="formRule" inline label-width="80px">
           <div class="form-div" v-for="(secondFormModel,index) in secondFormModels.formListData" :key="index">
             <div class="rulerStatus">
               <div v-if="secondFormModel.eventRuleId" class="save">已保存</div>
@@ -161,9 +160,9 @@
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             :rules="formRule.timeRangeUnit">
                 <el-input :disabled="handleType=='query'" type="number" v-model="secondFormModel.timeRange"
-                          class="input-with-select">
+                          class="input-with-select" style="width: 220px;">
                   <template #append>
-                    <el-select v-model="secondFormModel.timeRangeUnit">
+                    <el-select v-model="secondFormModel.timeRangeUnit" style="width: 100px">
                       <el-option v-for="item in sop_time_range_unit" :key="item.value" :value="item.value"
                                  :label="item.label">
                         {{ item.label }}
@@ -172,8 +171,6 @@
                   </template>
                 </el-input>
               </el-form-item>
-            </el-row>
-            <el-row>
               <el-form-item class="label" label="奖励条件" :prop="'formListData.' + index + '.calcUnit'"
                             :rules="formRule.calcUnit">
                 <el-select :disabled="handleType=='query'" v-model="secondFormModel.calcUnit">
@@ -193,7 +190,7 @@
             </el-row>
             <el-row v-for="(item,index) in secondFormModel.jobs">
               <el-form-item class="label" label="职务">
-                <div style="width: 70px !important;fontWeight: bold;color: #606266;">
+                <div style="width: 220px !important;fontWeight: bold;color: #606266;">
                   {{ item.jobName }}
                 </div>
               </el-form-item>
@@ -203,7 +200,8 @@
                     oninput="value=value.replace(/[^\d]/g,'')"
                     v-model.number="item.targetRange"
                     @change="()=>{if(!item.targetRange) secondFormModel.jobs[index].targetRange=0}"
-                    class="input-with-select">
+                    class="input-with-select"
+                    style="width: 220px;">
                   <template #append>
                     <el-select v-model="secondFormModel.calcUnit" disabled style="width: 80px">
                       <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value"
@@ -250,12 +248,11 @@
             </el-checkbox-group>
 
           </div>
-
         </el-form>
         <el-empty description="暂无数据" v-if="secondFormModels.formListData.length == 0" />
       </el-tab-pane>
       <el-tab-pane name="third" label="门店">
-        <el-form ref="thirdForm" v-model="thirdFormModels" :rules="formRule" inline label-width="100px">
+        <el-form ref="thirdForm" v-model="thirdFormModels" :rules="formRule" inline label-width="80px">
           <div class="form-div" v-for="(thirdFormModel,index) in thirdFormModels.formListData" :key="index">
             <div class="rulerStatus">
               <div v-if="thirdFormModel.eventRuleId" class="save">已保存</div>
@@ -286,9 +283,9 @@
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             :rules="formRule.timeRangeUnit">
                 <el-input :disabled="handleType=='query'" type="number" v-model="thirdFormModel.timeRange"
-                          class="input-with-select">
+                          class="input-with-select" style="width: 220px;">
                   <template #append>
-                    <el-select v-model="thirdFormModel.timeRangeUnit">
+                    <el-select v-model="thirdFormModel.timeRangeUnit" style="width: 100px;">
                       <el-option v-for="item in sop_time_range_unit" :key="item.value" :value="item.value"
                                  :label="item.label">
                         {{ item.label }}
@@ -297,8 +294,6 @@
                   </template>
                 </el-input>
               </el-form-item>
-            </el-row>
-            <el-row>
               <el-form-item class="label" label="奖励条件" :prop="'formListData.' + index + '.calcUnit'"
                             :rules="formRule.calcUnit">
                 <el-select :disabled="handleType=='query'" v-model="thirdFormModel.calcUnit">
@@ -320,7 +315,7 @@
             </el-row>
             <el-row v-for="(item,index) in thirdFormModel.jobs" :key="index">
               <el-form-item class="label" label="职务">
-                <div style="width: 70px !important;fontWeight: bold;color: #606266;">
+                <div style="width: 220px !important;fontWeight: bold;color: #606266;">
                   {{ item.jobName }}
                 </div>
               </el-form-item>
@@ -330,7 +325,8 @@
                     v-model.number="item.targetRange"
                     @change="()=>{if(!item.targetRange) thirdFormModel.jobs[index].targetRange=0}"
                     oninput="value=value.replace(/[^\d]/g,'')"
-                    class="input-with-select">
+                    class="input-with-select"
+                    style="width: 220px;">
                   <template #append>
                     <el-select v-model="thirdFormModel.calcUnit" disabled style="width: 80px">
                       <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value"
@@ -345,7 +341,8 @@
                     v-model.number="item.targetRange"
                     oninput="value=value.replace(/[^0-9.]/g,'')"
                     @change="()=>{if(!item.targetRange) thirdFormModel.jobs[index].targetRange=0}"
-                    class="input-with-select">
+                    class="input-with-select"
+                    style="width: 220px;">
                   <template #append>
                     <el-select v-model="thirdFormModel.calcUnit" disabled style="width: 80px">
                       <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value"
@@ -1002,7 +999,6 @@ defineExpose({
 .label::v-deep( .el-form-item__label) {
   color: #606266;
   font-weight: 600;
-  justify-content: flex-start !important;
   text-align: left;
 }
 

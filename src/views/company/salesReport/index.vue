@@ -1,43 +1,41 @@
 <template>
   <div class="outBox">
     <!--    搜索区域-->
-    <el-form :model="queryParams" ref="queryRef" :inline="true">
+    <el-form :model="queryParams" ref="queryRef" :inline="true" label-width="70px">
       <el-form-item label="任务时间" prop="name">
-        <el-date-picker v-model="queryParams.betweenDates" type="daterange" clearable @keyup.enter="handleQuery"/>
+        <el-date-picker v-model="queryParams.betweenDates" type="daterange" start-placeholder="开始时间"
+                        end-placeholder="结束时间" clearable @keyup.enter="handleQuery" style="width: 220px" />
       </el-form-item>
-<!--      <el-form-item>-->
-        <el-form-item label="快捷时间" prop="name">
-          <el-radio-group v-model="queryParams.fastTime">
-            <el-radio :label="1">昨日</el-radio>
-            <el-radio :label="2">本周</el-radio>
-            <el-radio :label="3">本月</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="区域" prop="name">
-          <el-select v-model="queryParams.regionFilter" placeholder="请选择要查看的区域" clearable>
-            <el-option label="大区" value="shanghai"/>
-            <el-option label="片区" value="beijing"/>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="品类" prop="name">
-          <el-select v-model="queryParams.productTypeFilter" placeholder="请选择要查看的品类" clearable>
-            <el-option v-for="(item,index) in productTypeOption" :key="index" :label="item.name" :value="item.value"/>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="品牌" prop="name">
-          <el-select v-model="queryParams.brandFilter" placeholder="请选择要查看的品牌" clearable>
-            <el-option v-for="(item,index) in brandOption" :key="index" :label="item.name" :value="item.value"/>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="关键字" prop="name">
-          <el-input v-model="queryParams.keyWords" placeholder="请输入商品名称|商品ID"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-          <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-        </el-form-item>
-
-<!--      </el-form-item>-->
+      <el-form-item label="快捷时间" prop="name">
+        <el-radio-group v-model="queryParams.fastTime">
+          <el-radio :label="1">昨日</el-radio>
+          <el-radio :label="2">本周</el-radio>
+          <el-radio :label="3">本月</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="区域" prop="name">
+        <el-select v-model="queryParams.regionFilter" placeholder="请选择要查看的区域" clearable>
+          <el-option label="大区" value="shanghai"/>
+          <el-option label="片区" value="beijing"/>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="品类" prop="name">
+        <el-select v-model="queryParams.productTypeFilter" placeholder="请选择要查看的品类" clearable>
+          <el-option v-for="(item,index) in productTypeOption" :key="index" :label="item.name" :value="item.value"/>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="品牌" prop="name">
+        <el-select v-model="queryParams.brandFilter" placeholder="请选择要查看的品牌" clearable>
+          <el-option v-for="(item,index) in brandOption" :key="index" :label="item.name" :value="item.value"/>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="关键字" prop="name">
+        <el-input v-model="queryParams.keyWords" placeholder="请输入商品名称|商品ID" style="width: 220px;"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+      </el-form-item>
     </el-form>
 
     <el-divider />
@@ -506,6 +504,11 @@ const innitSelectOption = function () {
 </script>
 
 <style scoped lang="scss">
+::v-deep( .el-form-item__label) {
+  color: #606266;
+  font-weight: 600;
+}
+
 // 先把整体的线去掉
 .chartShow::v-deep(.el-tabs--card >.el-tabs__header) {
   border: none !important;

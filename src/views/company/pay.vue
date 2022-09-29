@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="btn-box">
-      <el-button type="primary" @click="handelRead('edit')" v-if="inputType==='readey'">修改</el-button>
+      <el-button @click="handelRead('edit')" v-if="inputType==='readey'">修改</el-button>
       <el-button v-if="inputType!=='readey'" type="primary" @click="handelRead('sure')">确定</el-button>
       <el-button v-if="inputType!=='readey'" @click="handelRead('cancel')">取消</el-button>
     </div>

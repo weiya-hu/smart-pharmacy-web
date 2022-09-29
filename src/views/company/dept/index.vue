@@ -1,12 +1,12 @@
 <template>
    <div class="app-container">
-      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
+      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
          <el-form-item label="机构名称" prop="name">
             <el-input
                v-model="queryParams.name"
                placeholder="请输入机构名称"
                clearable
-               style="width: 240px"
+               style="width: 220px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>

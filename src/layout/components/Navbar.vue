@@ -124,10 +124,10 @@ getInfo()
         margin-right: 15px;
       }
       .term-time-border {
-        border: 1px solid #999;
+        border: 1px solid #e2e2e2;
         width: 80px;
         height: 24px;
-        line-height: 23px;
+        line-height: 22px;
         text-align: center;
         display: inline-block;
         border-radius: 25px;

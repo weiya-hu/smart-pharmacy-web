@@ -3,19 +3,20 @@
     <div class="desc">
       <span>激励活动 —— 连锁商户自己发起的营销激励活动</span>
     </div>
-    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
       <el-form-item class="label" label="关键字" prop="name">
-        <el-input v-model="queryParams.keyword" placeholder="名称｜描述" clearable @keyup.enter="handleQuery"/>
+        <el-input v-model="queryParams.keyword" placeholder="名称｜描述" clearable @keyup.enter="handleQuery" style="width: 220px" />
       </el-form-item>
       <el-form-item class="label" label="任务时间" prop="name">
         <el-date-picker format="YYYY-MM-DD" value-format="YYYY-MM-DD" v-model="betweenDates"
                         type="daterange" clearable
                         start-placeholder="开始时间"
                         end-placeholder="结束时间"
-                        @keyup.enter="handleQuery"/>
+                        @keyup.enter="handleQuery"
+                        style="width: 220px" />
       </el-form-item>
       <el-form-item class="label" label="状态" prop="state">
-        <el-select v-model="queryParams.state" clearable @change="handleQuery" @keyup.enter="handleQuery">
+        <el-select v-model="queryParams.state" clearable @change="handleQuery" @keyup.enter="handleQuery"  style="width: 220px">
           <el-option v-for="item in activity_type" :value="item.value" :key="item.value"
                      :label="item.label">{{ item.label }}
           </el-option>
@@ -189,13 +190,11 @@ function handleDelete(row) {
 
 getList();
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .label::v-deep( .el-form-item__label) {
   color: #606266;
   font-weight: 600;
-  justify-content: flex-start !important;
 }
-
 .app-container {
   .desc {
     color: #999;

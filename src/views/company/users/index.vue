@@ -2,17 +2,15 @@
   <div class="app-container">
     <el-row :gutter="20">
       <!--部门数据-->
-      <el-col :span="4" :xs="24">
+      <el-col :span="4" :xs="24" style="background: #f9f9f9">
         <div class="head-container">
           <el-input
               v-model="deptName"
               placeholder="请输入机构名称"
               clearable
               prefix-icon="Search"
-              style="margin-bottom: 20px"
+              style="margin-bottom: 15px"
           />
-        </div>
-        <div class="head-container">
           <el-tree
               :data="deptOptions"
               :props="{ label: 'label', children: 'children' }"
@@ -39,7 +37,7 @@
                 v-model="queryParams.userName"
                 placeholder="请输入成员名称"
                 clearable
-                style="width: 240px"
+                style="width: 220px"
                 @keyup.enter="handleQuery"
             />
           </el-form-item>
@@ -48,16 +46,16 @@
                 v-model="queryParams.mobile"
                 placeholder="请输入手机号码"
                 clearable
-                style="width: 240px"
+                style="width: 220px"
                 @keyup.enter="handleQuery"
             />
           </el-form-item>
           <el-form-item label="状态" prop="enable">
             <el-select
                 v-model="queryParams.enable"
-                placeholder="成员状态"
+                placeholder="请选择成员状态"
                 clearable
-                style="width: 240px"
+                style="width: 220px"
             >
               <!--                     <el-option-->
               <!--                        v-for="dict in sys_normal_disable"-->
@@ -690,8 +688,8 @@ getQrCode()
   line-height: 30px;
 }
 .head-container {
-  :deep(.el-tree-node__content):hover {
-    background: #f9f9f9;
+  .el-tree {
+    background: 0;
   }
 }
 .code-dialog {

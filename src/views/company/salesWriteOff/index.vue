@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form v-show="showSearch" :inline="true">
+    <el-form v-show="showSearch" :inline="true" label-width="55px">
       <el-form-item class="label" label="关键字">
         <!--              <el-input-->
         <!--                  style="width: 400px"-->
@@ -12,7 +12,7 @@
         <!--                  <el-button :icon="Search"/>-->
         <!--                </template>-->
         <!--              </el-input>-->
-        <el-input v-model="queryParams.otherFilter" placeholder="请输入商品名/商品品牌" clearable />
+        <el-input v-model="queryParams.otherFilter" placeholder="请输入商品名/商品品牌" clearable style="width: 220px" />
       </el-form-item>
       <el-form-item class="label" label="时间">
         <el-date-picker
@@ -22,6 +22,7 @@
             end-placeholder="结束时间"
             format="YYYY-MM-DD hh-mm-ss"
             value-format="YYYY-MM-DD hh:mm:ss"
+            style="width: 360px"
         />
       </el-form-item>
       <el-form-item>
@@ -411,4 +412,8 @@ getList()
 </script>
 
 <style scoped lang="scss">
+.label::v-deep( .el-form-item__label) {
+  color: #606266;
+  font-weight: 600;
+}
 </style>

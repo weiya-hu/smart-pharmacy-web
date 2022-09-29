@@ -1,12 +1,12 @@
 <template>
   <div class="app-container">
     <div class="btn-box">
-      <el-button type="primary"  @click="handelRead('edit')" v-if="inputType === 'readey'">修改</el-button>
+      <el-button @click="handelRead('edit')" v-if="inputType === 'readey'">修改</el-button>
       <el-button v-if="inputType!=='readey'" type="primary" @click="handelRead('sure')">确定</el-button>
       <el-button v-if="inputType!=='readey'" @click="handelRead('cancel')">取消</el-button>
     </div>
     <div class="form-box">
-      <el-form v-model="form" label-position="left" label-width="85px">
+      <el-form v-model="form" label-width="85px">
         <div class="form-top">
           <el-form-item label="企业logo" prop="logo">
             <div>
@@ -49,7 +49,7 @@
           <el-form-item label="企微ID" prop="plainCorpId">
             <el-input v-model="form.plainCorpId" :disabled="inputType==='readey'" />
           </el-form-item>
-          <el-form-item label="法定代表人" prop="legalPersonId">
+          <el-form-item label="法人代表" prop="legalPersonId">
             <el-select v-model="form.legalPersonId" :disabled="inputType==='readey'" placeholder=" " style="width: 350px;">
               <el-option v-for="item in legalPersonList" :key="item.userId" :label="item.userName" :value="item.userId" />
             </el-select>
@@ -273,7 +273,8 @@ getFormData()
       width: 350px;
     }
     :deep(.el-form-item--default) .el-form-item__label {
-      font-weight: 700;
+      color: #606266;
+      font-weight: 600;
     }
     .back-box {
       position: relative;
