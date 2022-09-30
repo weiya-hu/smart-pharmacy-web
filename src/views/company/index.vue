@@ -248,7 +248,7 @@ getFormData()
   .btn-box {
     position: absolute;
     left: 535px;
-    z-index: 999;
+    z-index: 2;
   }
   .form-box {
     .form-top {

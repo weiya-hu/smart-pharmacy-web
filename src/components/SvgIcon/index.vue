@@ -1,5 +1,5 @@
 <template>
-  <svg :class="svgClass" aria-hidden="true">
+  <svg :class="svgClass" aria-hidden="true" :style="{'margin-right': $props.iconClass !== '#' && $props.iconClass !== '' ? '16px' : '0'}">
     <use :xlink:href="iconName" :fill="color" />
   </svg>
 </template>

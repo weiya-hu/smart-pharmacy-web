@@ -111,7 +111,6 @@
         </div>
 
         <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
-          <!--               <el-table-column type="selection" width="50" align="center" />-->
           <el-table-column label="成员编号" align="center" key="userId" prop="userId" v-if="columns[0].visible"
                            :show-overflow-tooltip="true"/>
           <el-table-column label="成员名称" align="center" key="userName" prop="userName" v-if="columns[1].visible"
@@ -195,8 +194,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="角色">
-              <el-select v-model="form.roleIds" multiple placeholder="请选择" style="width: 100%">
+            <el-form-item label="角色" prop="roleIds">
+              <el-select v-model="form.roleIds" multiple placeholder="请选择角色" style="width: 100%">
                 <el-option
                     v-for="item in roleOptions"
                     :key="item.roleId"
@@ -419,9 +418,9 @@ const data = reactive({
       message: "成员名称长度必须介于 2 和 20 之间",
       trigger: "blur"
     }],
-    alias: [{required: true, message: "成员昵称不能为空", trigger: "blur"}],
-    email: [{type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"]}],
-    mobile: [{pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur"}]
+    roleIds: [{required: true, message: "角色不能为空", trigger: "change"}],
+    deptIds: [{required: true, message: "归属部门不能为空", trigger: "change"}],
+    mobile: [{required: true, message: "手机号码不能为空", trigger: "blur"},{pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur"}],
   }
 });
 
@@ -565,16 +564,16 @@ function initTreeData() {
 function reset() {
   form.value = {
     userId: undefined,
-    deptIds: undefined,
+    deptIds: [],
     userName: undefined,
-    alias: undefined,
+    // alias: undefined,
     mobile: undefined,
     email: undefined,
     gender: undefined,
     enable: 1,
     remark: undefined,
     // postIds: [],
-    roleIds: undefined
+    roleIds: []
   };
   proxy.resetForm("userRef");
 };

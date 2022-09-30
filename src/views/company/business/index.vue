@@ -350,7 +350,7 @@ function resetQuery() {
 /** 新增按钮操作 */
 function handleAdd() {
   reset();
-  listReltree({allChild:true}).then(response => {
+  listReltree({allChild:true, queryRoot:true}).then(response => {
     // deptOptions.value = proxy.handleTree(response.data, "id");
     deptOptions.value = response.data
   });
@@ -375,7 +375,7 @@ function handleUpdate(row) {
   reset();
   getNameData(row)
   // listReltree({nodeId: row.id}).then(response => {
-  listReltree().then(response => {
+  listReltree({allChild:true,queryRoot:true}).then(response => {
     // deptOptions.value = proxy.handleTree(response.data, "id");
     deptOptions.value = response.data
   });
