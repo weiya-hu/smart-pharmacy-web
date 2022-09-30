@@ -32,6 +32,7 @@ const menuCheckStrictly = ref(true)
 const queryParams = ref({
   name: '',
   allChild: true,
+  queryRoot:true
 })
 const loadTree = () => {
   listReltree(queryParams.value)

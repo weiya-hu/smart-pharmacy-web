@@ -5,10 +5,10 @@
     </div>
     <!--    搜索条件-->
     <div class="serachParams">
-      <el-form :inline="true" :model="queryParams" class="demo-form-inline">
+      <el-form :inline="true" :model="queryParams" class="demo-form-inline" label-width="70px">
         <el-form-item class="label" label="任务时间">
           <el-date-picker
-              style="width: 300px;"
+              style="width: 220px;"
               v-model="queryParams.betweenDate"
               type="daterange"
               start-placeholder="开始时间"
@@ -18,7 +18,7 @@
           />
         </el-form-item>
         <el-form-item class="label" label="区域">
-          <el-cascader v-model="queryParams.nodeId" @change="changeArea" style="width: 300px;"
+          <el-cascader v-model="queryParams.nodeId" @change="changeArea" style="width: 220px;"
                        placeholder="请选择区域"
                        :collapse-tags="true"
                        :options="options"
@@ -26,25 +26,23 @@
                        clearable/>
         </el-form-item>
         <el-form-item class="label" label="条件查询">
-          <el-input style="width: 300px;" v-model="queryParams.otherFilter"
-                    placeholder="请输入任务名/编号/商品名/商品ID/品牌"></el-input>
+          <el-input style="width: 220px;" v-model="queryParams.otherFilter"
+                    placeholder="请输入查询条件"></el-input>
         </el-form-item>
         <el-form-item class="label" label="任务状态">
-          <el-select style="width: 300px;" v-model="queryParams.state" placeholder="请选择任务状态" clearable>
+          <el-select style="width: 220px;" v-model="queryParams.state" placeholder="请选择任务状态" clearable>
             <el-option v-for="(item,key) in statusOption" :key="key" :label="item.label" :value="item.value"/>
           </el-select>
         </el-form-item>
         <el-form-item class="label" label="时间范围">
-          <el-select style="width: 300px;" v-model="queryParams.timeRangeQuickSelection"
+          <el-select style="width: 220px;" v-model="queryParams.timeRangeQuickSelection"
                      placeholder="请选择要查看的区域" clearable>
             <el-option v-for="(item,key) in fastSelectDate" :key="key" :label="item.label" :value="item.value"/>
           </el-select>
         </el-form-item>
-        <el-form-item class="label" label=" ">
-          <div style="width: 300px;">
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-          </div>
+        <el-form-item class="label">
+          <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+          <el-button icon="Refresh" @click="resetQuery">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -643,7 +641,7 @@ let chart_one_data = {
       }
     },
     // barWidth: 50,
-    barMaxWidth: 40,
+    barMaxWidth: 20,
     label: {
       show: true,
       // 标签的位置 left right bottom top inside  // 绝对的像素值 position: [10, 10]
@@ -959,7 +957,7 @@ let chart_two_data = {
     type: 'bar',
     stack: '总量',
     // barWidth: 50,
-    barMaxWidth: 40,
+    barMaxWidth: 20,
     label: {
       show: true,
       // 标签的位置 left right bottom top inside  // 绝对的像素值 position: [10, 10]
@@ -986,7 +984,7 @@ let chart_two_data = {
       type: 'bar',
       stack: '总量',
       // barWidth: 50,
-      barMaxWidth: 40,
+      barMaxWidth: 20,
       label: {
         show: true,
         // 标签的位置 left right bottom top inside  // 绝对的像素值 position: [10, 10]
@@ -1015,7 +1013,7 @@ let chart_two_data = {
       name: '总数',    // 总数显示，生成一个总数的柱状图，将颜色设为透明，
       type: 'bar',     // label将位置设备内部底部，造成一个总数显示在
       stack: '总量',    // 柱状图上方的假象
-      barMaxWidth: 40,
+      barMaxWidth: 20,
       label: {
         normal: {
           show: true,
@@ -1127,7 +1125,7 @@ const chart_three_data = {
   ],
   series: [
     {
-      barMaxWidth: 40,
+      barMaxWidth: 20,
       type: 'bar',
       stack: '总量',  //注意这里也要添加，要不然对不齐
       label: {
@@ -1149,7 +1147,7 @@ const chart_three_data = {
       data: [],
     },
     {
-      barMaxWidth: 40,
+      barMaxWidth: 20,
       type: 'bar',
       stack: '总量',  //注意这里也要添加，要不然对不齐
       label: {
@@ -1171,7 +1169,7 @@ const chart_three_data = {
       data: [],
     },
     {
-      barMaxWidth: 40,
+      barMaxWidth: 20,
       type: 'bar',
       stack: '总量',  //注意这里也要添加，要不然对不齐
       label: {
@@ -1308,8 +1306,6 @@ innitSelectOption()
 .label::v-deep( .el-form-item__label) {
   color: #606266;
   font-weight: 600;
-  width: 70px;
-  justify-content: flex-start !important;
 }
 
 .outBox::v-deep(.el-loading-spinner) {

@@ -1,12 +1,12 @@
 <template>
    <div class="app-container">
-      <el-form :model="queryParams" ref="queryRef" v-show="showSearch" :inline="true">
+      <el-form :model="queryParams" ref="queryRef" v-show="showSearch" :inline="true" label-width="68px">
          <el-form-item label="角色名称" prop="name">
             <el-input
                v-model="queryParams.name"
                placeholder="请输入角色名称"
                clearable
-               style="width: 240px"
+               style="width: 220px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
@@ -49,51 +49,52 @@
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
          </el-form-item>
       </el-form>
-      <el-row :gutter="10" class="mb8">
+     <div class="btn-back">
+       <el-row :gutter="10" class="mb8">
          <el-col :span="1.5">
-            <el-button
+           <el-button
                type="primary"
                plain
                icon="Plus"
                @click="handleAdd"
                v-hasPermi="['system:role:add']"
-            >新增</el-button>
-         </el-col>
-         <el-col :span="1.5">
-            <el-button
-               type="success"
-               plain
-               icon="Edit"
-               :disabled="single"
-               @click="handleUpdate"
-               v-hasPermi="['system:role:edit']"
-            >修改</el-button>
+           >新增</el-button>
          </el-col>
 <!--         <el-col :span="1.5">-->
-<!--            <el-button-->
-<!--               type="danger"-->
+<!--           <el-button-->
+<!--               type="success"-->
 <!--               plain-->
-<!--               icon="Delete"-->
-<!--               :disabled="multiple"-->
-<!--               @click="handleDelete"-->
-<!--               v-hasPermi="['system:role:remove']"-->
-<!--            >删除</el-button>-->
+<!--               icon="Edit"-->
+<!--               :disabled="single"-->
+<!--               @click="handleUpdate"-->
+<!--               v-hasPermi="['system:role:edit']"-->
+<!--           >修改</el-button>-->
 <!--         </el-col>-->
-<!--         <el-col :span="1.5">-->
-<!--            <el-button-->
-<!--               type="warning"-->
-<!--               plain-->
-<!--               icon="Download"-->
-<!--               @click="handleExport"-->
-<!--               v-hasPermi="['system:role:export']"-->
-<!--            >导出</el-button>-->
-<!--         </el-col>-->
+         <!--         <el-col :span="1.5">-->
+         <!--            <el-button-->
+         <!--               type="danger"-->
+         <!--               plain-->
+         <!--               icon="Delete"-->
+         <!--               :disabled="multiple"-->
+         <!--               @click="handleDelete"-->
+         <!--               v-hasPermi="['system:role:remove']"-->
+         <!--            >删除</el-button>-->
+         <!--         </el-col>-->
+         <!--         <el-col :span="1.5">-->
+         <!--            <el-button-->
+         <!--               type="warning"-->
+         <!--               plain-->
+         <!--               icon="Download"-->
+         <!--               @click="handleExport"-->
+         <!--               v-hasPermi="['system:role:export']"-->
+         <!--            >导出</el-button>-->
+         <!--         </el-col>-->
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
-      </el-row>
+       </el-row>
+     </div>
 
       <!-- 表格数据 -->
       <el-table v-loading="loading" :data="roleList" @selection-change="handleSelectionChange">
-         <el-table-column type="selection" width="55" />
          <el-table-column label="角色编号" prop="roleId" :show-overflow-tooltip="true" />
          <el-table-column label="角色名称" prop="name" :show-overflow-tooltip="true" />
 <!--         <el-table-column label="权限字符" prop="roleKey" :show-overflow-tooltip="true" />-->
@@ -115,6 +116,7 @@
          </el-table-column>
          <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="280">
             <template #default="scope">
+              <div class="btn-col">
                 <el-button
                   type="text"
                   icon="Edit"
@@ -149,6 +151,7 @@
                   v-hasPermi="['system:role:edit']"
                 >分配用户
                 </el-button>
+              </div>
             </template>
          </el-table-column>
       </el-table>

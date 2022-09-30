@@ -3,11 +3,9 @@
     <h4 class="form-header h4">基本信息</h4>
     <el-form :model="form" label-width="80px">
       <el-row>
-        <el-col :span="8" :offset="2">
-          <el-form-item label="用户名称" prop="nickName">
-            <el-input v-model="form.userName" disabled/>
-          </el-form-item>
-        </el-col>
+        <el-form-item label="用户名称" prop="nickName">
+          <el-input v-model="form.userName" disabled />
+        </el-form-item>
         <!--            <el-col :span="8" :offset="2">-->
         <!--               <el-form-item label="登录账号" prop="userName">-->
         <!--                  <el-input v-model="form.userName" disabled />-->

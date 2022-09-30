@@ -1,25 +1,26 @@
 <template>
   <div class="app-container">
-    <el-form v-model="queryParam" ref="queryForm" label-width="70px">
-      <el-row>
-        <el-form-item label="门店名称">
-          <el-input v-model="queryParam.name"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-          <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-        </el-form-item>
-      </el-row>
+    <el-form v-model="queryParam" ref="queryForm" :inline="true">
+      <el-form-item label="门店名称">
+        <el-input v-model="queryParam.name" placeholder="请输入门店名称"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+      </el-form-item>
     </el-form>
 
     <el-table v-loading="loading" :data="storeList" height="250">
       <el-table-column label="门店编号" prop="storeId"/>
       <el-table-column label="门店名称" prop="name" show-overflow-tooltip/>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="props.handleType !== 'query'">
         <template #default="scope">
           <el-button type="text" @click="handleAdd(scope.row)">添加</el-button>
         </template>
       </el-table-column>
+      <template #empty>
+        <span>暂无可选择数据</span>
+      </template>
     </el-table>
     <pagination
         v-show="total>0"
@@ -29,15 +30,15 @@
         @pagination="getList"
     />
     <el-divider content-position="left">已选择产品</el-divider>
-    <div class="handler">
+    <div class="handler" v-if="props.handleType !== 'query'">
       <el-button @click="cleanAllStore" link type="primary">清空已选</el-button>
     </div>
     <el-table v-loading="loading" :data="storeResultList" height="250">
       <el-table-column label="门店编号" prop="storeId"/>
       <el-table-column label="门店名称" prop="name" show-overflow-tooltip/>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="props.handleType !== 'query'">
         <template #default="scope">
-          <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
+          <el-button type="text"  @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -79,15 +80,6 @@ const getList = () => {
         storeList.value = res.data.list
         total.value = Number(res.data.total)
 
-        // console.log('filterIds', props.filterIds)
-        // console.log('storeList', storeList.value)
-        // if (props.filterIds.length > 0) {
-        //   storeList.value.forEach(item => {
-        //     if (props.filterIds.indexOf(item.storeId) > -1) {
-        //       handleAdd(item)
-        //     }
-        //   })
-        // }
         let obj = storeList.value.filter(item => props.filterIds.indexOf(item.storeId) > -1)
         obj.forEach(items => {
           handleAdd(items)
@@ -100,7 +92,7 @@ const getList = () => {
 //清空全部门店
 const cleanAllStore = () => {
   storeResultList.value = []
-  getList()
+  
 }
 
 
@@ -139,11 +131,16 @@ const props = defineProps({
   filterIds: {
     type: Array,
     default: []
+  },
+  handleType: {
+    type: String,
+    default: undefined
   }
 })
 
 defineExpose({
   getStoreResultList,
+  getList
 })
 
 getList()

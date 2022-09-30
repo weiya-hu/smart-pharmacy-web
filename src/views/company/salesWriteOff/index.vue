@@ -1,68 +1,69 @@
 <template>
-  <div class="outBox">
-    <div class="search">
-      <div class="form">
-        <el-form v-show="showSearch">
-          <el-row>
-            <el-form-item class="label" label="时间">
-              <el-date-picker
-                  type="datetimerange"
-                  v-model="betweenTime"
-                  start-placeholder="开始时间"
-                  end-placeholder="结束时间"
-                  format="YYYY-MM-DD hh-mm-ss"
-                  value-format="YYYY-MM-DD hh:mm:ss"
-              />
-            </el-form-item>
-            <el-form-item class="label" style="marginLeft:20px" label="关键字">
-              <el-input
-                  style="width: 400px"
-                  v-model="queryParams.otherFilter"
-                  placeholder="请输入商品名/商品品牌"
-                  clearable
-              >
-                <template #prepend>
-                  <el-button :icon="Search"/>
-                </template>
-              </el-input>
-            </el-form-item>
-            <div class="handler">
-              <el-row>
-                <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-                <!--                <el-button-->
-                <!--                    type="info"-->
-                <!--                    plain-->
-                <!--                    icon="Upload"-->
-                <!--                    @click="handleImport"-->
-                <!--                >导入-->
-                <!--                </el-button>-->
-
-                <el-button
-                    type="info"
-                    plain
-                    icon="Upload"
-                    @click="customizeImport"
-                >自定义导入
-                </el-button>
-                <!--                <el-button-->
-                <!--                    type="info"-->
-                <!--                    plain-->
-                <!--                    @click="matchFormHeader"-->
-                <!--                >匹配表头-->
-                <!--                </el-button>-->
-                <el-button type="primary" @click="queryNextpage(true)">上一页</el-button>
-                <el-button type="primary" @click="queryNextpage(false)">下一页</el-button>
-              </el-row>
-            </div>
-          </el-row>
-        </el-form>
-      </div>
-
+  <div class="app-container">
+    <el-form v-show="showSearch" :inline="true" label-width="55px">
+      <el-form-item class="label" label="关键字">
+        <!--              <el-input-->
+        <!--                  style="width: 400px"-->
+        <!--                  v-model="queryParams.otherFilter"-->
+        <!--                  placeholder="请输入商品名/商品品牌"-->
+        <!--                  clearable-->
+        <!--              >-->
+        <!--                <template #prepend>-->
+        <!--                  <el-button :icon="Search"/>-->
+        <!--                </template>-->
+        <!--              </el-input>-->
+        <el-input v-model="queryParams.otherFilter" placeholder="请输入商品名/商品品牌" clearable style="width: 220px" />
+      </el-form-item>
+      <el-form-item class="label" label="时间">
+        <el-date-picker
+            type="datetimerange"
+            v-model="betweenTime"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            format="YYYY-MM-DD hh-mm-ss"
+            value-format="YYYY-MM-DD hh:mm:ss"
+            style="width: 360px"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+      </el-form-item>
+    </el-form>
+    <div class="btn-back">
+      <el-row :gutter="10" class="mb8">
+        <!--                <el-button-->
+        <!--                    type="info"-->
+        <!--                    plain-->
+        <!--                    icon="Upload"-->
+        <!--                    @click="handleImport"-->
+        <!--                >导入-->
+        <!--                </el-button>-->
+        <el-col :span="1.5">
+          <el-button
+              type="info"
+              plain
+              icon="Upload"
+              @click="customizeImport"
+          >自定义导入
+          </el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button type="primary" plain @click="queryNextpage(true)">上一页</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button type="primary" plain @click="queryNextpage(false)">下一页</el-button>
+        </el-col>
+        <!--                <el-button-->
+        <!--                    type="info"-->
+        <!--                    plain-->
+        <!--                    @click="matchFormHeader"-->
+        <!--                >匹配表头-->
+        <!--                </el-button>-->
+        <right-toolbar v-model:showSearch="showSearch" @queryTable="refreshList" :columns="columns"></right-toolbar>
+      </el-row>
     </div>
-    <div style="display: flex;justifyContent:flex-end;marginBottom: 20px">
-      <right-toolbar v-model:showSearch="showSearch" @queryTable="refreshList" :columns="columns"></right-toolbar>
-    </div>
-    <el-dialog title="订单导入" v-model="upload.open" width="50%" append-to-body>
+
+    <el-dialog title="订单导入" v-model="upload.open" width="50%" append-to-body :close-on-click-modal="false" draggable>
       <el-upload
           ref="uploadRef"
           :limit="1"
@@ -100,7 +101,7 @@
       </template>
     </el-dialog>
     <!--    自定义导入-->
-    <el-dialog title="导入销售清单" v-model="uploadData.open" width="50%" append-to-body>
+    <el-dialog title="导入销售清单" v-model="uploadData.open" width="50%" append-to-body :close-on-click-modal="false" draggable>
       <el-upload
           style="margin: 0 10px"
           :limit="1"
@@ -151,10 +152,10 @@
         <el-table-column label="规格" v-if="columns[4].visible" align="center" key="specification"
                          prop="specification"/>
         <el-table-column label="门店ID" v-if="columns[5].visible" align="center" key="storeId" prop="storeId"/>
-        <el-table-column label="门店名" v-if="columns[6].visible" align="center" key="storeName" prop="storeName"/>
-        <el-table-column label="门店订单ID" v-if="columns[7].visible" align="center" key="storeOrderNumber"
+        <el-table-column label="门店名" min-width="150px" v-if="columns[6].visible" align="center" key="storeName" prop="storeName"/>
+        <el-table-column label="门店订单ID" min-width="90px" v-if="columns[7].visible" align="center" key="storeOrderNumber"
                          prop="storeOrderNumber"/>
-        <el-table-column width="120px" v-if="columns[8].visible" label="销售员" align="center" key="userName"
+        <el-table-column width="90px" v-if="columns[8].visible" label="销售员" align="center" key="userName"
                          prop="userName"/>
       </el-table>
       <div style="padding: 20px;display: flex;justifyContent: flex-end">
@@ -162,10 +163,6 @@
         <span>当前页:{{ currentPage + 1 }}</span>
       </div>
     </div>
-    <div>
-
-    </div>
-
 
   </div>
 </template>
@@ -418,26 +415,6 @@ getList()
 <style scoped lang="scss">
 .label::v-deep( .el-form-item__label) {
   color: #606266;
-  width: 70px;
-  justify-content: flex-start !important;
-}
-
-.outBox {
-  padding: 20px;
-
-  .search {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 20px;
-
-    .seach {
-      margin-left: 20px;
-
-    }
-
-    .handler {
-      margin-left: 20px;
-    }
-  }
+  font-weight: 600;
 }
 </style>

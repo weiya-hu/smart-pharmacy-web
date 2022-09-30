@@ -2,34 +2,34 @@
   <div class="app-container">
     <el-row :gutter="20">
       <!--部门数据-->
-      <el-col :span="4" :xs="24">
-        <div class="head-container">
-          <el-input
-              v-model="deptName"
-              placeholder="请输入机构名称"
-              clearable
-              prefix-icon="Search"
-              style="margin-bottom: 20px"
-          />
-        </div>
-        <div class="head-container">
-          <el-tree
-              :data="deptOptions"
-              :props="{ label: 'label', children: 'children' }"
-              :expand-on-click-node="false"
-              :filter-node-method="filterNode"
-              ref="deptTreeRef"
-              highlight-current
-              default-expand-all
-              @node-click="handleNodeClick"
-          >
-            <template #default="{ node, data }">
-              <el-tooltip placement="top" :content="node.label" :disabled="showTitle">
-                <span class="text-nowrap" @mouseover="onShowTips">{{ node.label }}</span>
-              </el-tooltip>
-            </template>
-          </el-tree>
-        </div>
+      <el-col :span="4" :xs="24" style="background: #f9f9f9;">
+        <el-scrollbar height="800px">
+          <div class="head-container">
+            <el-input
+                v-model="deptName"
+                placeholder="请输入机构名称"
+                clearable
+                prefix-icon="Search"
+                style="margin-bottom: 15px"
+            />
+            <el-tree
+                :data="deptOptions"
+                :props="{ label: 'label', children: 'children' }"
+                :expand-on-click-node="false"
+                :filter-node-method="filterNode"
+                ref="deptTreeRef"
+                highlight-current
+                default-expand-all
+                @node-click="handleNodeClick"
+            >
+              <template #default="{ node, data }">
+                <el-tooltip placement="top" :content="node.label" :disabled="showTitle">
+                  <span class="text-nowrap" @mouseover="onShowTips">{{ node.label }}</span>
+                </el-tooltip>
+              </template>
+            </el-tree>
+          </div>
+        </el-scrollbar>
       </el-col>
       <!--用户数据-->
       <el-col :span="20" :xs="24">
@@ -39,7 +39,7 @@
                 v-model="queryParams.userName"
                 placeholder="请输入成员名称"
                 clearable
-                style="width: 240px"
+                style="width: 220px"
                 @keyup.enter="handleQuery"
             />
           </el-form-item>
@@ -48,16 +48,16 @@
                 v-model="queryParams.mobile"
                 placeholder="请输入手机号码"
                 clearable
-                style="width: 240px"
+                style="width: 220px"
                 @keyup.enter="handleQuery"
             />
           </el-form-item>
           <el-form-item label="状态" prop="enable">
             <el-select
                 v-model="queryParams.enable"
-                placeholder="成员状态"
+                placeholder="请选择成员状态"
                 clearable
-                style="width: 240px"
+                style="width: 220px"
             >
               <!--                     <el-option-->
               <!--                        v-for="dict in sys_normal_disable"-->
@@ -85,53 +85,34 @@
           </el-form-item>
         </el-form>
 
-        <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5" v-show="isWecomAccount === 0">
-            <el-button
-                type="primary"
-                plain
-                icon="Plus"
-                @click="handleAdd"
-                v-hasPermi="['system:user:add']"
-            >新增
-            </el-button>
-          </el-col>
-          <!--               <el-col :span="1.5">-->
-          <!--                  <el-button-->
-          <!--                     type="success"-->
-          <!--                     plain-->
-          <!--                     icon="Edit"-->
-          <!--                     :disabled="single"-->
-          <!--                     @click="handleUpdate"-->
-          <!--                     v-hasPermi="['system:user:edit']"-->
-          <!--                  >修改</el-button>-->
-          <!--               </el-col>-->
-          <!--               <el-col :span="1.5">-->
-          <!--                  <el-button-->
-          <!--                     type="danger"-->
-          <!--                     plain-->
-          <!--                     icon="Delete"-->
-          <!--                     :disabled="multiple"-->
-          <!--                     @click="handleDelete"-->
-          <!--                     v-hasPermi="['system:user:remove']"-->
-          <!--                  >删除</el-button>-->
-          <!--               </el-col>-->
-          <el-col :span="1.5" v-show="isWecomAccount === 1">
-            <el-tooltip effect="dark" content="同步仅适用开通了企业微信的企业" placement="top">
+        <div class="btn-back">
+          <el-row :gutter="10" class="mb8">
+            <el-col :span="1.5" v-show="isWecomAccount === 0">
               <el-button
+                  type="primary"
                   plain
-                  type="warning"
-                  icon="Sort"
-                  @click="handleSynchro"
-              >同步
+                  icon="Plus"
+                  @click="handleAdd"
+                  v-hasPermi="['system:user:add']"
+              >新增
               </el-button>
-            </el-tooltip>
-          </el-col>
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
-        </el-row>
+            </el-col>
+            <el-col :span="1.5" v-show="isWecomAccount === 1">
+              <el-tooltip effect="dark" content="同步仅适用开通了企业微信的企业" placement="top">
+                <el-button
+                    plain
+                    type="warning"
+                    icon="Sort"
+                    @click="handleSynchro"
+                >同步
+                </el-button>
+              </el-tooltip>
+            </el-col>
+            <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
+          </el-row>
+        </div>
 
-        <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
-          <!--               <el-table-column type="selection" width="50" align="center" />-->
+        <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange" height="588px">
           <el-table-column label="成员编号" align="center" key="userId" prop="userId" v-if="columns[0].visible"
                            :show-overflow-tooltip="true"/>
           <el-table-column label="成员名称" align="center" key="userName" prop="userName" v-if="columns[1].visible"
@@ -165,31 +146,33 @@
           </el-table-column>
           <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
             <template #default="scope">
-              <el-button
-                  type="text"
-                  icon="Edit"
-                  size="small"
-                  v-if="isWecomAccount !== 1"
-                  @click="handleUpdate(scope.row)"
-                  v-hasPermi="['system:user:edit']"
-              >修改
-              </el-button>
-              <el-button
-                  type="text"
-                  icon="Delete"
-                  size="small"
-                  @click="handleDelete(scope.row)"
-                  v-hasPermi="['system:user:remove']"
-              >删除
-              </el-button>
-              <el-button
-                  type="text"
-                  icon="CircleCheck"
-                  size="small"
-                  @click="handleAuthRole(scope.row)"
-                  v-hasPermi="['system:user:edit']"
-              >分配角色
-              </el-button>
+              <div class="btn-col">
+                <el-button
+                    type="text"
+                    icon="Edit"
+                    size="small"
+                    v-if="isWecomAccount !== 1"
+                    @click="handleUpdate(scope.row)"
+                    v-hasPermi="['system:user:edit']"
+                >修改
+                </el-button>
+                <el-button
+                    type="text"
+                    icon="Delete"
+                    size="small"
+                    @click="handleDelete(scope.row)"
+                    v-hasPermi="['system:user:remove']"
+                >删除
+                </el-button>
+                <el-button
+                    type="text"
+                    icon="CircleCheck"
+                    size="small"
+                    @click="handleAuthRole(scope.row)"
+                    v-hasPermi="['system:user:edit']"
+                >分配角色
+                </el-button>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -213,8 +196,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="角色">
-              <el-select v-model="form.roleIds" multiple placeholder="请选择" style="width: 100%">
+            <el-form-item label="角色" prop="roleIds">
+              <el-select v-model="form.roleIds" multiple placeholder="请选择角色" style="width: 100%">
                 <el-option
                     v-for="item in roleOptions"
                     :key="item.roleId"
@@ -437,9 +420,9 @@ const data = reactive({
       message: "成员名称长度必须介于 2 和 20 之间",
       trigger: "blur"
     }],
-    alias: [{required: true, message: "成员昵称不能为空", trigger: "blur"}],
-    email: [{type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"]}],
-    mobile: [{pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur"}]
+    roleIds: [{required: true, message: "角色不能为空", trigger: "change"}],
+    deptIds: [{required: true, message: "归属部门不能为空", trigger: "change"}],
+    mobile: [{required: true, message: "手机号码不能为空", trigger: "blur"},{pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur"}],
   }
 });
 
@@ -583,16 +566,16 @@ function initTreeData() {
 function reset() {
   form.value = {
     userId: undefined,
-    deptIds: undefined,
+    deptIds: [],
     userName: undefined,
-    alias: undefined,
+    // alias: undefined,
     mobile: undefined,
     email: undefined,
     gender: undefined,
     enable: 1,
     remark: undefined,
     // postIds: [],
-    roleIds: undefined
+    roleIds: []
   };
   proxy.resetForm("userRef");
 };
@@ -702,6 +685,13 @@ getQrCode()
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 14px;
+  line-height: 30px;
+}
+.head-container {
+  .el-tree {
+    background: 0;
+  }
 }
 .code-dialog {
   :deep(.el-dialog__body) {

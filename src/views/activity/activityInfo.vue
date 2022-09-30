@@ -27,7 +27,7 @@
     <div style="text-align: center;margin-top: 5%">
       <el-button @click="step--" v-show="step > 1&&step<3">上一步</el-button>
       <el-button @click="handleBack" v-show="step===1">返回</el-button>
-      <el-button type="primary" @click="handleNext" v-show="step<3">下一步</el-button>
+      <el-button type="primary" @click="handleNext" v-show="step<3" :loading="loadingBtn">下一步</el-button>
     </div>
   </div>
 </template>
@@ -48,6 +48,7 @@ const activityStepFirstRef = ref()
 const activityStepSecondRef = ref()
 const eventId = ref('')
 const handleType = ref('')
+const loadingBtn = ref(false)
 let secondLoading = ref(false)
 let auditLoadiang = ref(false)
 const getImageUrl = () => {
@@ -59,8 +60,10 @@ const handleNext = async () => {
       step.value++
       activityStepSecondRef.value.loadEventRule()
     } else {
+      loadingBtn.value = true
       await activityStepFirstRef.value.submitForm().then(res => {
         if (res.code === 200) {
+          loadingBtn.value = false
           if (res.data) {
             eventId.value = res.data
           }
@@ -70,7 +73,11 @@ const handleNext = async () => {
           if (handleType.value === 'query' || handleType.value === 'edit') {
             activityStepSecondRef.value.loadEventRule()
           }
+        } else {
+          loadingBtn.value = false
         }
+      }).catch(err =>{
+        loadingBtn.value = false
       })
     }
     activityStepSecondRef.value.getJobList()

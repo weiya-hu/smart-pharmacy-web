@@ -35,58 +35,60 @@
          </el-form-item>
       </el-form>
 
-      <el-row :gutter="10" class="mb8">
+     <div class="btn-back">
+       <el-row :gutter="10" class="mb8">
          <el-col :span="1.5">
-            <el-button
+           <el-button
                type="primary"
                plain
                icon="Plus"
                @click="handleAdd"
                v-hasPermi="['system:post:add']"
-            >新增</el-button>
-         </el-col>
-         <el-col :span="1.5">
-            <el-button
-               type="success"
-               plain
-               icon="Edit"
-               :disabled="single"
-               @click="handleUpdate"
-               v-hasPermi="['system:post:edit']"
-            >修改</el-button>
+           >新增</el-button>
          </el-col>
 <!--         <el-col :span="1.5">-->
-<!--            <el-button-->
-<!--               type="danger"-->
+<!--           <el-button-->
+<!--               type="success"-->
 <!--               plain-->
-<!--               icon="Delete"-->
-<!--               :disabled="multiple"-->
-<!--               @click="handleDelete"-->
-<!--               v-hasPermi="['system:post:remove']"-->
-<!--            >删除</el-button>-->
+<!--               icon="Edit"-->
+<!--               :disabled="single"-->
+<!--               @click="handleUpdate"-->
+<!--               v-hasPermi="['system:post:edit']"-->
+<!--           >修改</el-button>-->
 <!--         </el-col>-->
-<!--         <el-col :span="1.5">-->
-<!--            <el-button-->
-<!--               type="warning"-->
-<!--               plain-->
-<!--               icon="Download"-->
-<!--               @click="handleExport"-->
-<!--               v-hasPermi="['system:post:export']"-->
-<!--            >导出</el-button>-->
-<!--         </el-col>-->
+         <!--         <el-col :span="1.5">-->
+         <!--            <el-button-->
+         <!--               type="danger"-->
+         <!--               plain-->
+         <!--               icon="Delete"-->
+         <!--               :disabled="multiple"-->
+         <!--               @click="handleDelete"-->
+         <!--               v-hasPermi="['system:post:remove']"-->
+         <!--            >删除</el-button>-->
+         <!--         </el-col>-->
+         <!--         <el-col :span="1.5">-->
+         <!--            <el-button-->
+         <!--               type="warning"-->
+         <!--               plain-->
+         <!--               icon="Download"-->
+         <!--               @click="handleExport"-->
+         <!--               v-hasPermi="['system:post:export']"-->
+         <!--            >导出</el-button>-->
+         <!--         </el-col>-->
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
-      </el-row>
+       </el-row>
+     </div>
 
       <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
-         <el-table-column type="selection" width="55" />
+<!--         <el-table-column type="selection" width="55" />-->
          <el-table-column label="职务编号" prop="jobId" show-tooltip-when-overflow />
          <el-table-column label="职务名称" prop="name" />
          <el-table-column label="职务排序" prop="sort" />
          <el-table-column label="状态" prop="state">
             <template #default="scope">
 <!--               <dict-tag :options="sys_normal_disable" :value="scope.row.state" />-->
-              <el-tag v-if="scope.row.state == 1" type="primary">正常</el-tag>
-              <el-tag v-if="scope.row.state == 0" type="danger">停用</el-tag>
+              <span v-if="scope.row.state == 1" class="state-item1">正常</span>
+              <span v-if="scope.row.state == 0" class="state-item2">停用</span>
             </template>
          </el-table-column>
          <el-table-column label="创建时间"  prop="createTime" show-tooltip-when-overflow>
@@ -96,20 +98,22 @@
          </el-table-column>
          <el-table-column label="操作"  class-name="small-padding fixed-width" width="150">
             <template #default="scope">
-               <el-button
-                  type="text"
-                  icon="Edit"
-                  size="small"
-                  @click="handleUpdate(scope.row)"
-                  v-hasPermi="['system:post:edit']"
-               >修改</el-button>
-               <el-button
-                  type="text"
-                  icon="Delete"
-                  size="small"
-                  @click="handleDelete(scope.row)"
-                  v-hasPermi="['system:post:remove']"
-               >删除</el-button>
+              <div class="btn-col">
+                <el-button
+                    type="text"
+                    icon="Edit"
+                    size="small"
+                    @click="handleUpdate(scope.row)"
+                    v-hasPermi="['system:post:edit']"
+                >修改</el-button>
+                <el-button
+                    type="text"
+                    icon="Delete"
+                    size="small"
+                    @click="handleDelete(scope.row)"
+                    v-hasPermi="['system:post:remove']"
+                >删除</el-button>
+              </div>
             </template>
          </el-table-column>
       </el-table>

@@ -6,7 +6,7 @@
       <el-divider direction="vertical" />
       <div class="term-con">
 <!--        <span class="term-edition">v1.0</span>-->
-        <span class="term-time">{{ data.packageName }}</span>
+        <span class="term-time term-time-border">{{ data.packageName }}</span>
         <span class="term-time">有效期：{{ data.expireTime }}</span>
         <a href="#">续费</a>
       </div>
@@ -122,6 +122,15 @@ getInfo()
         font-weight: 500;
         color: #999999;
         margin-right: 15px;
+      }
+      .term-time-border {
+        border: 1px solid #e2e2e2;
+        width: 80px;
+        height: 24px;
+        line-height: 22px;
+        text-align: center;
+        display: inline-block;
+        border-radius: 25px;
       }
       a {
         font-size: 14px;
