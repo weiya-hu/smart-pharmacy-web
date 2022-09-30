@@ -2,32 +2,34 @@
   <div class="app-container">
     <el-row :gutter="20">
       <!--部门数据-->
-      <el-col :span="4" :xs="24" style="background: #f9f9f9">
-        <div class="head-container">
-          <el-input
-              v-model="deptName"
-              placeholder="请输入机构名称"
-              clearable
-              prefix-icon="Search"
-              style="margin-bottom: 15px"
-          />
-          <el-tree
-              :data="deptOptions"
-              :props="{ label: 'label', children: 'children' }"
-              :expand-on-click-node="false"
-              :filter-node-method="filterNode"
-              ref="deptTreeRef"
-              highlight-current
-              default-expand-all
-              @node-click="handleNodeClick"
-          >
-            <template #default="{ node, data }">
-              <el-tooltip placement="top" :content="node.label" :disabled="showTitle">
-                <span class="text-nowrap" @mouseover="onShowTips">{{ node.label }}</span>
-              </el-tooltip>
-            </template>
-          </el-tree>
-        </div>
+      <el-col :span="4" :xs="24" style="background: #f9f9f9;">
+        <el-scrollbar height="800px">
+          <div class="head-container">
+            <el-input
+                v-model="deptName"
+                placeholder="请输入机构名称"
+                clearable
+                prefix-icon="Search"
+                style="margin-bottom: 15px"
+            />
+            <el-tree
+                :data="deptOptions"
+                :props="{ label: 'label', children: 'children' }"
+                :expand-on-click-node="false"
+                :filter-node-method="filterNode"
+                ref="deptTreeRef"
+                highlight-current
+                default-expand-all
+                @node-click="handleNodeClick"
+            >
+              <template #default="{ node, data }">
+                <el-tooltip placement="top" :content="node.label" :disabled="showTitle">
+                  <span class="text-nowrap" @mouseover="onShowTips">{{ node.label }}</span>
+                </el-tooltip>
+              </template>
+            </el-tree>
+          </div>
+        </el-scrollbar>
       </el-col>
       <!--用户数据-->
       <el-col :span="20" :xs="24">
@@ -110,7 +112,7 @@
           </el-row>
         </div>
 
-        <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
+        <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange" height="588px">
           <el-table-column label="成员编号" align="center" key="userId" prop="userId" v-if="columns[0].visible"
                            :show-overflow-tooltip="true"/>
           <el-table-column label="成员名称" align="center" key="userName" prop="userName" v-if="columns[1].visible"
