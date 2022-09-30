@@ -3,7 +3,6 @@
     <el-row :gutter="20">
       <!--部门数据-->
       <el-col :span="4" :xs="24" style="background: #f9f9f9;">
-        <el-scrollbar height="800px">
           <div class="head-container">
             <el-input
                 v-model="deptName"
@@ -12,24 +11,25 @@
                 prefix-icon="Search"
                 style="margin-bottom: 15px"
             />
-            <el-tree
-                :data="deptOptions"
-                :props="{ label: 'label', children: 'children' }"
-                :expand-on-click-node="false"
-                :filter-node-method="filterNode"
-                ref="deptTreeRef"
-                highlight-current
-                default-expand-all
-                @node-click="handleNodeClick"
-            >
-              <template #default="{ node, data }">
-                <el-tooltip placement="top" :content="node.label" :disabled="showTitle">
-                  <span class="text-nowrap" @mouseover="onShowTips">{{ node.label }}</span>
-                </el-tooltip>
-              </template>
-            </el-tree>
+            <el-scrollbar height="800px">
+              <el-tree
+                  :data="deptOptions"
+                  :props="{ label: 'label', children: 'children' }"
+                  :expand-on-click-node="false"
+                  :filter-node-method="filterNode"
+                  ref="deptTreeRef"
+                  highlight-current
+                  default-expand-all
+                  @node-click="handleNodeClick"
+              >
+                <template #default="{ node, data }">
+                  <el-tooltip placement="top" :content="node.label" :disabled="showTitle">
+                    <span class="text-nowrap" @mouseover="onShowTips">{{ node.label }}</span>
+                  </el-tooltip>
+                </template>
+              </el-tree>
+            </el-scrollbar>
           </div>
-        </el-scrollbar>
       </el-col>
       <!--用户数据-->
       <el-col :span="20" :xs="24">
@@ -129,14 +129,8 @@
           </el-table-column>
           <el-table-column label="状态" align="center" key="enable" prop="enable" v-if="columns[4].visible">
             <template #default="scope">
-              <!--                     <el-switch-->
-              <!--                        v-model="scope.row.enable"-->
-              <!--                        :active-value="1"-->
-              <!--                        :inactive-value="0"-->
-              <!--                        @click="handleStatusChange(scope.row)"-->
-              <!--                     ></el-switch>-->
-              <el-tag v-if="scope.row.enable == 1">正常</el-tag>
-              <el-tag v-if="scope.row.enable == 0" type="danger">停用</el-tag>
+              <span v-if="scope.row.enable == 1" class="state-item1">正常</span>
+              <span v-if="scope.row.enable == 0" class="state-item2">停用</span>
             </template>
           </el-table-column>
           <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[5].visible" width="160">

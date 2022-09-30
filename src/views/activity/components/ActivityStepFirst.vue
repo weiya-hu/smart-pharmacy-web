@@ -115,23 +115,23 @@
     <!--    let productTypesOption = ref([])-->
     <!--    let specificationsOption = ref([])-->
     <el-dialog title="任务范围" v-model="showRuleScupes" width="50%">
-      <el-form :model="queryRuleScupesParams" label-width="68px">
+      <el-form :model="queryRuleScupesParams">
         <el-form-item @change="changeGoodsRange" label="品类" prop="productTypes">
-          <el-select v-model="queryRuleScupesParams.productTypes" multiple clearable>
+          <el-select v-model="queryRuleScupesParams.productTypes" multiple clearable style="width: 100%;">
             <el-option v-for="item in productTypesOption" :value="item" :key="item"
                        :label="item">{{ item }}
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="品牌" prop="brands">
-          <el-select @change="changeGoodsRange" v-model="queryRuleScupesParams.brands" clearable multiple>
+          <el-select @change="changeGoodsRange" v-model="queryRuleScupesParams.brands" clearable multiple style="width: 100%;">
             <el-option v-for="item in brandsOption" :value="item" :key="item"
                        :label="item">{{ item }}
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="规格" prop="specifications">
-          <el-select @change="changeGoodsRange" v-model="queryRuleScupesParams.specifications" clearable multiple>
+          <el-select @change="changeGoodsRange" v-model="queryRuleScupesParams.specifications" clearable multiple style="width: 100%;">
             <el-option v-for="item in specificationsOption" :value="item" :key="item"
                        :label="item">{{ item }}
             </el-option>
