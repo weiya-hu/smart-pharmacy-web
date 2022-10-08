@@ -5,7 +5,6 @@
       <div class="cprp-con">{{ data.corpName }}</div>
       <el-divider direction="vertical" />
       <div class="term-con">
-<!--        <span class="term-edition">v1.0</span>-->
         <span class="term-time term-time-border">{{ data.packageName }}</span>
         <span class="term-time">有效期：{{ data.expireTime }}</span>
         <a href="#">续费</a>
@@ -56,11 +55,6 @@ function logout() {
     })
   }).catch(() => { });
 }
-
-// const emits = defineEmits(['setLayout'])
-// function setLayout() {
-//   emits('setLayout');
-// }
 function getInfo() {
   if (userStore.corpInfo) {
     data.value = userStore.corpInfo
@@ -106,16 +100,6 @@ getInfo()
       white-space: nowrap;
     }
     .term-con {
-      .term-edition {
-        padding: 4px 6px;
-        font-size: 12px;
-        font-family: Source Han Sans CN;
-        font-weight: 500;
-        color: #999999;
-        background: rgba(153,153,153,0);
-        border: 1px solid #E2E2E2;
-        border-radius: 4px;
-      }
       .term-time {
         font-size: 14px;
         font-family: Source Han Sans CN;
@@ -152,6 +136,7 @@ getInfo()
         font-family: Source Han Sans CN;
         font-weight: 400;
         color: #999999;
+        white-space: nowrap;
       }
     }
     .el-button {

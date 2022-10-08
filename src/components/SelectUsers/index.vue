@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="">
     <el-row :gutter="20">
       <!--部门数据-->
       <el-col :span="4" :xs="24">
@@ -11,24 +11,24 @@
               prefix-icon="Search"
               style="margin-bottom: 20px"
           />
-        </div>
-        <div class="head-container">
-          <el-tree
-              :data="deptOptions"
-              :props="{ label: 'label', children: 'children' }"
-              :expand-on-click-node="false"
-              :filter-node-method="filterNode"
-              ref="deptTreeRef"
-              highlight-current
-              default-expand-all
-              @node-click="handleNodeClick"
-          >
-            <template #default="{ node, data }">
-              <el-tooltip placement="top" :content="node.label" :disabled="showTitle">
-                <span class="text-nowrap" @mouseover="onShowTips">{{ node.label }}</span>
-              </el-tooltip>
-            </template>
-          </el-tree>
+          <el-scrollbar height="450px">
+            <el-tree
+                :data="deptOptions"
+                :props="{ label: 'label', children: 'children' }"
+                :expand-on-click-node="false"
+                :filter-node-method="filterNode"
+                ref="deptTreeRef"
+                highlight-current
+                default-expand-all
+                @node-click="handleNodeClick"
+            >
+              <template #default="{ node, data }">
+                <el-tooltip placement="top" :content="node.label" :disabled="showTitle">
+                  <span class="text-nowrap" @mouseover="onShowTips">{{ node.label }}</span>
+                </el-tooltip>
+              </template>
+            </el-tree>
+          </el-scrollbar>
         </div>
       </el-col>
       <!--用户数据-->
@@ -39,7 +39,7 @@
                 v-model="queryParams.userName"
                 placeholder="请输入用户名称"
                 clearable
-                style="width: 240px"
+                style="width: 220px"
                 @keyup.enter="handleQuery"
             />
           </el-form-item>
@@ -48,7 +48,7 @@
                 v-model="queryParams.mobile"
                 placeholder="请输入手机号码"
                 clearable
-                style="width: 240px"
+                style="width: 220px"
                 @keyup.enter="handleQuery"
             />
           </el-form-item>
@@ -59,14 +59,13 @@
         </el-form>
 
         <div class="table-box">
-          <el-table row-key="userId" ref="userListRef" v-loading="loading" :data="userList" highlight-current-row @current-change="handleCurrentChange">
-            <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible"/>
+          <el-table row-key="userId" ref="userListRef" height="378px" v-loading="loading" :data="userList" highlight-current-row @current-change="handleCurrentChange">
+            <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" show-overflow-tooltip/>
             <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible"
                              :show-overflow-tooltip="true"/>
             <el-table-column label="部门" align="center" key="deptname" prop="deptname" v-if="columns[3].visible"
                              :show-overflow-tooltip="true"/>
-            <el-table-column label="手机号码" align="center" key="mobile" prop="mobile" v-if="columns[4].visible"
-                             width="120"/>
+            <el-table-column label="手机号码" align="center" key="mobile" prop="mobile" v-if="columns[4].visible" show-overflow-tooltip/>
           </el-table>
         </div>
         <pagination

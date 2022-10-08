@@ -48,13 +48,9 @@
         :default-expand-all="isExpandAll"
         row-key="nodeId"
         :tree-props="{ children: 'children' }"
+        height="720px"
     >
       <el-table-column prop="name" label="机构名称" width="450" show-tooltip-when-overflow></el-table-column>
-      <!--      <el-table-column prop="state" label="状态">-->
-      <!--        <template #default="scope">-->
-      <!--          <dict-tag :options="sys_normal_disable" :value="scope.row.state"/>-->
-      <!--        </template>-->
-      <!--      </el-table-column>-->
       <el-table-column label="创建时间" prop="createTime" show-tooltip-when-overflow>
         <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -134,7 +130,6 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="名称" prop="relationId">
-              <!--              <el-input v-model="form.name" style="width: 100%" placeholder="请选择名称 / 如没有需要的供应商，请输入名称"/>-->
               <el-select
                   v-model="form.relationId"
                   filterable
@@ -149,7 +144,7 @@
                 <el-option v-for="item in nameList" :key="item.relationId" :label="item.name" :value="item.relationId"/>
               </el-select>
 
-              <el-input v-if="form.type === 5" v-model="form.name"></el-input>
+              <el-input v-if="form.type === 5" v-model="form.name" placeholder="请输入名称"></el-input>
             </el-form-item>
             <el-form-item prop="code" v-show="form.type !== 5">
               <template #label>
@@ -223,15 +218,11 @@ import {
   addReltree,
   updateReltree,
   delReltree,
-  makerList,
-  chainList,
-  storeList,
   reltreeList
 } from "@/api/company/reltree";
 import {listPost} from "@/api/system/post";
 import {listUser} from "@/api/system/user";
 import {nextTick} from "vue";
-// import {watch} from "vue";
 
 const {proxy} = getCurrentInstance();
 const {sys_normal_disable, wecom_reltree_type} = proxy.useDict("sys_normal_disable", "wecom_reltree_type");
@@ -406,7 +397,6 @@ function submitForm() {
       formTableRef.value.validate((v) => {
         if (v) {
           form.value.users = tableUsers.tableData
-          // console.log('name', form.value.name)
           if (form.value.nodeId != undefined) {
             updateReltree(form.value).then(response => {
               proxy.$modal.msgSuccess("修改成功");

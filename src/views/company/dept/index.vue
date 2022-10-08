@@ -56,6 +56,7 @@
          row-key="deptId"
          :default-expand-all="isExpandAll"
          :tree-props="{ children: 'children' }"
+         height="680px"
       >
          <el-table-column prop="name" label="机构名称" min-width="200px" show-tooltip-when-overflow></el-table-column>
          <el-table-column prop="fullname"  min-width="200px" label="机构全称" show-tooltip-when-overflow></el-table-column>
@@ -103,13 +104,13 @@
          </el-table-column>
       </el-table>
 
-     <pagination
-         v-show="total > 0"
-         :total="total"
-         v-model:page="queryParams.pageNum"
-         v-model:limit="queryParams.pageSize"
-         @pagination="getList"
-     />
+<!--     <pagination-->
+<!--         v-show="total > 0"-->
+<!--         :total="total"-->
+<!--         v-model:page="queryParams.pageNum"-->
+<!--         v-model:limit="queryParams.pageSize"-->
+<!--         @pagination="getList"-->
+<!--     />-->
 
       <!-- 添加或修改部门对话框 -->
       <el-dialog :title="title" v-model="open" width="750px" append-to-body :close-on-click-modal="false" draggable>
@@ -178,7 +179,7 @@ const deptList = ref([]);
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
-const total = ref(0);
+// const total = ref(0);
 const title = ref("");
 const deptOptions = ref([]);
 const isExpandAll = ref(true);
@@ -190,7 +191,7 @@ const data = reactive({
     name: undefined,
     state: undefined,
     pageNum: 1,
-    pageSize: 10,
+    pageSize: 1000,
   },
   rules: {
     name: [{ required: true, message: "机构名称不能为空", trigger: "blur" }],
@@ -206,7 +207,7 @@ function getList() {
   loading.value = true;
   listDept(queryParams.value).then(response => {
     deptList.value = proxy.handleTree(response.data.list, "deptId");
-    total.value = Number(response.data.total);
+    // total.value = Number(response.data.total);
     loading.value = false;
   });
 }

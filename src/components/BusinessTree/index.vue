@@ -4,7 +4,7 @@
   <el-checkbox v-if="isShowMenuCheckStrictly" v-model="menuCheckStrictly" @change="handleCheckedTreeConnect($event, )">
     父子联动
   </el-checkbox>
-  <el-scrollbar style="height: 450px;">
+  <el-scrollbar style="height: 400px;">
     <el-tree
         class="tree-border"
         :data="treeData"
