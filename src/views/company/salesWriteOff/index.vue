@@ -2,17 +2,9 @@
   <div class="app-container">
     <el-form v-show="showSearch" :inline="true" label-width="55px">
       <el-form-item class="label" label="关键字">
-        <!--              <el-input-->
-        <!--                  style="width: 400px"-->
-        <!--                  v-model="queryParams.otherFilter"-->
-        <!--                  placeholder="请输入商品名/商品品牌"-->
-        <!--                  clearable-->
-        <!--              >-->
-        <!--                <template #prepend>-->
-        <!--                  <el-button :icon="Search"/>-->
-        <!--                </template>-->
-        <!--              </el-input>-->
-        <el-input v-model="queryParams.otherFilter" placeholder="请输入商品名/商品品牌" clearable style="width: 220px" />
+
+        <el-input v-model="queryParams.otherFilter" placeholder="请输入商品名/商品品牌/门店名称/销售员名" clearable
+                  style="width: 300px"/>
       </el-form-item>
       <el-form-item class="label" label="时间">
         <el-date-picker
@@ -27,17 +19,12 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
     <div class="btn-back">
       <el-row :gutter="10" class="mb8">
-        <!--                <el-button-->
-        <!--                    type="info"-->
-        <!--                    plain-->
-        <!--                    icon="Upload"-->
-        <!--                    @click="handleImport"-->
-        <!--                >导入-->
-        <!--                </el-button>-->
+
         <el-col :span="1.5">
           <el-button
               type="info"
@@ -53,17 +40,13 @@
         <el-col :span="1.5">
           <el-button type="primary" plain @click="queryNextpage(false)">下一页</el-button>
         </el-col>
-        <!--                <el-button-->
-        <!--                    type="info"-->
-        <!--                    plain-->
-        <!--                    @click="matchFormHeader"-->
-        <!--                >匹配表头-->
-        <!--                </el-button>-->
+
         <right-toolbar v-model:showSearch="showSearch" @queryTable="refreshList" :columns="columns"></right-toolbar>
       </el-row>
     </div>
 
-    <el-dialog title="订单导入" v-model="upload.open" width="50%" append-to-body :close-on-click-modal="false" draggable>
+    <el-dialog title="订单导入" v-model="upload.open" width="50%" append-to-body :close-on-click-modal="false"
+               draggable>
       <el-upload
           ref="uploadRef"
           :limit="1"
@@ -101,8 +84,12 @@
       </template>
     </el-dialog>
     <!--    自定义导入-->
-    <el-dialog title="导入销售清单" v-model="uploadData.open" width="50%" append-to-body :close-on-click-modal="false" draggable>
+    <el-dialog title="导入销售清单" v-model="uploadData.open" width="50%" append-to-body :close-on-click-modal="false"
+               draggable>
       <el-upload
+          v-loading="uploadData.isLoading"
+          element-loading-text="文件上传中..."
+          ref="customizeUploadRef"
           style="margin: 0 10px"
           :limit="1"
           accept=".xlsx, .xls"
@@ -112,8 +99,10 @@
           :data="uploadData.customizeParam"
           method:="POST"
           :file-list="customizeList"
-          :show-file-list="false"
+          :show-file-list="true"
           :on-success="handleCustomizeSuccess"
+          :on-progress="handleCustomizeFileUploadProgress"
+          :auto-upload="false"
           drag
       >
         <el-icon class="el-icon--upload">
@@ -121,6 +110,10 @@
         </el-icon>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         <template #tip>
+          <div class="el-upload__tip text-center">
+            <el-checkbox v-model="uploadData.customizeParam.isOverRide "/>
+            是否更新已经存在的用户数据
+          </div>
           <div class="el-upload__tip text-center">
             <span>温馨提示请确认，在上传清单以前，已经完成您销售清单的表头与系统表头的匹配
               如没有匹配，请点击：</span>
@@ -152,8 +145,10 @@
         <el-table-column label="规格" v-if="columns[4].visible" align="center" key="specification"
                          prop="specification"/>
         <el-table-column label="门店ID" v-if="columns[5].visible" align="center" key="storeId" prop="storeId"/>
-        <el-table-column label="门店名" min-width="150px" v-if="columns[6].visible" align="center" key="storeName" prop="storeName"/>
-        <el-table-column label="门店订单ID" min-width="90px" v-if="columns[7].visible" align="center" key="storeOrderNumber"
+        <el-table-column label="门店名" min-width="150px" v-if="columns[6].visible" align="center" key="storeName"
+                         prop="storeName"/>
+        <el-table-column label="门店订单ID" min-width="90px" v-if="columns[7].visible" align="center"
+                         key="storeOrderNumber"
                          prop="storeOrderNumber"/>
         <el-table-column width="90px" v-if="columns[8].visible" label="销售员" align="center" key="userName"
                          prop="userName"/>
@@ -176,6 +171,7 @@ import customizeImportFirst from './component/customizeImportFirst'
 import {ElMessage} from "element-plus";
 import router from "@/router";
 //自定义导入列表
+const customizeUploadRef = ref()
 const customizeList = ref([])
 const showSearch = ref(true);
 const {proxy} = getCurrentInstance()
@@ -228,22 +224,34 @@ const restPageQueryParams = () => {
 let uploadData = reactive({
   // 是否显示弹出层（订单导入）
   open: false,
-  // 是否禁用上传
+  isLoading: false,
   isUploading: false,
-  customizeUrl: import.meta.env.VITE_APP_BASE_API + '/file/file/upload',
-  customizeParam: {path: '/Company/Customize'},
+  // 是否禁用上传
+  customizeUrl: import.meta.env.VITE_APP_BASE_API + '/product/order/addDynamicHeaderExcelFile',
+  customizeParam: {
+    path: '/Company/Customize', isOverRide: true,
+  },
   token: getToken(),
   parameter: {corpId: '', file: ''}
 })
+//自定义上传前的回调
+const handleCustomizeFileUploadProgress = () => {
+  // uploadData.isLoading = true
+  uploadData.open = true
+}
 /**自定义上传成功的回调*/
 const handleCustomizeSuccess = function (res) {
   customizeList.value = []
-  addDynamicHeaderExcelUrl(res.data.url).then(res => {
-    if (res.code == 200) {
-      proxy.$modal.msgSuccess("上传文件成功")
-    }
-  })
-
+  proxy.$modal.msgSuccess("上传文件成功")
+  uploadData.open = false
+  uploadData.isLoading = false
+  // addDynamicHeaderExcelUrl(res.data.url).then(res => {
+  //   if (res.code == 200) {
+  //     proxy.$modal.msgSuccess("上传文件成功")
+  //     uploadData.open = false
+  //     uploadData.isLoading = false
+  //   }
+  // })
 }
 
 
@@ -261,7 +269,7 @@ const columns = ref([
 ]);
 /** 文件上传成功处理 */
 const handleFileSuccess = (response, file, fileList) => {
-  proxy.$refs["uploadRef"].handleRemove(file);
+  proxy.$refs["customizeUploadRef"].handleRemove(file);
   proxy.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入结果", {dangerouslyUseHTMLString: true});
   upload.open = false
   getList();
@@ -273,7 +281,7 @@ const handleFileUploadProgress = (event, file, fileList) => {
 
 /** 提交上传文件 */
 function submitFileForm() {
-  proxy.$refs["uploadRef"].submit();
+  proxy.$refs["customizeUploadRef"].submit();
 };
 
 /** 导入按钮操作 */
@@ -353,7 +361,7 @@ function queryNextpage(type) {
           nextSearchAfter.value = res.data.nextSearchAfter
           let nextIndex = currentPage.value + 1
           pageQueryParams.value[nextIndex] = res.data.nextSearchAfter
-          total.value = Number(res.data.pageSize * res.data.pages);
+          total.value = Number(res.data.pages);
           loading.value = false;
         }
       })
@@ -409,6 +417,16 @@ function handleQuery() {
   restPageQueryParams()
   getList();
 };
+
+/** 重置搜索 */
+function resetQuery() {
+  queryParams.value.pageNum = 1;
+  nextSearchAfter.value = undefined
+  currentPage.value = 0
+  restPageQueryParams()
+  refreshList()
+}
+
 getList()
 </script>
 
