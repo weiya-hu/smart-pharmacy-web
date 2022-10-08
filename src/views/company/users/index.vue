@@ -52,9 +52,9 @@
                 @keyup.enter="handleQuery"
             />
           </el-form-item>
-          <el-form-item label="状态" prop="enable">
+          <el-form-item label="状态" prop="isActivate">
             <el-select
-                v-model="queryParams.enable"
+                v-model="queryParams.isActivate"
                 placeholder="请选择成员状态"
                 clearable
                 style="width: 220px"
@@ -65,8 +65,8 @@
               <!--                        :label="dict.label"-->
               <!--                        :value="dict.value"-->
               <!--                     />-->
-              <el-option :value="1" label="启用"/>
-              <el-option :value="0" label="禁用"/>
+              <el-option :value="1" label="正常"/>
+              <el-option :value="0" label="停用"/>
             </el-select>
           </el-form-item>
 <!--          <el-form-item label="创建时间" style="width: 308px;">-->
@@ -127,10 +127,10 @@
               <el-button v-else  type="primary" link @click="showQrCode=true">请使用微信扫码激活</el-button>
             </template>
           </el-table-column>
-          <el-table-column label="状态" align="center" key="enable" prop="enable" v-if="columns[4].visible">
+          <el-table-column label="状态" align="center" key="isActivate" prop="isActivate" v-if="columns[4].visible">
             <template #default="scope">
-              <span v-if="scope.row.enable == 1" class="state-item1">正常</span>
-              <span v-if="scope.row.enable == 0" class="state-item2">停用</span>
+              <span v-if="scope.row.isActivate == 1" class="state-item1">正常</span>
+              <span v-if="scope.row.isActivate == 0" class="state-item2">停用</span>
             </template>
           </el-table-column>
           <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[5].visible" width="160">
@@ -247,7 +247,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="状态">
-              <el-radio-group v-model="form.enable">
+              <el-radio-group v-model="form.isActivate">
                 <el-radio
                     v-for="dict in sys_normal_disable"
                     :key="dict.value"
@@ -257,21 +257,6 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <!--               <el-col :span="12">-->
-          <!--                  <el-form-item label="岗位">-->
-          <!--                     <el-select v-model="form.postIds" multiple placeholder="请选择">-->
-          <!--                        <el-option-->
-          <!--                           v-for="item in postOptions"-->
-          <!--                           :key="item.jobId"-->
-          <!--                           :label="item.name"-->
-          <!--                           :value="item.jobId"-->
-          <!--                           :disabled="item.state == 0"-->
-          <!--                        ></el-option>-->
-          <!--                     </el-select>-->
-          <!--                  </el-form-item>-->
-          <!--               </el-col>-->
         </el-row>
         <el-row>
           <el-col :span="24">
@@ -343,11 +328,10 @@ import {getToken} from "@/utils/auth";
 import {treeselect} from "@/api/system/dept";
 import {listRole} from "@/api/system/role";
 import {listPost} from "@/api/system/post";
-import {changeUserStatus, listUser, delUser, getUser, updateUser, addUser, synchWeUser} from "@/api/system/user";
+import {listUser, delUser, getUser, updateUser, addUser, synchWeUser} from "@/api/system/user";
 import {getCurrUserBaseInfo, getInviteQrcode} from '@/api/company/info';
-import {nextTick, reactive, ref} from "vue";
+import {reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
-import useUserStore from '@/store/modules/user'
 
 const router = useRouter();
 const {proxy} = getCurrentInstance();
@@ -404,7 +388,7 @@ const data = reactive({
     pageSize: 10,
     userName: undefined,
     mobile: undefined,
-    enable: undefined,
+    isActivate: undefined,
     deptIds: []
   },
   rules: {
@@ -484,7 +468,6 @@ function resetQuery() {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  // const userIds = row.userId || ids.value;
   const userIds = row.userId
   proxy.$modal.confirm('是否确认删除成员编号为"' + userIds + '"的数据项？').then(function () {
     return delUser(userIds);
@@ -562,13 +545,11 @@ function reset() {
     userId: undefined,
     deptIds: [],
     userName: undefined,
-    // alias: undefined,
     mobile: undefined,
     email: undefined,
     gender: undefined,
-    enable: 1,
+    isActivate: 1,
     remark: undefined,
-    // postIds: [],
     roleIds: []
   };
   proxy.resetForm("userRef");
@@ -598,7 +579,6 @@ async function handleUpdate(row) {
       form.value = response.data;
     //   postOptions.value = response.posts;
     //   roleOptions.value = response.roles;
-    //   form.value.postIds = response.postIds;
     //   form.value.roleName = response.data.roleName;
     open.value = true;
     title.value = "修改成员";
@@ -651,7 +631,6 @@ const getQrCode = ()=>{
       .then(res => {
         if (res.code === 200) {
           qrCodeUrl.value = res.data
-          // showQrCode.value = true
         }
       })
 }
@@ -659,8 +638,6 @@ const getQrCode = ()=>{
 function onShowTips(e){
   let textLength = e.target.clientWidth
   let containerLength = e.target.scrollWidth
-  // console.log('textLength', textLength)
-  // console.log('containerLength', containerLength)
   if (textLength < containerLength) {
     showTitle.value = false
   } else {
