@@ -141,7 +141,7 @@
                   style="width: 100%"
                   v-if="form.type !==5"
               >
-                <el-option v-for="item in nameList" :key="item.relationId" :label="item.name" :value="item.relationId"/>
+                <el-option v-for="item in nameList" :key="item.id" :label="item.name" :value="item.relationId"/>
               </el-select>
 
               <el-input v-if="form.type === 5" v-model="form.name" placeholder="请输入名称"></el-input>
@@ -362,15 +362,15 @@ function toggleExpandAll() {
 }
 
 /** 修改按钮操作 */
-function handleUpdate(row) {
+async function handleUpdate(row) {
   reset();
-  getNameData(row)
+  await getNameData(row)
   // listReltree({nodeId: row.id}).then(response => {
-  listReltree({allChild:true,queryRoot:true}).then(response => {
+  await listReltree({allChild:true,queryRoot:true}).then(response => {
     // deptOptions.value = proxy.handleTree(response.data, "id");
     deptOptions.value = response.data
   });
-  getReltree(row.nodeId).then(response => {
+  await getReltree(row.nodeId).then(response => {
     form.value = response.data;
     form.value.parentNodeId = response.data.parentId
     tableUsers.tableData = response.data.users
