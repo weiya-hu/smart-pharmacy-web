@@ -92,11 +92,14 @@ function getOauthLogin() {
     state: 'qrLoginsplit',
   }
   if (params.authCode !== '') {
+    loading.value = true
     oauthLogin(params).then(res => {
       if (res.code === 200) {
+        loading.value = false
         setToken(res.data.access_token)
         router.push({path: "/index"});
       } else {
+        loading.value = false
         window.history.pushState(null,null,'/')
         dialogUrlVisible.value = true
       }
@@ -104,13 +107,13 @@ function getOauthLogin() {
       // dialogUrlVisible.value = true
       window.history.pushState(null,null,'/')
       dialogUrlVisible.value = true
+      loading.value = false
     })
   } else {
     router.push({path: "/login"})
   }
 }
 
-// console.log( router.currentRoute.value.query.auth_code)
 const wecomControlLogin = () => {
   let params = {
     authCode: GetQueryString('auth_code') ? GetQueryString('auth_code') : '',
