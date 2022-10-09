@@ -11,6 +11,7 @@
                 appid="wx3a6a5cc2924a2405"
                 :scope="'snsapi_login'"
                 :theme="'black'"
+                v-loading="loading"
                 state='wechat'
                 :redirect_uri='redirectUri'
                 href="data:text/css;base64,LmltcG93ZXJCb3ggLnFyY29kZSB7d2lkdGg6IDI0MHB4O2JvcmRlcjogMDt9Ci5pbXBvd2VyQm94IC50aXRsZSB7ZGlzcGxheTogbm9uZTt9Ci5pbXBvd2VyQm94IC5pbmZvIHt3aWR0aDogMjQwcHg7fQouc3RhdHVzX2ljb24ge2Rpc3BsYXk6IG5vbmV9Ci5pbXBvd2VyQm94IC5zdGF0dXMge3RleHQtYWxpZ246IGNlbnRlcjt9IA=="
@@ -48,6 +49,7 @@ const redirect = ref(undefined);
 const activeName = ref('first')
 const dialogVisible = ref(false)
 const dialogUrlVisible = ref(false)
+const loading = ref(false)
 
 // 微信扫码登录
 const redirectUri = encodeURIComponent("http://platform.shanhaiping.com/")
@@ -61,12 +63,15 @@ function getWechatLogin() {
     corpId: ''
   }
   if (params.authCode !== '') {
+    loading.value = true
     wechatLogin(params).then(res => {
       if (res.code === 200) {
+        loading.value = false
         setToken(res.data.access_token)
         console.log('res',res)
         router.push({path: "/index"});
       } else {
+        loading.value = false
         window.history.pushState(null,null,'/')
         dialogVisible.value = true
       }
@@ -74,6 +79,7 @@ function getWechatLogin() {
       // dialogVisible.value = true
       window.history.pushState(null,null,'/')
       dialogVisible.value = true
+      loading.value = false
     })
   } else {
     router.push({path: "/login"})
@@ -127,7 +133,7 @@ const wecomControlLogin = () => {
 
 const login = async () => {
   if (process.env.NODE_ENV == "development") {
-    setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcxODg2MTM1MTA3OTU2NzM2LCJ1c2VyX2tleSI6ImQxYzVhYWE5OTVhYTQ5ZThiZTcwNWQ2Y2MxYjg0NmJlIiwidXNlcm5hbWUiOiLmnLHpo54ifQ._3QHkyuxgXzCYWVmmea94KsqObFETg50n-GYSZmvekcnLhSBeWm4eEZG-DTrwdiGuFYnkPLJv1s98lCT0HcpdQ')
+    setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTc1NjkzNjY3MTY5NTEzNDcyLCJ1c2VyX2tleSI6IjI1Nzc0NzkzM2YwNTQxYmNhZTc3ZjcyNGIzNjVkYjhlIiwidXNlcm5hbWUiOiLnjovnvo7ojJwifQ.LlJK3XgKkbgomQZcaDjRE5_rNaPn3EQwOdrFj4m7GGnqTiQS-8B2ispB1c1sE6SP5YODjgDjmRV1x0FB18_I-g')
     //开发环境
   } else if (process.env.NODE_ENV == "production") {
     //生产环境

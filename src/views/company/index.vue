@@ -1,12 +1,12 @@
 <template>
   <div class="app-container">
-    <el-affix :offset="104">
-      <div class="btn-box" :style="{'width' : inputType === 'readey' ? '800px' : '945px'}">
+    <div class="btn-box" :style="{'width' : inputType === 'readey' ? '800px' : '945px'}">
+      <el-affix :offset="104">
         <el-button @click="handelRead('edit')" v-if="inputType === 'readey'">修改</el-button>
         <el-button v-if="inputType!=='readey'" type="primary" @click="handelRead('sure')">确定</el-button>
         <el-button v-if="inputType!=='readey'" @click="handelRead('cancel')">取消</el-button>
-      </div>
-    </el-affix>
+      </el-affix>
+  </div>
     <div class="form-box">
       <el-form v-model="form" label-width="105px">
         <el-form-item label="企业logo" prop="logo">
@@ -232,8 +232,9 @@ getFormData()
 <style lang="scss" scoped>
 .app-container {
   .btn-box {
-    margin: 0 auto -32px;
+    margin: 0 auto;
     text-align: end;
+    height: 0;
   }
   .form-box {
     .el-form-item {
