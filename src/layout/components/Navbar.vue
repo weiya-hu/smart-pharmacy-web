@@ -121,6 +121,7 @@ getInfo()
         font-family: Source Han Sans CN;
         font-weight: 500;
         color: #FF5A40;
+        white-space: nowrap;
       }
     }
     .avatar-con {
@@ -144,9 +145,14 @@ getInfo()
     }
   }
 }
+@media screen and (min-width: 768px) and (max-width: 1024px){
+  .term-con .term-time-border {
+    display: none !important;
+  }
+}
 @media screen and (max-width: 768px){
   .term-con span {
-    display: none;
+    display: none !important;
   }
   .avatar-con span {
     display: none;
