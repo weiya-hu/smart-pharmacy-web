@@ -22,8 +22,10 @@
               trigger: 'change',
             }:null">
             <div class="labelInfo">
-              <el-select clearable style="width: 300px" v-model="itemHeader.excelTitle">
-                <el-option v-for="(nextItem,nextIndex) in selectOption" :value="nextItem" :label="nextItem"
+              <el-select @change="changeSelected" @clear="clearSelected" clearable style="width: 300px"
+                         v-model="itemHeader.excelTitle">
+                <el-option v-for="(nextItem,nextIndex) in selectOption" :value="nextItem.label" :label="nextItem.label"
+                           :disabled="nextItem.disable"
                            :key="nextIndex"></el-option>
               </el-select>
               <div class="desc">
@@ -64,6 +66,16 @@ const formRef = ref()
 onMounted(() => {
   innitBaseInfo()
 })
+//格式化选项状态
+const formatOptionStatus = (data) => {
+  return data.map(item => {
+    return {
+      label: item,
+      disable: false
+    }
+  })
+}
+
 //数据初始化
 const innitBaseInfo = () => {
   isLoading.value = true
@@ -72,16 +84,14 @@ const innitBaseInfo = () => {
       isLoading.value = false
       let cacheHeaderOption = JSON.parse(localStorage.getItem("headerTitle"))
       if (cacheHeaderOption) {
-        selectOption.value = cacheHeaderOption
+        selectOption.value = formatOptionStatus(cacheHeaderOption)
       }
       if (!cacheHeaderOption && res.data[1].length !== 0) {
-        selectOption.value = res.data[1]
+        selectOption.value = formatOptionStatus(res.data[1])
       }
       matchHeaderInfo.value = res.data[2]
       allHeader.value.data = res.data[0]
-      console.log(res.data[1].length, cacheHeaderOption)
       if (res.data[1].length == 0 && !cacheHeaderOption) {
-        // router.push({path: '/enterpriseCenter/order/customizeImportFirst'})
         uploadRef.value.showDialog()
       } else {
         formatBaseInfo()
@@ -91,7 +101,40 @@ const innitBaseInfo = () => {
     ElMessage.error(rej.message)
   })
 }
+//初始化默认选中的状态
+const innitDefaultSelectedStatus = () => {
+  let selectedArray = []
+  allHeader.value.data.forEach(item => {
+    if (item.excelTitle !== '') {
+      selectedArray.push(item.excelTitle)
+    }
+    selectOption.value.forEach(nextItem => {
+      if (item.excelTitle == nextItem.label) {
+        nextItem.disable = true
+      }
+    })
+  })
+  console.log(selectedArray)
+  selectOption.value.forEach(item => {
+    if (selectedArray.some(nextItem => {
+      return nextItem == item.label
+    })) {
+      item.disable = true
+    } else {
+      item.disable = false
+    }
 
+  })
+
+}
+//清空选中
+const clearSelected = () => {
+  innitDefaultSelectedStatus()
+}
+//选中值时的回调
+const changeSelected = (value) => {
+  innitDefaultSelectedStatus()
+}
 //如果上传的header长度不为零格式化基础信息
 const formatBaseInfo = () => {
 //在allheader当中新增字段名称objField 值为field 初始化一个excelTitle值为空
@@ -107,7 +150,7 @@ const formatBaseInfo = () => {
       }
     })
   })
-
+  innitDefaultSelectedStatus()
 }
 const uploadSuccess = () => {
   innitBaseInfo()

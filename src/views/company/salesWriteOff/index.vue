@@ -84,8 +84,9 @@
       </template>
     </el-dialog>
     <!--    自定义导入-->
-    <el-dialog title="导入销售清单" v-model="uploadData.open" width="50%" append-to-body :close-on-click-modal="false"
-               draggable>
+    <el-dialog
+        title="导入销售清单" v-model="uploadData.open" width="50%" append-to-body :close-on-click-modal="false"
+        draggable>
       <el-upload
           v-loading="uploadData.isLoading"
           element-loading-text="文件上传中..."
@@ -93,7 +94,7 @@
           style="margin: 0 10px"
           :limit="1"
           accept=".xlsx, .xls"
-          :disabled="formDisabled"
+          :disabled="uploadData.isUploading"
           :action="uploadData.customizeUrl"
           :headers="{'Authorization':uploadData.token}"
           :data="uploadData.customizeParam"
@@ -103,6 +104,7 @@
           :on-success="handleCustomizeSuccess"
           :on-progress="handleCustomizeFileUploadProgress"
           :auto-upload="false"
+          :on-error="handleCustomizeError"
           drag
       >
         <el-icon class="el-icon--upload">
@@ -124,9 +126,9 @@
         </template>
       </el-upload>
       <template #footer>
-        <div class="dialog-footer">
-          <el-button type="primary" @click="submitFileForm">确 定</el-button>
-          <el-button @click="uploadData.open = false">取 消</el-button>
+        <div style="marginTop:20px" class="dialog-footer">
+          <el-button :disabled="uploadData.isLoading" type="primary" @click="submitFileForm">确 定</el-button>
+          <el-button :disabled="uploadData.isLoading" @click="uploadData.open = false">取 消</el-button>
         </div>
       </template>
     </el-dialog>
@@ -154,6 +156,7 @@
                          prop="userName"/>
       </el-table>
       <div style="padding: 20px;display: flex;justifyContent: flex-end">
+        <span style="marginRight:10px">共{{ totalCount }}条 </span>
         <span style="marginRight:10px">共{{ total }}页 </span>
         <span>当前页:{{ currentPage + 1 }}</span>
       </div>
@@ -197,6 +200,7 @@ const orderList = ref([]);
 //列表loading
 let loading = ref(false)
 const total = ref(0);
+let totalCount = ref(0)
 const {queryParams} = toRefs(data);
 /*** 用户导入参数 */
 const upload = reactive({
@@ -236,15 +240,18 @@ let uploadData = reactive({
 })
 //自定义上传前的回调
 const handleCustomizeFileUploadProgress = () => {
-  // uploadData.isLoading = true
+  uploadData.isLoading = true
+  uploadData.isUploading = true
   uploadData.open = true
 }
 /**自定义上传成功的回调*/
 const handleCustomizeSuccess = function (res) {
+  uploadData.isLoading = false
   customizeList.value = []
   proxy.$modal.msgSuccess("上传文件成功")
   uploadData.open = false
   uploadData.isLoading = false
+  uploadData.isUploading = false
   // addDynamicHeaderExcelUrl(res.data.url).then(res => {
   //   if (res.code == 200) {
   //     proxy.$modal.msgSuccess("上传文件成功")
@@ -253,7 +260,15 @@ const handleCustomizeSuccess = function (res) {
   //   }
   // })
 }
-
+/**自定义上传失败的回调 */
+const handleCustomizeError = function () {
+  uploadData.isLoading = false
+  customizeList.value = []
+  proxy.$modal.msgError("上传文件失败")
+  uploadData.open = false
+  uploadData.isLoading = false
+  uploadData.isUploading = false
+}
 
 // 列显隐信息
 const columns = ref([
@@ -393,6 +408,7 @@ function getList() {
     let nextIndex = currentPage.value + 1
     pageQueryParams.value[nextIndex] = res.data.nextSearchAfter
     total.value = Number(res.data.pages);
+    totalCount.value = Number(res.data.total)
     loading.value = false;
 
   })
@@ -431,6 +447,11 @@ getList()
 </script>
 
 <style scoped lang="scss">
+
+::v-deep(.el-progress) {
+  display: none !important;
+}
+
 .label::v-deep( .el-form-item__label) {
   color: #606266;
   font-weight: 600;
