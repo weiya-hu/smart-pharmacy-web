@@ -4,7 +4,7 @@
       <span>所有商品 —— 用户管理自己归属的所有商品</span>
     </div>
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="产品编辑" prop="code">
+      <el-form-item label="产品编号" prop="code">
         <el-input v-model="queryParams.code" placeholder="请输入产品编号" clearable @keyup.enter="handleQuery"/>
       </el-form-item>
       <el-form-item label="产品简称" prop="name">
