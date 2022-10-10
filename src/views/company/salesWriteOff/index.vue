@@ -246,19 +246,22 @@ const handleCustomizeFileUploadProgress = () => {
 }
 /**自定义上传成功的回调*/
 const handleCustomizeSuccess = function (res) {
-  uploadData.isLoading = false
-  customizeList.value = []
-  proxy.$modal.msgSuccess("上传文件成功")
-  uploadData.open = false
-  uploadData.isLoading = false
-  uploadData.isUploading = false
-  // addDynamicHeaderExcelUrl(res.data.url).then(res => {
-  //   if (res.code == 200) {
-  //     proxy.$modal.msgSuccess("上传文件成功")
-  //     uploadData.open = false
-  //     uploadData.isLoading = false
-  //   }
-  // })
+  if (res.code == 200) {
+    let {cantSave, insert, update} = res.data
+    uploadData.isLoading = false
+    customizeList.value = []
+    proxy.$modal.msgSuccess(`上传文件成功 未保存:${cantSave.length}条 新增:${insert.length}条 更新:${update.length}条`)
+    uploadData.open = false
+    uploadData.isLoading = false
+    uploadData.isUploading = false
+  } else {
+    uploadData.isLoading = false
+    customizeList.value = []
+    proxy.$modal.msgError("上传文件失败")
+    uploadData.open = false
+    uploadData.isLoading = false
+    uploadData.isUploading = false
+  }
 }
 /**自定义上传失败的回调 */
 const handleCustomizeError = function () {

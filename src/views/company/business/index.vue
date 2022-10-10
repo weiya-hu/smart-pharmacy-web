@@ -89,13 +89,13 @@
       </el-table-column>
     </el-table>
 
-<!--    <pagination-->
-<!--        v-show="total > 0"-->
-<!--        :total="total"-->
-<!--        v-model:page="queryParams.pageNum"-->
-<!--        v-model:limit="queryParams.pageSize"-->
-<!--        @pagination="getList"-->
-<!--    />-->
+    <!--    <pagination-->
+    <!--        v-show="total > 0"-->
+    <!--        :total="total"-->
+    <!--        v-model:page="queryParams.pageNum"-->
+    <!--        v-model:limit="queryParams.pageSize"-->
+    <!--        @pagination="getList"-->
+    <!--    />-->
 
     <!-- 添加或修改部门对话框 -->
     <el-dialog :title="title" v-model="open" width="60%" append-to-body :close-on-click-modal="false" draggable>
@@ -108,7 +108,7 @@
                   v-model="form.parentNodeId"
                   :data="deptOptions"
                   :render-after-expand="false"
-                  :props="{ value: 'id', label: 'name', children: 'children' }"
+                  :props="{ value: 'id', label: 'name', children: 'children',disabled:'disabled'}"
                   value-key="id"
                   placeholder="请选择上级机构"
                   check-strictly
@@ -136,12 +136,12 @@
                   allow-create
                   default-first-option
                   :reserve-keyword="false"
-                  placeholder="请选择或输入名称"
+                  placeholder="请选择名称 / 如没有需要的供应商，请输入名称"
                   clearable
                   style="width: 100%"
                   v-if="form.type !==5"
               >
-                <el-option v-for="item in nameList" :key="item.id" :label="item.name" :value="item.storeId"/>
+                <el-option v-for="item in nameList" :key="item.id" :label="item.name" :value="item.relationId"/>
               </el-select>
 
               <el-input v-if="form.type === 5" v-model="form.name" placeholder="请输入名称"></el-input>
@@ -150,7 +150,7 @@
               <template #label>
                 <span>
                   <el-tooltip content="业务方编码说明" placement="top">
-                    <el-icon><question-filled /></el-icon>
+                    <el-icon><question-filled/></el-icon>
                   </el-tooltip>
                    业务方编码
                 </span>
@@ -169,16 +169,18 @@
         <el-table :data="tableUsers.tableData" style="width: 100%" height="350px" class="table-data">
           <el-table-column prop="code" label="编码">
             <template #default="{ row, column, $index }">
-              <el-form-item >
-                <el-input v-model="row.code" placeholder="请输入编码" style="width: 90%;" />
+              <el-form-item>
+                <el-input v-model="row.code" placeholder="请输入编码" style="width: 90%;"/>
               </el-form-item>
             </template>
           </el-table-column>
           <el-table-column prop="userName" label="人员">
             <template #default="{ row, column, $index }">
               <el-form-item :prop=" 'tableData.' + $index + '.userId' " :rules="rulesTable.userName">
-                <el-select v-model="row.userId" filterable placeholder="请选择人员" style="width: 90%" @change="changeUser">
-                  <el-option v-for="item in selectUsers" :key="item.userId" :label="item.userName" :disabled="item.disabled"
+                <el-select v-model="row.userId" filterable placeholder="请选择人员" style="width: 90%"
+                           @change="changeUser">
+                  <el-option v-for="item in selectUsers" :key="item.userId" :label="item.userName"
+                             :disabled="item.disabled"
                              :value="item.userId"/>
                 </el-select>
               </el-form-item>
@@ -260,7 +262,8 @@ const data = reactive({
 const nameList = ref([])
 
 const {queryParams, form, rules} = toRefs(data);
-
+//业务结构当中已存在的门店
+let selectedStore = ref([])
 
 // 添加人员
 const handleAddUser = () => {
@@ -275,14 +278,16 @@ const handleDelUser = (index) => {
 const loadSelectUsers = () => {
   listUser({pageNum: 1, pageSize: 10000})
       .then(res => {
-        selectUsers.value = res.data.list.map(m=>{return{...m,disabled:false}})
+        selectUsers.value = res.data.list.map(m => {
+          return {...m, disabled: false}
+        })
       })
 }
-const changeUser = ()=>{
-  selectUsers.value.forEach(item=>{
-    let exists = tableUsers.tableData.some(s=>item.userId === s.userId)
-    nextTick(()=>{
-      if(exists) item.disabled = true
+const changeUser = () => {
+  selectUsers.value.forEach(item => {
+    let exists = tableUsers.tableData.some(s => item.userId === s.userId)
+    nextTick(() => {
+      if (exists) item.disabled = true
       else item.disabled = false
     })
   })
@@ -316,9 +321,9 @@ function cancel() {
 function reset() {
   form.value = {
     nodeId: undefined,
-    code:undefined,
+    code: undefined,
     parentNodeId: undefined,
-    relationId:undefined,
+    relationId: undefined,
     type: undefined,
     name: null,
   };
@@ -338,12 +343,33 @@ function resetQuery() {
   handleQuery();
 }
 
+/** 设置禁用选项 */
+function setDisable(data) {
+  if (data.length !== 0) {
+    data.forEach(item => {
+      if (item.type == 4) {
+        item.disabled = true
+      } else {
+        item.disabled = false
+      }
+      if (item.children && item.children.length !== 0) {
+        item.children = setDisable(item.children)
+      }
+    })
+
+  }
+
+  return data
+}
+
 /** 新增按钮操作 */
 function handleAdd() {
   reset();
-  listReltree({allChild:true, queryRoot:true}).then(response => {
+  listReltree({allChild: true, queryRoot: true}).then(response => {
     // deptOptions.value = proxy.handleTree(response.data, "id");
-    deptOptions.value = response.data
+    deptOptions.value = setDisable(response.data)
+    console.log(deptOptions.value)
+    // deptOptions.value = response.data
   });
   // if (row != undefined) {
   //   form.value.parentNodeId = row.nodeId;
@@ -366,9 +392,10 @@ async function handleUpdate(row) {
   reset();
   await getNameData(row)
   // listReltree({nodeId: row.id}).then(response => {
-  await listReltree({allChild:true,queryRoot:true}).then(response => {
+  await listReltree({allChild: true, queryRoot: true}).then(response => {
     // deptOptions.value = proxy.handleTree(response.data, "id");
-    deptOptions.value = response.data
+    deptOptions.value = setDisable(response.data)
+    // deptOptions.value = response.data
   });
   await getReltree(row.nodeId).then(response => {
     form.value = response.data;
@@ -384,12 +411,12 @@ async function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["deptRef"].validate(valid => {
     if (valid) {
-      if(form.value.relationId){
+      if (form.value.relationId) {
         //判断是否存在于集合中
-        let exists = nameList.value.filter(item=> item.storeId ===form.value.relationId)
-        if(exists.length >0){
+        let exists = nameList.value.filter(item => item.relationId === form.value.relationId)
+        if (exists.length > 0) {
           form.value.name = exists[0].name
-        }else{
+        } else {
           form.value.name = form.value.relationId
           form.value.relationId = undefined
         }
@@ -457,11 +484,11 @@ function handleDelete(row) {
 function handleChange(val) {
   form.value.name = null
   form.value.relationId = undefined
-  // let data = {
-  //   allChild: true,
-  //   type: val
-  // }
-  reltreeList().then(res => {
+  let data = {
+    allChild: true,
+    type: val
+  }
+  reltreeList(data).then(res => {
     if (res.code === 200) {
       nameList.value = res.data
     }
@@ -469,11 +496,11 @@ function handleChange(val) {
 }
 
 function getNameData(row) {
-  // let data = {
-  //   allChild: true,
-  //   type: row.type
-  // }
-  reltreeList().then(res => {
+  let data = {
+    allChild: true,
+    type: row.type
+  }
+  reltreeList(data).then(res => {
     if (res.code === 200) {
       nameList.value = res.data
     }
