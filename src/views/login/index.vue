@@ -41,7 +41,6 @@ import wxlogin from 'vue-wxlogin';
 import {oauthLogin, wechatLogin} from "../../api/login";
 import {GetQueryString} from '@/utils/validate';
 import {setToken, getToken,removeToken} from "../../utils/auth";
-import useUserStore from '@/store/modules/user'
 
 const {proxy} = getCurrentInstance();
 const router = useRouter(), route = useRoute();
@@ -68,6 +67,7 @@ function getWechatLogin() {
       if (res.code === 200) {
         loading.value = false
         setToken(res.data.access_token)
+        console.log('res',res)
         router.push({path: "/index"});
       } else {
         loading.value = false
@@ -135,7 +135,7 @@ const wecomControlLogin = () => {
 
 const login = async () => {
   if (process.env.NODE_ENV == "development") {
-    setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcyMTg2MDU1MTk1MDEzMTIwLCJ1c2VyX2tleSI6ImUxNDMxYzg2NDI4YjQyYjRiZTFiMmZjMWMzNGQwNTJjIiwidXNlcm5hbWUiOiLllJDmsLjkuYUifQ.2CIFYo7sD3QAD0k3ZzeGQZdbxOWIRTEVfQ7LCSXPN6D4bKdn_L2_27ApJwgofK-79RYhGYfg948ZIPXUHp-yJA')
+    setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcyMTg2MDU1MTk1MDEzMTIwLCJ1c2VyX2tleSI6ImQ1M2Q0ZDRiODJiYTRhYjBhYzc2NDI0MmJmM2JiYWI5IiwidXNlcm5hbWUiOiLllJDmsLjkuYUifQ.wQQNLmUPuEpqapyxC68PDJwbjNPzf4vtrpXJyZWx6q097d9csndDv5ER05Qbe7WMU5xKNYJOH7MNdRHiMniMmQ')
     //开发环境
   } else if (process.env.NODE_ENV == "production") {
     //生产环境
