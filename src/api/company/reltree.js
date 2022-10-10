@@ -75,8 +75,8 @@ export function listPage(query) {
 // 关系树列表
 export function reltreeList(data) {
     return request({
-        url: `/wecom/corpinfo/reltree/list`,
-        method: 'POST',
+        url: `/wecom/corpinfo/store/allList`,
+        method: 'get',
         data
     })
 }
