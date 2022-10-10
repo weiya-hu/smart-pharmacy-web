@@ -64,14 +64,10 @@ function getWechatLogin() {
   }
   if (params.authCode !== '') {
     loading.value = true
-    useUserStore().logOut().then(() => {
-      location.href = '/';
-    })
     wechatLogin(params).then(res => {
       if (res.code === 200) {
         loading.value = false
         setToken(res.data.access_token)
-        console.log('res',res)
         router.push({path: "/index"});
       } else {
         loading.value = false
@@ -139,7 +135,7 @@ const wecomControlLogin = () => {
 
 const login = async () => {
   if (process.env.NODE_ENV == "development") {
-    setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTc1NjkzNjY3MTY5NTEzNDcyLCJ1c2VyX2tleSI6ImVhNWRmY2M2YTUxZDQ2MzVhYTJhNDNiOGVjNTE0ZTkxIiwidXNlcm5hbWUiOiLnjovnvo7ojJwifQ.TwPemic2U1PsN2rshp-v_tk1JxiImyj2VXmfJtZh1fbKIvyd5nMXkoSw_Zd6L-awcHGrI7wydHtRCETrZQnB_g')
+    setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcyMTg2MDU1MTk1MDEzMTIwLCJ1c2VyX2tleSI6ImUxNDMxYzg2NDI4YjQyYjRiZTFiMmZjMWMzNGQwNTJjIiwidXNlcm5hbWUiOiLllJDmsLjkuYUifQ.2CIFYo7sD3QAD0k3ZzeGQZdbxOWIRTEVfQ7LCSXPN6D4bKdn_L2_27ApJwgofK-79RYhGYfg948ZIPXUHp-yJA')
     //开发环境
   } else if (process.env.NODE_ENV == "production") {
     //生产环境
