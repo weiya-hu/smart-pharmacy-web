@@ -119,7 +119,7 @@
     <el-table
         style="margin: 40px 0px"
         :data="regionTableListTree"
-        :default-expand-all="false"
+        :default-expand-all="true"
         row-key="nodeId"
         :tree-props="{ children: 'children' }"
         height="720px"
@@ -175,8 +175,6 @@
       </el-table-column>
       <el-table-column prop="count" label="品/单数" show-tooltip-when-overflow></el-table-column>
     </el-table>
-
-
     <!--    <div class="customizeTableList">-->
     <!--      <div v-for="(item,index) in regionTableList" :key="index" class="allArea area">-->
     <!--        <vxe-table-->
@@ -1352,47 +1350,49 @@ const formatSalesActiveInfo = (data) => {
           }
         }
       }
+    } else if (item == 0) {
+      return {
+        value: item,
+      }
     }
+
   })
-
-
   chart_one_Option.value.series[1].data = dailyData
   totalData = totalData.map(item => {
-        if (item > 0) {
-          return {
-            value: item,
-            label: {
-              normal: {
-                show: true,
-                position: 'insideBottom',
-                formatter: '{c}元',         // 显示的总数
-                textStyle: {
-                  color: '#333333',
-                  fontWeight: "bolder",
-                  fontSize: '12',
-                }
-              }
-            },
+    if (item > 0) {
+      return {
+        value: item,
+        label: {
+          normal: {
+            show: true,
+            position: 'insideBottom',
+            formatter: '{c}元',         // 显示的总数
+            textStyle: {
+              color: '#333333',
+              fontWeight: "bolder",
+              fontSize: '12',
+            }
           }
-        } else if (item < 0) {
-          return {
-            value: item,
-            label: {
-              normal: {
-                show: true,
-                position: 'insideTop',
-                formatter: '{c}元',         // 显示的总数
-                textStyle: {
-                  color: '#333333',
-                  fontWeight: "bolder",
-                  fontSize: '12',
-                }
-              }
-            },
-          }
-        }
+        },
       }
-  )
+    } else if (item < 0) {
+      return {
+        value: item,
+        label: {
+          normal: {
+            show: true,
+            position: 'insideTop',
+            formatter: '{c}元',         // 显示的总数
+            textStyle: {
+              color: '#333333',
+              fontWeight: "bolder",
+              fontSize: '12',
+            }
+          }
+        },
+      }
+    }
+  })
 
 
   chart_one_Option.value.series[2].data = totalData

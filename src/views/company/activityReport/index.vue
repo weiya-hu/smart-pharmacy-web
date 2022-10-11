@@ -89,12 +89,12 @@
     <!--    图形统计-->
     <div class="barChart">
       <div class="chart chart_two">
-        <scaleChart ref="chart_two_ref" v-if="chart_two_isNull == false" :dataOption="chart_two_data"></scaleChart>
-        <el-empty description="暂无奖励数据" v-if="chart_two_isNull == true"/>
+        <scaleChart ref="chart_two_ref" v-show="chart_two_isNull == false" :dataOption="chart_two_data"></scaleChart>
+        <el-empty description="暂无奖励数据" v-show="chart_two_isNull == true"/>
       </div>
       <div class="chart chart_one">
-        <scaleChart ref="chart_one_ref" v-if="chart_one_isNull == false" :dataOption="chart_one_data"></scaleChart>
-        <el-empty description="暂无销售数据" v-if="chart_one_isNull == true"/>
+        <scaleChart ref="chart_one_ref" v-show="chart_one_isNull == false" :dataOption="chart_one_data"></scaleChart>
+        <el-empty description="暂无销售数据" v-show="chart_one_isNull == true"/>
       </div>
 
       <!--      <div class="chart chart_three">-->
