@@ -73,9 +73,12 @@ export default defineComponent({
     store = tableStore.get(props.storeConfig.storeName)() || null
     // 2.发送网络请求
     const getPageData = (queryInfo) => {
-      if (store[props.storeConfig.requestMethodName instanceof Function]) {
-        store[props.storeConfig.requestMethodName]()
+      if (props.storeConfig.requestMethodName !== null) {
+        if (store[props.storeConfig.requestMethodName instanceof Function]) {
+          store[props.storeConfig.requestMethodName]()
+        }
       }
+
     }
     // getPageData()
     // 1.双向绑定pageInfo

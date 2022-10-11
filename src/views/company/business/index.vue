@@ -307,6 +307,7 @@ function getList() {
   loading.value = true;
   listPage(queryParams.value).then(response => {
     deptList.value = proxy.handleTree(response.data.list, "nodeId", "parentNodeId");
+    console.log(deptList.value)
     loading.value = false;
   });
 }

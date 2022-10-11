@@ -68,3 +68,11 @@ export function getEventRewardBi(data) {
         param: data
     })
 }
+//获取区域业务组织架构
+export function getAreaTree(data) {
+    return request({
+        url: `/wecom/corpinfo/reltree/tree`,
+        method: 'get',
+        params: data
+    })
+}

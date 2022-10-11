@@ -19,23 +19,63 @@
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+        <el-button
+            type="info"
+            plain
+            icon="Upload"
+            @click="handleImport"
+        >导入
+        </el-button>
+        <el-button type="primary" icon="Plus" @click="handleAdd">新增产品</el-button>
       </el-form-item>
     </el-form>
 
-    <div class="btn-back">
-      <el-row :gutter="10" class="mb8">
-        <el-col :span="1.5">
-          <el-button
-              type="info"
-              plain
-              icon="Upload"
-              @click="handleImport"
-          >导入
-          </el-button>
-        </el-col>
-        <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
-      </el-row>
-    </div>
+    <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <!--        <el-button-->
+        <!--            type="primary"-->
+        <!--            plain-->
+        <!--            icon="Plus"-->
+        <!--            @click="handleAdd"-->
+        <!--            v-hasPermi="['wecom:product:add']"-->
+        <!--        >新增-->
+        <!--        </el-button>-->
+        <!--      </el-col>-->
+        <!--      <el-col :span="1.5">-->
+        <!--        <el-button-->
+        <!--            type="success"-->
+        <!--            plain-->
+        <!--            icon="Edit"-->
+        <!--            :disabled="single"-->
+        <!--            @click="handleUpdate"-->
+        <!--            v-hasPermi="['wecom:product:edit']"-->
+        <!--        >修改-->
+        <!--        </el-button>-->
+        <!--      </el-col>-->
+        <!--      <el-col :span="1.5">-->
+        <!--        <el-button-->
+        <!--            type="danger"-->
+        <!--            plain-->
+        <!--            icon="Delete"-->
+        <!--            :disabled="multiple"-->
+        <!--            @click="handleDelete"-->
+        <!--            v-hasPermi="['wecom:product:remove']"-->
+        <!--        >删除-->
+        <!--        </el-button>-->
+        <!--      </el-col>-->
+        <!--      <el-col :span="1.5">-->
+        <!--        <el-button-->
+        <!--            type="warning"-->
+        <!--            plain-->
+        <!--            icon="Download"-->
+        <!--            @click="handleExport"-->
+        <!--            v-hasPermi="['wecom:product:export']"-->
+        <!--        >导出-->
+        <!--        </el-button>-->
+
+      </el-col>
+      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+    </el-row>
 
     <el-table v-loading="loading" :data="productList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
@@ -49,24 +89,26 @@
       <el-table-column label="品牌" prop="brand" show-tooltip-when-overflow/>
       <el-table-column label="规格" prop="specification" show-tooltip-when-overflow/>
       <el-table-column label="最小计量单位" prop="unit"/>
-      <!--      <el-table-column label="操作" class-name="small-padding fixed-width">-->
-      <!--        <template #default="scope">-->
-      <!--          <el-button-->
-      <!--              type="text"-->
-      <!--              icon="Edit"-->
-      <!--              @click="handleUpdate(scope.row)"-->
-      <!--              v-hasPermi="['wecom:product:edit']"-->
-      <!--          >修改-->
-      <!--          </el-button>-->
-      <!--          <el-button-->
-      <!--              type="text"-->
-      <!--              icon="Delete"-->
-      <!--              @click="handleDelete(scope.row)"-->
-      <!--              v-hasPermi="['wecom:product:remove']"-->
-      <!--          >删除-->
-      <!--          </el-button>-->
-      <!--        </template>-->
-      <!--      </el-table-column>-->
+      <el-table-column label="操作" class-name="small-padding fixed-width">
+        <template #default="scope">
+          <div style="display: flex">
+            <el-button
+                type="text"
+                icon="Edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['wecom:product:edit']"
+            >修改
+            </el-button>
+            <el-button
+                type="text"
+                icon="Delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['wecom:product:remove']"
+            >删除
+            </el-button>
+          </div>
+        </template>
+      </el-table-column>
     </el-table>
 
     <pagination
@@ -79,27 +121,27 @@
 
     <!-- 添加或修改连锁门店销售的所有产品的数据对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="productRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="商家产品ID" prop="productChainid">
-          <el-input v-model="form.productChainid" placeholder="请输入商家产品ID"/>
+      <el-form ref="productRef" :model="form" :rules="rules" label-width="100px">
+        <el-form-item class="label" label="商家产品ID" prop="productChainId">
+          <el-input v-model="form.productChainId" placeholder="请输入商家产品ID"/>
         </el-form-item>
-        <el-form-item label="产品ID" prop="productid" >
-          <el-input v-model="form.productid" placeholder="请输入产品ID"/>
+        <el-form-item class="label" label="产品ID" prop="productId">
+          <el-input v-model="form.productId" placeholder="请输入产品ID"/>
         </el-form-item>
-        <el-form-item label="公司ID" prop="companyid">
-          <el-input v-model="form.companyid" placeholder="请输入公司ID"/>
+        <el-form-item class="label" label="公司ID">
+          <el-input v-model="form.corpId" placeholder="请输入公司ID"/>
         </el-form-item>
-        <el-form-item label="自定义标签" prop="tag">
+        <el-form-item class="label" label="自定义标签" prop="tag">
           <el-input v-model="form.tag" type="textarea" placeholder="请输入内容"/>
         </el-form-item>
-        <el-form-item label="序号" prop="sort">
+        <el-form-item class="label" label="序号" prop="sort">
           <el-input v-model="form.sort" placeholder="请输入序号"/>
         </el-form-item>
-        <el-form-item label="创建人" prop="createUserid">
-          <el-input v-model="form.createUserid" placeholder="请输入创建人"/>
+        <el-form-item class="label" label="创建人" prop="createUserId">
+          <el-input v-model="form.createUserId" placeholder="请输入创建人"/>
         </el-form-item>
-        <el-form-item label="修改人" prop="updateUserid">
-          <el-input v-model="form.updateUserid" placeholder="请输入修改人"/>
+        <el-form-item class="label" label="修改人" prop="updateUserId">
+          <el-input v-model="form.updateUserId" placeholder="请输入修改人"/>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -177,9 +219,9 @@ const data = reactive({
     brands: null
   },
   rules: {
-    productChainid: [
+    productChainId: [
       {required: true, message: "商家产品ID不能为空", trigger: "blur"}
-    ], companyid: [
+    ], companyId: [
       {required: true, message: "公司ID不能为空", trigger: "blur"}
     ],
   }
@@ -206,14 +248,14 @@ function cancel() {
 // 表单重置
 function reset() {
   form.value = {
-    productChainid: null,
-    productid: null,
-    companyid: null,
+    productChainId: null,
+    productId: null,
+    companyId: null,
     tag: null,
     sort: null,
-    createUserid: null,
+    createUserId: null,
     createTime: null,
-    updateUserid: null,
+    updateUserId: null,
     updateTime: null
   };
   proxy.resetForm("productRef");
@@ -290,7 +332,7 @@ function handleAdd() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
-  const _productChainid = row.productChainid || ids.value
+  let _productChainid = row.productChainId || ids.value
   getProduct(_productChainid).then(response => {
     form.value = response.data;
     open.value = true;
@@ -302,7 +344,7 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["productRef"].validate(valid => {
     if (valid) {
-      if (form.value.productChainid != null) {
+      if (form.value.productChainId != null) {
         updateProduct(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
@@ -321,7 +363,7 @@ function submitForm() {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const _productChainids = row.productChainid || ids.value;
+  const _productChainids = row.productChainId || ids.value;
   proxy.$modal.confirm('是否确认删除连锁门店销售的所有产品的数据编号为"' + _productChainids + '"的数据项？').then(function () {
     return delProduct(_productChainids);
   }).then(() => {
@@ -340,7 +382,13 @@ function handleExport() {
 
 getList();
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.label::v-deep( .el-form-item__label) {
+  color: #606266;
+  width: 70px;
+  justify-content: flex-start !important;
+}
+
 .app-container {
   .desc {
     color: #999;

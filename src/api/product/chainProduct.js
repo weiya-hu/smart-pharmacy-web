@@ -12,7 +12,7 @@ export function listProduct(query) {
 // 查询连锁门店销售的所有产品的数据详细
 export function getProduct(productChainid) {
     return request({
-        url: `/product/chain/product/${productChainId}`,
+        url: `/product/chain/product/${productChainid}`,
         method: 'get'
     })
 }
@@ -38,7 +38,7 @@ export function updateProduct(data) {
 // 删除连锁门店销售的所有产品的数据
 export function delProduct(productChainid) {
     return request({
-        url: `/product/chain/product/${productChainId}`,
+        url: `/product/chain/product/${productChainid}`,
         method: 'delete'
     })
 }

@@ -117,8 +117,8 @@
             是否更新已经存在的用户数据
           </div>
           <div class="el-upload__tip text-center">
-            <span>温馨提示请确认，在上传清单以前，已经完成您销售清单的表头与系统表头的匹配
-              如没有匹配，请点击：</span>
+                <span>温馨提示请确认，在上传清单以前，已经完成您销售清单的表头与系统表头的匹配
+                  如没有匹配，请点击：</span>
             <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;"
                      @click="matchFormHeader">去匹配表头
             </el-link>
@@ -132,6 +132,53 @@
         </div>
       </template>
     </el-dialog>
+    <!--http自定义上传-->
+    <!--    <el-dialog-->
+    <!--        title="导入销售清单" v-model="uploadData.open" width="50%" append-to-body :close-on-click-modal="false"-->
+    <!--        draggable>-->
+    <!--      <el-upload-->
+    <!--          :disabled="uploadData.isUploading"-->
+    <!--          ref="customizeUploadRef"-->
+    <!--          style="margin: 0 10px"-->
+    <!--          :limit="1"-->
+    <!--          accept=".xlsx, .xls"-->
+    <!--          action="#"-->
+    <!--          method:="POST"-->
+    <!--          :file-list="customizeList"-->
+    <!--          :show-file-list="true"-->
+    <!--          :on-success="handleCustomizeSuccess"-->
+    <!--          :on-progress="handleCustomizeFileUploadProgress"-->
+    <!--          :http-request="customizeUpload"-->
+    <!--          :auto-upload="false"-->
+    <!--          :on-error="handleCustomizeError"-->
+    <!--          drag-->
+    <!--      >-->
+    <!--        <el-icon class="el-icon&#45;&#45;upload">-->
+    <!--          <upload-filled/>-->
+    <!--        </el-icon>-->
+    <!--        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>-->
+    <!--        <template #tip>-->
+    <!--          <div class="el-upload__tip text-center">-->
+    <!--            <el-checkbox v-model="uploadData.customizeParam.isOverRide "/>-->
+    <!--            是否更新已经存在的用户数据-->
+    <!--          </div>-->
+    <!--          <div class="el-upload__tip text-center">-->
+    <!--            <span>温馨提示请确认，在上传清单以前，已经完成您销售清单的表头与系统表头的匹配-->
+    <!--              如没有匹配，请点击：</span>-->
+    <!--            <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;"-->
+    <!--                     @click="matchFormHeader">去匹配表头-->
+    <!--            </el-link>-->
+    <!--          </div>-->
+    <!--        </template>-->
+    <!--      </el-upload>-->
+    <!--      <el-progress v-if="isShowProgress" :percentage="percentage" :color="customColors"/>-->
+    <!--      <template #footer>-->
+    <!--        <div style="marginTop:20px" class="dialog-footer">-->
+    <!--          <el-button :disabled="uploadData.isLoading" type="primary" @click="submitFileForm">确 定</el-button>-->
+    <!--          <el-button :disabled="uploadData.isLoading" @click="uploadData.open = false">取 消</el-button>-->
+    <!--        </div>-->
+    <!--      </template>-->
+    <!--    </el-dialog>-->
 
 
     <div class="tableList">
@@ -169,7 +216,7 @@
 import {Search} from '@element-plus/icons-vue'
 import {getCurrentInstance, reactive, toRefs} from "vue";
 import {getToken} from "@/utils/auth";
-import {getOrderList, addDynamicHeaderExcelUrl} from "@/api/system/order";
+import {getOrderList, addDynamicHeaderExcelUrl, uploadSaleOrder} from "@/api/system/order";
 import customizeImportFirst from './component/customizeImportFirst'
 import {ElMessage} from "element-plus";
 import router from "@/router";
@@ -187,7 +234,14 @@ let pageQueryParams = ref([[
   undefined
 ]
 ])
-
+//控制进度条是否显示
+let isShowProgress = ref(false)
+//进度条控制
+const customColors = [
+  {color: '#1989fa', percentage: 99.99},
+  {color: '#5cb87a', percentage: 100},
+]
+const percentage = ref(0)
 //搜索条件
 const data = reactive({
   queryParams: {
@@ -238,6 +292,35 @@ let uploadData = reactive({
   token: getToken(),
   parameter: {corpId: '', file: ''}
 })
+/**http自定义上传函数*/
+let customizeUpload = (fileObj) => {
+  isShowProgress.value = true
+  let formData = new FormData()
+  formData.append("file", fileObj.file)
+  formData.append("path", uploadData.customizeParam.path)
+  formData.append("isOverRide", uploadData.customizeParam.isOverRide)
+  uploadSaleOrder({token: uploadData.token, cllBackFunction: uploadProgressCallback, data: formData}).then(res => {
+    if (res.data.code == 200) {
+      let {cantSave, insert, update} = res.data.data
+      customizeList.value = []
+      proxy.$modal.msgSuccess(`上传文件成功 未保存:${cantSave.length}条 新增:${insert.length}条 更新:${update.length}条`)
+    } else {
+      isShowProgress.value = false
+      customizeList.value = []
+      proxy.$modal.msgError("上传文件失败")
+      uploadData.open = false
+      uploadData.isUploading = false
+    }
+  })
+
+}
+
+/**上传进度的回调*/
+const uploadProgressCallback = (progressEvent) => {
+  let persent = (progressEvent.loaded / progressEvent.total * 100 | 0)
+  percentage.value = persent
+}
+
 //自定义上传前的回调
 const handleCustomizeFileUploadProgress = () => {
   uploadData.isLoading = true

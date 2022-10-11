@@ -1,5 +1,8 @@
 <template>
-  <div style="width: 100%;height: 100%" class="container" ref="containerBox">
+  <div v-loading="scaleLoading" element-loading-text="加载中..." style="width: 100%;height: 100%">
+    <div style="width: 100%;height: 100%;" class="container"
+         ref="containerBox">
+    </div>
   </div>
 </template>
 
@@ -7,6 +10,7 @@
 import * as echarts from 'echarts'
 import {onMounted, reactive} from "vue";
 
+let scaleLoading = ref(true)
 let props = defineProps({
   dataOption: {
     type: Object,
@@ -30,6 +34,8 @@ let props = defineProps({
 onMounted(() => {
   init();
 })
+
+
 const containerBox = ref('')
 let myEcharts = reactive({});
 //初始化echarts实例方法
@@ -48,11 +54,19 @@ const init = () => {
   });
 
 }
+const turnUpLoading = () => {
+  scaleLoading.value = true
+}
+const turnDownLoading = () => {
+  scaleLoading.value = false
+}
 const setOption = function (option) {
   myEcharts.setOption(option);
 }
 defineExpose({
-  setOption
+  setOption,
+  turnUpLoading,
+  turnDownLoading
 })
 </script>
 

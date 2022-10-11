@@ -26,8 +26,8 @@
                        clearable/>
         </el-form-item>
         <el-form-item class="label" label="条件查询">
-          <el-input style="width: 220px;" v-model="queryParams.otherFilter"
-                    placeholder="请输入查询条件"></el-input>
+          <el-input style="width: 300px;" v-model="queryParams.otherFilter"
+                    placeholder="请输入任务名/编号/商品名/商品ID/品牌"></el-input>
         </el-form-item>
         <el-form-item class="label" label="任务状态">
           <el-select style="width: 220px;" v-model="queryParams.state" placeholder="请选择任务状态" clearable>
@@ -89,10 +89,12 @@
     <!--    图形统计-->
     <div class="barChart">
       <div class="chart chart_two">
-        <scaleChart ref="chart_two_ref" :dataOption="chart_two_data"></scaleChart>
+        <scaleChart ref="chart_two_ref" v-if="chart_two_isNull == false" :dataOption="chart_two_data"></scaleChart>
+        <el-empty description="暂无奖励数据" v-if="chart_two_isNull == true"/>
       </div>
       <div class="chart chart_one">
-        <scaleChart ref="chart_one_ref" :dataOption="chart_one_data"></scaleChart>
+        <scaleChart ref="chart_one_ref" v-if="chart_one_isNull == false" :dataOption="chart_one_data"></scaleChart>
+        <el-empty description="暂无销售数据" v-if="chart_one_isNull == true"/>
       </div>
 
       <!--      <div class="chart chart_three">-->
@@ -110,7 +112,7 @@
             :header-cell-style="{background: '#efefef'}"
             :data="item.saleList">
           <vxe-column type="seq" title="序号" width="60"></vxe-column>
-          <vxe-column field="name" title="名称"></vxe-column>
+          <vxe-column field="name" show-header-overflow show-overflow show-footer-overflow title="名称"></vxe-column>
           <vxe-column field="saleAmount" title="销售额">
             <template #default="{row}">
               <span>{{ row.saleAmount }}元</span>
@@ -136,10 +138,10 @@
           <template #yearOnYearSlot="{row}">
             <div>
               {{ row.yearOnYear }}
-              <span v-if="Number(row.yearOnYear.split('%')[0])>0">
+              <span v-if="row.yearOnYear && Number(row.yearOnYear.split('%')[0])>0">
                       <el-icon size="18px" color="green"><Top/></el-icon>
                   </span>
-              <span v-else>
+              <span v-else-if="row.yearOnYear && Number(row.yearOnYear.split('%')[0])<0">
                     <el-icon size="18px" color="red"><Bottom/></el-icon>
                   </span>
 
@@ -148,53 +150,16 @@
           <template #monthOnMonthSlot="{row}">
             <div>
               {{ row.monthOnMonth }}
-              <span v-if="Number(row.monthOnMonth.split('%')[0])>0">
+              <span v-if="row.monthOnMonth && Number(row.monthOnMonth.split('%')[0])>0">
                       <el-icon size="18px" color="green"><Top/></el-icon>
                   </span>
-              <span v-else>
+              <span v-else-if="row.monthOnMonth && Number(row.monthOnMonth.split('%')[0])<0">
                     <el-icon size="18px" color="red"><Bottom/></el-icon>
                   </span>
             </div>
           </template>
         </pagevxeContent>
-<!--        <el-tabs-->
-<!--            v-model="salesBrand"-->
-<!--            class="demo-tabs"-->
-<!--        >-->
-<!--          <el-tab-pane label="品牌销量" name="first">-->
-<!--            <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReportBrand"-->
-<!--                            :contentTableConfig="storeBrandTableConfig">-->
-<!--              <template #salesAmountSlot="{row}">-->
-<!--                <div>-->
-<!--                  {{ row.salesAmount }}元-->
-<!--                </div>-->
-<!--              </template>-->
-<!--              <template #yearOnYearSlot="{row}">-->
-<!--                <div>-->
-<!--                  {{ row.yearOnYear }}-->
-<!--                  <span v-if="Number(row.yearOnYear.split('%')[0])>0">-->
-<!--                          <el-icon size="18px" color="green"><Top/></el-icon>-->
-<!--                      </span>-->
-<!--                  <span v-else>-->
-<!--                        <el-icon size="18px" color="red"><Bottom/></el-icon>-->
-<!--                      </span>-->
 
-<!--                </div>-->
-<!--              </template>-->
-<!--              <template #monthOnMonthSlot="{row}">-->
-<!--                <div>-->
-<!--                  {{ row.monthOnMonth }}-->
-<!--                  <span v-if="Number(row.monthOnMonth.split('%')[0])>0">-->
-<!--                          <el-icon size="18px" color="green"><Top/></el-icon>-->
-<!--                      </span>-->
-<!--                  <span v-else>-->
-<!--                        <el-icon size="18px" color="red"><Bottom/></el-icon>-->
-<!--                      </span>-->
-<!--                </div>-->
-<!--              </template>-->
-<!--            </pagevxeContent>-->
-<!--          </el-tab-pane>-->
-<!--        </el-tabs>-->
       </div>
       <div class="salesSingle sales">
         <div class="sales-header">
@@ -211,10 +176,10 @@
           <template #yearOnYearSlot="{row}">
             <div>
               {{ row.yearOnYear }}
-              <span v-if="Number(row.yearOnYear.split('%')[0])>0">
+              <span v-if="row.yearOnYear && Number(row.yearOnYear.split('%')[0])>0">
                       <el-icon size="18px" color="green"><Top/></el-icon>
                   </span>
-              <span v-else>
+              <span v-else-if="row.yearOnYear && Number(row.yearOnYear.split('%')[0])<0">
                     <el-icon size="18px" color="red"><Bottom/></el-icon>
                   </span>
 
@@ -223,195 +188,157 @@
           <template #monthOnMonthSlot="{row}">
             <div>
               {{ row.monthOnMonth }}
-              <span v-if="Number(row.monthOnMonth.split('%')[0])>0">
+              <span v-if="row.monthOnMonth && Number(row.monthOnMonth.split('%')[0])>0">
                       <el-icon size="18px" color="green"><Top/></el-icon>
                   </span>
-              <span v-else>
+              <span v-else-if="row.monthOnMonth && Number(row.monthOnMonth.split('%')[0])<0">
                     <el-icon size="18px" color="red"><Bottom/></el-icon>
                   </span>
             </div>
           </template>
         </pagevxeContent>
-<!--        <el-tabs-->
-<!--            v-model="salesSingle"-->
-<!--            class="demo-tabs"-->
-<!--        >-->
-<!--          <el-tab-pane label="单品销量" name="first">-->
-<!--            <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReportProduct"-->
-<!--                            :contentTableConfig="storeProductTableConfig">-->
-<!--              <template #salesAmountSlot="{row}">-->
-<!--                <div>-->
-<!--                  {{ row.salesAmount }}元-->
-<!--                </div>-->
-<!--              </template>-->
-<!--              <template #yearOnYearSlot="{row}">-->
-<!--                <div>-->
-<!--                  {{ row.yearOnYear }}-->
-<!--                  <span v-if="Number(row.yearOnYear.split('%')[0])>0">-->
-<!--                          <el-icon size="18px" color="green"><Top/></el-icon>-->
-<!--                      </span>-->
-<!--                  <span v-else>-->
-<!--                        <el-icon size="18px" color="red"><Bottom/></el-icon>-->
-<!--                      </span>-->
-
-<!--                </div>-->
-<!--              </template>-->
-<!--              <template #monthOnMonthSlot="{row}">-->
-<!--                <div>-->
-<!--                  {{ row.monthOnMonth }}-->
-<!--                  <span v-if="Number(row.monthOnMonth.split('%')[0])>0">-->
-<!--                          <el-icon size="18px" color="green"><Top/></el-icon>-->
-<!--                      </span>-->
-<!--                  <span v-else>-->
-<!--                        <el-icon size="18px" color="red"><Bottom/></el-icon>-->
-<!--                      </span>-->
-<!--                </div>-->
-<!--              </template>-->
-<!--            </pagevxeContent>-->
-<!--          </el-tab-pane>-->
-<!--        </el-tabs>-->
       </div>
     </div>
     <!--      奖励列表-->
-    <div>
-      <div class="rewardList">
-        <div class="rewardTypeList listInfo">
-          <el-tabs
-              v-model="rewardType"
-              type="border-card"
-          >
-            <el-tab-pane label="单品激励" name="first">
-              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"
-                              :contentTableConfig="allAreaTableConfig">
-                <template #chainRatioSlot="{row}">
-                  <div>
-                    {{ row.chainRatio }}
-                    <span v-if="row.isUp">
-                          <el-icon color="green"><Top/></el-icon>
-                      </span>
-                    <span v-else>
-                        <el-icon color="red"><Bottom/></el-icon>
-                      </span>
+    <!--    <div>-->
+    <!--      <div class="rewardList">-->
+    <!--        <div class="rewardTypeList listInfo">-->
+    <!--          <el-tabs-->
+    <!--              v-model="rewardType"-->
+    <!--              type="border-card"-->
+    <!--          >-->
+    <!--            <el-tab-pane label="单品激励" name="first">-->
+    <!--              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
+    <!--                              :contentTableConfig="allAreaTableConfig">-->
+    <!--                <template #chainRatioSlot="{row}">-->
+    <!--                  <div>-->
+    <!--                    {{ row.chainRatio }}-->
+    <!--                    <span v-if="row.isUp">-->
+    <!--                          <el-icon color="green"><Top/></el-icon>-->
+    <!--                      </span>-->
+    <!--                    <span v-else>-->
+    <!--                        <el-icon color="red"><Bottom/></el-icon>-->
+    <!--                      </span>-->
 
-                  </div>
-                </template>
-              </pagevxeContent>
-            </el-tab-pane>
-            <el-tab-pane label="品牌激励" name="second">
-              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"
-                              :contentTableConfig="allAreaTableConfig">
-                <template #chainRatioSlot="{row}">
-                  <div>
-                    {{ row.chainRatio }}
-                    <span v-if="row.isUp">
-                          <el-icon color="green"><Top/></el-icon>
-                      </span>
-                    <span v-else>
-                        <el-icon color="red"><Bottom/></el-icon>
-                      </span>
+    <!--                  </div>-->
+    <!--                </template>-->
+    <!--              </pagevxeContent>-->
+    <!--            </el-tab-pane>-->
+    <!--            <el-tab-pane label="品牌激励" name="second">-->
+    <!--              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
+    <!--                              :contentTableConfig="allAreaTableConfig">-->
+    <!--                <template #chainRatioSlot="{row}">-->
+    <!--                  <div>-->
+    <!--                    {{ row.chainRatio }}-->
+    <!--                    <span v-if="row.isUp">-->
+    <!--                          <el-icon color="green"><Top/></el-icon>-->
+    <!--                      </span>-->
+    <!--                    <span v-else>-->
+    <!--                        <el-icon color="red"><Bottom/></el-icon>-->
+    <!--                      </span>-->
 
-                  </div>
-                </template>
-              </pagevxeContent>
-            </el-tab-pane>
-            <el-tab-pane label="门店激励" name="third">
-              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"
-                              :contentTableConfig="allAreaTableConfig">
-                <template #chainRatioSlot="{row}">
-                  <div>
-                    {{ row.chainRatio }}
-                    <span v-if="row.isUp">
-                          <el-icon color="green"><Top/></el-icon>
-                      </span>
-                    <span v-else>
-                        <el-icon color="red"><Bottom/></el-icon>
-                      </span>
+    <!--                  </div>-->
+    <!--                </template>-->
+    <!--              </pagevxeContent>-->
+    <!--            </el-tab-pane>-->
+    <!--            <el-tab-pane label="门店激励" name="third">-->
+    <!--              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
+    <!--                              :contentTableConfig="allAreaTableConfig">-->
+    <!--                <template #chainRatioSlot="{row}">-->
+    <!--                  <div>-->
+    <!--                    {{ row.chainRatio }}-->
+    <!--                    <span v-if="row.isUp">-->
+    <!--                          <el-icon color="green"><Top/></el-icon>-->
+    <!--                      </span>-->
+    <!--                    <span v-else>-->
+    <!--                        <el-icon color="red"><Bottom/></el-icon>-->
+    <!--                      </span>-->
 
-                  </div>
-                </template>
-              </pagevxeContent>
-            </el-tab-pane>
+    <!--                  </div>-->
+    <!--                </template>-->
+    <!--              </pagevxeContent>-->
+    <!--            </el-tab-pane>-->
 
-          </el-tabs>
+    <!--          </el-tabs>-->
 
 
-        </div>
-        <div class="rewardInfoList listInfo">
-          <el-tabs
-              v-model="rewardInfo"
-              type="border-card"
-          >
-            <el-tab-pane label="品牌获奖" name="first">
-              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"
-                              :contentTableConfig="allAreaTableConfig">
-                <template #chainRatioSlot="{row}">
-                  <div>
-                    {{ row.chainRatio }}
-                    <span v-if="row.isUp">
-                          <el-icon color="green"><Top/></el-icon>
-                      </span>
-                    <span v-else>
-                        <el-icon color="red"><Bottom/></el-icon>
-                      </span>
+    <!--        </div>-->
+    <!--        <div class="rewardInfoList listInfo">-->
+    <!--          <el-tabs-->
+    <!--              v-model="rewardInfo"-->
+    <!--              type="border-card"-->
+    <!--          >-->
+    <!--            <el-tab-pane label="品牌获奖" name="first">-->
+    <!--              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
+    <!--                              :contentTableConfig="allAreaTableConfig">-->
+    <!--                <template #chainRatioSlot="{row}">-->
+    <!--                  <div>-->
+    <!--                    {{ row.chainRatio }}-->
+    <!--                    <span v-if="row.isUp">-->
+    <!--                          <el-icon color="green"><Top/></el-icon>-->
+    <!--                      </span>-->
+    <!--                    <span v-else>-->
+    <!--                        <el-icon color="red"><Bottom/></el-icon>-->
+    <!--                      </span>-->
 
-                  </div>
-                </template>
-              </pagevxeContent>
-            </el-tab-pane>
-            <el-tab-pane label="区域获奖" name="second">
-              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"
-                              :contentTableConfig="allAreaTableConfig">
-                <template #chainRatioSlot="{row}">
-                  <div>
-                    {{ row.chainRatio }}
-                    <span v-if="row.isUp">
-                          <el-icon color="green"><Top/></el-icon>
-                      </span>
-                    <span v-else>
-                        <el-icon color="red"><Bottom/></el-icon>
-                      </span>
+    <!--                  </div>-->
+    <!--                </template>-->
+    <!--              </pagevxeContent>-->
+    <!--            </el-tab-pane>-->
+    <!--            <el-tab-pane label="区域获奖" name="second">-->
+    <!--              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
+    <!--                              :contentTableConfig="allAreaTableConfig">-->
+    <!--                <template #chainRatioSlot="{row}">-->
+    <!--                  <div>-->
+    <!--                    {{ row.chainRatio }}-->
+    <!--                    <span v-if="row.isUp">-->
+    <!--                          <el-icon color="green"><Top/></el-icon>-->
+    <!--                      </span>-->
+    <!--                    <span v-else>-->
+    <!--                        <el-icon color="red"><Bottom/></el-icon>-->
+    <!--                      </span>-->
 
-                  </div>
-                </template>
-              </pagevxeContent>
-            </el-tab-pane>
-            <el-tab-pane label="门店获奖" name="third">
-              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"
-                              :contentTableConfig="allAreaTableConfig">
-                <template #chainRatioSlot="{row}">
-                  <div>
-                    {{ row.chainRatio }}
-                    <span v-if="row.isUp">
-                          <el-icon color="green"><Top/></el-icon>
-                      </span>
-                    <span v-else>
-                        <el-icon color="red"><Bottom/></el-icon>
-                      </span>
+    <!--                  </div>-->
+    <!--                </template>-->
+    <!--              </pagevxeContent>-->
+    <!--            </el-tab-pane>-->
+    <!--            <el-tab-pane label="门店获奖" name="third">-->
+    <!--              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
+    <!--                              :contentTableConfig="allAreaTableConfig">-->
+    <!--                <template #chainRatioSlot="{row}">-->
+    <!--                  <div>-->
+    <!--                    {{ row.chainRatio }}-->
+    <!--                    <span v-if="row.isUp">-->
+    <!--                          <el-icon color="green"><Top/></el-icon>-->
+    <!--                      </span>-->
+    <!--                    <span v-else>-->
+    <!--                        <el-icon color="red"><Bottom/></el-icon>-->
+    <!--                      </span>-->
 
-                  </div>
-                </template>
-              </pagevxeContent>
-            </el-tab-pane>
-            <el-tab-pane label="个人获奖" name="four">
-              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"
-                              :contentTableConfig="allAreaTableConfig">
-                <template #chainRatioSlot="{row}">
-                  <div>
-                    {{ row.chainRatio }}
-                    <span v-if="row.isUp">
-                          <el-icon color="green"><Top/></el-icon>
-                      </span>
-                    <span v-else>
-                        <el-icon color="red"><Bottom/></el-icon>
-                      </span>
-                  </div>
-                </template>
-              </pagevxeContent>
-            </el-tab-pane>
-          </el-tabs>
-        </div>
-      </div>
-    </div>
+    <!--                  </div>-->
+    <!--                </template>-->
+    <!--              </pagevxeContent>-->
+    <!--            </el-tab-pane>-->
+    <!--            <el-tab-pane label="个人获奖" name="four">-->
+    <!--              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
+    <!--                              :contentTableConfig="allAreaTableConfig">-->
+    <!--                <template #chainRatioSlot="{row}">-->
+    <!--                  <div>-->
+    <!--                    {{ row.chainRatio }}-->
+    <!--                    <span v-if="row.isUp">-->
+    <!--                          <el-icon color="green"><Top/></el-icon>-->
+    <!--                      </span>-->
+    <!--                    <span v-else>-->
+    <!--                        <el-icon color="red"><Bottom/></el-icon>-->
+    <!--                      </span>-->
+    <!--                  </div>-->
+    <!--                </template>-->
+    <!--              </pagevxeContent>-->
+    <!--            </el-tab-pane>-->
+    <!--          </el-tabs>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
   </div>
 </template>
 
@@ -433,11 +360,15 @@ import scaleChart from "@/components/scale-Chart/scale-Chart.vue"
 import useActivityReportStore from "@/store/modules/Company/activityReport.js";
 import {cloneFunction} from "@/utils/globalFunction";
 
+let chart_one_isNull = ref(false)
+let chart_two_isNull = ref(false)
 /**echarts实例*/
 let chart_one_ref = ref()
 let chart_two_ref = ref()
 let chart_three_ref = ref()
-let loading = ref()
+/**整体loading*/
+let loading = ref(false)
+/**tab所处位置*/
 const salesBrand = ref('first')
 const salesSingle = ref('first')
 const rewardType = ref('first')
@@ -452,16 +383,15 @@ const reportTotalNumber = ref({
   totalPrizePool: '',
   userNumber: ''
 })
-
-
-//区域级联下拉
+/**区域级联下拉*/
 let props = ref({multiple: true, label: 'name', value: 'id', checkStrictly: false})
+/**区域级联下拉选项*/
 let options = ref([])
 const size = {
   width: '90vw',
   height: '40vh'
 }
-//下拉状态选项
+/**下拉状态选项*/
 const statusOption = [
   {
     label: "全部",
@@ -476,6 +406,7 @@ const statusOption = [
     value: 10
   }
 ]
+/**查询条件*/
 const data = reactive({
   form: {},
   queryParams: {
@@ -488,10 +419,8 @@ const data = reactive({
 })
 const {queryParams} = toRefs(data);
 const changeArea = () => {
-  console.log(queryParams.value.nodeId)
 }
-
-
+/**快捷时间选项*/
 const fastSelectDate = ref([
   {
     label: "今日",
@@ -623,7 +552,13 @@ let chart_one_data = {
       fontSize: 14, // 文字的字体大小
       color: '#6e7079', // 刻度标签文字的颜色
       // 使用字符串模板，模板变量为刻度默认标签 {value}
-      formatter: '{value}'
+      formatter: function (value) {
+        if (value.length > 5) {
+          return value.slice(0, 5) + "..."
+        } else {
+          return value
+        }
+      }
     },
     splitLine: {
       show: false // 是否显示分隔线。默认数值轴显示
@@ -745,6 +680,225 @@ const chart_one_data_none = {
     data: []
   },
 }
+/**图形二配置*/
+let chart_two_data = {
+  color: ['#8fd5f3'],
+  dataZoom: [                 //Y轴滑动条
+    {
+      type: 'slider', //滑动条
+      show: false,      //开启
+      yAxisIndex: [0],
+      right: '93%',  //滑动条位置
+      start: 1,    //初始化时，滑动条宽度开始标度
+      end: 100
+    },   //初始化时，滑动条宽度结束标度 //y轴内置滑动
+    {
+      type: 'inside',  //内置滑动，随鼠标滚轮展示
+      show: false,
+      yAxisIndex: [0],
+      start: 1,//初始化时，滑动条宽度开始标度  end: 50  //初始化时，滑动条宽度结束标度　　　　　　　　　　　
+    }
+  ],
+  // grid: {
+  //   x: 60, // 左间距
+  //   y: 80, // 上间距
+  //   x2: 60, // 右间距
+  //   y2: 40, // 下间距
+  //   containLabel: true // grid 区域是否包含坐标轴的刻度标签, 常用于『防止标签溢出』的场景
+  // },
+  tooltip: {
+    trigger: 'axis', // 触发类型, axis: 坐标轴触发
+    axisPointer: {
+      // 指示器类型  'line' 直线指示器 'shadow' 阴影指示器 'none' 无指示器
+      // 'cross' 十字准星指示器 其实是种简写，表示启用两个正交的轴的 axisPointer
+      type: 'shadow',
+      shadowStyle: {
+        color: 'rgba(153, 153, 153, 0.2)',
+        width: '1'
+      }
+    },
+    textStyle: {
+      // color: '#cdd3ee' // 文字颜色
+    },
+    // // 提示框浮层内容格式器，支持字符串模板和回调函数两种形式 折线（区域）图、柱状（条形）图、K线图
+    // // {a}（系列名称），{b}（类目值），{c}（数值）, {d}（无）
+    // formatter: '{b}<br />{a0}:{c0}:{c1}'
+    formatter: function (params, ticket, callback) {
+      return params[0].name + '<br />' + "已奖励占比: " + ((-params[0].value) / (-params[2].value) * 100).toFixed(2) + "%" + '<br/>' + "已奖励金额: " + (-params[0].value) + "元"
+    }
+  },
+  title: {
+    text: '奖励',
+    x: 'right',
+    padding: [20, 100, 20, 100],
+  },
+  legend: {
+    data: ['奖励']
+  },
+  xAxis: {
+    // name: "奖金",
+    nameLocation: 'start',
+    nameGap: 60,
+    nameTextStyle: {
+      fontSize: 18,
+      color: "#282828"
+    },
+    show: true,
+    // 坐标轴刻度标签
+    // inverse
+    splitLine: {
+      show: false // 是否显示分隔线。默认数值轴显示
+    },
+    axisLine: { // 是否显示坐标轴轴线 默认显示
+      // symbol: ['arrow', 'none'],
+      show: true, // 是否显示坐标轴轴线 默认显示
+      lineStyle: { // 坐标轴线线的颜色
+        color: '#dedede'
+      }
+    },
+    axisTick: {
+      show: false // 是否显示坐标轴刻度 默认显示
+    },
+    axisLabel: {
+      show: true, // 是否显示刻度标签 默认显示
+      fontSize: 14, // 文字的字体大小
+      color: '#6e7079', // 刻度标签文字的颜色
+      // 使用字符串模板，模板变量为刻度默认标签 {value}
+      formatter: function (value) {
+        if (value < 0 && -value < 10000) {
+          return -value + "元"
+        } else if (value < 0 && -value >= 10000) {
+          return (-value) / 10000 + "万"
+        } else {
+          return 0
+        }
+      }
+    },
+  },
+  yAxis: {
+    type: "category",
+    position: 'right',
+    show: true,
+    axisTick: {
+      show: false // 是否显示坐标轴刻度 默认显示
+    },
+    nameTextStyle: {
+      fontSize: 18,
+      color: "#282828",
+    },
+    axisLine: { // 是否显示坐标轴轴线 默认显示
+      symbol: ['none', 'arrow'],
+      show: true, // 是否显示坐标轴轴线 默认显示
+      lineStyle: { // 坐标轴线线的颜色
+        color: '#dedede'
+      }
+    },
+
+    axisLabel: {
+      type: 'value',
+      show: true, // 是否显示刻度标签 默认显示
+      fontSize: 14, // 文字的字体大小
+      color: '#6e7079', // 刻度标签文字的颜色
+      // 使用字符串模板，模板变量为刻度默认标签 {value}
+      formatter: function (value) {
+        if (value.length > 5) {
+          return value.slice(0, 5) + "..."
+        } else {
+          return value
+        }
+      }
+    },
+    splitLine: {
+      show: false // 是否显示分隔线。默认数值轴显示
+    },
+    data: []
+  },
+  series: [{
+    name: '已奖励',
+    type: 'bar',
+    stack: '总量',
+    // barWidth: 50,
+    barMaxWidth: 20,
+    label: {
+      show: true,
+      // 标签的位置 left right bottom top inside  // 绝对的像素值 position: [10, 10]
+      // 相对的百分比 position: ['50%', '50%']
+      position: 'left',
+      formatter: function (value) { //把数据也转换成正数用的是负负为正，下面data里的数据就要是负数，如果需要负数把这段formatter删掉
+        return ''
+      },
+      textStyle: {
+        fontSize: '14',
+        color: "#000"
+      }
+    },
+    itemStyle: {
+      normal: {
+        // barBorderRadius: [8, 0, 0, 8], // （顺时针左上，右上，右下，左下）
+        color: '#7fafd8'
+      },
+    },
+    data: []
+  },
+    {
+      name: '奖励剩余',
+      type: 'bar',
+      stack: '总量',
+      // barWidth: 50,
+      barMaxWidth: 20,
+      label: {
+        show: true,
+        // 标签的位置 left right bottom top inside  // 绝对的像素值 position: [10, 10]
+        // 相对的百分比 position: ['50%', '50%']
+        position: 'insideRight',
+        formatter: function (value) { //把数据也转换成正数用的是负负为正，下面data里的数据就要是负数，如果需要负数把这段formatter删掉
+          return ''
+        },
+        // formatter: function (params) {//设置显示的数据
+        //   return percentageData.value[params.dataIndex]
+        // },
+        textStyle: {
+          fontSize: '14',
+          color: "#000"
+        }
+      },
+      itemStyle: {
+        normal: {
+          barBorderRadius: [8, 0, 0, 8], // （顺时针左上，右上，右下，左下）
+          color: '#d3dae1'
+        }
+      },
+      data: []
+    },
+    {
+      name: '总数',    // 总数显示，生成一个总数的柱状图，将颜色设为透明，
+      type: 'bar',     // label将位置设备内部底部，造成一个总数显示在
+      stack: '总量',    // 柱状图上方的假象
+      barMaxWidth: 20,
+      label: {
+        normal: {
+          show: true,
+          position: 'insideRight',
+          formatter: function (value) { //把数据也转换成正数用的是负负为正，下面data里的数据就要是负数，如果需要负数把这段formatter删掉
+            if (value.data < 0) {
+              return -value.data + "元"
+            } else {
+              return value.data + "元"
+            }
+          },
+          textStyle: {color: '#000'}
+        }
+      },
+      itemStyle: {
+        normal: {
+          color: 'rgba(128, 128, 128, 0)'      // 柱状图颜色设为透明
+        }
+      },
+
+      data: []
+    }
+  ]
+}
 const chart_two_data_none = {
   title: {
     text: '暂无奖励数据',
@@ -825,219 +979,6 @@ const chart_two_data_none = {
     data: []
   },
 }
-/**图形二配置*/
-let chart_two_data = {
-  color: ['#8fd5f3'],
-  dataZoom: [                 //Y轴滑动条
-    {
-      type: 'slider', //滑动条
-      show: false,      //开启
-      yAxisIndex: [0],
-      right: '93%',  //滑动条位置
-      start: 1,    //初始化时，滑动条宽度开始标度
-      end: 100
-    },   //初始化时，滑动条宽度结束标度 //y轴内置滑动
-    {
-      type: 'inside',  //内置滑动，随鼠标滚轮展示
-      show: false,
-      yAxisIndex: [0],
-      start: 1,//初始化时，滑动条宽度开始标度  end: 50  //初始化时，滑动条宽度结束标度　　　　　　　　　　　
-    }
-  ],
-  // grid: {
-  //   x: 60, // 左间距
-  //   y: 80, // 上间距
-  //   x2: 60, // 右间距
-  //   y2: 40, // 下间距
-  //   containLabel: true // grid 区域是否包含坐标轴的刻度标签, 常用于『防止标签溢出』的场景
-  // },
-  tooltip: {
-    trigger: 'axis', // 触发类型, axis: 坐标轴触发
-    axisPointer: {
-      // 指示器类型  'line' 直线指示器 'shadow' 阴影指示器 'none' 无指示器
-      // 'cross' 十字准星指示器 其实是种简写，表示启用两个正交的轴的 axisPointer
-      type: 'shadow',
-      shadowStyle: {
-        color: 'rgba(153, 153, 153, 0.2)',
-        width: '1'
-      }
-    },
-    textStyle: {
-      // color: '#cdd3ee' // 文字颜色
-    },
-    // // 提示框浮层内容格式器，支持字符串模板和回调函数两种形式 折线（区域）图、柱状（条形）图、K线图
-    // // {a}（系列名称），{b}（类目值），{c}（数值）, {d}（无）
-    // formatter: '{b}<br />{a0}:{c0}:{c1}'
-    formatter: function (params, ticket, callback) {
-      return params[0].name + '<br />' + "已奖励占比: " + (-params[0].value) / (-params[2].value) + "%" + '<br/>' + "已奖励金额: " + (-params[0].value) + "元"
-    }
-  },
-  title: {
-    text: '奖励',
-    x: 'right',
-    padding: [20, 100, 20, 100],
-  },
-  legend: {
-    data: ['奖励']
-  },
-  xAxis: {
-    // name: "奖金",
-    nameLocation: 'start',
-    nameGap: 60,
-    nameTextStyle: {
-      fontSize: 18,
-      color: "#282828"
-    },
-    show: true,
-    // 坐标轴刻度标签
-    // inverse
-    splitLine: {
-      show: false // 是否显示分隔线。默认数值轴显示
-    },
-    axisLine: { // 是否显示坐标轴轴线 默认显示
-      // symbol: ['arrow', 'none'],
-      show: true, // 是否显示坐标轴轴线 默认显示
-      lineStyle: { // 坐标轴线线的颜色
-        color: '#dedede'
-      }
-    },
-    axisTick: {
-      show: false // 是否显示坐标轴刻度 默认显示
-    },
-    axisLabel: {
-      show: true, // 是否显示刻度标签 默认显示
-      fontSize: 14, // 文字的字体大小
-      color: '#6e7079', // 刻度标签文字的颜色
-      // 使用字符串模板，模板变量为刻度默认标签 {value}
-      formatter: function (value) {
-        if (value < 0 && -value < 10000) {
-          return -value + "元"
-        } else if (value < 0 && -value >= 10000) {
-          return (-value) / 10000 + "万"
-        } else {
-          return 0
-        }
-      }
-    },
-  },
-  yAxis: {
-    type: "category",
-    position: 'right',
-    show: true,
-    axisTick: {
-      show: false // 是否显示坐标轴刻度 默认显示
-    },
-    nameTextStyle: {
-      fontSize: 18,
-      color: "#282828",
-    },
-    axisLine: { // 是否显示坐标轴轴线 默认显示
-      symbol: ['none', 'arrow'],
-      show: true, // 是否显示坐标轴轴线 默认显示
-      lineStyle: { // 坐标轴线线的颜色
-        color: '#dedede'
-      }
-    },
-
-    axisLabel: {
-      type: 'value',
-      show: true, // 是否显示刻度标签 默认显示
-      fontSize: 14, // 文字的字体大小
-      color: '#6e7079', // 刻度标签文字的颜色
-      // 使用字符串模板，模板变量为刻度默认标签 {value}
-      formatter: '{value}'
-    },
-    splitLine: {
-      show: false // 是否显示分隔线。默认数值轴显示
-    },
-    data: []
-  },
-  series: [{
-    name: '已奖励',
-    type: 'bar',
-    stack: '总量',
-    // barWidth: 50,
-    barMaxWidth: 20,
-    label: {
-      show: true,
-      // 标签的位置 left right bottom top inside  // 绝对的像素值 position: [10, 10]
-      // 相对的百分比 position: ['50%', '50%']
-      position: 'left',
-      formatter: function (value) { //把数据也转换成正数用的是负负为正，下面data里的数据就要是负数，如果需要负数把这段formatter删掉
-        return ''
-      },
-      textStyle: {
-        fontSize: '14',
-        color: "#000"
-      }
-    },
-    itemStyle: {
-      normal: {
-        barBorderRadius: [8, 0, 0, 8], // （顺时针左上，右上，右下，左下）
-        color: '#d3dae1'
-      },
-    },
-    data: []
-  },
-    {
-      name: '奖励剩余',
-      type: 'bar',
-      stack: '总量',
-      // barWidth: 50,
-      barMaxWidth: 20,
-      label: {
-        show: true,
-        // 标签的位置 left right bottom top inside  // 绝对的像素值 position: [10, 10]
-        // 相对的百分比 position: ['50%', '50%']
-        position: 'insideRight',
-        formatter: function (value) { //把数据也转换成正数用的是负负为正，下面data里的数据就要是负数，如果需要负数把这段formatter删掉
-          return ''
-        },
-        // formatter: function (params) {//设置显示的数据
-        //   return percentageData.value[params.dataIndex]
-        // },
-        textStyle: {
-          fontSize: '14',
-          color: "#000"
-        }
-      },
-      itemStyle: {
-        normal: {
-          barBorderRadius: [8, 0, 0, 8], // （顺时针左上，右上，右下，左下）
-          color: '#d3dae1'
-        }
-      },
-      data: []
-    },
-    {
-      name: '总数',    // 总数显示，生成一个总数的柱状图，将颜色设为透明，
-      type: 'bar',     // label将位置设备内部底部，造成一个总数显示在
-      stack: '总量',    // 柱状图上方的假象
-      barMaxWidth: 20,
-      label: {
-        normal: {
-          show: true,
-          position: 'insideRight',
-          formatter: function (value) { //把数据也转换成正数用的是负负为正，下面data里的数据就要是负数，如果需要负数把这段formatter删掉
-            if (value.data < 0) {
-              return -value.data + "元"
-            } else {
-              return value.data + "元"
-            }
-          },
-          textStyle: {color: '#000'}
-        }
-      },
-      itemStyle: {
-        normal: {
-          color: 'rgba(128, 128, 128, 0)'      // 柱状图颜色设为透明
-        }
-      },
-
-      data: []
-    }
-  ]
-}
 /**图形三配置*/
 const chart_three_data = {
   title: {
@@ -1056,7 +997,7 @@ const chart_three_data = {
     },
     formatter: function (params, ticket, callback) {
       // return params[0].name + '<br />' + "已奖励占比: " + (-params[0].value) / (-params[2].value) + "%"
-      return "???2222"
+      return ""
     }
   },
   // dataZoom: [                 //Y轴滑动条
@@ -1193,6 +1134,21 @@ const chart_three_data = {
 
 
 }
+/**奖励发放比例*/
+let percentageData = ref([])
+
+/**重置按钮操作*/
+function resetQuery() {
+  queryParams.value = {
+    state: undefined,
+    nodeId: [],
+    otherFilter: undefined,
+    betweenDate: [],
+    timeRangeQuickSelection: ''
+  }
+  loading.value = true
+  getList();
+}
 
 /** 搜索按钮操作 */
 function handleQuery() {
@@ -1200,8 +1156,8 @@ function handleQuery() {
 }
 ;
 
+/**查询数据信息*/
 function getList() {
-  loading.value = true
   let timeObject = {
     startTime: undefined,
     endTime: undefined
@@ -1213,7 +1169,6 @@ function getList() {
     }
   }
   queryParams.value.nodeId = Array.from(new Set(queryParams.value.nodeId.flat()));
-  console.log({...cloneFunction(queryParams.value), ...timeObject})
   /**获取首页的数字*/
   getActivityReportNumbers({...cloneFunction(queryParams.value), ...timeObject}).then(res => {
     if (res.code == 200) {
@@ -1229,9 +1184,10 @@ function getList() {
         chart_one_data = chart_one_data_none
         chart_two_data = chart_two_data_none
         nextTick(() => {
-          chart_one_ref.value.setOption(chart_one_data, true)
-          chart_two_ref.value.setOption(chart_two_data, true)
-          loading.value = false
+          chart_two_ref.value.turnDownLoading()
+          chart_one_ref.value.turnDownLoading()
+          chart_one_isNull.value = true
+          chart_two_isNull.value = true
         })
       }
     }
@@ -1243,8 +1199,6 @@ function getList() {
 //获取区域销售情况
   store.getActivityReportAreaList({...cloneFunction(queryParams.value), ...timeObject})
 }
-
-let percentageData = ref([])
 
 /**遍历初始化条形统计图展示数据 */
 function innitBarChartData(data) {
@@ -1262,7 +1216,7 @@ function innitBarChartData(data) {
   let saleAmountArray = []
   data.forEach(item => {
     awardAmountArray.push(-item.awardAmount)
-    remainingAwardAmountArray.push(-(item.prizePool - item.awardAmount))
+    remainingAwardAmountArray.push(-Math.abs((item.prizePool - item.awardAmount)))
     eventNameArray.push(item.eventName)
     percentageArray.push(item.percentage)
     prizePoolArray.push(-item.prizePool)
@@ -1286,15 +1240,19 @@ function innitBarChartData(data) {
     chart_two_ref.value.setOption(chart_two_data, true)
     // chart_three_ref.value.setOption(chart_three_data, true)
     loading.value = false
+    chart_two_ref.value.turnDownLoading()
+    chart_one_ref.value.turnDownLoading()
   })
 }
 
 /**下拉选项初始化*/
 function innitSelectOption() {
-// 获取区域下拉统计
+  loading.value = true
+  /**获取区域下拉统计*/
   getAreaTree({allChild: true}).then(res => {
     if (res.code == 200) {
       options.value = res.data
+      loading.value = false
     }
   })
   getList()
@@ -1479,6 +1437,9 @@ innitSelectOption()
       //margin: 0 10px;
       height: 750px;
       text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
 
@@ -1519,6 +1480,7 @@ innitSelectOption()
         padding: 15px;
         box-sizing: border-box;
         color: #999999;
+
         .active {
           color: #ff5a40;
           font-weight: bold;
@@ -1540,10 +1502,11 @@ innitSelectOption()
       margin: 0 10px;
       border-radius: 10px;
       overflow: hidden;
-      
+
       .el-tabs--border-card {
         border-radius: 10px;
         overflow: hidden;
+
         :deep(.el-tabs__content) {
           //background: #FAFAFA;
           padding: 0;

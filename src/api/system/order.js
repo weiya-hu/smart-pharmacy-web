@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import axios from 'axios'
 
 // 查询订单列表
 export function getOrderList(query) {
@@ -14,7 +15,7 @@ export function addDynamicHeaderExcelUrl(query) {
     return request({
         url: `/product/order/addDynamicHeaderExcelUrl?fileUrl=${query}`,
         method: 'post',
-        timeout:120000
+        timeout: 120000
     })
 }
 
@@ -23,7 +24,7 @@ export function getMapping() {
     return request({
         url: `/product/dynamicddi/getMapping`,
         method: 'get',
-        timeout:120000
+        timeout: 120000
     })
 }
 
@@ -42,4 +43,21 @@ export function queryProductOrderDynamicHeaderData() {
         url: `/product/dynamicddi/queryProductOrderDynamicHeaderData`,
         method: 'get',
     })
+}
+
+//销售订单文件上传
+export function uploadSaleOrder(obj) {
+    return axios({
+        url: import.meta.env.VITE_APP_BASE_API + `/product/order/addDynamicHeaderExcelFile`,
+        method: 'post',
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + obj.token,
+        },
+        data: obj.data,
+        onUploadProgress: obj.cllBackFunction,
+        timeout: 50000,
+    })
+
+
 }
