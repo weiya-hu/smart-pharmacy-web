@@ -141,7 +141,7 @@
                   style="width: 100%"
                   v-if="form.type !==5"
               >
-                <el-option v-for="item in nameList" :key="item.id" :label="item.name" :value="item.relationId"/>
+                <el-option v-for="item in nameList" :key="item.id" :label="item.name" :value="item.storeId"/>
               </el-select>
 
               <el-input v-if="form.type === 5" v-model="form.name" placeholder="请输入名称"></el-input>
@@ -414,7 +414,7 @@ function submitForm() {
     if (valid) {
       if (form.value.relationId) {
         //判断是否存在于集合中
-        let exists = nameList.value.filter(item => item.relationId === form.value.relationId)
+        let exists = nameList.value.filter(item => item.storeId === form.value.relationId)
         if (exists.length > 0) {
           form.value.name = exists[0].name
         } else {
@@ -485,11 +485,7 @@ function handleDelete(row) {
 function handleChange(val) {
   form.value.name = null
   form.value.relationId = undefined
-  let data = {
-    allChild: true,
-    type: val
-  }
-  reltreeList(data).then(res => {
+  reltreeList().then(res => {
     if (res.code === 200) {
       nameList.value = res.data
     }
@@ -497,11 +493,7 @@ function handleChange(val) {
 }
 
 function getNameData(row) {
-  let data = {
-    allChild: true,
-    type: row.type
-  }
-  reltreeList(data).then(res => {
+  reltreeList().then(res => {
     if (res.code === 200) {
       nameList.value = res.data
     }
