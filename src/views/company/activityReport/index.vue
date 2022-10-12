@@ -103,23 +103,41 @@
     </div>
     <!--    区域销售列表展示-->
     <div class="areaMarket">
-      <div v-for="(item,index) in store.activityReportAreaList" :key="index" class="allArea area">
-        <vxe-table
-            align="center"
-            height="600px"
-            border="none"
-            class="mytable-scrollbar"
-            :header-cell-style="{background: '#efefef'}"
-            :data="item.saleList">
-          <vxe-column type="seq" title="序号" width="60"></vxe-column>
-          <vxe-column field="name" show-header-overflow show-overflow show-footer-overflow title="名称"></vxe-column>
-          <vxe-column field="saleAmount" title="销售额">
-            <template #default="{row}">
-              <span>{{ row.saleAmount }}元</span>
-            </template>
-          </vxe-column>
-        </vxe-table>
-      </div>
+      <el-table
+          :data="store.activityReportAreaListToTree"
+          :default-expand-all="false"
+          row-key="nodeId"
+          style="width: 100%;height: 100%"
+          :tree-props="{ children: 'children' }"
+          :cell-style="{'text-align':'center'}"
+          :header-cell-style="{'text-align':'center',backgroundColor: '#efefef !important',}"
+      >
+        <el-table-column type="index" label="序号" width="50"/>
+        <el-table-column prop="name" label="名称" show-tooltip-when-overflow></el-table-column>
+        <el-table-column prop="saleAmount" label="销售额" show-tooltip-when-overflow>
+          <template #default="{row}">
+            <span>{{ row.saleAmount }}元</span>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <!--      <div v-for="(item,index) in store.activityReportAreaList" :key="index" class="allArea area">-->
+      <!--        <vxe-table-->
+      <!--            align="center"-->
+      <!--            height="600px"-->
+      <!--            border="none"-->
+      <!--            class="mytable-scrollbar"-->
+      <!--            :header-cell-style="{background: '#efefef'}"-->
+      <!--            :data="item.saleList">-->
+      <!--          <vxe-column type="seq" title="序号" width="60"></vxe-column>-->
+      <!--          <vxe-column field="name" show-header-overflow show-overflow show-footer-overflow title="名称"></vxe-column>-->
+      <!--          <vxe-column field="saleAmount" title="销售额">-->
+      <!--            <template #default="{row}">-->
+      <!--              <span>{{ row.saleAmount }}元</span>-->
+      <!--            </template>-->
+      <!--          </vxe-column>-->
+      <!--        </vxe-table>-->
+      <!--      </div>-->
     </div>
     <!--    品牌销量和单品销量-->
     <div class="salesBrandAndSingle">
@@ -359,6 +377,8 @@ import {getActivityReportNumbers, getSalesHistogram, getAreaTree, getRegionSaleI
 import scaleChart from "@/components/scale-Chart/scale-Chart.vue"
 import useActivityReportStore from "@/store/modules/Company/activityReport.js";
 import {cloneFunction} from "@/utils/globalFunction";
+
+const {proxy} = getCurrentInstance();
 
 let chart_one_isNull = ref(false)
 let chart_two_isNull = ref(false)
@@ -1197,7 +1217,10 @@ function getList() {
 //  获取单品销量
   store.getActivityReportProductList({...cloneFunction(queryParams.value), ...timeObject})
 //获取区域销售情况
-  store.getActivityReportAreaList({...cloneFunction(queryParams.value), ...timeObject})
+  store.getActivityReportAreaList({...cloneFunction(queryParams.value), ...timeObject}, proxy).then(res => {
+
+
+  })
 }
 
 /**遍历初始化条形统计图展示数据 */
@@ -1450,6 +1473,7 @@ innitSelectOption()
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+    height: 40vh;
 
     .area {
       flex: 1;

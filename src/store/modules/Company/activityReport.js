@@ -1,4 +1,5 @@
 import {getBrandTop, getProductTop, getRegionSaleInfo} from '@/api/activityReport.js'
+import {getCurrentInstance} from "vue";
 
 const useActivityReportStore = defineStore(
     'activityReport',
@@ -8,6 +9,7 @@ const useActivityReportStore = defineStore(
             activityReportBrandList: [],
             activityReportProductList: [],
             activityReportAreaList: [],
+            activityReportAreaListToTree: [],
             activityReportCount: 0
         }),
         actions: {
@@ -36,6 +38,8 @@ const useActivityReportStore = defineStore(
                     //    发送请求获取数据
                     getProductTop(data).then(res => {
                         if (res.code == 200) {
+
+
                             this.activityReportProductList = res.data
                             resolve(true)
                         }
@@ -43,12 +47,17 @@ const useActivityReportStore = defineStore(
                 })
             },
             //    获取区域销售情况
-            getActivityReportAreaList(data) {
+            getActivityReportAreaList(data, proxy) {
                 return new Promise((resolve, reject) => {
                     //    发送请求获取数据
                     getRegionSaleInfo(data).then(res => {
                         if (res.code == 200) {
                             this.activityReportAreaList = res.data
+                            let allData = res.data.map(item => {
+                                return item.saleList
+                            }).flat()
+                            this.activityReportAreaListToTree = proxy.handleTree(allData, "nodeId", "parentNodeId");
+                            console.log(this.activityReportAreaListToTree)
                             resolve(true)
                         }
                     })

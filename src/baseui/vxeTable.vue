@@ -14,7 +14,8 @@
       <vxe-column type="seq" title="序号">
       </vxe-column>
       <template v-for="propItem in propList" :key="propItem.prop">
-        <vxe-column v-bind="propItem" align="center" show-overflow-tooltip>
+        <vxe-column v-bind="propItem" align="center" show-header-overflow show-overflow show-footer-overflow
+                    show-overflow-tooltip>
           <template #default="scope">
             <slot :name="propItem.slotName" :row="scope.row">
               {{ scope.row[propItem.field] }}
@@ -81,12 +82,10 @@ export default defineComponent({
     }
 
 
-
     return {handleSelectionChange}
   }
 })
 </script>
-
 <style scoped lang="scss">
 /*滚动条整体部分*/
 .mytable-scrollbar ::-webkit-scrollbar {

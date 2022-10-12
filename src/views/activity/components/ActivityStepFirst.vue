@@ -63,7 +63,7 @@
             :autosize="{ minRows: 3, maxRows: 9 }"
             type="textarea"
             placeholder="请输入任务描述"
-            style="width: 400px" />
+            style="width: 400px"/>
       </el-form-item>
 
       <!--      <el-form-item label="任务截止类型" prop="endType">-->
@@ -74,42 +74,42 @@
       <!--        </el-select>-->
       <!--      </el-form-item>-->
 
-<!--      <el-form-item class="label" label="活动附件" prop="filesInfos">-->
-<!--        <el-upload-->
-<!--            :disabled="formDisabled"-->
-<!--            :action="uploadData.imgBannerUrl"-->
-<!--            :headers="{'Authorization':uploadData.token}"-->
-<!--            :data="uploadData.imgBannerParam"-->
-<!--            method:="POST"-->
-<!--            accept="image/jpg,image/jpeg,image/png"-->
-<!--            :limit="1"-->
-<!--            :file-list="imgBannerList"-->
-<!--            :show-file-list="false"-->
-<!--            :on-success="handleImgBannerSuccess">-->
-<!--          <div class="demo-image__placeholder">-->
-<!--            <div class="block">-->
-<!--              <el-image :src="form.files[0].url" v-if="form.files.length!==0"-->
-<!--                        style="width: 400px;height: 150px;border: 1px solid #c0c4cc">-->
-<!--                <template #placeholder>-->
-<!--                  <div class="image-slot">Loading<span class="dot">...</span></div>-->
-<!--                </template>-->
-<!--              </el-image>-->
-<!--              <el-image-->
-<!--                  v-if="form.files.length==0"-->
-<!--                  style="width: 400px;height: 100px;border: 1px solid #c0c4cc">-->
-<!--                <template #error>-->
-<!--                  <div class="image-slot"-->
-<!--                       style="display: flex;justify-content:center;align-items:center;height: 100px">-->
-<!--                    <el-icon :size="48">-->
-<!--                      <Picture/>-->
-<!--                    </el-icon>-->
-<!--                  </div>-->
-<!--                </template>-->
-<!--              </el-image>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </el-upload>-->
-<!--      </el-form-item>-->
+      <!--      <el-form-item class="label" label="活动附件" prop="filesInfos">-->
+      <!--        <el-upload-->
+      <!--            :disabled="formDisabled"-->
+      <!--            :action="uploadData.imgBannerUrl"-->
+      <!--            :headers="{'Authorization':uploadData.token}"-->
+      <!--            :data="uploadData.imgBannerParam"-->
+      <!--            method:="POST"-->
+      <!--            accept="image/jpg,image/jpeg,image/png"-->
+      <!--            :limit="1"-->
+      <!--            :file-list="imgBannerList"-->
+      <!--            :show-file-list="false"-->
+      <!--            :on-success="handleImgBannerSuccess">-->
+      <!--          <div class="demo-image__placeholder">-->
+      <!--            <div class="block">-->
+      <!--              <el-image :src="form.files[0].url" v-if="form.files.length!==0"-->
+      <!--                        style="width: 400px;height: 150px;border: 1px solid #c0c4cc">-->
+      <!--                <template #placeholder>-->
+      <!--                  <div class="image-slot">Loading<span class="dot">...</span></div>-->
+      <!--                </template>-->
+      <!--              </el-image>-->
+      <!--              <el-image-->
+      <!--                  v-if="form.files.length==0"-->
+      <!--                  style="width: 400px;height: 100px;border: 1px solid #c0c4cc">-->
+      <!--                <template #error>-->
+      <!--                  <div class="image-slot"-->
+      <!--                       style="display: flex;justify-content:center;align-items:center;height: 100px">-->
+      <!--                    <el-icon :size="48">-->
+      <!--                      <Picture/>-->
+      <!--                    </el-icon>-->
+      <!--                  </div>-->
+      <!--                </template>-->
+      <!--              </el-image>-->
+      <!--            </div>-->
+      <!--          </div>-->
+      <!--        </el-upload>-->
+      <!--      </el-form-item>-->
     </el-form>
     <!--    let brandsOption = ref([])-->
     <!--    let productTypesOption = ref([])-->
@@ -124,14 +124,16 @@
           </el-select>
         </el-form-item>
         <el-form-item label="品牌" prop="brands">
-          <el-select @change="changeGoodsRange" v-model="queryRuleScupesParams.brands" clearable multiple style="width: 100%;">
+          <el-select @change="changeGoodsRange" v-model="queryRuleScupesParams.brands" clearable multiple
+                     style="width: 100%;">
             <el-option v-for="item in brandsOption" :value="item" :key="item"
                        :label="item">{{ item }}
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="规格" prop="specifications">
-          <el-select @change="changeGoodsRange" v-model="queryRuleScupesParams.specifications" clearable multiple style="width: 100%;">
+          <el-select @change="changeGoodsRange" v-model="queryRuleScupesParams.specifications" clearable multiple
+                     style="width: 100%;">
             <el-option v-for="item in specificationsOption" :value="item" :key="item"
                        :label="item">{{ item }}
             </el-option>
@@ -254,7 +256,12 @@ const data = reactive({
     ruleScupes: [{required: true, validator: ruleScupes}],
     ruleResponsibleUsers: [{required: true, validator: ruleResponsibleUsers}],
     // taskName: [{required: true, message: "请输入名称", trigger: "blur"}],
-    comment: [{required: true, message: "请输入任务描述", trigger: "blur"}, {min: 4, max: 1028, message: "任务描述不得低于4字符，不得超过1028字符", trigger: "blur"}],
+    comment: [{required: true, message: "请输入任务描述", trigger: "blur"}, {
+      min: 4,
+      max: 1028,
+      message: "任务描述不得低于4字符，不得超过1028字符",
+      trigger: "blur"
+    }],
   }
 });
 
@@ -321,13 +328,14 @@ async function submitForm() {
   if (v) {
     //任务范围
     firstLoading.value = true
-    if (form.value.eventId != null && form.value.canEdit) {
+    if (props.eventId != null && props.canEdit) {
+      form.value.eventId = props.eventId
       return updateEventInfo(form.value)
-    } else if (form.value.eventId === undefined) {
+    } else if (props.eventId === undefined) {
       return createEventInfo(form.value)
-    } else if (form.value.eventId != null) {
+    } else if (props.eventId != null) {
       return new Promise((resolve) => {
-        resolve({code: 200, data: form.value.eventId})
+        resolve({code: 200, data: props.eventId})
       })
     }
   } else {
@@ -481,6 +489,10 @@ const props = defineProps({
     type: String,
     default: undefined
   },
+  canEdit: {
+    type: Boolean,
+    default: false
+  }
 })
 onLoad()
 
