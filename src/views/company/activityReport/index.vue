@@ -110,9 +110,9 @@
           style="width: 100%;height: 100%"
           :tree-props="{ children: 'children' }"
           :cell-style="{'text-align':'center'}"
-          :header-cell-style="{'text-align':'center',backgroundColor: '#efefef !important',}"
+          :header-cell-style="{backgroundColor: '#efefef !important','text-align':'center'}"
       >
-        <el-table-column type="index" label="序号" width="50"/>
+        <el-table-column type="index" label="序号" width="200"/>
         <el-table-column prop="name" label="名称" show-tooltip-when-overflow></el-table-column>
         <el-table-column prop="saleAmount" label="销售额" show-tooltip-when-overflow>
           <template #default="{row}">

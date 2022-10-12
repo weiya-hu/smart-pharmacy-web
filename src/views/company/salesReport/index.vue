@@ -225,7 +225,7 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="其他" name="seven">
-          <!-- 自定义结构统计表   -->
+          <!-- 自定义结构统计表      :cell-style="{'text-align':'center'}" -->
           <div class="tableList">
             <el-table
                 v-loading="treeLoading"
@@ -236,10 +236,10 @@
                 style="width: 100%;height: 100%"
                 :tree-props="{ children: 'children' }"
                 :cell-style="{'text-align':'center'}"
-                :header-cell-style="{'text-align':'center',backgroundColor: '#efefef !important',}"
+                :header-cell-style="{backgroundColor: '#efefef !important','text-align':'center'}"
             >
-              <el-table-column type="index" label="序号" width="50"/>
-              <el-table-column prop="group" label="名称" show-tooltip-when-overflow></el-table-column>
+              <el-table-column type="index" label="序号" width="200"/>
+              <el-table-column prop="group" width="230" label="名称" show-tooltip-when-overflow></el-table-column>
               <el-table-column prop="avgMoney" label="均值(元)" show-tooltip-when-overflow>
                 <template #default="{row}">
                   <span>{{ row.avgMoney.toFixed(2) }}</span>
