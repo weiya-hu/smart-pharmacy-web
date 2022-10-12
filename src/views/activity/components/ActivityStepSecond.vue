@@ -77,12 +77,12 @@
                     v-model.number="item.targetRange"
                     class="input-with-select"
                     style="width: 220px"
-                @change="()=>{if(!item.targetRange) firstFormModel.jobs[i].targetRange=0}"
+                    @change="()=>{if(!item.targetRange) firstFormModel.jobs[i].targetRange=0}"
                 >
                   <template #append>
                     <el-select v-model="firstFormModel.calcUnit" disabled style="width: 80px">
                       <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value"
-                                 :label="item.label" />
+                                 :label="item.label"/>
                     </el-select>
                   </template>
                 </el-input>
@@ -128,7 +128,7 @@
 
           </div>
         </el-form>
-        <el-empty description="暂无数据" v-if="firstFormModels.formListData.length == 0" />
+        <el-empty description="暂无数据" v-if="firstFormModels.formListData.length == 0"/>
       </el-tab-pane>
       <el-tab-pane name="second" label="品牌">
         <el-form ref="secondForm" v-model="secondFormModels" :rules="formRule" inline label-width="80px">
@@ -249,7 +249,7 @@
 
           </div>
         </el-form>
-        <el-empty description="暂无数据" v-if="secondFormModels.formListData.length == 0" />
+        <el-empty description="暂无数据" v-if="secondFormModels.formListData.length == 0"/>
       </el-tab-pane>
       <el-tab-pane name="third" label="门店">
         <el-form ref="thirdForm" v-model="thirdFormModels" :rules="formRule" inline label-width="80px">
@@ -376,11 +376,12 @@
           </div>
 
         </el-form>
-        <el-empty description="暂无数据" v-if="thirdFormModels.formListData.length == 0" />
+        <el-empty description="暂无数据" v-if="thirdFormModels.formListData.length == 0"/>
       </el-tab-pane>
     </el-tabs>
     <!-- 商品列表弹窗-->
-    <el-dialog title="商品列表" v-model="showProductsDialog" width="70%" append-to-body :close-on-click-modal="false" draggable destroy-on-close>
+    <el-dialog title="商品列表" v-model="showProductsDialog" width="70%" append-to-body :close-on-click-modal="false"
+               draggable destroy-on-close>
       <SelectProducts :eventRuleId="itemRuleId" :eventId="props.eventId" :packageId="productPackageId"
                       :productIds="productList" :handleType="props.handleType"
                       ref="selectProductsRef"></SelectProducts>
@@ -393,8 +394,10 @@
       </template>
     </el-dialog>
     <!-- 门店列表弹窗-->
-    <el-dialog title="门店列表" v-model="showStoreDialog" width="70%" append-to-body :close-on-click-modal="false" draggable destroy-on-close>
-      <SelectStore :eventId="props.eventId" :handleType="props.handleType" :filterIds="storeList" ref="selectStoreRef"></SelectStore>
+    <el-dialog title="门店列表" v-model="showStoreDialog" width="70%" append-to-body :close-on-click-modal="false"
+               draggable destroy-on-close>
+      <SelectStore :eventId="props.eventId" :handleType="props.handleType" :filterIds="storeList"
+                   ref="selectStoreRef"></SelectStore>
       <template #footer>
         <div class="dialog-footer">
           <el-button v-if="handleType!=='query'" type="primary" @click="onSuccessStoreDialog">保 存</el-button>
@@ -605,7 +608,9 @@ const getJobList = () => {
 const openProductsDialog = (index, row) => {
   if (row.eventRuleId) {
     itemRuleId.value = row.eventRuleId
-    productList.value = row.products.map(m=> {return m.eventProductId})
+    productList.value = row.products.map(m => {
+      return m.eventProductId
+    })
   } else {
     itemRuleId.value = null
   }
@@ -758,7 +763,7 @@ const saveFormAndAdd = async (index, type) => {
                   })
                 }
                 closeLoading()
-              }).catch(e=>closeLoading())
+              }).catch(e => closeLoading())
         } else {
           openLoading()
           changeEventRule(firstFormModels.value.formListData[index])
@@ -770,7 +775,7 @@ const saveFormAndAdd = async (index, type) => {
                   }
                 }
                 closeLoading()
-              }).catch(e=>closeLoading())
+              }).catch(e => closeLoading())
         }
       }
       break;
@@ -791,7 +796,7 @@ const saveFormAndAdd = async (index, type) => {
                   })
                 }
                 closeLoading()
-              }).catch(e=>closeLoading())
+              }).catch(e => closeLoading())
         } else {
           openLoading()
           changeEventRule(secondFormModels.value.formListData[index])
@@ -803,7 +808,7 @@ const saveFormAndAdd = async (index, type) => {
                   }
                 }
                 closeLoading()
-              }).catch(e=>closeLoading())
+              }).catch(e => closeLoading())
         }
       }
       break;
@@ -824,7 +829,7 @@ const saveFormAndAdd = async (index, type) => {
                   })
                 }
                 closeLoading()
-              }).catch(e=>closeLoading())
+              }).catch(e => closeLoading())
         } else {
           openLoading()
           changeEventRule(thirdFormModels.value.formListData[index])
@@ -836,7 +841,7 @@ const saveFormAndAdd = async (index, type) => {
                   }
                 }
                 closeLoading()
-              }).catch(e=>closeLoading())
+              }).catch(e => closeLoading())
         }
       }
       break;
@@ -979,8 +984,8 @@ const publishActivity = () => {
   // return publish(props.eventId)
 }
 
-const clearJobValue = (value)=>{
-  if(!value){
+const clearJobValue = (value) => {
+  if (!value) {
     value = 0
   }
 }

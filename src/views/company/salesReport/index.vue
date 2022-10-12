@@ -115,136 +115,6 @@
       </el-tabs>
 
     </div>
-    <!-- 自定义结构统计表   -->
-    <el-table
-        style="margin: 40px 0px"
-        :data="regionTableListTree"
-        :default-expand-all="true"
-        row-key="nodeId"
-        :tree-props="{ children: 'children' }"
-        height="720px"
-    >
-      <el-table-column prop="group" label="名称" show-tooltip-when-overflow></el-table-column>
-      <el-table-column prop="avgMoney" label="均值(元)" show-tooltip-when-overflow>
-        <template #default="{row}">
-          <span>{{ row.avgMoney.toFixed(2) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="maxMoney" label="峰值(元)" show-tooltip-when-overflow>
-        <template #default="{row}">
-          <span>{{ row.maxMoney.toFixed(2) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="maxTime" label="峰值日期" show-tooltip-when-overflow></el-table-column>
-      <el-table-column prop="proportion" label="总额占比" show-tooltip-when-overflow></el-table-column>
-      <el-table-column prop="yearOnYear" label="同比" show-tooltip-when-overflow>
-        <template #default="{row}">
-          <div>
-            {{ row.yearOnYear }}
-            <span v-if="row.yearOnYear && Number(row.yearOnYear.split('%')[0])>0">
-                      <el-icon size="18px" color="green"><Top/></el-icon>
-                  </span>
-            <span v-else-if="row.yearOnYear == null"></span>
-            <span v-else>
-                    <el-icon size="18px" color="red"><Bottom/></el-icon>
-                  </span>
-
-          </div>
-        </template>
-
-      </el-table-column>
-      <el-table-column prop="monthOnMonth" label="环比" show-tooltip-when-overflow>
-        <template #default="{row}">
-          <div>
-            {{ row.monthOnMonth }}
-            <span v-if="row.monthOnMonth && Number(row.monthOnMonth.split('%')[0])>0">
-                      <el-icon size="18px" color="green"><Top/></el-icon>
-                  </span>
-            <span v-else-if="row.monthOnMonth == null"></span>
-            <span v-else>
-                    <el-icon size="18px" color="red"><Bottom/></el-icon>
-                  </span>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="shelfSalesRatio" label="动销率" show-tooltip-when-overflow></el-table-column>
-      <el-table-column prop="sumMoney" label="销售额(元)" show-tooltip-when-overflow>
-        <template #default="{row}">
-          <span>{{ row.sumMoney.toFixed(2) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="count" label="品/单数" show-tooltip-when-overflow></el-table-column>
-    </el-table>
-    <!--    <div class="customizeTableList">-->
-    <!--      <div v-for="(item,index) in regionTableList" :key="index" class="allArea area">-->
-    <!--        <vxe-table-->
-    <!--            align="center"-->
-    <!--            height="600px"-->
-    <!--            border="none"-->
-    <!--            class="mytable-scrollbar"-->
-    <!--            :header-cell-style="{background: '#efefef'}"-->
-    <!--            :data="item.msgList">-->
-    <!--          <vxe-column type="seq" title="序号" width="60"></vxe-column>-->
-    <!--          <vxe-column field="group" show-header-overflow show-overflow show-footer-overflow title="名称"></vxe-column>-->
-    <!--          <vxe-column field="avgMoney" show-header-overflow show-overflow show-footer-overflow-->
-    <!--                      title="均值(元)">-->
-    <!--            <template #default="{row}">-->
-    <!--              <span>{{ row.avgMoney.toFixed(2) }}</span>-->
-    <!--            </template>-->
-    <!--          </vxe-column>-->
-    <!--          <vxe-column field="maxMoney" show-header-overflow show-overflow show-footer-overflow-->
-    <!--                      title="峰值(元)">-->
-    <!--            <template #default="{row}">-->
-    <!--              <span>{{ row.maxMoney.toFixed(2) }}</span>-->
-    <!--            </template>-->
-    <!--          </vxe-column>-->
-    <!--          <vxe-column field="maxTime" show-header-overflow show-overflow show-footer-overflow-->
-    <!--                      title="峰值日期"></vxe-column>-->
-    <!--          <vxe-column field="proportion" show-header-overflow show-overflow show-footer-overflow-->
-    <!--                      title="总额占比"></vxe-column>-->
-    <!--          <vxe-column field="yearOnYear" show-header-overflow show-overflow show-footer-overflow-->
-    <!--                      title="同比">-->
-    <!--            <template #default="{row}">-->
-    <!--              <div>-->
-    <!--                {{ row.yearOnYear }}-->
-    <!--                <span v-if="row.yearOnYear && Number(row.yearOnYear.split('%')[0])>0">-->
-    <!--                      <el-icon size="18px" color="green"><Top/></el-icon>-->
-    <!--                  </span>-->
-    <!--                <span v-else-if="row.yearOnYear == null"></span>-->
-    <!--                <span v-else>-->
-    <!--                    <el-icon size="18px" color="red"><Bottom/></el-icon>-->
-    <!--                  </span>-->
-
-    <!--              </div>-->
-    <!--            </template>-->
-    <!--          </vxe-column>-->
-    <!--          <vxe-column field="monthOnMonth" show-header-overflow show-overflow show-footer-overflow-->
-    <!--                      title="环比">-->
-    <!--            <template #default="{row}">-->
-    <!--              <div>-->
-    <!--                {{ row.monthOnMonth }}-->
-    <!--                <span v-if="row.monthOnMonth && Number(row.monthOnMonth.split('%')[0])>0">-->
-    <!--                      <el-icon size="18px" color="green"><Top/></el-icon>-->
-    <!--                  </span>-->
-    <!--                <span v-else-if="row.monthOnMonth == null"></span>-->
-    <!--                <span v-else>-->
-    <!--                    <el-icon size="18px" color="red"><Bottom/></el-icon>-->
-    <!--                  </span>-->
-    <!--              </div>-->
-    <!--            </template>-->
-    <!--          </vxe-column>-->
-    <!--          <vxe-column field="shelfSalesRatio" show-header-overflow show-overflow show-footer-overflow-->
-    <!--                      title="动销率"></vxe-column>-->
-    <!--          <vxe-column field="sumMoney" title="销售额(元)">-->
-    <!--            <template #default="{row}">-->
-    <!--              <span>{{ row.sumMoney.toFixed(2) }}</span>-->
-    <!--            </template>-->
-    <!--          </vxe-column>-->
-    <!--          <vxe-column field="count" show-header-overflow show-overflow show-footer-overflow-->
-    <!--                      title="品/单数"></vxe-column>-->
-    <!--        </vxe-table>-->
-    <!--      </div>-->
-    <!--    </div>-->
 
     <!-- 门店，单品，品牌统计表-->
     <div class="areaStatistical">
@@ -354,6 +224,74 @@
             </pagevxeContent>
           </div>
         </el-tab-pane>
+        <el-tab-pane label="其他" name="seven">
+          <!-- 自定义结构统计表   -->
+          <div class="tableList">
+            <el-table
+                v-loading="treeLoading"
+                element-loading-text="加载中..."
+                :data="regionTableListTree"
+                :default-expand-all="false"
+                row-key="nodeId"
+                style="width: 100%;height: 100%"
+                :tree-props="{ children: 'children' }"
+                :cell-style="{'text-align':'center'}"
+                :header-cell-style="{'text-align':'center',backgroundColor: '#efefef !important',}"
+            >
+              <el-table-column type="index" label="序号" width="50"/>
+              <el-table-column prop="group" label="名称" show-tooltip-when-overflow></el-table-column>
+              <el-table-column prop="avgMoney" label="均值(元)" show-tooltip-when-overflow>
+                <template #default="{row}">
+                  <span>{{ row.avgMoney.toFixed(2) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="maxMoney" label="峰值(元)" show-tooltip-when-overflow>
+                <template #default="{row}">
+                  <span>{{ row.maxMoney.toFixed(2) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="maxTime" label="峰值日期" show-tooltip-when-overflow></el-table-column>
+              <el-table-column prop="proportion" label="总额占比" show-tooltip-when-overflow></el-table-column>
+              <el-table-column prop="yearOnYear" label="同比" show-tooltip-when-overflow>
+                <template #default="{row}">
+                  <div>
+                    {{ row.yearOnYear }}
+                    <span v-if="row.yearOnYear && Number(row.yearOnYear.split('%')[0])>0">
+                      <el-icon size="18px" color="green"><Top/></el-icon>
+                  </span>
+                    <span v-else-if="row.yearOnYear == null"></span>
+                    <span v-else>
+                    <el-icon size="18px" color="red"><Bottom/></el-icon>
+                  </span>
+
+                  </div>
+                </template>
+
+              </el-table-column>
+              <el-table-column prop="monthOnMonth" label="环比" show-tooltip-when-overflow>
+                <template #default="{row}">
+                  <div>
+                    {{ row.monthOnMonth }}
+                    <span v-if="row.monthOnMonth && Number(row.monthOnMonth.split('%')[0])>0">
+                      <el-icon size="18px" color="green"><Top/></el-icon>
+                  </span>
+                    <span v-else-if="row.monthOnMonth == null"></span>
+                    <span v-else>
+                    <el-icon size="18px" color="red"><Bottom/></el-icon>
+                  </span>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="shelfSalesRatio" label="动销率" show-tooltip-when-overflow></el-table-column>
+              <el-table-column prop="sumMoney" label="销售额(元)" show-tooltip-when-overflow>
+                <template #default="{row}">
+                  <span>{{ row.sumMoney.toFixed(2) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="count" label="品/单数" show-tooltip-when-overflow></el-table-column>
+            </el-table>
+          </div>
+        </el-tab-pane>
       </el-tabs>
     </div>
 
@@ -387,6 +325,8 @@ const {proxy} = getCurrentInstance();
 let regionTableList = ref([])
 /**自定义列表数据树形结构*/
 let regionTableListTree = ref([])
+/**自定义树形结构loading*/
+let treeLoading = ref(false)
 let saleStore = useSalesReport()
 /**查询参数*/
 const data = reactive({
@@ -1249,6 +1189,9 @@ const listTabChange = (name = 'fourth') => {
     case "six":
       getListInfo(name)
       break;
+    case 'seven':
+      getRegionTableList()
+      break;
   }
 
 }
@@ -1559,17 +1502,16 @@ const getRegionTableList = () => {
       endTime: queryParams.value.betweenDates[1]
     }
   }
-  salesLoading.value = true
+  treeLoading.value = true
   queryParams.value.nodeId = Array.from(new Set(queryParams.value.nodeId.flat()));
   getRegionMulti({...cloneFunction(queryParams.value), ...timeObject}).then(res => {
     if (res.code == 200) {
       regionTableList.value = res.data
       regionTableListTree.value = formatToTree(res.data)
-      salesLoading.value = false
+      treeLoading.value = false
     }
   }, rej => {
-    salesLoading.value = false
-
+    treeLoading.value = false
   })
 }
 /**自定义结构当中的数据格式化为树形结构*/
@@ -1577,7 +1519,6 @@ const formatToTree = (data) => {
   let allData = data.map(item => {
     return item.msgList
   }).flat()
-  console.log(proxy.handleTree(allData, "nodeId", "parentNodeId"))
   return proxy.handleTree(allData, "nodeId", "parentNodeId");
 }
 /**查询*/
@@ -1586,7 +1527,6 @@ const handleQuery = () => {
   areaName.value = 'fourth'
   innitDataInfo()
   listTabChange()
-  getRegionTableList()
 }
 /**重置*/
 const resetQuery = () => {
@@ -1605,7 +1545,6 @@ const innit = function () {
   innitSelectOption()
   innitDataInfo()
   listTabChange()
-  getRegionTableList()
 }
 innit()
 </script>

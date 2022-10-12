@@ -7,7 +7,7 @@
       <el-step title="完成发布"/>
     </el-steps>
 
-    <ActivityStepFirst ref="activityStepFirstRef" :handleType="handleType" :eventId="eventId"
+    <ActivityStepFirst ref="activityStepFirstRef" :handleType="handleType" :eventId="eventId" :canEdit='canEdit'
                        v-show="step === 1"></ActivityStepFirst>
     <ActivityStepSecond v-loading="secondLoading" ref="activityStepSecondRef"
                         v-show="eventId && step === 2" :handleType="handleType"
@@ -25,7 +25,7 @@
       </div>
     </div>
     <div style="text-align: center;margin-top: 5%">
-      <el-button @click="step--" v-show="step > 1&&step<3">上一步</el-button>
+      <el-button @click="decrementStep" v-show="step > 1&&step<3">上一步</el-button>
       <el-button @click="handleBack" v-show="step===1">返回</el-button>
       <el-button type="primary" @click="handleNext" v-show="step<3" :loading="loadingBtn">下一步</el-button>
     </div>
@@ -39,7 +39,8 @@ export default {
 <script setup>
 import ActivityStepFirst from './components/ActivityStepFirst'
 import ActivityStepSecond from './components/ActivityStepSecond'
-import {queryEventRule, publish} from '@/api/activity/eventInfo'
+import {queryEventRule, publish, getEventInfoByid} from '@/api/activity/eventInfo'
+import {nextTick} from "vue";
 
 const route = useRoute();
 const {proxy} = getCurrentInstance();
@@ -53,6 +54,18 @@ let secondLoading = ref(false)
 let auditLoadiang = ref(false)
 const getImageUrl = () => {
   return new URL(`../../assets/images/complete.png`, import.meta.url).href
+}
+let canEdit = ref(false)
+const decrementStep = () => {
+  step.value--
+  if (step.value === 1) {
+    //  获取任务基本信息
+    getEventInfoByid(eventId.value).then(res => {
+      if (res.code == 200) {
+        canEdit.value = res.data.canEdit
+      }
+    })
+  }
 }
 const handleNext = async () => {
   if (step.value === 1) {
@@ -70,13 +83,16 @@ const handleNext = async () => {
           step.value++
           activityStepFirstRef.value.closeLoading()
           proxy.$modal.msgSuccess("保存成功");
-          if (handleType.value === 'query' || handleType.value === 'edit') {
-            activityStepSecondRef.value.loadEventRule()
+          // if (handleType.value === 'query' || handleType.value === 'edit') {
+          if (handleType.value) {
+            nextTick(() => {
+              activityStepSecondRef.value.loadEventRule()
+            })
           }
         } else {
           loadingBtn.value = false
         }
-      }).catch(err =>{
+      }).catch(err => {
         loadingBtn.value = false
       })
     }
@@ -85,7 +101,6 @@ const handleNext = async () => {
     if (handleType.value === 'query') {
       return
     }
-    //判断当前任务是否已经提交过审批
     queryEventRule({eventId: eventId.value})
         .then(res => {
           if (res.code !== 200 || res.data.list.length === 0) {
