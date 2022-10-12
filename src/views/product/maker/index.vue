@@ -5,16 +5,16 @@
     </div>
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="产品编号" prop="code">
-        <el-input v-model="queryParams.code" placeholder="请输入产品编号" clearable @keyup.enter="handleQuery"/>
+        <el-input v-model="queryParams.code" placeholder="请输入产品编号" clearable @keyup.enter="handleQuery" />
       </el-form-item>
       <el-form-item label="产品简称" prop="name">
-        <el-input v-model="queryParams.name" placeholder="请输入产品简称" clearable @keyup.enter="handleQuery"/>
+        <el-input v-model="queryParams.name" placeholder="请输入产品简称" clearable @keyup.enter="handleQuery" />
       </el-form-item>
       <el-form-item label="产品类别" prop="productType">
-        <el-input v-model="queryParams.productType" placeholder="请输入产品类别" clearable @keyup.enter="handleQuery"/>
+        <el-input v-model="queryParams.productType" placeholder="请输入产品类别" clearable @keyup.enter="handleQuery" />
       </el-form-item>
       <el-form-item label="品牌" prop="brands">
-        <el-input v-model="queryParams.brands" placeholder="请输入产品品牌" clearable @keyup.enter="handleQuery"/>
+        <el-input v-model="queryParams.brands" placeholder="请输入产品品牌" clearable @keyup.enter="handleQuery" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -38,17 +38,17 @@
     </div>
 
     <el-table v-loading="loading" :data="productList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="69码" prop="barCode" show-tooltip-when-overflow/>
-      <el-table-column label="产品ID" prop="productId" show-tooltip-when-overflow width="200"/>
-      <el-table-column label="产品编号" prop="code" show-tooltip-when-overflow/>
-      <el-table-column label="产品简称" prop="name" show-tooltip-when-overflow/>
-      <el-table-column label="产品全称" prop="fullname" show-tooltip-when-overflow/>
-      <el-table-column label="产品类别" prop="productType" show-tooltip-when-overflow/>
-      <el-table-column label="产品等级" prop="level" show-tooltip-when-overflow/>
-      <el-table-column label="品牌" prop="brand" show-tooltip-when-overflow/>
-      <el-table-column label="规格" prop="specification" show-tooltip-when-overflow/>
-      <el-table-column label="最小计量单位" prop="unit" show-tooltip-when-overflow/>
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="69码" prop="barCode" show-tooltip-when-overflow />
+      <el-table-column label="产品ID" prop="productId" show-tooltip-when-overflow width="200" />
+      <el-table-column label="产品编号" prop="code" show-tooltip-when-overflow />
+      <el-table-column label="产品简称" prop="name" show-tooltip-when-overflow />
+      <el-table-column label="产品全称" prop="fullname" show-tooltip-when-overflow />
+      <el-table-column label="产品类别" prop="productType" show-tooltip-when-overflow />
+      <el-table-column label="产品等级" prop="level" show-tooltip-when-overflow />
+      <el-table-column label="品牌" prop="brand" show-tooltip-when-overflow />
+      <el-table-column label="规格" prop="specification" show-tooltip-when-overflow />
+      <el-table-column label="最小计量单位" prop="unit" show-tooltip-when-overflow  min-width="110px" />
       <!--      <el-table-column label="操作" class-name="small-padding fixed-width">-->
       <!--        <template #default="scope">-->
       <!--          <el-button-->
@@ -81,40 +81,40 @@
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="productRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="产品ID" prop="productMakerid">
-          <el-input v-model="form.productMakerid" placeholder="请输入商家产品ID"/>
+          <el-input v-model="form.productMakerid" placeholder="请输入商家产品ID" />
         </el-form-item>
         <el-form-item label="产品ID" prop="productid">
-          <el-input v-model="form.productid" placeholder="请输入产品ID"/>
+          <el-input v-model="form.productid" placeholder="请输入产品ID" />
         </el-form-item>
         <el-form-item label="公司ID" prop="companyid">
-          <el-input v-model="form.companyid" placeholder="请输入公司ID"/>
+          <el-input v-model="form.companyid" placeholder="请输入公司ID" />
         </el-form-item>
         <el-form-item label="连锁门店ID" prop="storeid">
-          <el-input v-model="form.storeid" placeholder="请输入连锁门店ID"/>
+          <el-input v-model="form.storeid" placeholder="请输入连锁门店ID" />
         </el-form-item>
         <el-form-item label="自定义标签" prop="tag">
-          <el-input v-model="form.tag" type="textarea" placeholder="请输入内容"/>
+          <el-input v-model="form.tag" type="textarea" placeholder="请输入内容" />
         </el-form-item>
         <el-form-item label="生产许可证" prop="licenseProduction">
-          <el-input v-model="form.licenseProduction" placeholder="请输入生产许可证"/>
+          <el-input v-model="form.licenseProduction" placeholder="请输入生产许可证" />
         </el-form-item>
         <el-form-item label="注册证" prop="licenseRegister">
-          <el-input v-model="form.licenseRegister" placeholder="请输入注册证"/>
+          <el-input v-model="form.licenseRegister" placeholder="请输入注册证" />
         </el-form-item>
         <el-form-item label="外包装尺寸" prop="packageSize">
-          <el-input v-model="form.packageSize" placeholder="请输入外包装尺寸"/>
+          <el-input v-model="form.packageSize" placeholder="请输入外包装尺寸" />
         </el-form-item>
         <el-form-item label="税率" prop="taxRate">
-          <el-input v-model="form.taxRate" placeholder="请输入税率"/>
+          <el-input v-model="form.taxRate" placeholder="请输入税率" />
         </el-form-item>
         <el-form-item label="序号" prop="sort">
-          <el-input v-model="form.sort" placeholder="请输入序号"/>
+          <el-input v-model="form.sort" placeholder="请输入序号" />
         </el-form-item>
         <el-form-item label="创建人" prop="createUserid">
-          <el-input v-model="form.createUserid" placeholder="请输入创建人"/>
+          <el-input v-model="form.createUserid" placeholder="请输入创建人" />
         </el-form-item>
         <el-form-item label="修改人" prop="updateUserid">
-          <el-input v-model="form.updateUserid" placeholder="请输入修改人"/>
+          <el-input v-model="form.updateUserid" placeholder="请输入修改人" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -139,13 +139,13 @@
           drag
       >
         <el-icon class="el-icon--upload">
-          <upload-filled/>
+          <upload-filled />
         </el-icon>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         <template #tip>
           <div class="el-upload__tip text-center">
             <div class="el-upload__tip">
-              <el-checkbox v-model="upload.updateSupport"/>
+              <el-checkbox v-model="upload.updateSupport" />
               是否更新已经存在的用户数据
             </div>
             <span>仅允许导入xls、xlsx格式文件。</span>

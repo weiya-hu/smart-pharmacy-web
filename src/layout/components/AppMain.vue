@@ -1,5 +1,4 @@
 <template>
-<!--  <el-scrollbar height="400px">-->
   <section class="app-main">
     <router-view v-slot="{ Component, route }">
       <transition name="fade-transform" mode="out-in">
@@ -9,12 +8,10 @@
       </transition>
     </router-view>
   </section>
-<!--  </el-scrollbar>-->
 </template>
 
 <script setup>
 import useTagsViewStore from '@/store/modules/tagsView'
-import {watch} from "vue";
 
 const tagsViewStore = useTagsViewStore()
 const route = useRoute()
