@@ -608,12 +608,12 @@ const getJobList = () => {
 const openProductsDialog = (index, row) => {
   if (row.eventRuleId) {
     itemRuleId.value = row.eventRuleId
-    productList.value = row.products.map(m => {
-      return m.eventProductId
-    })
   } else {
     itemRuleId.value = null
   }
+  productList.value = row.products.map(m => {
+    return m.eventProductId
+  })
   productPackageId.value = index
   showProductsDialog.value = true
 }

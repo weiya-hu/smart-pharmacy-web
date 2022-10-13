@@ -79,7 +79,7 @@ let queryParam = ref({
   eventId: '',
 })
 const loading = ref(false)
-const productList = ref([])
+const productList = ref(props.productIds)
 const total = ref(0)
 const queryForm = ref()
 const productResultList = ref([])
