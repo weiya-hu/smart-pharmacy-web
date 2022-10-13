@@ -96,7 +96,9 @@ const handleNext = async () => {
         loadingBtn.value = false
       })
     }
-    activityStepSecondRef.value.getJobList()
+    if (eventId.value !== undefined) {
+      activityStepSecondRef.value.getJobList()
+    }
   } else if (step.value === 2) {
     if (handleType.value === 'query') {
       return
