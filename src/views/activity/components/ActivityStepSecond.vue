@@ -31,7 +31,8 @@
               </el-form-item>
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             :rules="formRule.timeRangeUnit">
-                <el-input :disabled="handleType=='query'" type="number" v-model="firstFormModel.timeRange"
+                <el-input :disabled="handleType=='query'" type="number" oninput="value=value.replace(/[^\d]/g,'')"
+                          v-model="firstFormModel.timeRange"
                           class="input-with-select" style="width: 220px">
                   <template #append>
                     <el-select v-model="firstFormModel.timeRangeUnit" style="width: 100px">
@@ -158,6 +159,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
+                            oninput="value=value.replace(/[^\d]/g,'')"
                             :rules="formRule.timeRangeUnit">
                 <el-input :disabled="handleType=='query'" type="number" v-model="secondFormModel.timeRange"
                           class="input-with-select" style="width: 220px;">
@@ -281,6 +283,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
+                            oninput="value=value.replace(/[^\d]/g,'')"
                             :rules="formRule.timeRangeUnit">
                 <el-input :disabled="handleType=='query'" type="number" v-model="thirdFormModel.timeRange"
                           class="input-with-select" style="width: 220px;">

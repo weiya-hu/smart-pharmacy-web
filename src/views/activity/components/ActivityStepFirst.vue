@@ -1,6 +1,6 @@
 <template>
   <div class="app-container" v-loading="firstLoading" element-loading-text="加载中...">
-    <el-form ref="activityRef" :model="form" :rules="rules" label-width="110px">
+    <el-form ref="activityRef" :model="form" :rules="rules" label-width="130px">
       <!--      <el-form-item class="label" label="任务简称" prop="name">-->
       <!--      <el-form-item class="label" label="任务简称">-->
       <!--        <el-input style="width: 400px;" v-model="form.name" placeholder="请输入任务简称" :disabled="formDisabled"/>-->
@@ -11,21 +11,28 @@
       <el-form-item class="label" label="活动名称" prop="name">
         <el-input style="width: 400px;" v-model="form.name" placeholder="请输入任务名称" :disabled="formDisabled"/>
       </el-form-item>
-      <el-form-item class="label" label="活动奖励预算" prop="moneyRange">
-        <el-input style="width: 400px;" type="number"
+      <el-form-item class="label" label="活动奖励预算(元)" prop="moneyRange">
+        <el-input style="width: 400px;"
                   oninput="value=value.replace(/[^0-9.]/g,'')"
                   v-model.number="form.moneyRange" placeholder="请输入任务奖励预算"
+                  clearable
+                  min="0"
                   :disabled="formDisabled"/>
       </el-form-item>
       <el-form-item class="label" label="开始时间" prop="beginTime">
-        <el-date-picker style="width: 400px;" v-model="form.beginTime" type="date" placeholder="开始时间"
+        <el-date-picker @change="(time)=>{dataPicker('begin',time)}"
+                        style="width: 400px;" v-model="form.beginTime" type="datetime" placeholder="开始时间"
                         value-format="YYYY-MM-DD HH:mm:ss"
+                        :default-time="new Date(2022, 9, 10, 0, 0,0)"
                         :disabled="formDisabled"/>
       </el-form-item>
       <el-form-item class="label" label="结束时间" prop="endTime">
-        <el-date-picker style="width: 400px;" v-model="form.endTime" type="date" placeholder="结束时间"
-                        value-format="YYYY-MM-DD HH:mm:ss"
-                        :disabled="formDisabled"/>
+        <el-date-picker
+            @change="(time)=>{dataPicker('end',time)}"
+            style="width: 400px;" v-model="form.endTime" type="datetime" placeholder="结束时间"
+            value-format="YYYY-MM-DD HH:mm:ss"
+            :default-time="new Date(2022, 9, 10, 23, 59,59)"
+            :disabled="formDisabled"/>
       </el-form-item>
       <el-form-item class="label" label="活动范围" prop="ruleScupes">
         <el-button @click="showRuleScupes = !showRuleScupes" link type="primary">
@@ -65,7 +72,6 @@
             placeholder="请输入任务描述"
             style="width: 400px"/>
       </el-form-item>
-
       <!--      <el-form-item label="任务截止类型" prop="endType">-->
       <!--        <el-select v-model="form.endType" clearablestyle="width: 100%">-->
       <!--          <el-option v-for="item in activity_type" :value="item.value" :key="item.value" :label="item.label">-->
@@ -367,7 +373,97 @@ const loadGoodsFilterOption = () => {
     specificationsOption.value = specifications
   })
 }
+/**时间日期选择*/
+const dataPicker = (tag, time) => {
+  if (!time) {
+    return
+  }
+  switch (tag) {
+    case "begin":
+      verifiyBeginTime(time)
+      break
+    case "end":
+      verifiyEndTime(time)
+      break
+  }
+}
+/**校验开始日期*/
+const verifiyBeginTime = (time) => {
+//当结束日期为空的时候开始日期为任意日期
+//当结束日期不为空时开始日期必须小于结束日期
+  if (!form.value.endTime) {
+    form.value.beginTime = time
+  } else if (form.value.endTime) {
+    if (compareDate(form.value.beginTime, form.value.endTime)) {
+      form.value.beginTime = time
+    } else {
+      form.value.beginTime = null
+      proxy.$modal.msgError("开始时间必须小于结束时间")
+    }
+  }
+}
 
+/**校验结束日期*/
+const verifiyEndTime = (time) => {
+//  当开始日期不为空时结束日期必须大于开始日期并且大于当前日期
+  //  当开始日期为空时结束日期必须大于当前日期
+  if (form.value.beginTime) {
+    if (compareDate(form.value.beginTime, form.value.endTime)) {
+      //    获取当前时间
+      let nowDate = getCurrentTime()
+      if (compareDate(nowDate, time)) {
+        form.value.endTime = time
+      } else {
+        form.value.endTime = null
+        proxy.$modal.msgError("结束时间必须大于当前时间")
+      }
+    } else {
+      form.value.endTime = null
+      proxy.$modal.msgError("结束时间必须大于开始时间")
+    }
+  } else {
+    //    获取当前时间
+    let nowDate = getCurrentTime()
+    if (compareDate(nowDate, time)) {
+      form.value.endTime = time
+    } else {
+      form.value.endTime = null
+      proxy.$modal.msgError("结束时间必须大于当前时间")
+    }
+  }
+}
+/**两个时间比较大小*/
+const compareDate = (dateTime1, dateTime2) => {
+  let formatDate1 = new Date(dateTime1)
+  let formatDate2 = new Date(dateTime2)
+  if (formatDate1 > formatDate2) {
+    return false
+  } else {
+    return true
+  }
+}
+/**获取当前日期*/
+const getCurrentTime = () => {
+  let date = new Date();//当前时间
+  let year = date.getFullYear() //返回指定日期的年份
+  let month = repair(date.getMonth() + 1);//月
+  let day = repair(date.getDate());//日
+  let hour = repair(date.getHours());//时
+  let minute = repair(date.getMinutes());//分
+  let second = repair(date.getSeconds());//秒
+  //当前时间
+  let curTime = year + "-" + month + "-" + day
+      + " " + hour + ":" + minute + ":" + second;
+  return curTime;
+}
+/**补充0*/
+const repair = (i) => {
+  if (i >= 0 && i <= 9) {
+    return "0" + i;
+  } else {
+    return i;
+  }
+}
 // 范围选择确定
 const onSuccessRuleScupes = () => {
   form.value.productFilter = {
@@ -495,8 +591,6 @@ const props = defineProps({
   }
 })
 onLoad()
-
-
 </script>
 
 <style scoped lang="scss">
