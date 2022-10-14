@@ -542,7 +542,7 @@ function resetQuery() {
 /** 分页 */
 const pageItem = computed(() => {
   let start = currentPage.value + 1, end = Math.ceil(totalCount.value / queryParams.value.pageSize)
-  if (end < 5) return end;
+  if (end < 10) return end;
   if (start <= 5) {
     return [1, 2, 3, 4, 5, 6, '', end]
   } else if (start > end - 5) {
