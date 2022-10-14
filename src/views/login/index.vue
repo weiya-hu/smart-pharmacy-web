@@ -2,7 +2,10 @@
   <div class="login" v-loading="loading"  element-loading-text="登录中···">
     <div class="login-box">
       <div class="login-left">
-        <img src="../../assets/images/login_left.png" alt=""/>
+<!--        <img src="../../assets/images/login_left.png" alt=""/>-->
+        <video width="520" height="435" playsinline="" autoplay="" muted="" loop="">
+          <source src="../../assets/video/login_left.mp4" type="video/mp4">
+        </video>
       </div>
       <div class="login-right">
         <el-tabs v-model="activeName" class="demo-tabs">
@@ -67,7 +70,6 @@ function getWechatLogin() {
       if (res.code === 200) {
         loading.value = false
         setToken(res.data.access_token)
-        console.log('res',res)
         router.push({path: "/index"});
       } else {
         loading.value = false
@@ -135,7 +137,7 @@ const wecomControlLogin = () => {
 
 const login = async () => {
   if (process.env.NODE_ENV == "development") {
-    setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcyMTg2MDU1MTk1MDEzMTIwLCJ1c2VyX2tleSI6ImQ1M2Q0ZDRiODJiYTRhYjBhYzc2NDI0MmJmM2JiYWI5IiwidXNlcm5hbWUiOiLllJDmsLjkuYUifQ.wQQNLmUPuEpqapyxC68PDJwbjNPzf4vtrpXJyZWx6q097d9csndDv5ER05Qbe7WMU5xKNYJOH7MNdRHiMniMmQ')
+    setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTc1NjkzNjY3MTY5NTEzNDcyLCJ1c2VyX2tleSI6IjY3MzljMjYzYWY2OTQxYjdiNGUwNzM1NzhlMGM2YTgyIiwidXNlcm5hbWUiOiLnjovnvo7ojJwifQ.-6CFBuPlPybbNnnicFhBXyEUm3-xLhlpI6dfLvPFKdFpszIU-Gf7Z_M-ZkQXh_6GpTTIDJgrA38IH3SoQ6qgCw')
     //开发环境
   } else if (process.env.NODE_ENV == "production") {
     //生产环境
