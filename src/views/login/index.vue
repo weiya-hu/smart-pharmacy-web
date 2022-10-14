@@ -185,15 +185,18 @@ login()
     justify-content: space-between;
 
     .login-left {
-      width: 520px;
-      height: 435px;
+      //width: 520px;
+      //height: 435px;
+      width: auto;
+      height: auto;
     }
 
     .login-right {
       width: 400px;
       margin: 0 auto;
       overflow: hidden;
-      padding: 0 20px 0 40px;
+      //padding: 0 20px 0 40px;
+      padding: 35px 40px 0 0;
 
       :deep(.el-tabs__nav) {
         transform: translateX(52px) !important;
