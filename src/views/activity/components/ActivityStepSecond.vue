@@ -132,7 +132,7 @@
         <el-empty description="暂无数据" v-if="firstFormModels.formListData.length == 0"/>
       </el-tab-pane>
       <el-tab-pane name="second" label="品牌">
-        <el-form ref="secondForm" v-model="secondFormModels" :rules="formRule" inline label-width="80px">
+        <el-form ref="secondForm" v-model="secondFormModels" :rules="formRule" inline label-width="95px">
           <div class="form-div" v-for="(secondFormModel,index) in secondFormModels.formListData" :key="index">
             <div class="rulerStatus">
               <div v-if="secondFormModel.eventRuleId" class="save">已保存</div>
@@ -227,7 +227,7 @@
                   </template>
                 </el-input>
               </el-form-item>
-              <el-form-item class="label" label="奖励金额">
+              <el-form-item class="label" :label="secondFormModel.rewardType == 1 ? '奖励金额(元)' : '金额比例(%)'">
                 <el-input oninput="value=value.replace(/[^0-9.]/g,'')" :disabled="handleType=='query'"
                           @change="()=>{if(!item.price) secondFormModel.jobs[index].price=0}"
                           v-model="item.price" class="input-with-select">
@@ -254,7 +254,7 @@
         <el-empty description="暂无数据" v-if="secondFormModels.formListData.length == 0"/>
       </el-tab-pane>
       <el-tab-pane name="third" label="门店">
-        <el-form ref="thirdForm" v-model="thirdFormModels" :rules="formRule" inline label-width="80px">
+        <el-form ref="thirdForm" v-model="thirdFormModels" :rules="formRule" inline label-width="95px">
           <div class="form-div" v-for="(thirdFormModel,index) in thirdFormModels.formListData" :key="index">
             <div class="rulerStatus">
               <div v-if="thirdFormModel.eventRuleId" class="save">已保存</div>
@@ -354,7 +354,7 @@
                   </template>
                 </el-input>
               </el-form-item>
-              <el-form-item class="label" label="奖励金额">
+              <el-form-item class="label" :label="thirdFormModel.rewardType == 1 ? '奖励金额(元)' : '金额比例(%)'">
                 <el-input oninput="value=value.replace(/[^0-9.]/g,'')" :disabled="handleType=='query'"
                           @change="()=>{if(!item.price) thirdFormModel.jobs[index].price=0}"
                           v-model="item.price" class="input-with-select">
@@ -383,7 +383,8 @@
       </el-tab-pane>
     </el-tabs>
     <!-- 商品列表弹窗-->
-    <el-dialog title="商品列表" v-model="showProductsDialog" width="70%" append-to-body :close-on-click-modal="false"
+    <el-dialog title="商品列表" v-model="showProductsDialog" width="70%" top="6vh" append-to-body
+               :close-on-click-modal="false"
                draggable destroy-on-close>
       <SelectProducts :eventRuleId="itemRuleId" :eventId="props.eventId" :packageId="productPackageId"
                       :productIds="productList" :handleType="props.handleType"
@@ -397,7 +398,7 @@
       </template>
     </el-dialog>
     <!-- 门店列表弹窗-->
-    <el-dialog title="门店列表" v-model="showStoreDialog" width="70%" append-to-body :close-on-click-modal="false"
+    <el-dialog title="门店列表" v-model="showStoreDialog" width="70%" top="8vh" append-to-body :close-on-click-modal="false"
                draggable destroy-on-close>
       <SelectStore :eventId="props.eventId" :handleType="props.handleType" :filterIds="storeList"
                    ref="selectStoreRef"></SelectStore>

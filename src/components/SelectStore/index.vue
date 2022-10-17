@@ -10,10 +10,11 @@
       </el-form-item>
     </el-form>
 
-    <el-table v-loading="loading" :data="storeList" height="250">
+    <el-table v-loading="loading" :data="storeList" height="200">
       <el-table-column label="门店编号" prop="storeId"/>
       <el-table-column label="门店名称" prop="name" show-overflow-tooltip/>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="props.handleType !== 'query'">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width"
+                       v-if="props.handleType !== 'query'">
         <template #default="scope">
           <el-button type="text" @click="handleAdd(scope.row)">添加</el-button>
         </template>
@@ -33,12 +34,13 @@
     <div class="handler" v-if="props.handleType !== 'query'">
       <el-button @click="cleanAllStore" link type="primary">清空已选</el-button>
     </div>
-    <el-table v-loading="loading" :data="storeResultList" height="250">
+    <el-table v-loading="loading" :data="storeResultList" height="200">
       <el-table-column label="门店编号" prop="storeId"/>
       <el-table-column label="门店名称" prop="name" show-overflow-tooltip/>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="props.handleType !== 'query'">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width"
+                       v-if="props.handleType !== 'query'">
         <template #default="scope">
-          <el-button type="text"  @click="handleDelete(scope.row)">删除</el-button>
+          <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
