@@ -3,7 +3,7 @@
   <div class="app-container" v-loading="secondLoading" element-loading-text="请等待...">
     <el-tabs type="border-card" v-model="tabValue" @tab-change="changeTab">
       <el-tab-pane name="first" label="单品｜组合">
-        <el-form ref="firstForm" :model="firstFormModels" :rules="formRule" inline label-width="80px">
+        <el-form ref="firstForm" :model="firstFormModels" :rules="formRule" inline label-width="95px">
           <div class="form-div" v-for="(firstFormModel,index) in firstFormModels.formListData" :key="index">
             <div class="rulerStatus">
               <div v-if="firstFormModel.eventRuleId" class="save">已保存</div>
@@ -52,7 +52,7 @@
               </el-form-item>
               <el-form-item class="label" label="奖励方式" :prop="'formListData.' + index + '.rewardType'"
                             :rules="formRule.rewardType">
-                <el-select :disabled="handleType=='query'" v-model="firstFormModel.rewardType">
+                <el-select :disabled="handleType=='query'" v-model="firstFormModel.rewardType" @change="editas">
                   <el-option v-for="item in sop_reward_type" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
@@ -103,7 +103,7 @@
                   </template>
                 </el-input>
               </el-form-item>
-              <el-form-item class="label" label="奖励金额">
+              <el-form-item class="label" :label="firstFormModel.rewardType == 1 ? '奖励金额(元)' : '金额比例(%)'">
                 <el-input oninput="value=value.replace(/[^0-9.]/g,'')"
                           :disabled="handleType=='query'"
                           v-model="item.price"
@@ -427,7 +427,6 @@ import {
 } from '@/api/activity/eventInfo'
 import SelectProducts from '@/components/SelectProducts/index'
 import SelectStore from '@/components/SelectStore/index'
-import {nextTick} from "vue";
 import {cloneFunction} from "@/utils/globalFunction";
 
 const {proxy} = getCurrentInstance();
@@ -637,7 +636,7 @@ const onSuccessProductsDialog = (e) => {
 }
 const onCancelProductsDialog = () => {
   showProductsDialog.value = false
-  productList.value = []
+  // productList.value = []
 }
 
 //Tab 选择事件
@@ -893,7 +892,7 @@ const onSuccessStoreDialog = () => {
 //门店弹窗关闭
 const onCancelStoreDialog = () => {
   showStoreDialog.value = false
-  storeList.value = []
+  // storeList.value = []
 }
 
 const props = defineProps({

@@ -91,8 +91,11 @@ const getList = () => {
 
 //清空全部门店
 const cleanAllStore = () => {
+  storeResultList.value.forEach(item => {
+    storeList.value.push(item)
+  })
   storeResultList.value = []
-  
+
 }
 
 

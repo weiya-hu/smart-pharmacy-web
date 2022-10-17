@@ -51,7 +51,7 @@
       <el-table-column label="规格" prop="specification" show-overflow-tooltip/>
       <el-table-column label="数量" align="center">
         <template #default="scope">
-          <el-input type="number" v-model.number="scope.row.account"></el-input>
+          <el-input type="number" v-model.number="scope.row.account" min="1"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="props.handleType !== 'query'">
@@ -102,13 +102,10 @@ const restQueryParam = () => {
 }
 //清空已选择商品
 const clearSelected = () => {
-  productResultList.value = []
-  queryProductList(queryParam.value).then(res => {
-    if (res.code === 200) {
-      productList.value = res.data.list
-      total.value = Number(res.data.total)
-    }
+  productResultList.value.forEach(item => {
+    productList.value.push(item)
   })
+  productResultList.value = []
 }
 //搜索产品
 const getList = () => {
