@@ -322,7 +322,7 @@ let customizeUpload = (fileObj) => {
     } else {
       isShowProgress.value = false
       customizeList.value = []
-      proxy.$modal.msgError("上传文件失败")
+      proxy.$modal.msgError(res.msg)
       uploadData.open = false
       uploadData.isUploading = false
     }
