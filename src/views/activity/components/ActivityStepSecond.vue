@@ -31,7 +31,7 @@
               </el-form-item>
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             :rules="formRule.timeRangeUnit">
-                <el-input :disabled="handleType=='query'" type="number" oninput="value=value.replace(/[^\d]/g,'')"
+                <el-input :disabled="handleType=='query'" oninput="value=value.replace(/[^\d]/g,'')"
                           v-model="firstFormModel.timeRange"
                           class="input-with-select" style="width: 220px">
                   <template #append>
@@ -73,8 +73,7 @@
                             class="label" label="奖励阈值" :rules="formRule.targetRange">
                 <el-input
                     :disabled="handleType=='query'"
-                    type="number"
-                    oninput="value=value.replace(/[^\d]/g,'')"
+                    oninput="value=value.replace(/[^0-9.]/g,'')"
                     v-model.number="item.targetRange"
                     class="input-with-select"
                     style="width: 220px"
@@ -164,7 +163,7 @@
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             oninput="value=value.replace(/[^\d]/g,'')"
                             :rules="formRule.timeRangeUnit">
-                <el-input :disabled="handleType=='query'" type="number" v-model="secondFormModel.timeRange"
+                <el-input :disabled="handleType=='query'" v-model="secondFormModel.timeRange"
                           class="input-with-select" style="width: 220px;">
                   <template #append>
                     <el-select v-model="secondFormModel.timeRangeUnit" style="width: 100px">
@@ -289,7 +288,7 @@
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             oninput="value=value.replace(/[^\d]/g,'')"
                             :rules="formRule.timeRangeUnit">
-                <el-input :disabled="handleType=='query'" type="number" v-model="thirdFormModel.timeRange"
+                <el-input :disabled="handleType=='query'" v-model="thirdFormModel.timeRange"
                           class="input-with-select" style="width: 220px;">
                   <template #append>
                     <el-select v-model="thirdFormModel.timeRangeUnit" style="width: 100px;">
