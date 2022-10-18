@@ -25,46 +25,6 @@
     <div class="btn-back">
       <el-row :gutter="10" class="mb8">
         <el-col :span="1.5">
-          <!--        <el-button-->
-          <!--            type="primary"-->
-          <!--            plain-->
-          <!--            icon="Plus"-->
-          <!--            @click="handleAdd"-->
-          <!--            v-hasPermi="['wecom:product:add']"-->
-          <!--        >新增-->
-          <!--        </el-button>-->
-          <!--      </el-col>-->
-          <!--      <el-col :span="1.5">-->
-          <!--        <el-button-->
-          <!--            type="success"-->
-          <!--            plain-->
-          <!--            icon="Edit"-->
-          <!--            :disabled="single"-->
-          <!--            @click="handleUpdate"-->
-          <!--            v-hasPermi="['wecom:product:edit']"-->
-          <!--        >修改-->
-          <!--        </el-button>-->
-          <!--      </el-col>-->
-          <!--      <el-col :span="1.5">-->
-          <!--        <el-button-->
-          <!--            type="danger"-->
-          <!--            plain-->
-          <!--            icon="Delete"-->
-          <!--            :disabled="multiple"-->
-          <!--            @click="handleDelete"-->
-          <!--            v-hasPermi="['wecom:product:remove']"-->
-          <!--        >删除-->
-          <!--        </el-button>-->
-          <!--      </el-col>-->
-          <!--      <el-col :span="1.5">-->
-          <!--        <el-button-->
-          <!--            type="warning"-->
-          <!--            plain-->
-          <!--            icon="Download"-->
-          <!--            @click="handleExport"-->
-          <!--            v-hasPermi="['wecom:product:export']"-->
-          <!--        >导出-->
-          <!--        </el-button>-->
           <el-button type="primary" icon="Plus" @click="handleAdd" plain>新增产品</el-button>
           <el-button
               type="info"
@@ -78,8 +38,9 @@
       </el-row>
     </div>
 
-    <el-table v-loading="loading" :data="productList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center"/>
+    <!--    <el-table v-loading="loading" :data="productList" @selection-change="handleSelectionChange">-->
+    <el-table v-loading="loading" :data="productList">
+      <!--      <el-table-column type="selection" width="55" align="center"/>-->
       <el-table-column label="69码" prop="barCode" show-tooltip-when-overflow/>
       <el-table-column label="产品ID" prop="productId" show-tooltip-when-overflow width="200"/>
       <el-table-column label="产品编号" prop="code" show-tooltip-when-overflow/>
@@ -123,7 +84,7 @@
     />
 
     <!-- 添加或修改连锁门店销售的所有产品的数据对话框 -->
-    <el-dialog :title="title" v-model="open" width="500px" append-to-body>
+    <el-dialog :title="title" v-model="open" width="500px" append-to-body :close-on-click-modal="false" draggable>
       <el-form ref="productRef" :model="form" :rules="rules" label-width="100px">
         <el-form-item class="label" label="商家产品ID" prop="productChainId">
           <el-input v-model="form.productChainId" placeholder="请输入商家产品ID"/>
@@ -155,7 +116,7 @@
       </template>
     </el-dialog>
     <!-- 产品导入和模板下载   -->
-    <el-dialog title="产品导入" v-model="upload.open" width="50%" append-to-body>
+    <el-dialog title="产品导入" v-model="upload.open" width="50%" append-to-body :close-on-click-modal="false" draggable>
       <el-upload
           ref="uploadRef"
           :limit="1"
@@ -206,9 +167,9 @@ const productList = ref([]);
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
-const ids = ref([]);
-const single = ref(true);
-const multiple = ref(true);
+// const ids = ref([]);
+// const single = ref(true);
+// const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
 
@@ -319,11 +280,11 @@ const handleFileUploadProgress = (event, file, fileList) => {
 };
 
 // 多选框选中数据
-function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.productChainid);
-  single.value = selection.length != 1;
-  multiple.value = !selection.length;
-}
+// function handleSelectionChange(selection) {
+//   ids.value = selection.map(item => item.productChainid);
+//   // single.value = selection.length != 1;
+//   // multiple.value = !selection.length;
+// }
 
 /** 新增按钮操作 */
 function handleAdd() {
@@ -335,7 +296,8 @@ function handleAdd() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
-  let _productChainid = row.productChainId || ids.value
+  // let _productChainid = row.productChainId || ids.value
+  let _productChainid = row.productChainId;
   getProduct(_productChainid).then(response => {
     form.value = response.data;
     open.value = true;
@@ -366,7 +328,8 @@ function submitForm() {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const _productChainids = row.productChainId || ids.value;
+  // const _productChainids = row.productChainId || ids.value;
+  const _productChainids = row.productChainId;
   proxy.$modal.confirm('是否确认删除连锁门店销售的所有产品的数据编号为"' + _productChainids + '"的数据项？').then(function () {
     return delProduct(_productChainids);
   }).then(() => {

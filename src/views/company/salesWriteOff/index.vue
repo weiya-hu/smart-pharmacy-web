@@ -12,8 +12,8 @@
             v-model="betweenTime"
             start-placeholder="开始时间"
             end-placeholder="结束时间"
-            format="YYYY-MM-DD hh-mm-ss"
-            value-format="YYYY-MM-DD hh:mm:ss"
+            format="YYYY-MM-DD HH-mm-ss"
+            value-format="YYYY-MM-DD HH:mm:ss"
             style="width: 360px"
         />
       </el-form-item>
@@ -586,7 +586,7 @@ getList()
 
   .page-box {
     .el-tag {
-      width: 32px;
+      min-width: 32px;
       height: 32px;
       border-radius: 2px;
       font-size: 14px;

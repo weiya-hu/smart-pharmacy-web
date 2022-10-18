@@ -10,18 +10,18 @@
                         format="YYYY-MM-DD"
                         value-format="YYYY-MM-DD hh:mm:ss"
                         clearable
-                        style="width: 300px;"
+                        style="width: 220px;"
         />
       </el-form-item>
       <el-form-item class="label" label="时间范围" prop="name">
-        <el-select style="width: 300px;" v-model="queryParams.timeRangeQuickSelection"
+        <el-select style="width: 220px;" v-model="queryParams.timeRangeQuickSelection"
                    placeholder="请选择要查看的区域" clearable>
           <el-option v-for="(item,key) in fastSelectDate" :key="key" :label="item.label" :value="item.value"/>
         </el-select>
 
       </el-form-item>
       <el-form-item class="label" label="区域" prop="name">
-        <el-cascader v-model="queryParams.nodeId" style="width: 300px;"
+        <el-cascader v-model="queryParams.nodeId" style="width: 220px;"
                      placeholder="请选择区域"
                      :collapse-tags="true"
                      :options="areaOptions"
@@ -29,49 +29,64 @@
                      clearable/>
       </el-form-item>
       <el-form-item class="label" label="品类" prop="name">
-        <el-select style="width: 300px;" v-model="queryParams.productTypeFilter" placeholder="请选择要查看的品类"
+        <el-select style="width: 220px;" v-model="queryParams.productTypeFilter" placeholder="请选择要查看的品类"
                    clearable>
           <el-option v-for="(item,index) in productTypeOption" :key="index" :label="item.name" :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item class="label" label="品牌" prop="name">
-        <el-select collapse-tags multiple style="width: 300px;" v-model="queryParams.brand"
+        <el-select collapse-tags multiple style="width: 220px;" v-model="queryParams.brand"
                    placeholder="请选择要查看的品牌" clearable>
           <el-option v-for="(item,index) in brandOption" :key="index" :label="item.name" :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item class="label" label="关键字" prop="name">
-        <el-input style="width: 300px;" v-model="queryParams.otherFilter"
+        <el-input style="width: 220px;" v-model="queryParams.otherFilter"
                   placeholder="请输入商品名称|商品ID"></el-input>
       </el-form-item>
-      <el-form-item class="label" label=" ">
+      <el-form-item class="label">
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
     <!--    总数统计-->
     <div class="totalStatistics">
-      <div class="totalItem">
-        <div class="data">{{ baseInfo.sumAmount !== 0 ? baseInfo.sumAmount.toFixed(2) : 0 }}</div>
-        <div class="title">销售总额(元)</div>
-      </div>
-      <div class="totalItem">
-        <div class="data">{{ baseInfo.sumEventAmount !== 0 ? baseInfo.sumEventAmount.toFixed(2) : 0 }}</div>
-        <div class="title">激励活动销售额(元)</div>
-      </div>
+      <el-row>
+        <el-col :xs="8" :sm="6" :md="4">
+          <div class="totalItem">
+            <div class="data">{{ baseInfo.sumAmount !== 0 ? baseInfo.sumAmount.toFixed(2) : 0 }}</div>
+            <div class="title">销售总额(元)</div>
+          </div>
+        </el-col>
 
-      <div class="totalItem">
-        <div class="data">{{ baseInfo.storeCount }}</div>
-        <div class="title">动销店铺(家)</div>
-      </div>
-      <div class="totalItem">
-        <div class="data">{{ baseInfo.brandCount }}</div>
-        <div class="title">动销品牌(个)</div>
-      </div>
-      <div class="totalItem">
-        <div class="data">{{ baseInfo.productCount }}</div>
-        <div class="title">动销商品(个/套)</div>
-      </div>
+        <el-col :xs="8" :sm="6" :md="4">
+          <div class="totalItem">
+            <div class="data">{{ baseInfo.sumEventAmount !== 0 ? baseInfo.sumEventAmount.toFixed(2) : 0 }}</div>
+            <div class="title">激励活动销售额(元)</div>
+          </div>
+        </el-col>
+
+        <el-col :xs="8" :sm="6" :md="4">
+          <div class="totalItem">
+            <div class="data">{{ baseInfo.storeCount }}</div>
+            <div class="title">动销店铺(家)</div>
+          </div>
+        </el-col>
+
+        <el-col :xs="8" :sm="6" :md="4">
+          <div class="totalItem">
+            <div class="data">{{ baseInfo.brandCount }}</div>
+            <div class="title">动销品牌(个)</div>
+          </div>
+        </el-col>
+
+        <el-col :xs="8" :sm="6" :md="4">
+          <div class="totalItem">
+            <div class="data">{{ baseInfo.productCount }}</div>
+            <div class="title">动销商品(个/套)</div>
+          </div>
+        </el-col>
+      </el-row>
 
     </div>
     <!--    统计图展示-->
@@ -1553,8 +1568,6 @@ innit()
 .label::v-deep( .el-form-item__label) {
   color: #606266;
   font-weight: 600;
-  width: 70px;
-  justify-content: flex-start !important;
 }
 
 // 先把整体的线去掉
@@ -1643,15 +1656,16 @@ innit()
 
   .totalStatistics {
     margin-top: 40px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
+    //display: flex;
+    //flex-direction: row;
+    //justify-content: space-evenly;
     border-top: 2px solid #d6dde4;
     padding-top: 20px;
 
     .totalItem {
       flex: 1;
-      width: 150px;
+      //width: 150px;
+      width: 100%;
       height: 100px;
       border-radius: 5px;
       display: flex;
