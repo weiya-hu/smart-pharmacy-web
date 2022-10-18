@@ -89,14 +89,6 @@
       </el-table-column>
     </el-table>
 
-    <!--    <pagination-->
-    <!--        v-show="total > 0"-->
-    <!--        :total="total"-->
-    <!--        v-model:page="queryParams.pageNum"-->
-    <!--        v-model:limit="queryParams.pageSize"-->
-    <!--        @pagination="getList"-->
-    <!--    />-->
-
     <!-- 添加或修改部门对话框 -->
     <el-dialog :title="title" v-model="open" width="60%" append-to-body :close-on-click-modal="false" draggable>
       <el-form ref="deptRef" :model="form" :rules="rules" label-width="100px">
@@ -233,7 +225,6 @@ const deptList = ref([]);
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
-const total = ref(0);
 const title = ref("");
 const deptOptions = ref([]);
 const isExpandAll = ref(true);
@@ -307,7 +298,6 @@ function getList() {
   loading.value = true;
   listPage(queryParams.value).then(response => {
     deptList.value = proxy.handleTree(response.data.list, "nodeId", "parentNodeId");
-    console.log(deptList.value)
     loading.value = false;
   });
 }
@@ -455,34 +445,7 @@ function handleDelete(row) {
   });
 }
 
-// function handleChange(val) {
-//   if (val === 1) {
-//     form.value.name = null
-//     makerList().then(res => {
-//       if (res.code === 200) {
-//         nameList.value = res.data.list
-//       }
-//     })
-//   } else if (val === 3) {
-//     form.value.name = null
-//     chainList().then(res => {
-//       if (res.code === 200) {
-//         nameList.value = res.data.list
-//       }
-//     })
-//   } else if (val === 4) {
-//     form.value.name = null
-//     storeList().then(res => {
-//       if (res.code === 200) {
-//         nameList.value = res.data.list
-//       }
-//     })
-//   } else {
-//     nameList.value = []
-//   }
-// }
-
-function handleChange(val) {
+function handleChange() {
   form.value.name = null
   form.value.relationId = undefined
   reltreeList().then(res => {
@@ -492,7 +455,7 @@ function handleChange(val) {
   })
 }
 
-function getNameData(row) {
+function getNameData() {
   reltreeList().then(res => {
     if (res.code === 200) {
       nameList.value = res.data

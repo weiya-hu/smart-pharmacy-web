@@ -26,7 +26,7 @@
                        clearable/>
         </el-form-item>
         <el-form-item class="label" label="条件查询">
-          <el-input style="width: 300px;" v-model="queryParams.otherFilter"
+          <el-input style="width: 270px;" v-model="queryParams.otherFilter"
                     placeholder="请输入任务名/编号/商品名/商品ID/品牌"></el-input>
         </el-form-item>
         <el-form-item class="label" label="任务状态">
@@ -48,37 +48,37 @@
     </div>
     <div class="statistic">
       <el-row>
-        <el-col :span="4">
+        <el-col :md="4" :sm="6" :xs="8">
           <div class="totalItem">
             <div class="data">{{ reportTotalNumber.eventNumber }}</div>
             <div class="title">当前活动</div>
           </div>
         </el-col>
-        <el-col :span="4">
+        <el-col :md="4" :sm="6" :xs="8">
           <div class="totalItem">
             <div class="data">{{ reportTotalNumber.storeNumber }}</div>
             <div class="title">参与店铺</div>
           </div>
         </el-col>
-        <el-col :span="4">
+        <el-col :md="4" :sm="6" :xs="8">
           <div class="totalItem">
             <div class="data">{{ reportTotalNumber.userNumber }}</div>
             <div class="title">参与人次</div>
           </div>
         </el-col>
-        <el-col :span="4">
+        <el-col :md="4" :sm="6" :xs="8">
           <div class="totalItem">
             <div class="data">{{ reportTotalNumber.saleAmount }}</div>
             <div class="title">销售额(元)</div>
           </div>
         </el-col>
-        <el-col :span="4">
+        <el-col :md="4" :sm="6" :xs="8">
           <div class="totalItem">
             <div class="data">{{ reportTotalNumber.totalPrizePool }}</div>
             <div class="title">合计奖池(元)</div>
           </div>
         </el-col>
-        <el-col :span="4">
+        <el-col :md="4" :sm="6" :xs="8">
           <div class="totalItem">
             <div class="data">{{ reportTotalNumber.awardMoney }}</div>
             <div class="title">累计发放(元)</div>
@@ -141,81 +141,89 @@
     </div>
     <!--    品牌销量和单品销量-->
     <div class="salesBrandAndSingle">
-      <div class="salesBrand sales">
-        <div class="sales-header">
-          <div class="active">品牌销量</div>
-          <div>个</div>
-        </div>
-        <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReportBrand"
-                        :contentTableConfig="storeBrandTableConfig">
-          <template #salesAmountSlot="{row}">
-            <div>
-              {{ row.salesAmount }}元
+      <el-row :gutter="20">
+        <el-col :sm="24" :md="12" :xs="24">
+          <div class="salesBrand sales">
+            <div class="sales-header">
+              <div class="active">品牌销量</div>
+<!--              <div>个</div>-->
             </div>
-          </template>
-          <template #yearOnYearSlot="{row}">
-            <div>
-              {{ row.yearOnYear }}
-              <span v-if="row.yearOnYear && Number(row.yearOnYear.split('%')[0])>0">
-                      <el-icon size="18px" color="green"><Top/></el-icon>
-                  </span>
-              <span v-else-if="row.yearOnYear && Number(row.yearOnYear.split('%')[0])<0">
-                    <el-icon size="18px" color="red"><Bottom/></el-icon>
-                  </span>
+            <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReportBrand"
+                            :contentTableConfig="storeBrandTableConfig">
+              <template #salesAmountSlot="{row}">
+                <div>
+                  {{ row.salesAmount }}元
+                </div>
+              </template>
+              <template #yearOnYearSlot="{row}">
+                <div>
+                  {{ row.yearOnYear }}
+                  <span v-if="row.yearOnYear && Number(row.yearOnYear.split('%')[0])>0">
+                        <el-icon size="18px" color="green"><Top/></el-icon>
+                    </span>
+                  <span v-else-if="row.yearOnYear && Number(row.yearOnYear.split('%')[0])<0">
+                      <el-icon size="18px" color="red"><Bottom/></el-icon>
+                    </span>
 
-            </div>
-          </template>
-          <template #monthOnMonthSlot="{row}">
-            <div>
-              {{ row.monthOnMonth }}
-              <span v-if="row.monthOnMonth && Number(row.monthOnMonth.split('%')[0])>0">
-                      <el-icon size="18px" color="green"><Top/></el-icon>
-                  </span>
-              <span v-else-if="row.monthOnMonth && Number(row.monthOnMonth.split('%')[0])<0">
-                    <el-icon size="18px" color="red"><Bottom/></el-icon>
-                  </span>
-            </div>
-          </template>
-        </pagevxeContent>
+                </div>
+              </template>
+              <template #monthOnMonthSlot="{row}">
+                <div>
+                  {{ row.monthOnMonth }}
+                  <span v-if="row.monthOnMonth && Number(row.monthOnMonth.split('%')[0])>0">
+                        <el-icon size="18px" color="green"><Top/></el-icon>
+                    </span>
+                  <span v-else-if="row.monthOnMonth && Number(row.monthOnMonth.split('%')[0])<0">
+                      <el-icon size="18px" color="red"><Bottom/></el-icon>
+                    </span>
+                </div>
+              </template>
+            </pagevxeContent>
 
-      </div>
-      <div class="salesSingle sales">
-        <div class="sales-header">
-          <div class="active">单品销量</div>
-          <div>个</div>
-        </div>
-        <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReportProduct"
-                        :contentTableConfig="storeProductTableConfig">
-          <template #salesAmountSlot="{row}">
-            <div>
-              {{ row.salesAmount }}元
-            </div>
-          </template>
-          <template #yearOnYearSlot="{row}">
-            <div>
-              {{ row.yearOnYear }}
-              <span v-if="row.yearOnYear && Number(row.yearOnYear.split('%')[0])>0">
-                      <el-icon size="18px" color="green"><Top/></el-icon>
-                  </span>
-              <span v-else-if="row.yearOnYear && Number(row.yearOnYear.split('%')[0])<0">
-                    <el-icon size="18px" color="red"><Bottom/></el-icon>
-                  </span>
+          </div>
+        </el-col>
 
+        <el-col :sm="24" :md="12" :xs="24">
+          <div class="salesSingle sales">
+            <div class="sales-header">
+              <div class="active">单品销量</div>
+<!--              <div>个</div>-->
             </div>
-          </template>
-          <template #monthOnMonthSlot="{row}">
-            <div>
-              {{ row.monthOnMonth }}
-              <span v-if="row.monthOnMonth && Number(row.monthOnMonth.split('%')[0])>0">
-                      <el-icon size="18px" color="green"><Top/></el-icon>
-                  </span>
-              <span v-else-if="row.monthOnMonth && Number(row.monthOnMonth.split('%')[0])<0">
-                    <el-icon size="18px" color="red"><Bottom/></el-icon>
-                  </span>
-            </div>
-          </template>
-        </pagevxeContent>
-      </div>
+            <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReportProduct"
+                            :contentTableConfig="storeProductTableConfig">
+              <template #salesAmountSlot="{row}">
+                <div>
+                  {{ row.salesAmount }}元
+                </div>
+              </template>
+              <template #yearOnYearSlot="{row}">
+                <div>
+                  {{ row.yearOnYear }}
+                  <span v-if="row.yearOnYear && Number(row.yearOnYear.split('%')[0])>0">
+                        <el-icon size="18px" color="green"><Top/></el-icon>
+                    </span>
+                  <span v-else-if="row.yearOnYear && Number(row.yearOnYear.split('%')[0])<0">
+                      <el-icon size="18px" color="red"><Bottom/></el-icon>
+                    </span>
+
+                </div>
+              </template>
+              <template #monthOnMonthSlot="{row}">
+                <div>
+                  {{ row.monthOnMonth }}
+                  <span v-if="row.monthOnMonth && Number(row.monthOnMonth.split('%')[0])>0">
+                        <el-icon size="18px" color="green"><Top/></el-icon>
+                    </span>
+                  <span v-else-if="row.monthOnMonth && Number(row.monthOnMonth.split('%')[0])<0">
+                      <el-icon size="18px" color="red"><Bottom/></el-icon>
+                    </span>
+                </div>
+              </template>
+            </pagevxeContent>
+          </div>
+        </el-col>
+
+      </el-row>
     </div>
     <!--      奖励列表-->
     <!--    <div>-->
@@ -1486,14 +1494,15 @@ innitSelectOption()
   }
 
   .salesBrandAndSingle {
-    margin-top: 20px;
+    //margin-top: 20px;
     width: 100%;
-    display: flex;
-    justify-content: space-between;
+    //display: flex;
+    //justify-content: space-between;
 
     .sales {
-      flex: 1;
-      margin: 0 10px;
+      //flex: 1;
+      //margin: 0 10px;
+      margin-top: 20px;
       border: 1px solid #D6D6D6;
       border-radius: 10px;
       overflow: hidden;
