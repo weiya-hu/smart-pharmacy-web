@@ -4,7 +4,7 @@
       <el-form-item class="label" label="关键字">
 
         <el-input v-model="queryParams.otherFilter" placeholder="请输入商品名/商品品牌/门店名称/销售员名" clearable
-                  style="width: 300px" />
+                  style="width: 300px"/>
       </el-form-item>
       <el-form-item class="label" label="时间">
         <el-date-picker
@@ -34,12 +34,12 @@
           >自定义导入
           </el-button>
         </el-col>
-<!--        <el-col :span="1.5">-->
-<!--          <el-button type="primary" plain @click="queryNextpage(true)">上一页</el-button>-->
-<!--        </el-col>-->
-<!--        <el-col :span="1.5">-->
-<!--          <el-button type="primary" plain @click="queryNextpage(false)">下一页</el-button>-->
-<!--        </el-col>-->
+        <!--        <el-col :span="1.5">-->
+        <!--          <el-button type="primary" plain @click="queryNextpage(true)">上一页</el-button>-->
+        <!--        </el-col>-->
+        <!--        <el-col :span="1.5">-->
+        <!--          <el-button type="primary" plain @click="queryNextpage(false)">下一页</el-button>-->
+        <!--        </el-col>-->
 
         <right-toolbar v-model:showSearch="showSearch" @queryTable="refreshList" :columns="columns"></right-toolbar>
       </el-row>
@@ -60,13 +60,13 @@
           drag
       >
         <el-icon class="el-icon--upload">
-          <upload-filled />
+          <upload-filled/>
         </el-icon>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         <template #tip>
           <div class="el-upload__tip text-center">
             <div class="el-upload__tip">
-              <el-checkbox v-model="upload.updateSupport" />
+              <el-checkbox v-model="upload.updateSupport"/>
               是否更新已经存在的用户数据
             </div>
             <span>仅允许导入xls、xlsx格式文件。</span>
@@ -108,12 +108,12 @@
           drag
       >
         <el-icon class="el-icon--upload">
-          <upload-filled />
+          <upload-filled/>
         </el-icon>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         <template #tip>
           <div class="el-upload__tip text-center">
-            <el-checkbox v-model="uploadData.customizeParam.isOverRide " />
+            <el-checkbox v-model="uploadData.customizeParam.isOverRide "/>
             是否更新已经存在的用户数据
           </div>
           <div class="el-upload__tip text-center">
@@ -184,37 +184,44 @@
     <div class="tableList">
       <el-table v-loading="loading" :data="orderList">
         <el-table-column min-width="100px" v-if="columns[0].visible" label="产品名" key="productName"
-                         prop="productName" show-overflow-tooltip />
+                         prop="productName" show-overflow-tooltip/>
         <el-table-column min-width="90px" v-if="columns[1].visible" label="销售金额" key="paidinAmount"
-                         prop="paidinAmount" show-overflow-tooltip />
+                         prop="paidinAmount" show-overflow-tooltip/>
         <el-table-column min-width="90px" v-if="columns[2].visible" label="销售数量" key="saleNumber"
-                         prop="saleNumber" show-overflow-tooltip />
+                         prop="saleNumber" show-overflow-tooltip/>
         <el-table-column min-width="160px" v-if="columns[3].visible" label="销售时间" key="saleTime"
-                         prop="saleTime" show-overflow-tooltip />
+                         prop="saleTime" show-overflow-tooltip/>
         <el-table-column label="规格" v-if="columns[4].visible" key="specification"
-                         prop="specification" show-overflow-tooltip />
-        <el-table-column label="门店ID" min-width="150px" v-if="columns[5].visible" key="storeId" prop="storeId" show-overflow-tooltip />
+                         prop="specification" show-overflow-tooltip/>
+        <el-table-column label="门店ID" min-width="150px" v-if="columns[5].visible" key="storeId" prop="storeId"
+                         show-overflow-tooltip/>
         <el-table-column label="门店名" min-width="150px" v-if="columns[6].visible" key="storeName"
-                         prop="storeName" show-overflow-tooltip />
+                         prop="storeName" show-overflow-tooltip/>
         <el-table-column label="门店订单ID" min-width="90px" v-if="columns[7].visible" key="storeOrderNumber"
-                         prop="storeOrderNumber" show-overflow-tooltip />
+                         prop="storeOrderNumber" show-overflow-tooltip/>
         <el-table-column min-width="100px" v-if="columns[8].visible" label="销售员" key="userName"
-                         prop="userName" show-overflow-tooltip />
+                         prop="userName" show-overflow-tooltip/>
       </el-table>
 
       <div class="pagination-container pagination" v-show="total > 0">
         <div class="total">共{{ totalCount }}条</div>
         <el-button :icon="ArrowLeft" text bg @click="queryNextpage(true)" :disabled="currentPage + 1 == 1"></el-button>
         <div class="page-box">
-          <el-tag v-for="item in pageItem" effect="dark" :type="currentPage + 1 === item ? '' : 'info'" style="margin: 0 5px;">{{item}} <el-icon v-show="item == ''"> <MoreFilled /></el-icon></el-tag>
+          <el-tag v-for="item in pageItem" effect="dark" :type="currentPage + 1 === item ? '' : 'info'"
+                  style="margin: 0 5px;">{{ item }}
+            <el-icon v-show="item == ''">
+              <MoreFilled/>
+            </el-icon>
+          </el-tag>
         </div>
-        <el-button :icon="ArrowRight" text bg @click="queryNextpage(false)" :disabled="currentPage + 1 == Math.ceil(totalCount / 10)"></el-button>
+        <el-button :icon="ArrowRight" text bg @click="queryNextpage(false)"
+                   :disabled="currentPage + 1 == Math.ceil(totalCount / 10)"></el-button>
       </div>
-<!--      <div style="padding: 20px;display: flex;justifyContent: flex-end">-->
-<!--        <span style="marginRight:10px">共{{ totalCount }}条 </span>-->
-<!--        <span style="marginRight:10px">共{{ total }}页 </span>-->
-<!--        <span>当前页:{{ currentPage + 1 }}</span>-->
-<!--      </div>-->
+      <!--      <div style="padding: 20px;display: flex;justifyContent: flex-end">-->
+      <!--        <span style="marginRight:10px">共{{ totalCount }}条 </span>-->
+      <!--        <span style="marginRight:10px">共{{ total }}页 </span>-->
+      <!--        <span>当前页:{{ currentPage + 1 }}</span>-->
+      <!--      </div>-->
     </div>
 
   </div>
@@ -565,15 +572,18 @@ getList()
   color: #606266;
   font-weight: 600;
 }
+
 .pagination {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+
   .total {
     margin-right: 10px;
     font-weight: 400;
     color: var(--el-text-color-regular);
   }
+
   .page-box {
     .el-tag {
       width: 32px;
@@ -582,12 +592,14 @@ getList()
       font-size: 14px;
       font-weight: 400;
     }
+
     .el-tag--dark.el-tag--info {
       background: var(--el-fill-color);
       color: var(--el-text-color-regular);
       border: 0;
     }
   }
+
   ::v-deep(.el-button.is-text) {
     width: 32px;
     height: 32px;

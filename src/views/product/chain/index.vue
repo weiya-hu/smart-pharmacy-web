@@ -5,16 +5,16 @@
     </div>
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="产品编号" prop="code">
-        <el-input v-model="queryParams.code" placeholder="请输入产品编号" clearable @keyup.enter="handleQuery" />
+        <el-input v-model="queryParams.code" placeholder="请输入产品编号" clearable @keyup.enter="handleQuery"/>
       </el-form-item>
       <el-form-item label="产品简称" prop="name">
-        <el-input v-model="queryParams.name" placeholder="请输入产品简称" clearable @keyup.enter="handleQuery" />
+        <el-input v-model="queryParams.name" placeholder="请输入产品简称" clearable @keyup.enter="handleQuery"/>
       </el-form-item>
       <el-form-item label="产品类别" prop="productType">
-        <el-input v-model="queryParams.productType" placeholder="请输入产品类别" clearable @keyup.enter="handleQuery" />
+        <el-input v-model="queryParams.productType" placeholder="请输入产品类别" clearable @keyup.enter="handleQuery"/>
       </el-form-item>
       <el-form-item label="品牌" prop="brands">
-        <el-input v-model="queryParams.brands" placeholder="请输入产品品牌" clearable @keyup.enter="handleQuery" />
+        <el-input v-model="queryParams.brands" placeholder="请输入产品品牌" clearable @keyup.enter="handleQuery"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -22,72 +22,74 @@
       </el-form-item>
     </el-form>
 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <!--        <el-button-->
-        <!--            type="primary"-->
-        <!--            plain-->
-        <!--            icon="Plus"-->
-        <!--            @click="handleAdd"-->
-        <!--            v-hasPermi="['wecom:product:add']"-->
-        <!--        >新增-->
-        <!--        </el-button>-->
-        <!--      </el-col>-->
-        <!--      <el-col :span="1.5">-->
-        <!--        <el-button-->
-        <!--            type="success"-->
-        <!--            plain-->
-        <!--            icon="Edit"-->
-        <!--            :disabled="single"-->
-        <!--            @click="handleUpdate"-->
-        <!--            v-hasPermi="['wecom:product:edit']"-->
-        <!--        >修改-->
-        <!--        </el-button>-->
-        <!--      </el-col>-->
-        <!--      <el-col :span="1.5">-->
-        <!--        <el-button-->
-        <!--            type="danger"-->
-        <!--            plain-->
-        <!--            icon="Delete"-->
-        <!--            :disabled="multiple"-->
-        <!--            @click="handleDelete"-->
-        <!--            v-hasPermi="['wecom:product:remove']"-->
-        <!--        >删除-->
-        <!--        </el-button>-->
-        <!--      </el-col>-->
-        <!--      <el-col :span="1.5">-->
-        <!--        <el-button-->
-        <!--            type="warning"-->
-        <!--            plain-->
-        <!--            icon="Download"-->
-        <!--            @click="handleExport"-->
-        <!--            v-hasPermi="['wecom:product:export']"-->
-        <!--        >导出-->
-        <!--        </el-button>-->
-        <el-button type="primary" icon="Plus" @click="handleAdd">新增产品</el-button>
-        <el-button
-            type="info"
-            plain
-            icon="Upload"
-            @click="handleImport"
-        >导入
-        </el-button>
-      </el-col>
-      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
+    <div class="btn-back">
+      <el-row :gutter="10" class="mb8">
+        <el-col :span="1.5">
+          <!--        <el-button-->
+          <!--            type="primary"-->
+          <!--            plain-->
+          <!--            icon="Plus"-->
+          <!--            @click="handleAdd"-->
+          <!--            v-hasPermi="['wecom:product:add']"-->
+          <!--        >新增-->
+          <!--        </el-button>-->
+          <!--      </el-col>-->
+          <!--      <el-col :span="1.5">-->
+          <!--        <el-button-->
+          <!--            type="success"-->
+          <!--            plain-->
+          <!--            icon="Edit"-->
+          <!--            :disabled="single"-->
+          <!--            @click="handleUpdate"-->
+          <!--            v-hasPermi="['wecom:product:edit']"-->
+          <!--        >修改-->
+          <!--        </el-button>-->
+          <!--      </el-col>-->
+          <!--      <el-col :span="1.5">-->
+          <!--        <el-button-->
+          <!--            type="danger"-->
+          <!--            plain-->
+          <!--            icon="Delete"-->
+          <!--            :disabled="multiple"-->
+          <!--            @click="handleDelete"-->
+          <!--            v-hasPermi="['wecom:product:remove']"-->
+          <!--        >删除-->
+          <!--        </el-button>-->
+          <!--      </el-col>-->
+          <!--      <el-col :span="1.5">-->
+          <!--        <el-button-->
+          <!--            type="warning"-->
+          <!--            plain-->
+          <!--            icon="Download"-->
+          <!--            @click="handleExport"-->
+          <!--            v-hasPermi="['wecom:product:export']"-->
+          <!--        >导出-->
+          <!--        </el-button>-->
+          <el-button type="primary" icon="Plus" @click="handleAdd" plain>新增产品</el-button>
+          <el-button
+              type="info"
+              plain
+              icon="Upload"
+              @click="handleImport"
+          >导入
+          </el-button>
+        </el-col>
+        <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+      </el-row>
+    </div>
 
     <el-table v-loading="loading" :data="productList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="69码" prop="barCode" show-tooltip-when-overflow />
-      <el-table-column label="产品ID" prop="productId" show-tooltip-when-overflow width="200" />
-      <el-table-column label="产品编号" prop="code" show-tooltip-when-overflow />
-      <el-table-column label="产品简称" prop="name" show-tooltip-when-overflow />
-      <el-table-column label="产品全称" prop="fullname" show-tooltip-when-overflow />
-      <el-table-column label="产品类别" prop="productType" show-tooltip-when-overflow />
-      <el-table-column label="产品等级" prop="level" show-tooltip-when-overflow />
-      <el-table-column label="品牌" prop="brand" show-tooltip-when-overflow />
-      <el-table-column label="规格" prop="specification" show-tooltip-when-overflow />
-      <el-table-column label="最小计量单位" prop="unit" min-width="110px"  />
+      <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column label="69码" prop="barCode" show-tooltip-when-overflow/>
+      <el-table-column label="产品ID" prop="productId" show-tooltip-when-overflow width="200"/>
+      <el-table-column label="产品编号" prop="code" show-tooltip-when-overflow/>
+      <el-table-column label="产品简称" prop="name" show-tooltip-when-overflow/>
+      <el-table-column label="产品全称" prop="fullname" show-tooltip-when-overflow/>
+      <el-table-column label="产品类别" prop="productType" show-tooltip-when-overflow/>
+      <el-table-column label="产品等级" prop="level" show-tooltip-when-overflow/>
+      <el-table-column label="品牌" prop="brand" show-tooltip-when-overflow/>
+      <el-table-column label="规格" prop="specification" show-tooltip-when-overflow/>
+      <el-table-column label="最小计量单位" prop="unit" min-width="110px"/>
       <el-table-column label="操作" class-name="small-padding fixed-width" width="150px">
         <template #default="scope">
           <div class="btn-col">
@@ -118,31 +120,31 @@
         v-model:page="queryParams.pageNum"
         v-model:limit="queryParams.pageSize"
         @pagination="getList"
-     />
+    />
 
     <!-- 添加或修改连锁门店销售的所有产品的数据对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="productRef" :model="form" :rules="rules" label-width="100px">
         <el-form-item class="label" label="商家产品ID" prop="productChainId">
-          <el-input v-model="form.productChainId" placeholder="请输入商家产品ID" />
+          <el-input v-model="form.productChainId" placeholder="请输入商家产品ID"/>
         </el-form-item>
         <el-form-item class="label" label="产品ID" prop="productId">
-          <el-input v-model="form.productId" placeholder="请输入产品ID" />
+          <el-input v-model="form.productId" placeholder="请输入产品ID"/>
         </el-form-item>
         <el-form-item class="label" label="公司ID">
-          <el-input v-model="form.corpId" placeholder="请输入公司ID" />
+          <el-input v-model="form.corpId" placeholder="请输入公司ID"/>
         </el-form-item>
         <el-form-item class="label" label="自定义标签" prop="tag">
-          <el-input v-model="form.tag" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.tag" type="textarea" placeholder="请输入内容"/>
         </el-form-item>
         <el-form-item class="label" label="序号" prop="sort">
-          <el-input v-model="form.sort" placeholder="请输入序号" />
+          <el-input v-model="form.sort" placeholder="请输入序号"/>
         </el-form-item>
         <el-form-item class="label" label="创建人" prop="createUserId">
-          <el-input v-model="form.createUserId" placeholder="请输入创建人" />
+          <el-input v-model="form.createUserId" placeholder="请输入创建人"/>
         </el-form-item>
         <el-form-item class="label" label="修改人" prop="updateUserId">
-          <el-input v-model="form.updateUserId" placeholder="请输入修改人" />
+          <el-input v-model="form.updateUserId" placeholder="请输入修改人"/>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -167,13 +169,13 @@
           drag
       >
         <el-icon class="el-icon--upload">
-          <upload-filled />
+          <upload-filled/>
         </el-icon>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         <template #tip>
           <div class="el-upload__tip text-center">
             <div class="el-upload__tip">
-              <el-checkbox v-model="upload.updateSupport" />
+              <el-checkbox v-model="upload.updateSupport"/>
               是否更新已经存在的用户数据
             </div>
             <span>仅允许导入xls、xlsx格式文件。</span>
