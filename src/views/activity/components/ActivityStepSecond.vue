@@ -104,11 +104,13 @@
                   </template>
                 </el-input>
               </el-form-item>
+              <!--              @change="()=>{if(!item.price) firstFormModel.jobs[i].price=0}"-->
               <el-form-item class="label" :label="firstFormModel.rewardType == 1 ? '奖励金额(元)' : '金额比例(%)'">
                 <el-input oninput="value=value.replace(/[^0-9.]/g,'')"
                           :disabled="handleType=='query'"
                           v-model="item.price"
-                          @change="()=>{if(!item.price) firstFormModel.jobs[i].price=0}"
+                          @blur="(value)=>{changePrice(item.price,item,firstFormModel.rewardType,index)}"
+
                           class="input-with-select">
                 </el-input>
               </el-form-item>
@@ -228,9 +230,10 @@
                   </template>
                 </el-input>
               </el-form-item>
+              <!--                          @change="()=>{if(!item.price) secondFormModel.jobs[index].price=0}"-->
               <el-form-item class="label" :label="secondFormModel.rewardType == 1 ? '奖励金额(元)' : '金额比例(%)'">
                 <el-input oninput="value=value.replace(/[^0-9.]/g,'')" :disabled="handleType=='query'"
-                          @change="()=>{if(!item.price) secondFormModel.jobs[index].price=0}"
+                          @blur="(value)=>{changePrice(item.price,item,secondFormModel.rewardType,index)}"
                           v-model="item.price" class="input-with-select">
                 </el-input>
               </el-form-item>
@@ -357,7 +360,7 @@
               </el-form-item>
               <el-form-item class="label" :label="thirdFormModel.rewardType == 1 ? '奖励金额(元)' : '金额比例(%)'">
                 <el-input oninput="value=value.replace(/[^0-9.]/g,'')" :disabled="handleType=='query'"
-                          @change="()=>{if(!item.price) thirdFormModel.jobs[index].price=0}"
+                          @blur="(value)=>{changePrice(item.price,item,thirdFormModel.rewardType,index)}"
                           v-model="item.price" class="input-with-select">
                 </el-input>
               </el-form-item>
@@ -595,16 +598,32 @@ const getJobList = () => {
         if (res.code === 200) {
           jobList.value = res.data.list.map(job => ({...job, targetRange: 0, price: 0}))
           firstFormModels.value.formListData.forEach(item => {
-            item.jobs = res.data.list.map(job => ({...job, targetRange: 0, price: 0}))
+            if (item.jobs.length == 0) {
+              item.jobs = res.data.list.map(job => ({...job, targetRange: 0, price: 0}))
+            }
           })
           secondFormModels.value.formListData.forEach(item => {
-            item.jobs = res.data.list.map(job => ({...job, targetRange: 0, price: 0}))
+            if (item.jobs.length == 0) {
+              item.jobs = res.data.list.map(job => ({...job, targetRange: 0, price: 0}))
+            }
           })
           thirdFormModels.value.formListData.forEach(item => {
-            item.jobs = res.data.list.map(job => ({...job, targetRange: 0, price: 0}))
+            if (item.jobs.length == 0) {
+              item.jobs = res.data.list.map(job => ({...job, targetRange: 0, price: 0}))
+            }
           })
         }
       })
+}
+/**改变金额*/
+const changePrice = (value, item, tage, index) => {
+  if (tage !== 1) {
+    let reg = /^(0.\d+|0|1)$/
+    if (!reg.test(value)) {
+      item.price = 0
+      proxy.$modal.msgError("请输入0到1的小数")
+    }
+  }
 }
 
 /** 品牌 **/
