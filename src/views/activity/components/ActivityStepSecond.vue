@@ -22,7 +22,7 @@
             </el-row>
             <el-row>
               <el-form-item class="label" label="核算方式" :prop="'formListData.' + index + '.calcType'"
-                            :rules="formRule.calcType">
+              >
                 <el-select :disabled="handleType=='query'" v-model="firstFormModel.calcType">
                   <el-option v-for="item in sop_calc_type" :key="item.value" :value="item.value" :label="item.label">
                     {{ item.label }}
@@ -30,7 +30,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
-                            :rules="formRule.timeRangeUnit">
+              >
                 <el-input :disabled="handleType=='query'" oninput="value=value.replace(/[^\d]/g,'')"
                           v-model="firstFormModel.timeRange"
                           class="input-with-select" style="width: 220px">
@@ -45,13 +45,13 @@
                 </el-input>
               </el-form-item>
               <el-form-item class="label" label="奖励条件" :prop="'formListData.' + index + '.calcUnit'"
-                            :rules="formRule.calcUnit">
+              >
                 <el-select :disabled="handleType=='query'" v-model="firstFormModel.calcUnit">
                   <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
               <el-form-item class="label" label="奖励方式" :prop="'formListData.' + index + '.rewardType'"
-                            :rules="formRule.rewardType">
+              >
                 <el-select :disabled="handleType=='query'" v-model="firstFormModel.rewardType" @change="editas">
                   <el-option v-for="item in sop_reward_type" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
@@ -153,7 +153,7 @@
             </el-row>
             <el-row>
               <el-form-item class="label" label="核算方式" :prop="'formListData.' + index + '.calcType'"
-                            :rules="formRule.calcType">
+              >
                 <el-select :disabled="handleType=='query'" v-model="secondFormModel.calcType">
                   <el-option v-for="item in sop_calc_type" :key="item.value" :value="item.value" :label="item.label">
                     {{ item.label }}
@@ -162,7 +162,7 @@
               </el-form-item>
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             oninput="value=value.replace(/[^\d]/g,'')"
-                            :rules="formRule.timeRangeUnit">
+              >
                 <el-input :disabled="handleType=='query'" v-model="secondFormModel.timeRange"
                           class="input-with-select" style="width: 220px;">
                   <template #append>
@@ -176,13 +176,13 @@
                 </el-input>
               </el-form-item>
               <el-form-item class="label" label="奖励条件" :prop="'formListData.' + index + '.calcUnit'"
-                            :rules="formRule.calcUnit">
+              >
                 <el-select :disabled="handleType=='query'" v-model="secondFormModel.calcUnit">
                   <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
               <el-form-item class="label" label="奖励方式" :prop="'formListData.' + index + '.rewardType'"
-                            :rules="formRule.rewardType">
+              >
                 <el-select :disabled="handleType=='query'" v-model="secondFormModel.rewardType">
                   <el-option v-for="item in sop_reward_type" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
@@ -278,7 +278,7 @@
             </el-row>
             <el-row>
               <el-form-item class="label" label="核算方式" :prop="'formListData.' + index + '.calcType'"
-                            :rules="formRule.calcType">
+              >
                 <el-select :disabled="handleType=='query'" v-model="thirdFormModel.calcType">
                   <el-option v-for="item in sop_calc_type" :key="item.value" :value="item.value" :label="item.label">
                     {{ item.label }}
@@ -287,7 +287,7 @@
               </el-form-item>
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             oninput="value=value.replace(/[^\d]/g,'')"
-                            :rules="formRule.timeRangeUnit">
+              >
                 <el-input :disabled="handleType=='query'" v-model="thirdFormModel.timeRange"
                           class="input-with-select" style="width: 220px;">
                   <template #append>
@@ -301,13 +301,13 @@
                 </el-input>
               </el-form-item>
               <el-form-item class="label" label="奖励条件" :prop="'formListData.' + index + '.calcUnit'"
-                            :rules="formRule.calcUnit">
+              >
                 <el-select :disabled="handleType=='query'" v-model="thirdFormModel.calcUnit">
                   <el-option v-for="item in sop_calc_unit" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
               </el-form-item>
               <el-form-item class="label" label="奖励方式" :prop="'formListData.' + index + '.rewardType'"
-                            :rules="formRule.rewardType">
+              >
                 <el-select :disabled="handleType=='query'" v-model="thirdFormModel.rewardType">
                   <el-option v-for="item in sop_reward_type" :key="item.value" :value="item.value" :label="item.label"/>
                 </el-select>
