@@ -94,6 +94,7 @@
                     oninput="value=value.replace(/[^0-9.]/g,'')"
                     v-model="item.targetRange"
                     class="input-with-select"
+                    style="width: 220px"
                     @change="()=>{if(!item.targetRange) firstFormModel.jobs[i].targetRange=0}">
                   <template #append>
                     <el-select v-model="firstFormModel.calcUnit" disabled style="width: 80px">
