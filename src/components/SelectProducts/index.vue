@@ -23,7 +23,8 @@
       <el-table-column label="品类" prop="productType"/>
       <el-table-column label="品牌" prop="brand"/>
       <el-table-column label="规格" prop="specification" show-overflow-tooltip/>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="props.handleType !== 'query'">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width"
+                       v-if="props.handleType !== 'query'">
         <template #default="scope">
           <el-button type="text" @click="handleAdd(scope.row)">添加</el-button>
         </template>
@@ -54,7 +55,8 @@
           <el-input type="number" v-model.number="scope.row.account" min="1"></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="props.handleType !== 'query'">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width"
+                       v-if="props.handleType !== 'query'">
         <template #default="scope">
           <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
         </template>
@@ -115,10 +117,10 @@ const getList = () => {
       if (res.code === 200) {
         productList.value = res.data.list
         total.value = Number(res.data.total)
-        if(props.productIds.length >0){
-          props.productIds.forEach(item=>{
-           let exists = productList.value.filter(f=> item === f.eventProductId)
-            exists.forEach(e=>{
+        if (props.productIds.length > 0) {
+          props.productIds.forEach(item => {
+            let exists = productList.value.filter(f => item === f.eventProductId)
+            exists.forEach(e => {
               handleAdd(e)
             })
           })
@@ -136,10 +138,20 @@ const resetQuery = () => {
 }
 //选择商品
 const handleAdd = (row) => {
+  let selectedInfo = null
   productList.value.splice(productList.value.indexOf(row), 1)
   let isExists = productResultList.value.some(r => r.productId === row.productId)
+  if (props.selectedGoodsAccount.length !== 0) {
+    selectedInfo = props.selectedGoodsAccount.find(R => {
+      return R.id == row.eventProductId
+    })
+  }
   if (!isExists) {
-    row.account = 1
+    if (selectedInfo) {
+      row.account = selectedInfo.account
+    } else {
+      row.account = 1
+    }
     productResultList.value.push(row)
   }
 }
@@ -175,13 +187,17 @@ const props = defineProps({
     type: String,
     default: null
   },
-  productIds:{
-    type:Array,
-    default:[]
+  productIds: {
+    type: Array,
+    default: []
   },
   handleType: {
     type: String,
-  default: undefined
+    default: undefined
+  },
+  selectedGoodsAccount: {
+    type: Array,
+    default: []
   }
 })
 // const getSelectedGoods = () => {

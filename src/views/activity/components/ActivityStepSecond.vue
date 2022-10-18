@@ -387,7 +387,8 @@
     <el-dialog title="商品列表" v-model="showProductsDialog" width="70%" top="6vh" append-to-body
                :close-on-click-modal="false"
                draggable destroy-on-close>
-      <SelectProducts :eventRuleId="itemRuleId" :eventId="props.eventId" :packageId="productPackageId"
+      <SelectProducts :selectedGoodsAccount="selectedGoodsAccount" :eventRuleId="itemRuleId" :eventId="props.eventId"
+                      :packageId="productPackageId"
                       :productIds="productList" :handleType="props.handleType"
                       ref="selectProductsRef"></SelectProducts>
       <template #footer>
@@ -399,7 +400,8 @@
       </template>
     </el-dialog>
     <!-- 门店列表弹窗-->
-    <el-dialog title="门店列表" v-model="showStoreDialog" width="70%" top="8vh" append-to-body :close-on-click-modal="false"
+    <el-dialog title="门店列表" v-model="showStoreDialog" width="70%" top="8vh" append-to-body
+               :close-on-click-modal="false"
                draggable destroy-on-close>
       <SelectStore :eventId="props.eventId" :handleType="props.handleType" :filterIds="storeList"
                    ref="selectStoreRef"></SelectStore>
@@ -430,6 +432,7 @@ import {
 import SelectProducts from '@/components/SelectProducts/index'
 import SelectStore from '@/components/SelectStore/index'
 import {cloneFunction} from "@/utils/globalFunction";
+import {nextTick} from "vue";
 
 const {proxy} = getCurrentInstance();
 const {
@@ -445,6 +448,7 @@ const formStoreIndex = ref(NaN)
 let itemRuleId = ref(null)
 const productList = ref([])
 const storeList = ref([])
+let selectedGoodsAccount = ref([])
 const firstFormModels = ref({
       formListData: [{
         eventCalcRewardType: 1,
@@ -615,6 +619,12 @@ const openProductsDialog = (index, row) => {
   } else {
     itemRuleId.value = null
   }
+  selectedGoodsAccount.value = row.products.map(m => {
+    return {
+      id: m.eventProductId,
+      account: m.account
+    }
+  })
   productList.value = row.products.map(m => {
     return m.eventProductId
   })
@@ -640,7 +650,6 @@ const onCancelProductsDialog = () => {
   showProductsDialog.value = false
   // productList.value = []
 }
-
 //Tab 选择事件
 const changeTab = (e) => {
   switch (e) {
