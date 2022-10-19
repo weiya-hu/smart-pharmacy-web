@@ -1,10 +1,13 @@
 <template>
   <div class="app-container">
-    <el-steps :active="step" align-center finish-status="success" simple>
-      <el-step title="基本信息"/>
-      <el-step title="规则配置"/>
-      <el-step title="提交审核"/>
-      <el-step title="完成发布"/>
+    <el-steps :active="step" align-center simple>
+      <el-step title="基本信息" :icon="List">
+      </el-step>
+      <el-step title="规则配置" :icon="Ticket">
+      </el-step>
+      <el-step title="提交审核" :icon="UserFilled"></el-step>
+      <el-step title="完成发布" :icon="Promotion">
+      </el-step>
     </el-steps>
 
     <ActivityStepFirst ref="activityStepFirstRef" :handleType="handleType" :eventId="eventId" :canEdit='canEdit'
@@ -41,6 +44,7 @@ import ActivityStepFirst from './components/ActivityStepFirst'
 import ActivityStepSecond from './components/ActivityStepSecond'
 import {queryEventRule, publish, getEventInfoByid} from '@/api/activity/eventInfo'
 import {nextTick} from "vue";
+import {List, Ticket, UserFilled, Promotion} from '@element-plus/icons-vue';
 
 const route = useRoute();
 const {proxy} = getCurrentInstance();

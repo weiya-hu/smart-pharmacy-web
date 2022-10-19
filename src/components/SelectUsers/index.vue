@@ -59,7 +59,7 @@
         </el-form>
 
         <div class="table-box">
-          <el-table row-key="userId" ref="userListRef" height="378px" v-loading="loading" :data="userList" highlight-current-row @current-change="handleCurrentChange">
+          <el-table row-key="userId" ref="userListRef" height="325px" v-loading="loading" :data="userList" highlight-current-row @current-change="handleCurrentChange">
             <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" show-overflow-tooltip/>
             <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible"
                              :show-overflow-tooltip="true"/>
@@ -260,7 +260,7 @@ selectedNodeId()
 }
 .table-box {
   :deep(.el-table__body tr.current-row>td.el-table__cell) {
-    background-color: #f9efef;
+    background-color: #ffe3df;
   }
 }
 </style>

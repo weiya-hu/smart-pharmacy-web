@@ -1043,6 +1043,7 @@ defineExpose({
   border: 1px solid #D4D7DE;
   margin: 5px;
   padding: 20px;
+  position: relative;
 }
 
 .moudelTitle {
@@ -1052,24 +1053,25 @@ defineExpose({
 }
 
 .rulerStatus {
-  width: 60px;
+  //width: 60px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  &>div{
+    width: 79px;
+    height: 26px;
+    line-height: 26px;
+    padding-left: 25px;
+    color: #fff;
+    font-size: 14px;
+  }
 
   .save {
-    padding: 5px;
-    width: 100%;
-    height: 100%;
-    background-color: #8acf6a;
-    color: #fff;
-    border-radius: 10px 0 0 0;
+    background: url("@/assets/images/save.png");
   }
 
   .notSave {
-    padding: 5px;
-    width: 100%;
-    height: 100%;
-    background-color: #ff806c;
-    color: #fff;
-    border-radius: 10px 0 0 0;
+    background: url("@/assets/images/save-not.png");
   }
 }
 

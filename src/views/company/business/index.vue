@@ -189,7 +189,9 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="120">
             <template #default="{ row, column, $index }">
-              <el-button link type="primary" icon="Delete" size="small" @click="handleDelUser($index)">删除</el-button>
+              <div class="btn-col">
+                <el-button link type="primary" icon="Delete" size="small" @click="handleDelUser($index)">删除</el-button>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -406,7 +408,7 @@ function submitForm() {
         //判断是否存在于集合中
         let exists = nameList.value.filter(item => item.storeId === form.value.relationId)
         if (exists.length > 0) {
-          form.value.name = exists[0].name
+          // form.value.name = exists[0].name
         } else {
           form.value.name = form.value.relationId
           form.value.relationId = undefined

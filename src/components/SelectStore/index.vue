@@ -16,7 +16,9 @@
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width"
                        v-if="props.handleType !== 'query'">
         <template #default="scope">
-          <el-button type="text" @click="handleAdd(scope.row)">添加</el-button>
+          <div class="btn-col">
+            <el-button type="text" @click="handleAdd(scope.row)">添加</el-button>
+          </div>
         </template>
       </el-table-column>
       <template #empty>
@@ -40,7 +42,9 @@
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width"
                        v-if="props.handleType !== 'query'">
         <template #default="scope">
-          <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
+          <div class="btn-col">
+            <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
+          </div>
         </template>
       </el-table-column>
     </el-table>

@@ -19,6 +19,7 @@
       </el-form-item>
     </el-form>
     <el-table v-loading="loading" :data="productList" height="200">
+      <el-table-column label="编码" prop="code"/>
       <el-table-column label="名称" prop="name"/>
       <el-table-column label="品类" prop="productType"/>
       <el-table-column label="品牌" prop="brand"/>
@@ -26,7 +27,9 @@
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width"
                        v-if="props.handleType !== 'query'">
         <template #default="scope">
-          <el-button type="text" @click="handleAdd(scope.row)">添加</el-button>
+          <div class="btn-col">
+            <el-button type="text" @click="handleAdd(scope.row)">添加</el-button>
+          </div>
         </template>
       </el-table-column>
       <template #empty>
@@ -45,7 +48,7 @@
       <el-button @click="clearSelected" link type="primary" v-if="props.handleType !== 'query'">清空已选</el-button>
     </div>
     <el-table v-loading="loading" :data="productResultList" height="200">
-      <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column label="编码" prop="code"/>
       <el-table-column label="名称" prop="name"/>
       <el-table-column label="品类" prop="productType"/>
       <el-table-column label="品牌" prop="brand"/>
@@ -58,7 +61,9 @@
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width"
                        v-if="props.handleType !== 'query'">
         <template #default="scope">
-          <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
+          <div class="btn-col">
+            <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
+          </div>
         </template>
       </el-table-column>
     </el-table>
