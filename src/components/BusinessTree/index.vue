@@ -73,7 +73,7 @@ function getMenuAllCheckedKeys() {
   // 半选中的菜单节点
   // let halfCheckedKeys = menuRef.value.getHalfCheckedKeys();
   // checkedKeys.unshift.apply(checkedKeys, halfCheckedKeys);
-  let checknodes = menuRef.value.getCheckedNodes()
+  let checknodes = menuRef.value.getCheckedNodes(true)
   return checknodes;
 }
 
