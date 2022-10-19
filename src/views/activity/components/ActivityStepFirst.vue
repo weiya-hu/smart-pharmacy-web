@@ -36,23 +36,23 @@
       </el-form-item>
       <el-form-item class="label" label="活动范围" prop="ruleScupes">
         <el-button @click="showRuleScupes = !showRuleScupes" link type="primary">
-          <span v-show="handleType === 'query'"><span
-              v-show="form.ruleScupes.length>0">已选择机构节点（{{ form.ruleScupes.length }}）个</span></span>
-          <span v-show="handleType === 'edit'"><span
-              v-show="form.ruleScupes.length>0">已选择机构节点（{{ form.ruleScupes.length }}）个</span></span>
-          <span v-show="handleType === 'add'"><span
-              v-show="form.ruleScupes.length>0">已选择机构节点（{{ form.ruleScupes.length }}）个</span></span>
+          <span v-show="handleType === 'query'">查看<span
+              v-show="form.ruleScupes.length>0">已选择（{{ form.ruleScupes.length }}）个</span></span>
+          <span v-show="handleType === 'edit'">编辑<span
+              v-show="form.ruleScupes.length>0">已选择（{{ form.ruleScupes.length }}）个</span></span>
+          <span v-show="handleType === 'add'">新增<span
+              v-show="form.ruleScupes.length>0">已选择（{{ form.ruleScupes.length }}）个</span></span>
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="活动负责人" prop="ruleResponsibleUsers">
 <<<<<<< Updated upstream
         <el-button @click="showResponsibleUsers = !showResponsibleUsers" link type="primary">
-          <span v-show="handleType === 'query'"><span
-              v-show="form.responsibleUsers.length>0">已选择负责人（{{ form.responsibleUsers.length }}）个</span></span>
-          <span v-show="handleType === 'edit'"><span
-              v-show="form.responsibleUsers.length>0">已选择负责人（{{ form.responsibleUsers.length }}）个</span></span>
-          <span v-show="handleType === 'add'"><span
-              v-show="form.responsibleUsers.length>0">已选择负责人（{{ form.responsibleUsers.length }}）个</span></span>
+          <span v-show="handleType === 'query'">查看<span
+              v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
+          <span v-show="handleType === 'edit'">编辑<span
+              v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
+          <span v-show="handleType === 'add'">新增<span
+              v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
 =======
         <el-button @click="chickShowUsers" link type="primary">
           <span v-show="handleType === 'query'">查看<span
@@ -66,12 +66,12 @@
       </el-form-item>
       <el-form-item class="label" label="活动参与方" prop="participants">
         <el-button @click="showRarticipants = !showRarticipants" link type="primary">
-          <span v-show="handleType === 'query'"><span
-              v-show="form.participants.length>0">已选择参与方（{{ form.participants.length }}）个</span></span>
-          <span v-show="handleType === 'edit'"><span
-              v-show="form.participants.length>0">已选择参与方（{{ form.participants.length }}）个</span></span>
-          <span v-show="handleType === 'add'"><span
-              v-show="form.participants.length>0">已选择参与方（{{ form.participants.length }}）个</span></span>
+          <span v-show="handleType === 'query'">查看 <span
+              v-show="form.participants.length>0">已选择（{{ form.participants.length }}）个</span></span>
+          <span v-show="handleType === 'edit'">编辑<span
+              v-show="form.participants.length>0">已选择（{{ form.participants.length }}）个</span></span>
+          <span v-show="handleType === 'add'">新增<span
+              v-show="form.participants.length>0">已选择（{{ form.participants.length }}）个</span></span>
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="任务描述" prop="comment">
