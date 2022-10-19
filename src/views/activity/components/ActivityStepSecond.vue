@@ -1063,7 +1063,7 @@ const disableScroll = () => {
   console.log(dom)
   dom.style.position = "fixed";
   dom.style.top = "-" + scrollTopVal + 'px';
-  dom.style.width = '100%';
+  dom.style.width = 'auto';
   dom.style.overflowY = "hidden";
 }
 const selectProductsClose =()=>{

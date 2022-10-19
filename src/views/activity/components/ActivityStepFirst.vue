@@ -45,6 +45,7 @@
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="活动负责人" prop="ruleResponsibleUsers">
+<<<<<<< Updated upstream
         <el-button @click="showResponsibleUsers = !showResponsibleUsers" link type="primary">
           <span v-show="handleType === 'query'"><span
               v-show="form.responsibleUsers.length>0">已选择负责人（{{ form.responsibleUsers.length }}）个</span></span>
@@ -52,6 +53,15 @@
               v-show="form.responsibleUsers.length>0">已选择负责人（{{ form.responsibleUsers.length }}）个</span></span>
           <span v-show="handleType === 'add'"><span
               v-show="form.responsibleUsers.length>0">已选择负责人（{{ form.responsibleUsers.length }}）个</span></span>
+=======
+        <el-button @click="chickShowUsers" link type="primary">
+          <span v-show="handleType === 'query'">查看<span
+              v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
+          <span v-show="handleType === 'edit'">编辑<span
+              v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
+          <span v-show="handleType === 'add'">新增<span
+              v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
+>>>>>>> Stashed changes
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="活动参与方" prop="participants">
@@ -214,7 +224,7 @@ import {
 } from "@/api/activity/eventInfo";
 import BusinessTree from '@/components/BusinessTree/index'
 import SelectUsers from '@/components/SelectUsers/index'
-import {reactive} from "vue";
+import {nextTick, reactive} from "vue";
 import {getToken} from "@/utils/auth";
 import {ElMessage, ElMessageBox} from "element-plus";
 
@@ -541,12 +551,15 @@ const onCancelRuleScupes = () => {
 //任务负责人选择确定
 const onSuccessResponsibleUsers = () => {
   showResponsibleUsers.value = false
-  form.value.responsibleUsers = responsibleUsersRef.value.getSelectUsers().map(item => {
+  if(responsibleUsersRef.value.getSelectUsers().length >0){
+    form.value.responsibleUsers = responsibleUsersRef.value.getSelectUsers().map(item => {
     return {
       userId: item.userId,
       name: item.userName
     }
   })
+  }
+  
   proxy.$refs["activityRef"].validateField('ruleResponsibleUsers')
 }
 //任务负责人选择取消
@@ -574,7 +587,17 @@ const queryActivityEventId = async (eventId) => {
   }
 }
 
+const chickShowUsers = ()=>{
+  showResponsibleUsers.value = !showResponsibleUsers.value
 
+  //设置默认选中
+  nextTick(()=>{
+    responsibleUsersRef.value.defineSelected()
+    responsibleUsersRef.value.setPageNum()
+  })
+  
+}
+ 
 //添加loading
 const openLoading = () => {
   firstLoading.value = true
