@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="">
     <el-form v-model="queryParam" ref="queryForm" :inline="true">
       <el-form-item label="名称">
         <el-input v-model="queryParam.name" placeholder="请输入商品名称"></el-input>
@@ -18,12 +18,12 @@
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-table v-loading="loading" :data="productList" height="200">
-      <el-table-column label="编码" prop="code"/>
-      <el-table-column label="名称" prop="name"/>
-      <el-table-column label="品类" prop="productType"/>
-      <el-table-column label="品牌" prop="brand"/>
-      <el-table-column label="规格" prop="specification" show-overflow-tooltip/>
+    <el-table v-loading="loading" :data="productList" height="270">
+      <el-table-column label="编码" prop="code" show-overflow-tooltip/>
+      <el-table-column label="名称" prop="name" show-overflow-tooltip min-width="135px"/>
+      <el-table-column label="品类" prop="productType" show-overflow-tooltip/>
+      <el-table-column label="品牌" prop="brand" show-overflow-tooltip/>
+      <el-table-column label="规格" prop="specification" show-overflow-tooltip min-width="135px"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width"
                        v-if="props.handleType !== 'query'">
         <template #default="scope">
@@ -47,15 +47,15 @@
     <div class="handler">
       <el-button @click="clearSelected" link type="primary" v-if="props.handleType !== 'query'">清空已选</el-button>
     </div>
-    <el-table v-loading="loading" :data="productResultList" height="200">
-      <el-table-column label="编码" prop="code"/>
-      <el-table-column label="名称" prop="name"/>
-      <el-table-column label="品类" prop="productType"/>
-      <el-table-column label="品牌" prop="brand"/>
-      <el-table-column label="规格" prop="specification" show-overflow-tooltip/>
+    <el-table v-loading="loading" :data="productResultList" height="150">
+      <el-table-column label="编码" prop="code" show-overflow-tooltip/>
+      <el-table-column label="名称" prop="name" show-overflow-tooltip min-width="100px"/>
+      <el-table-column label="品类" prop="productType" show-overflow-tooltip/>
+      <el-table-column label="品牌" prop="brand" show-overflow-tooltip/>
+      <el-table-column label="规格" prop="specification" show-overflow-tooltip min-width="120px"/>
       <el-table-column label="数量" align="center">
         <template #default="scope">
-          <el-input type="number" v-model.number="scope.row.account" min="1"></el-input>
+          <el-input type="number" size="small" v-model.number="scope.row.account" min="1"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width"
@@ -232,11 +232,9 @@ getList()
 </script>
 
 <style scoped lang="scss">
-.app-container {
-  .handler {
-    margin: 10px 0;
-    display: flex;
-    justify-content: flex-end;
-  }
+.handler {
+  margin: 10px 0;
+  display: flex;
+  justify-content: flex-end;
 }
 </style>

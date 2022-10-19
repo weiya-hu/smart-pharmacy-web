@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="">
     <el-form v-model="queryParam" ref="queryForm" :inline="true">
       <el-form-item label="门店名称">
         <el-input v-model="queryParam.name" placeholder="请输入门店名称"></el-input>
@@ -10,9 +10,9 @@
       </el-form-item>
     </el-form>
 
-    <el-table v-loading="loading" :data="storeList" height="200">
+    <el-table v-loading="loading" :data="storeList" height="270">
       <el-table-column label="门店编号" prop="storeId"/>
-      <el-table-column label="门店名称" prop="name" show-overflow-tooltip/>
+      <el-table-column label="门店名称" prop="name" show-overflow-tooltip min-width="150px"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width"
                        v-if="props.handleType !== 'query'">
         <template #default="scope">
@@ -38,7 +38,7 @@
     </div>
     <el-table v-loading="loading" :data="storeResultList" height="200">
       <el-table-column label="门店编号" prop="storeId"/>
-      <el-table-column label="门店名称" prop="name" show-overflow-tooltip/>
+      <el-table-column label="门店名称" prop="name" show-overflow-tooltip min-width="150px"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width"
                        v-if="props.handleType !== 'query'">
         <template #default="scope">
@@ -156,11 +156,9 @@ getList()
 </script>
 
 <style scoped lang="scss">
-.app-container {
-  .handler {
-    margin: 10px 0;
-    display: flex;
-    justify-content: flex-end;
-  }
+.handler {
+  margin: 10px 0;
+  display: flex;
+  justify-content: flex-end;
 }
 </style>

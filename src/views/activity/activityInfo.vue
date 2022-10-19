@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-steps :active="step" align-center simple>
+    <el-steps :active="step" align-center simple process-status="finish" finish-status="process">
       <el-step title="基本信息" :icon="List">
       </el-step>
       <el-step title="规则配置" :icon="Ticket">
@@ -11,12 +11,12 @@
     </el-steps>
 
     <ActivityStepFirst ref="activityStepFirstRef" :handleType="handleType" :eventId="eventId" :canEdit='canEdit'
-                       v-show="step === 1"></ActivityStepFirst>
+                       v-show="step === 0"></ActivityStepFirst>
     <ActivityStepSecond v-loading="secondLoading" ref="activityStepSecondRef"
-                        v-show="eventId && step === 2" :handleType="handleType"
+                        v-show="eventId && step === 1" :handleType="handleType"
                         :eventId="eventId"></ActivityStepSecond>
-    <div v-if="step===3" element-loading-text="审核提交中..." class="auditLoadiang" v-loading="auditLoadiang"></div>
-    <div class="finish" v-if="step===4">
+    <div v-if="step===2" element-loading-text="审核提交中..." class="auditLoadiang" v-loading="auditLoadiang"></div>
+    <div class="finish" v-if="step===3">
       <div class="imageIcon">
         <el-image :src="getImageUrl()"></el-image>
       </div>
@@ -24,12 +24,12 @@
         审核提交成功
       </div>
       <div>
-        <el-button class="finishBack" @click="handleBack" v-show="step===4">返回</el-button>
+        <el-button class="finishBack" @click="handleBack" v-show="step===3">返回</el-button>
       </div>
     </div>
     <div style="text-align: center;margin-top: 5%">
-      <el-button @click="decrementStep" v-show="step > 1&&step<3">上一步</el-button>
-      <el-button @click="handleBack" v-show="step===1">返回</el-button>
+      <el-button @click="decrementStep" v-show="step > 0&&step<3">上一步</el-button>
+      <el-button @click="handleBack" v-show="step===0">返回</el-button>
       <el-button type="primary" @click="handleNext" v-show="step<3" :loading="loadingBtn">下一步</el-button>
     </div>
   </div>
@@ -48,7 +48,7 @@ import {List, Ticket, UserFilled, Promotion} from '@element-plus/icons-vue';
 
 const route = useRoute();
 const {proxy} = getCurrentInstance();
-const step = ref(1)
+const step = ref(0)
 const activityStepFirstRef = ref()
 const activityStepSecondRef = ref()
 const eventId = ref('')
@@ -72,7 +72,7 @@ const decrementStep = () => {
   }
 }
 const handleNext = async () => {
-  if (step.value === 1) {
+  if (step.value === 0) {
     if (handleType.value === 'query') {
       step.value++
       activityStepSecondRef.value.loadEventRule()
@@ -103,7 +103,7 @@ const handleNext = async () => {
     if (eventId.value !== undefined) {
       activityStepSecondRef.value.getJobList()
     }
-  } else if (step.value === 2) {
+  } else if (step.value === 1) {
     if (handleType.value === 'query') {
       return
     }

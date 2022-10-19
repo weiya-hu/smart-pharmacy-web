@@ -11,7 +11,7 @@
       </div>
       <el-divider direction="vertical" />
       <div class="avatar-con">
-        <img :src="data.headImageUrl" alt="" />
+        <img :src="data.headImageUrl" alt="" v-if="isWecomAccount !== 1"/>
         <span class="user-name">{{ data.userName }}</span>
       </div>
       <el-divider direction="vertical" />
@@ -32,6 +32,7 @@ import {getCurrUserBaseInfo} from '../../api/company/info'
 const appStore = useAppStore()
 const userStore = useUserStore()
 
+const isWecomAccount = ref()
 const data = ref({
   corpName: '',
   packageName: '',
@@ -62,6 +63,7 @@ function getInfo() {
     getCurrUserBaseInfo().then(res => {
       if (res.code === 200) {
         data.value = res.data
+        isWecomAccount.value = res.data.isWecomAccount
         userStore.setCorpInfo(data.value)
       }
     })

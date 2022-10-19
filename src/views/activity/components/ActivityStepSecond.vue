@@ -129,7 +129,8 @@
             <el-button v-show="firstFormModel.products.length > 0 " type="primary"
                        @click="openProductsDialog(index,firstFormModel)">点击查看商品列表
             </el-button>
-
+            <el-divider content-position="left" v-if="firstFormModel.comment !== undefined"></el-divider>
+            <div class="tips">{{firstFormModel.comment}}</div>
           </div>
         </el-form>
         <el-empty description="暂无数据" v-if="firstFormModels.formListData.length == 0"/>
@@ -252,7 +253,8 @@
                 {{ brand }}
               </el-checkbox>
             </el-checkbox-group>
-
+            <el-divider content-position="left" v-if="secondFormModel.comment !== undefined"></el-divider>
+            <div class="tips">{{secondFormModel.comment}}</div>
           </div>
         </el-form>
         <el-empty description="暂无数据" v-if="secondFormModels.formListData.length == 0"/>
@@ -380,6 +382,8 @@
             <el-button v-if="thirdFormModels.formListData[index].filter.ids.length!==0" type="primary"
                        @click="openStoreDialog(index, thirdFormModel)">点击查看门店列表
             </el-button>
+            <el-divider content-position="left" v-if="thirdFormModel.comment !== undefined"></el-divider>
+            <div class="tips">{{thirdFormModel.comment}}</div>
           </div>
 
         </el-form>
@@ -1073,6 +1077,11 @@ defineExpose({
   .notSave {
     background: url("@/assets/images/save-not.png");
   }
+}
+
+.tips {
+  color: #606266;
+  font-size: 14px;
 }
 
 .handler {
