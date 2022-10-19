@@ -513,6 +513,7 @@ const onSuccessRuleScupes = () => {
   }
   form.value.ruleScupes = businessTreeParticipantsRef.value.getMenuAllChildCheckedKeys().map(item => ({nodeId: item.id}))
   showRuleScupes.value = false
+  proxy.$refs["activityRef"].validateField('ruleScupes')
 }
 // 范围选择取消
 const onCancelRuleScupes = () => {
@@ -536,6 +537,7 @@ const onSuccessResponsibleUsers = () => {
       name: item.userName
     }
   })
+  proxy.$refs["activityRef"].validateField('ruleResponsibleUsers')
 }
 //任务负责人选择取消
 const onCancelResponsibleUsers = () => {
