@@ -129,7 +129,8 @@
                 </el-input>
               </el-form-item>
             </el-row>
-
+            <el-divider content-position="left" v-if="firstFormModel.comment !== undefined"></el-divider>
+            <div class="tips">{{firstFormModel.comment}}</div>
 
           </div>
         </el-form>
@@ -254,7 +255,8 @@
               </el-form-item>
             </el-row>
 
-
+            <el-divider content-position="left" v-if="secondFormModel.comment !== undefined"></el-divider>
+            <div class="tips">{{secondFormModel.comment}}</div>
           </div>
         </el-form>
         <el-empty description="暂无数据" v-if="secondFormModels.formListData.length == 0"/>
@@ -381,7 +383,8 @@
                 </el-input>
               </el-form-item>
             </el-row>
-
+            <el-divider content-position="left" v-if="thirdFormModel.comment !== undefined"></el-divider>
+            <div class="tips">{{thirdFormModel.comment}}</div>
           </div>
         </el-form>
         <el-empty description="暂无数据" v-if="thirdFormModels.formListData.length == 0"/>
