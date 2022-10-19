@@ -28,9 +28,9 @@
       </div>
     </div>
     <div style="text-align: center;margin-top: 5%">
-      <el-button @click="decrementStep" v-show="step > 0&&step<3">上一步</el-button>
+      <el-button @click="decrementStep" v-show="step > 0&&step<2">{{ handleType == 'query' ? '上一页' : '上一步' }}</el-button>
       <el-button @click="handleBack" v-show="step===0">返回</el-button>
-      <el-button type="primary" @click="handleNext" v-show="step<3" :loading="loadingBtn">下一步</el-button>
+      <el-button type="primary" @click="handleNext" v-show="step<2" :loading="loadingBtn">{{ handleType == 'query' ? '下一页' : '下一步' }}</el-button>
     </div>
   </div>
 </template>
