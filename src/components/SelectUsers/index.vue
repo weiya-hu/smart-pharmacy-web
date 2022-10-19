@@ -59,7 +59,8 @@
         </el-form>
 
         <div class="table-box">
-          <el-table row-key="userId" ref="userListRef" height="325px" v-loading="loading" :data="userList" highlight-current-row @current-change="handleCurrentChange">
+          <el-table row-key="userId" ref="userListRef" height="325px" v-loading="loading" :data="userList" :current-row-key="currentUserId"
+             highlight-current-row @current-change="handleCurrentChange">
             <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" show-overflow-tooltip/>
             <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible"
                              :show-overflow-tooltip="true"/>
@@ -89,6 +90,7 @@ const router = useRouter();
 const {proxy} = getCurrentInstance();
 const {sys_normal_disable, sys_user_sex} = proxy.useDict("sys_normal_disable", "sys_user_sex");
 
+const currentUserId = ref(props.data.userId)
 const userList = ref([]);
 const open = ref(false);
 const loading = ref(true);
@@ -188,6 +190,7 @@ function resetQuery() {
 
 /** 选择  */
 function handleCurrentChange(currentRow) {
+  console.log(props.data,currentRow)
   selectUsers.value[0] = currentRow
 }
 
