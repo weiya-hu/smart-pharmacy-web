@@ -12,6 +12,7 @@ const useTagsViewStore = defineStore(
       },
       addVisitedView(view) {
         if (this.visitedViews.some(v => v.path === view.path)) return
+        // if (this.visitedViews.some(v => v.path === view.path && view.path !=='/markteCenter/activityInfo')) return
         this.visitedViews.push(
           Object.assign({}, view, {
             title: view.meta.title || 'no-name'

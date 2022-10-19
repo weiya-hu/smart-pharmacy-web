@@ -1,6 +1,6 @@
 <template>
 
-  <div class="app-container" v-loading="secondLoading" element-loading-text="请等待...">
+  <div class="app-container secondStep" v-loading="secondLoading" element-loading-text="请等待..." >
     <el-tabs type="border-card" v-model="tabValue" @tab-change="changeTab">
       <el-tab-pane name="first" label="单品｜组合">
         <el-form ref="firstForm" :model="firstFormModels" :rules="formRule" inline label-width="95px">
@@ -393,7 +393,9 @@
     <!-- 商品列表弹窗-->
     <el-dialog title="商品列表" v-model="showProductsDialog" width="70%" top="6vh" append-to-body
                :close-on-click-modal="false"
-               draggable destroy-on-close>
+               draggable destroy-on-close
+               @close="selectProductsClose"
+               >
       <SelectProducts :selectedGoodsAccount="selectedGoodsAccount" :eventRuleId="itemRuleId" :eventId="props.eventId"
                       :packageId="productPackageId"
                       :productIds="productList" :handleType="props.handleType"
@@ -465,7 +467,7 @@ const firstFormModels = ref({
         rewardType: 1,
         calcUnit: 1,
         products: [],
-        jobs: jobList.value,
+        jobs: cloneFunction(jobList.value),
         filter: {
           ids: [], specifications: [], brands: [], productTypes: []
         }
@@ -538,7 +540,7 @@ const thirdFormModels = ref({
     timeRangeUnit: 'everyday',
     rewardType: 1,
     calcUnit: 1,
-    jobs: jobList.value,
+    jobs: cloneFunction(jobList.value),
     filter: {
       ids: [], specifications: [], brands: [], productTypes: []
     }
@@ -552,7 +554,7 @@ const resetThirdForm = () => {
     timeRangeUnit: 'everyday',
     rewardType: 1,
     calcUnit: 1,
-    jobs: jobList.value,
+    jobs: cloneFunction(jobList.value),
     filter: {
       ids: [], specifications: [], brands: [], productTypes: []
     }
@@ -653,6 +655,7 @@ const openProductsDialog = (index, row) => {
   })
   productPackageId.value = index
   showProductsDialog.value = true
+  disableScroll()
 }
 
 const openStoreDialog = (index, data) => {
@@ -691,12 +694,15 @@ const addForm = () => {
   switch (tabValue.value) {
     case 'first' :
       firstFormModels.value.formListData.push(resetFirstForm())
+      scrollBottom()
       break;
     case 'second' :
       secondFormModels.value.formListData.push(resetSecondForm())
+      scrollBottom()
       break;
     case 'third' :
       thirdFormModels.value.formListData.push(resetThirdForm())
+      scrollBottom()
       break;
   }
 }
@@ -795,6 +801,7 @@ const saveFormAndAdd = async (index, type) => {
                   getActivityRules().then(res => {
                     if (type === 'saveAndAdd') {
                       firstFormModels.value.formListData.push(resetFirstForm())
+                      scrollBottom()
                     }
                   })
                 }
@@ -808,6 +815,7 @@ const saveFormAndAdd = async (index, type) => {
                   proxy.$modal.msgSuccess("修改规则成功");
                   if (type === 'saveAndAdd') {
                     firstFormModels.value.formListData.push(resetFirstForm())
+                    scrollBottom()
                   }
                 }
                 closeLoading()
@@ -828,6 +836,7 @@ const saveFormAndAdd = async (index, type) => {
                   getActivityRules().then(res => {
                     if (type === 'saveAndAdd') {
                       secondFormModels.value.formListData.push(resetSecondForm())
+                      scrollBottom()
                     }
                   })
                 }
@@ -841,6 +850,7 @@ const saveFormAndAdd = async (index, type) => {
                   proxy.$modal.msgSuccess("修改规则成功");
                   if (type === 'saveAndAdd') {
                     secondFormModels.value.formListData.push(resetSecondForm())
+                    scrollBottom()
                   }
                 }
                 closeLoading()
@@ -861,6 +871,7 @@ const saveFormAndAdd = async (index, type) => {
                   getActivityRules().then(res => {
                     if (type === 'saveAndAdd') {
                       thirdFormModels.value.formListData.push(resetThirdForm())
+                      scrollBottom()
                     }
                   })
                 }
@@ -874,6 +885,7 @@ const saveFormAndAdd = async (index, type) => {
                   proxy.$modal.msgSuccess("修改规则成功");
                   if (type === 'saveAndAdd') {
                     thirdFormModels.value.formListData.push(resetThirdForm())
+                    scrollBottom()
                   }
                 }
                 closeLoading()
@@ -1023,6 +1035,45 @@ const publishActivity = () => {
 const clearJobValue = (value) => {
   if (!value) {
     value = 0
+  }
+}
+
+//新增时页面滑到滑到底部
+const scrollBottom =()=>{
+  nextTick(()=>{
+    let height = document.getElementsByClassName('secondStep')[0].clientHeight;
+    window.scroll({ top: height , left: 0, behavior: 'smooth' });
+  })
+}
+
+//禁止页面滑动，修改弹框弹出来后分页器修改页数后主页面滑动的bug
+const disableScroll = () => {
+  var scrollTopVal = document.documentElement.scrollTop || document.body.scrollTop;
+  // 禁止滑动
+  let dom = document.getElementsByClassName('main-container')[0]
+  console.log(dom)
+  dom.style.position = "fixed";
+  dom.style.top = "-" + scrollTopVal + 'px';
+  dom.style.width = '100%';
+  dom.style.overflowY = "hidden";
+}
+const selectProductsClose =()=>{
+  enableScroll()
+}
+
+const enableScroll = () => {
+  /** *取消滑动限制***/
+  let dom = document.getElementsByClassName('main-container')[0]
+  var scrollVal = Math.abs(parseFloat(dom.style.top));
+  dom.style.position = "relative";
+  dom.style.overflowY = "auto";
+  dom.style.width = 'auto';
+  dom.style.top = "";
+  if (document.body) {
+    document.body.scrollTop = scrollVal;
+  }
+  if (document.documentElement) {
+    document.documentElement.scrollTop = scrollVal;
   }
 }
 
