@@ -116,10 +116,11 @@ const getList = () => {
     queryProductList(queryParam.value).then(res => {
       if (res.code === 200) {
         productList.value = res.data.list
+        console.log(props.productIds, productList.value)
         total.value = Number(res.data.total)
         if (props.productIds.length > 0) {
           props.productIds.forEach(item => {
-            let exists = productList.value.filter(f => item === f.eventProductId)
+            let exists = productList.value.filter(f => item === f.productId)
             exists.forEach(e => {
               handleAdd(e)
             })
@@ -143,7 +144,7 @@ const handleAdd = (row) => {
   let isExists = productResultList.value.some(r => r.productId === row.productId)
   if (props.selectedGoodsAccount.length !== 0) {
     selectedInfo = props.selectedGoodsAccount.find(R => {
-      return R.id == row.eventProductId
+      return R.id == row.productId
     })
   }
   if (!isExists) {
@@ -172,7 +173,7 @@ const getProductPackageResultList = () => {
   }))
 }
 const getProductResultList = () => {
-  return productResultList.value.map(item => ({account: item.account, eventProductId: item.eventProductId}))
+  return productResultList.value.map(item => ({account: 1, eventProductId: item.eventProductId}))
 }
 const props = defineProps({
   eventId: {

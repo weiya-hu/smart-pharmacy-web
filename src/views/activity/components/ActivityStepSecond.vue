@@ -639,12 +639,12 @@ const openProductsDialog = (index, row) => {
   }
   selectedGoodsAccount.value = row.products.map(m => {
     return {
-      id: m.eventProductId,
+      id: m.productId,
       account: m.account
     }
   })
   productList.value = row.products.map(m => {
-    return m.eventProductId
+    return m.productId
   })
   productPackageId.value = index
   showProductsDialog.value = true
