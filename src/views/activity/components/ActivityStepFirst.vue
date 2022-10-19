@@ -45,15 +45,6 @@
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="活动负责人" prop="ruleResponsibleUsers">
-<<<<<<< Updated upstream
-        <el-button @click="showResponsibleUsers = !showResponsibleUsers" link type="primary">
-          <span v-show="handleType === 'query'">查看<span
-              v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
-          <span v-show="handleType === 'edit'">编辑<span
-              v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
-          <span v-show="handleType === 'add'">新增<span
-              v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
-=======
         <el-button @click="chickShowUsers" link type="primary">
           <span v-show="handleType === 'query'">查看<span
               v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
@@ -61,7 +52,6 @@
               v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
           <span v-show="handleType === 'add'">新增<span
               v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
->>>>>>> Stashed changes
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="活动参与方" prop="participants">
@@ -559,7 +549,7 @@ const onSuccessResponsibleUsers = () => {
     }
   })
   }
-  
+
   proxy.$refs["activityRef"].validateField('ruleResponsibleUsers')
 }
 //任务负责人选择取消
@@ -595,9 +585,9 @@ const chickShowUsers = ()=>{
     responsibleUsersRef.value.defineSelected()
     responsibleUsersRef.value.setPageNum()
   })
-  
+
 }
- 
+
 //添加loading
 const openLoading = () => {
   firstLoading.value = true
