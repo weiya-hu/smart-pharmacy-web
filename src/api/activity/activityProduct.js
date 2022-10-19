@@ -5,9 +5,10 @@ export function queryProductList(data) {
     return request({
         url: `/sop/event/product/list`,
         method: 'get',
-        params:data
+        params: data
     })
 }
+
 //任务范围中的品牌列表
 export function queryBrandList(eventId) {
     return request({
@@ -17,18 +18,20 @@ export function queryBrandList(eventId) {
 }
 
 //任务范围中的门店列表
-export function queryStoreList(eventId,data) {
+export function queryStoreList(eventId, data) {
     return request({
         url: `/sop/event/info/beSelectedStore/${eventId}`,
         method: 'get',
-        params:data
+        params: data
     })
 }
+
 //任务范围中的职务列表
-export function queryJobList(eventId) {
+export function queryJobList(eventId, data = []) {
     return request({
         url: `/sop/event/info/job/${eventId}`,
         method: 'get',
+        params: data
     })
 }
 

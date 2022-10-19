@@ -18,6 +18,20 @@
               </div>
             </div>
             <el-row>
+              <div class="moudelTitle">参与商品</div>
+            </el-row>
+            <el-button v-show="firstFormModel.products.length === 0" type="primary" link
+                       @click="openProductsDialog(index,firstFormModel)">添加商品
+            </el-button>
+            <el-button type="primary" link>已选（{{
+                firstFormModel.products && firstFormModel.products.length
+              }}）个
+            </el-button>
+            <el-button v-show="firstFormModel.products.length > 0 " type="primary"
+                       @click="openProductsDialog(index,firstFormModel)">点击查看商品列表
+            </el-button>
+            <el-divider content-position="left"></el-divider>
+            <el-row>
               <div class="moudelTitle">奖励核算配置</div>
             </el-row>
             <el-row>
@@ -115,22 +129,8 @@
                 </el-input>
               </el-form-item>
             </el-row>
-            <el-divider content-position="left"></el-divider>
-            <el-row>
-              <div class="moudelTitle">参与商品</div>
-            </el-row>
-            <el-button v-show="firstFormModel.products.length === 0" type="primary" link
-                       @click="openProductsDialog(index,firstFormModel)">添加商品
-            </el-button>
-            <el-button type="primary" link>已选（{{
-                firstFormModel.products && firstFormModel.products.length
-              }}）个
-            </el-button>
-            <el-button v-show="firstFormModel.products.length > 0 " type="primary"
-                       @click="openProductsDialog(index,firstFormModel)">点击查看商品列表
-            </el-button>
-            <el-divider content-position="left" v-if="firstFormModel.comment !== undefined"></el-divider>
-            <div class="tips">{{firstFormModel.comment}}</div>
+
+
           </div>
         </el-form>
         <el-empty description="暂无数据" v-if="firstFormModels.formListData.length == 0"/>
@@ -150,6 +150,20 @@
                 <el-button type="primary" @click="addForm">新增</el-button>
               </div>
             </div>
+            <el-row>
+              <div class="moudelTitle">参与品牌</div>
+            </el-row>
+            <el-checkbox v-model="secondFormModel.brandsCheckAll" :indeterminate="secondFormModel.isIndeterminate"
+                         @change="handleCheckAllChange($event,secondFormModel)"
+            >全选
+            </el-checkbox>
+            <el-checkbox-group v-model="secondFormModel.filter.brands"
+                               @change="handleCheckedBrandChange($event,secondFormModel)">
+              <el-checkbox v-for="brand in brands" :key="brand" :label="brand">
+                {{ brand }}
+              </el-checkbox>
+            </el-checkbox-group>
+            <el-divider content-position="left"></el-divider>
             <el-row>
               <div class="moudelTitle">奖励核算配置</div>
             </el-row>
@@ -239,22 +253,8 @@
                 </el-input>
               </el-form-item>
             </el-row>
-            <el-divider content-position="left"></el-divider>
-            <el-row>
-              <div class="moudelTitle">参与品牌</div>
-            </el-row>
-            <el-checkbox v-model="secondFormModel.brandsCheckAll" :indeterminate="secondFormModel.isIndeterminate"
-                         @change="handleCheckAllChange($event,secondFormModel)"
-            >全选
-            </el-checkbox>
-            <el-checkbox-group v-model="secondFormModel.filter.brands"
-                               @change="handleCheckedBrandChange($event,secondFormModel)">
-              <el-checkbox v-for="brand in brands" :key="brand" :label="brand">
-                {{ brand }}
-              </el-checkbox>
-            </el-checkbox-group>
-            <el-divider content-position="left" v-if="secondFormModel.comment !== undefined"></el-divider>
-            <div class="tips">{{secondFormModel.comment}}</div>
+
+
           </div>
         </el-form>
         <el-empty description="暂无数据" v-if="secondFormModels.formListData.length == 0"/>
@@ -274,6 +274,20 @@
                 <el-button type="primary" @click="addForm">新增</el-button>
               </div>
             </div>
+            <el-row>
+              <div class="moudelTitle">参与门店</div>
+            </el-row>
+            <el-button v-if="thirdFormModels.formListData[index].filter.ids.length==0" type="primary" link
+                       @click="openStoreDialog(index, thirdFormModel)">添加门店
+            </el-button>
+            <el-button type="primary" link>已选（{{
+                thirdFormModels.formListData[index].filter.ids.length
+              }}）个
+            </el-button>
+            <el-button v-if="thirdFormModels.formListData[index].filter.ids.length!==0" type="primary"
+                       @click="openStoreDialog(index, thirdFormModel)">点击查看门店列表
+            </el-button>
+            <el-divider content-position="left"></el-divider>
             <el-row>
               <div class="moudelTitle">
                 奖励核算配置
@@ -368,24 +382,7 @@
               </el-form-item>
             </el-row>
 
-            <el-divider content-position="left"></el-divider>
-            <el-row>
-              <div class="moudelTitle">参与门店</div>
-            </el-row>
-            <el-button v-if="thirdFormModels.formListData[index].filter.ids.length==0" type="primary" link
-                       @click="openStoreDialog(index, thirdFormModel)">添加门店
-            </el-button>
-            <el-button type="primary" link>已选（{{
-                thirdFormModels.formListData[index].filter.ids.length
-              }}）个
-            </el-button>
-            <el-button v-if="thirdFormModels.formListData[index].filter.ids.length!==0" type="primary"
-                       @click="openStoreDialog(index, thirdFormModel)">点击查看门店列表
-            </el-button>
-            <el-divider content-position="left" v-if="thirdFormModel.comment !== undefined"></el-divider>
-            <div class="tips">{{thirdFormModel.comment}}</div>
           </div>
-
         </el-form>
         <el-empty description="暂无数据" v-if="thirdFormModels.formListData.length == 0"/>
       </el-tab-pane>
@@ -554,7 +551,7 @@ const resetThirdForm = () => {
     timeRangeUnit: 'everyday',
     rewardType: 1,
     calcUnit: 1,
-    jobs: cloneFunction(jobList.value),
+    jobs: [],
     filter: {
       ids: [], specifications: [], brands: [], productTypes: []
     }
@@ -615,7 +612,8 @@ const getJobList = () => {
           })
           thirdFormModels.value.formListData.forEach(item => {
             if (item.jobs.length == 0) {
-              item.jobs = res.data.list.map(job => ({...job, targetRange: 0, price: 0}))
+              // item.jobs = res.data.list.map(job => ({...job, targetRange: 0, price: 0}))
+              item.jobs = []
             }
           })
         }
@@ -644,12 +642,8 @@ const openProductsDialog = (index, row) => {
   } else {
     itemRuleId.value = null
   }
-  selectedGoodsAccount.value = row.products.map(m => {
-    return {
-      id: m.productId,
-      account: m.account
-    }
-  })
+  selectedGoodsAccount.value = row.products
+  console.log(selectedGoodsAccount.value)
   productList.value = row.products.map(m => {
     return m.productId
   })
@@ -934,6 +928,18 @@ const getActivityRules = () => {
 const onSuccessStoreDialog = () => {
   showStoreDialog.value = false
   thirdFormModels.value.formListData[formStoreIndex.value].filter.ids = selectStoreRef.value.getStoreResultList()
+//  获取门店规则下的职务
+  queryJobList(props.eventId, {nodeIds: thirdFormModels.value.formListData[formStoreIndex.value].filter.ids})
+      .then(res => {
+        if (res.code === 200) {
+          thirdFormModels.value.formListData[formStoreIndex.value].jobs = res.data.list.map(job => ({
+            ...job,
+            targetRange: 0,
+            price: 0
+          }))
+
+        }
+      })
 }
 //门店弹窗关闭
 const onCancelStoreDialog = () => {

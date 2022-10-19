@@ -32,7 +32,7 @@ const menuCheckStrictly = ref(true)
 const queryParams = ref({
   name: '',
   allChild: true,
-  queryRoot:true
+  queryRoot: true
 })
 const loadTree = () => {
   listReltree(queryParams.value)
@@ -77,8 +77,20 @@ function getMenuAllCheckedKeys() {
   return checknodes;
 }
 
+/**获取末梢叶子节点的数量*/
+function getMenuAllChildCheckedKeys() {
+  // 目前被选中的菜单节点
+  let checkedKeys = menuRef.value.getCheckedKeys();
+  // 半选中的菜单节点
+  // let halfCheckedKeys = menuRef.value.getHalfCheckedKeys();
+  // checkedKeys.unshift.apply(checkedKeys, halfCheckedKeys);
+  let checknodes = menuRef.value.getCheckedNodes(true)
+  return checknodes;
+}
+
 defineExpose({
-  getMenuAllCheckedKeys
+  getMenuAllCheckedKeys,
+  getMenuAllChildCheckedKeys
 })
 const props = defineProps({
   handelType: {

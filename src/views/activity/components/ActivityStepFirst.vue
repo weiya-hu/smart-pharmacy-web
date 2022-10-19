@@ -203,6 +203,7 @@
 </template>
 
 <script setup>
+
 import {
   createEventInfo,
   updateEventInfo,
@@ -215,7 +216,7 @@ import BusinessTree from '@/components/BusinessTree/index'
 import SelectUsers from '@/components/SelectUsers/index'
 import {reactive} from "vue";
 import {getToken} from "@/utils/auth";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 
 let ruleScupes = (rule, value, callback) => {
   if (form.value.ruleScupes === undefined || form.value.ruleScupes.length === 0) {
@@ -335,7 +336,9 @@ async function submitForm() {
     //任务范围
     firstLoading.value = true
     if (props.eventId != null && props.canEdit) {
+      let backData = null
       form.value.eventId = props.eventId
+      // return open(form.value)
       return updateEventInfo(form.value)
     } else if (props.eventId === undefined) {
       return createEventInfo(form.value)
@@ -348,6 +351,28 @@ async function submitForm() {
     proxy.$modal.msgError("请输入完整信息");
   }
 }
+
+// const open = (value) => {
+//   ElMessageBox.confirm(
+//       '修改任务信息可能会导致活动规则错误,是否继续修改?',
+//       'Warning',
+//       {
+//         confirmButtonText: '确定',
+//         cancelButtonText: '取消',
+//         type: 'warning',
+//       }
+//   )
+//       .then(() => {
+//         return updateEventInfo(value)
+//       })
+//       .catch(() => {
+//         ElMessage({
+//           type: 'info',
+//           message: '取消修改',
+//         })
+//       })
+// }
+
 
 let brandsOption = ref([])
 let productTypesOption = ref([])
@@ -486,7 +511,7 @@ const onSuccessRuleScupes = () => {
   } else {
     form.value.productFilter.specifications = queryRuleScupesParams.value.specifications
   }
-  form.value.ruleScupes = businessTreeParticipantsRef.value.getMenuAllCheckedKeys().map(item => ({nodeId: item.id}))
+  form.value.ruleScupes = businessTreeParticipantsRef.value.getMenuAllChildCheckedKeys().map(item => ({nodeId: item.id}))
   showRuleScupes.value = false
 }
 // 范围选择取消

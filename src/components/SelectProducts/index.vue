@@ -75,7 +75,10 @@ import {queryProductList} from '@/api/activity/activityProduct'
 import {
   queryEventRuleInfo
 } from '@/api/activity/eventInfo'
+import {cloneFunction} from "../../utils/globalFunction";
 
+let currentPageData = ref([])
+let selectProductId = ref([])
 let queryParam = ref({
   name: '',
   productType: '',
@@ -113,18 +116,20 @@ const clearSelected = () => {
     productList.value.push(item)
   })
   productResultList.value = []
+  selectProductId.value = []
 }
 //搜索产品
 const getList = () => {
   if (props.eventId) {
     queryParam.value.eventId = props.eventId
+    currentPageData.value = []
     queryProductList(queryParam.value).then(res => {
       if (res.code === 200) {
+        currentPageData.value = cloneFunction(res.data.list)
         productList.value = res.data.list
-        console.log(props.productIds, productList.value)
         total.value = Number(res.data.total)
-        if (props.productIds.length > 0) {
-          props.productIds.forEach(item => {
+        if (selectProductId.value.length > 0) {
+          selectProductId.value.forEach(item => {
             let exists = productList.value.filter(f => item === f.productId)
             exists.forEach(e => {
               handleAdd(e)
@@ -147,9 +152,9 @@ const handleAdd = (row) => {
   let selectedInfo = null
   productList.value.splice(productList.value.indexOf(row), 1)
   let isExists = productResultList.value.some(r => r.productId === row.productId)
-  if (props.selectedGoodsAccount.length !== 0) {
-    selectedInfo = props.selectedGoodsAccount.find(R => {
-      return R.id == row.productId
+  if (productResultList.value.length !== 0) {
+    selectedInfo = productResultList.value.find(R => {
+      return R.productId == row.productId
     })
   }
   if (!isExists) {
@@ -160,6 +165,7 @@ const handleAdd = (row) => {
     }
     productResultList.value.push(row)
   }
+
 }
 //删除商品
 const handleDelete = (row) => {
@@ -167,18 +173,30 @@ const handleDelete = (row) => {
   if (index !== -1) {
     productResultList.value.splice(index, 1)
   }
-  productList.value.push(row)
+  if (currentPageData.value.findIndex(item => {
+    return item.productId == row.productId
+  }) !== -1) {
+    productList.value.push(row)
+  }
+  //删除对应选中id
+  let deleteIndex = selectProductId.value.findIndex(item =>
+      item == row.productId
+  )
+  if (deleteIndex !== -1) {
+    selectProductId.value.splice(deleteIndex, 1)
+  }
+  if (productResultList.value.length == 0) {
+    clearSelected()
+  }
 }
 //获取已选择商品
 const getProductPackageResultList = () => {
   return productResultList.value.map(item => ({
-    account: item.account,
-    eventProductId: item.eventProductId,
-    packageId: props.packageId
+    ...cloneFunction(item)
   }))
 }
 const getProductResultList = () => {
-  return productResultList.value.map(item => ({account: 1, eventProductId: item.eventProductId}))
+  return productResultList.value.map(item => ({account: 1, ...cloneFunction(item)}))
 }
 const props = defineProps({
   eventId: {
@@ -220,7 +238,10 @@ const props = defineProps({
 //   getSelectedGoods()
 // })
 
-
+const getSelect = () => {
+  productResultList.value = props.selectedGoodsAccount
+  selectProductId.value = props.productIds
+}
 defineExpose({
   getProductResultList,
   getProductPackageResultList
@@ -228,7 +249,7 @@ defineExpose({
 })
 // getSelectedGoods()
 getList()
-// getSelect()
+getSelect()
 </script>
 
 <style scoped lang="scss">
