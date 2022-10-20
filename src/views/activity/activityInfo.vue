@@ -1,11 +1,26 @@
 <template>
   <div class="app-container">
     <el-steps :active="step" align-center simple process-status="finish" finish-status="process">
-      <el-step title="基本信息" :icon="List">
+      <el-step title="基本信息">
+        <template #icon>
+          <img src="../../assets/images/step-hide-1.png" v-show="step == 0" />
+          <img src="../../assets/images/step-success.png" v-show="step !== 0" />
+        </template>
       </el-step>
-      <el-step title="规则配置" :icon="Ticket">
+      <el-step title="规则配置">
+        <template #icon>
+          <img src="../../assets/images/step-hide-2.png" v-show="step == 1" />
+          <img src="../../assets/images/step-show-2.png" v-show="step !== 1 && step < 1" />
+          <img src="../../assets/images/step-success.png" v-show="step > 1" />
+        </template>
       </el-step>
-      <el-step title="提交审核" :icon="UserFilled"></el-step>
+      <el-step title="提交审核">
+        <template #icon>
+          <img src="../../assets/images/step-hide-3.png" v-show="step == 2" />
+          <img src="../../assets/images/step-show-3.png" v-show="step !== 2 && step < 2" />
+          <img src="../../assets/images/step-success.png" v-show="step > 2" />
+        </template>
+      </el-step>
       <el-step title="完成发布" :icon="Promotion">
       </el-step>
     </el-steps>
