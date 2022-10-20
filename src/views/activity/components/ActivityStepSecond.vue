@@ -47,7 +47,7 @@
                             :rules="formRule.timeRange"
               >
                 <el-input type="number" min="1" :disabled="handleType=='query'"
-                          oninput="value=value.replace(/[^\d]/g,'')"
+                          oninput="value=value.replace(/^(0+)|[^\d]+/g,'')"
                           v-model="firstFormModel.timeRange"
                           @change="()=>{if(!firstFormModel.timeRange) firstFormModel.timeRange=1}"
                           class="input-with-select" style="width: 220px">
@@ -181,7 +181,7 @@
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
                             oninput="value=value.replace(/[^\d]/g,'')"
               >
-                <el-input type="number" min="1" :disabled="handleType=='query'" v-model="secondFormModel.timeRange"
+                <el-input type="number" min="1" :disabled="handleType=='query'"
                           @change="()=>{if(!secondFormModel.timeRange) secondFormModel.timeRange=1}"
                           class="input-with-select" style="width: 220px;">
                   <template #append>

@@ -30,7 +30,7 @@
       </el-steps>
     </div>
     <div v-else>
-      <el-steps :active="4" align-center simple finish-status="process">
+      <el-steps :active="3" align-center simple finish-status="process">
         <el-step title="基本信息">
           <template #icon>
             <img src="../../assets/images/step-success.png"/>
