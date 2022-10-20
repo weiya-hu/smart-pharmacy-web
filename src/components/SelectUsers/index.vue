@@ -59,7 +59,7 @@
         </el-form>
 
         <div class="table-box">
-          <el-table row-key="userId" ref="userListRef" height="325px" v-loading="loading" :data="userList" :current-row-key="currentUserId"
+          <el-table row-key="userId" ref="userListRef" height="325px" v-loading="loading" :data="userList" 
              highlight-current-row @current-change="handleCurrentChange">
             <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" show-overflow-tooltip/>
             <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible"
@@ -90,7 +90,6 @@ const router = useRouter();
 const {proxy} = getCurrentInstance();
 const {sys_normal_disable, sys_user_sex} = proxy.useDict("sys_normal_disable", "sys_user_sex");
 
-const currentUserId = ref(props.data.userId)
 const userList = ref([]);
 const open = ref(false);
 const loading = ref(true);
@@ -159,6 +158,7 @@ function getList() {
   listUser(proxy.addDateRange(queryParams.value, dateRange.value)).then(res => {
     loading.value = false;
     userList.value = res.data.list;
+    selectUsers.value = []
     total.value = Number(res.data.total);
   });
 };
@@ -190,8 +190,10 @@ function resetQuery() {
 
 /** 选择  */
 function handleCurrentChange(currentRow) {
-  console.log(props.data,currentRow)
-  selectUsers.value[0] = currentRow
+  if(currentRow){
+    selectUsers.value[0] = currentRow
+  }
+  
 }
 
 /** 初始化部门数据 */
@@ -211,6 +213,7 @@ const getSelectUsers = () => {
 }
 //设置默认选中
 const defineSelected = () => {
+  selectedNodeId()
   nextTick(() => {
     userList.value.forEach(row => {
       if (defineSelectedId.value.indexOf(row.userId) >= 0) {
@@ -224,6 +227,8 @@ const selectedNodeId = () => {
   defineSelectedId.value = props.data.map(item => {
     return item.userId
   })
+
+  
 }
 watch(() => queryParams.value.pageNum, () => {
   defineSelected()
@@ -237,8 +242,14 @@ const props = defineProps({
     default: undefined
   }
 })
+const setPageNum = () =>{
+  queryParams.value.pageNum = 1;
+  getList();
+}
 defineExpose({
-  getSelectUsers
+  getSelectUsers,
+  defineSelected,
+  setPageNum
 })
 
 function onShowTips(e){
@@ -250,6 +261,7 @@ function onShowTips(e){
     showTitle.value = true
   }
 }
+
 
 getList();
 getTreeselect();

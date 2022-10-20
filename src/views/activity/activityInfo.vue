@@ -43,9 +43,14 @@
       </div>
     </div>
     <div style="text-align: center;margin-top: 5%">
-      <el-button @click="decrementStep" v-show="step > 0&&step<2">{{ handleType == 'query' ? '上一页' : '上一步' }}</el-button>
+      <el-button @click="decrementStep" v-show="step > 0&&step<2">{{
+          handleType == 'query' ? '上一页' : '上一步'
+        }}
+      </el-button>
       <el-button @click="handleBack" v-show="step===0">返回</el-button>
-      <el-button type="primary" @click="handleNext" v-show="step<2" :loading="loadingBtn">{{ handleType == 'query' ? '下一页' : '下一步' }}</el-button>
+      <el-button type="primary" @click="handleNext" v-show="step<2" :loading="loadingBtn">
+        {{ handleType == 'query' ? '下一页' : '下一步' }}
+      </el-button>
     </div>
   </div>
 </template>
@@ -58,7 +63,7 @@ export default {
 import ActivityStepFirst from './components/ActivityStepFirst'
 import ActivityStepSecond from './components/ActivityStepSecond'
 import {queryEventRule, publish, getEventInfoByid} from '@/api/activity/eventInfo'
-import {nextTick} from "vue";
+import {nextTick, onMounted} from "vue";
 import {List, Ticket, UserFilled, Promotion} from '@element-plus/icons-vue';
 
 const route = useRoute();
@@ -77,7 +82,7 @@ const getImageUrl = () => {
 let canEdit = ref(false)
 const decrementStep = () => {
   step.value--
-  if (step.value === 1) {
+  if (step.value == 0) {
     //  获取任务基本信息
     getEventInfoByid(eventId.value).then(res => {
       if (res.code == 200) {
@@ -166,12 +171,24 @@ const isPresenceGoodsOrBrandOrStore = (dataList) => {
 const handleBack = () => {
   proxy.$tab.closeOpenPage('/markteCenter/activity')
 }
-
+//获取任务基本信息
+const getTaskInfo = () => {
+  if (eventId.value) {
+    getEventInfoByid(eventId.value).then(res => {
+      if (res.code == 200) {
+        canEdit.value = res.data.canEdit
+      }
+    })
+  } else {
+    return
+  }
+}
 const loadInfo = () => {
   eventId.value = route.query.eventId
   handleType.value = route.query.handleType
 }
 loadInfo()
+getTaskInfo()
 
 </script>
 

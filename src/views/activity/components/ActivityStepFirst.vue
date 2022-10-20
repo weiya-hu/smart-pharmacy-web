@@ -36,32 +36,32 @@
       </el-form-item>
       <el-form-item class="label" label="活动范围" prop="ruleScupes">
         <el-button @click="showRuleScupes = !showRuleScupes" link type="primary">
-          <span v-show="handleType === 'query'">查看<span
-              v-show="form.ruleScupes.length>0">已选择（{{ form.ruleScupes.length }}）个</span></span>
-          <span v-show="handleType === 'edit'">编辑<span
-              v-show="form.ruleScupes.length>0">已选择（{{ form.ruleScupes.length }}）个</span></span>
-          <span v-show="handleType === 'add'">新增<span
-              v-show="form.ruleScupes.length>0">已选择（{{ form.ruleScupes.length }}）个</span></span>
+          <span v-show="handleType === 'query'">查看&nbsp;<span
+              v-show="form.ruleScupes.length>0">已选择业务结构（{{ form.ruleScupes.length }}）个</span></span>
+          <span v-show="handleType === 'edit'">编辑 &nbsp;<span
+              v-show="form.ruleScupes.length>0">已选择业务结构（{{ form.ruleScupes.length }}）个</span></span>
+          <span v-show="handleType === 'add'">新增 &nbsp;<span
+              v-show="form.ruleScupes.length>0">已选择业务结构（{{ form.ruleScupes.length }}）个</span></span>
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="活动负责人" prop="ruleResponsibleUsers">
-        <el-button @click="showResponsibleUsers = !showResponsibleUsers" link type="primary">
-          <span v-show="handleType === 'query'">查看<span
-              v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
-          <span v-show="handleType === 'edit'">编辑<span
-              v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
-          <span v-show="handleType === 'add'">新增<span
-              v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
+        <el-button @click="chickShowUsers" link type="primary">
+          <span v-show="handleType === 'query'">查看&nbsp;<span
+              v-show="form.responsibleUsers.length>0">已选择负责人（{{ form.responsibleUsers.length }}）人</span></span>
+          <span v-show="handleType === 'edit'">编辑&nbsp;<span
+              v-show="form.responsibleUsers.length>0">已选择负责人（{{ form.responsibleUsers.length }}）人</span></span>
+          <span v-show="handleType === 'add'">新增&nbsp;<span
+              v-show="form.responsibleUsers.length>0">已选择负责人（{{ form.responsibleUsers.length }}）人</span></span>
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="活动参与方" prop="participants">
         <el-button @click="showRarticipants = !showRarticipants" link type="primary">
-          <span v-show="handleType === 'query'">查看 <span
-              v-show="form.participants.length>0">已选择（{{ form.participants.length }}）个</span></span>
-          <span v-show="handleType === 'edit'">编辑<span
-              v-show="form.participants.length>0">已选择（{{ form.participants.length }}）个</span></span>
-          <span v-show="handleType === 'add'">新增<span
-              v-show="form.participants.length>0">已选择（{{ form.participants.length }}）个</span></span>
+          <span v-show="handleType === 'query'">查看&nbsp; <span
+              v-show="form.participants.length>0">已选择参与方（{{ form.participants.length }}）个</span></span>
+          <span v-show="handleType === 'edit'">编辑&nbsp;<span
+              v-show="form.participants.length>0">已选择参与方（{{ form.participants.length }}）个</span></span>
+          <span v-show="handleType === 'add'">新增&nbsp;<span
+              v-show="form.participants.length>0">已选择参与方（{{ form.participants.length }}）个</span></span>
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="任务描述" prop="comment">
@@ -70,6 +70,7 @@
             :autosize="{ minRows: 3, maxRows: 9 }"
             type="textarea"
             placeholder="请输入任务描述"
+            :disabled="formDisabled"
             style="width: 400px"/>
       </el-form-item>
       <!--      <el-form-item label="任务截止类型" prop="endType">-->
@@ -214,7 +215,7 @@ import {
 } from "@/api/activity/eventInfo";
 import BusinessTree from '@/components/BusinessTree/index'
 import SelectUsers from '@/components/SelectUsers/index'
-import {reactive} from "vue";
+import {nextTick, reactive} from "vue";
 import {getToken} from "@/utils/auth";
 import {ElMessage, ElMessageBox} from "element-plus";
 
@@ -286,7 +287,8 @@ function reset() {
     beginTime: '', //开始时间
     endTime: '', //结束时间
     files: [],
-    ruleScupes: [], //任务范围
+    ruleScupes: [], //任务范围,
+    ruleScupesLength: 0,
     sendNotice: false, //是否发送通知给执行人
     responsibleUsers: [],//任务负责人
     participants: [],//任务参与人
@@ -336,9 +338,7 @@ async function submitForm() {
     //任务范围
     firstLoading.value = true
     if (props.eventId != null && props.canEdit) {
-      let backData = null
       form.value.eventId = props.eventId
-      // return open(form.value)
       return updateEventInfo(form.value)
     } else if (props.eventId === undefined) {
       return createEventInfo(form.value)
@@ -511,10 +511,21 @@ const onSuccessRuleScupes = () => {
   } else {
     form.value.productFilter.specifications = queryRuleScupesParams.value.specifications
   }
-  form.value.ruleScupes = businessTreeParticipantsRef.value.getMenuAllChildCheckedKeys().map(item => ({nodeId: item.id}))
+  let resultData = businessTreeParticipantsRef.value.getMenuAllCheckedKeys()
+  form.value.ruleScupes = resultData.map(item => ({nodeId: item.id}))
+  form.value.ruleScupesLength = getStoreArray(resultData)
+  console.log(form.value.ruleScupesLength)
   showRuleScupes.value = false
   proxy.$refs["activityRef"].validateField('ruleScupes')
 }
+//获取范围为门店的信息
+const getStoreArray = (data) => {
+  return data.filter(item => {
+    return item.type == 4
+  }).length
+}
+
+
 // 范围选择取消
 const onCancelRuleScupes = () => {
   //关闭弹窗
@@ -531,12 +542,15 @@ const onCancelRuleScupes = () => {
 //任务负责人选择确定
 const onSuccessResponsibleUsers = () => {
   showResponsibleUsers.value = false
-  form.value.responsibleUsers = responsibleUsersRef.value.getSelectUsers().map(item => {
-    return {
-      userId: item.userId,
-      name: item.userName
-    }
-  })
+  if (responsibleUsersRef.value.getSelectUsers().length > 0) {
+    form.value.responsibleUsers = responsibleUsersRef.value.getSelectUsers().map(item => {
+      return {
+        userId: item.userId,
+        name: item.userName
+      }
+    })
+  }
+
   proxy.$refs["activityRef"].validateField('ruleResponsibleUsers')
 }
 //任务负责人选择取消
@@ -564,6 +578,16 @@ const queryActivityEventId = async (eventId) => {
   }
 }
 
+const chickShowUsers = () => {
+  showResponsibleUsers.value = !showResponsibleUsers.value
+
+  //设置默认选中
+  nextTick(() => {
+    responsibleUsersRef.value.defineSelected()
+    responsibleUsersRef.value.setPageNum()
+  })
+
+}
 
 //添加loading
 const openLoading = () => {
