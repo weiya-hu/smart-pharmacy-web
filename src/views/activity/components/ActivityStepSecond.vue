@@ -1,6 +1,6 @@
 <template>
 
-  <div class="app-container secondStep" v-loading="secondLoading" element-loading-text="请等待..." >
+  <div class="app-container secondStep" v-loading="secondLoading" element-loading-text="请等待...">
     <el-tabs type="border-card" v-model="tabValue" @tab-change="changeTab">
       <el-tab-pane name="first" label="单品｜组合">
         <el-form ref="firstForm" :model="firstFormModels" :rules="formRule" inline label-width="95px">
@@ -44,10 +44,12 @@
                 </el-select>
               </el-form-item>
               <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
+                            :rules="formRule.timeRange"
               >
                 <el-input type="number" min="1" :disabled="handleType=='query'"
                           oninput="value=value.replace(/[^\d]/g,'')"
                           v-model="firstFormModel.timeRange"
+                          @change="()=>{if(!firstFormModel.timeRange) firstFormModel.timeRange=1}"
                           class="input-with-select" style="width: 220px">
                   <template #append>
                     <el-select v-model="firstFormModel.timeRangeUnit" style="width: 100px">
@@ -124,13 +126,12 @@
                           :disabled="handleType=='query'"
                           v-model="item.price"
                           @blur="(value)=>{changePrice(item.price,item,firstFormModel.rewardType,index)}"
-
                           class="input-with-select">
                 </el-input>
               </el-form-item>
             </el-row>
             <el-divider content-position="left" v-if="firstFormModel.comment !== undefined"></el-divider>
-            <div class="tips">{{firstFormModel.comment}}</div>
+            <div class="tips">{{ firstFormModel.comment }}</div>
 
           </div>
         </el-form>
@@ -181,6 +182,7 @@
                             oninput="value=value.replace(/[^\d]/g,'')"
               >
                 <el-input type="number" min="1" :disabled="handleType=='query'" v-model="secondFormModel.timeRange"
+                          @change="()=>{if(!secondFormModel.timeRange) secondFormModel.timeRange=1}"
                           class="input-with-select" style="width: 220px;">
                   <template #append>
                     <el-select v-model="secondFormModel.timeRangeUnit" style="width: 100px">
@@ -256,7 +258,7 @@
             </el-row>
 
             <el-divider content-position="left" v-if="secondFormModel.comment !== undefined"></el-divider>
-            <div class="tips">{{secondFormModel.comment}}</div>
+            <div class="tips">{{ secondFormModel.comment }}</div>
           </div>
         </el-form>
         <el-empty description="暂无数据" v-if="secondFormModels.formListData.length == 0"/>
@@ -308,6 +310,7 @@
                             oninput="value=value.replace(/[^\d]/g,'')"
               >
                 <el-input type="number" min="1" :disabled="handleType=='query'" v-model="thirdFormModel.timeRange"
+                          @change="()=>{if(!thirdFormModel.timeRange) thirdFormModel.timeRange=1}"
                           class="input-with-select" style="width: 220px;">
                   <template #append>
                     <el-select v-model="thirdFormModel.timeRangeUnit" style="width: 100px;">
@@ -384,7 +387,7 @@
               </el-form-item>
             </el-row>
             <el-divider content-position="left" v-if="thirdFormModel.comment !== undefined"></el-divider>
-            <div class="tips">{{thirdFormModel.comment}}</div>
+            <div class="tips">{{ thirdFormModel.comment }}</div>
           </div>
         </el-form>
         <el-empty description="暂无数据" v-if="thirdFormModels.formListData.length == 0"/>
@@ -395,7 +398,7 @@
                :close-on-click-modal="false"
                draggable destroy-on-close
                @close="selectProductsClose"
-               >
+    >
       <SelectProducts :selectedGoodsAccount="selectedGoodsAccount" :eventRuleId="itemRuleId" :eventId="props.eventId"
                       :packageId="productPackageId"
                       :productIds="productList" :handleType="props.handleType"
@@ -598,6 +601,24 @@ const getBrandList = () => {
         }
       })
 }
+
+//门店弹出确定
+const onSuccessStoreDialog = () => {
+  showStoreDialog.value = false
+  thirdFormModels.value.formListData[formStoreIndex.value].filter.ids = selectStoreRef.value.getStoreResultList()
+//  获取门店规则下的职务
+  queryJobList(props.eventId, {nodeIds: thirdFormModels.value.formListData[formStoreIndex.value].filter.ids})
+      .then(res => {
+        if (res.code === 200) {
+          thirdFormModels.value.formListData[formStoreIndex.value].jobs = res.data.list.map(job => ({
+            ...job,
+            targetRange: 0,
+            price: 0
+          }))
+
+        }
+      })
+}
 //查询职务列表
 const getJobList = () => {
   if (props.handleType === 'query') return
@@ -631,6 +652,11 @@ const changePrice = (value, item, tage, index) => {
     if (!reg.test(value)) {
       item.price = 0
       proxy.$modal.msgError("请输入0到1的小数")
+    }
+    return
+  } else {
+    if (!value) {
+      item.price = 0
     }
   }
 }
@@ -945,23 +971,6 @@ const getActivityRules = () => {
 }
 
 
-//门店弹出确定
-const onSuccessStoreDialog = () => {
-  showStoreDialog.value = false
-  thirdFormModels.value.formListData[formStoreIndex.value].filter.ids = selectStoreRef.value.getStoreResultList()
-//  获取门店规则下的职务
-  queryJobList(props.eventId, {nodeIds: thirdFormModels.value.formListData[formStoreIndex.value].filter.ids})
-      .then(res => {
-        if (res.code === 200) {
-          thirdFormModels.value.formListData[formStoreIndex.value].jobs = res.data.list.map(job => ({
-            ...job,
-            targetRange: 0,
-            price: 0
-          }))
-
-        }
-      })
-}
 //门店弹窗关闭
 const onCancelStoreDialog = () => {
   showStoreDialog.value = false
@@ -1066,10 +1075,10 @@ const clearJobValue = (value) => {
 }
 
 //新增时页面滑到滑到底部
-const scrollBottom =()=>{
-  nextTick(()=>{
+const scrollBottom = () => {
+  nextTick(() => {
     let height = document.getElementsByClassName('secondStep')[0].clientHeight;
-    window.scroll({ top: height , left: 0, behavior: 'smooth' });
+    window.scroll({top: height, left: 0, behavior: 'smooth'});
   })
 }
 
@@ -1084,7 +1093,7 @@ const disableScroll = () => {
   dom.style.width = 'auto';
   dom.style.overflowY = "hidden";
 }
-const selectProductsClose =()=>{
+const selectProductsClose = () => {
   enableScroll()
 }
 
@@ -1139,7 +1148,8 @@ defineExpose({
   position: absolute;
   left: 0;
   top: 0;
-  &>div{
+
+  & > div {
     width: 79px;
     height: 26px;
     line-height: 26px;

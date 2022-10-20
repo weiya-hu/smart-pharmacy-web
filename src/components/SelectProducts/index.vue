@@ -56,6 +56,7 @@
       <el-table-column label="数量" align="center">
         <template #default="scope">
           <el-input oninput="value=value.replace(/^0|[^0-9]/g, 1)" type="number" size="small"
+                    @change="()=>{if(!scope.row.account) scope.row.account=1}"
                     v-model.number="scope.row.account" min="1"></el-input>
         </template>
       </el-table-column>
