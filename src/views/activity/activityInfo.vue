@@ -21,7 +21,10 @@
           <img src="../../assets/images/step-success.png" v-show="step > 2" />
         </template>
       </el-step>
-      <el-step title="完成发布" :icon="Promotion">
+      <el-step title="完成发布">
+        <template #icon>
+          <img src="../../assets/images/step-hide-4.png" v-show="step == 3" />
+        </template>
       </el-step>
     </el-steps>
 
@@ -64,7 +67,7 @@ import ActivityStepFirst from './components/ActivityStepFirst'
 import ActivityStepSecond from './components/ActivityStepSecond'
 import {queryEventRule, publish, getEventInfoByid} from '@/api/activity/eventInfo'
 import {nextTick, onMounted} from "vue";
-import {List, Ticket, UserFilled, Promotion} from '@element-plus/icons-vue';
+import {Promotion} from '@element-plus/icons-vue';
 
 const route = useRoute();
 const {proxy} = getCurrentInstance();
@@ -73,6 +76,7 @@ const activityStepFirstRef = ref()
 const activityStepSecondRef = ref()
 const eventId = ref('')
 const handleType = ref('')
+const stateName = ref('')
 const loadingBtn = ref(false)
 let secondLoading = ref(false)
 let auditLoadiang = ref(false)
@@ -186,6 +190,7 @@ const getTaskInfo = () => {
 const loadInfo = () => {
   eventId.value = route.query.eventId
   handleType.value = route.query.handleType
+  stateName.value = route.query.stateName
 }
 loadInfo()
 getTaskInfo()

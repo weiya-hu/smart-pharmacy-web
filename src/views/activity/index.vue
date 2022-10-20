@@ -174,7 +174,7 @@ function handleAdd() {
 
 /** 查看按钮操作 */
 function handleQueryInfo(row) {
-  router.push({path: '/markteCenter/activityInfo', query: {handleType: 'query', eventId: row.eventId}})
+  router.push({path: '/markteCenter/activityInfo', query: {handleType: 'query', eventId: row.eventId, stateName: row.stateName}})
 }
 
 /** 删除按钮操作 */

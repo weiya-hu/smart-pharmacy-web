@@ -433,6 +433,7 @@ import {
   queryEventRule,
   publish,
   publishActivityTask,
+  queryEventRuleInfo,
   changeEventRule,
   deleteEventRule,
   approvalActivityTask,
@@ -470,7 +471,8 @@ const firstFormModels = ref({
         jobs: cloneFunction(jobList.value),
         filter: {
           ids: [], specifications: [], brands: [], productTypes: []
-        }
+        },
+        comment: ''
       }]
     }
 )
@@ -782,6 +784,7 @@ const delForm = async (index) => {
       break;
   }
 }
+const comment = ref()
 //保存并新增规则
 const saveFormAndAdd = async (index, type) => {
   switch (tabValue.value) {
@@ -814,6 +817,11 @@ const saveFormAndAdd = async (index, type) => {
                     firstFormModels.value.formListData.push(resetFirstForm())
                     scrollBottom()
                   }
+                  queryEventRuleInfo(firstFormModels.value.formListData[index].eventRuleId).then(res => {
+                    if (res.code === 200) {
+                      firstFormModels.value.formListData[index].comment = res.data.comment
+                    }
+                  })
                 }
                 closeLoading()
               }).catch(e => closeLoading())
@@ -849,6 +857,11 @@ const saveFormAndAdd = async (index, type) => {
                     secondFormModels.value.formListData.push(resetSecondForm())
                     scrollBottom()
                   }
+                  queryEventRuleInfo(secondFormModels.value.formListData[index].eventRuleId).then(res => {
+                    if (res.code === 200) {
+                      secondFormModels.value.formListData[index].comment = res.data.comment
+                    }
+                  })
                 }
                 closeLoading()
               }).catch(e => closeLoading())
@@ -884,6 +897,11 @@ const saveFormAndAdd = async (index, type) => {
                     thirdFormModels.value.formListData.push(resetThirdForm())
                     scrollBottom()
                   }
+                  queryEventRuleInfo(thirdFormModels.value.formListData[index].eventRuleId).then(res => {
+                    if (res.code === 200) {
+                      thirdFormModels.value.formListData[index].comment = res.data.comment
+                    }
+                  })
                 }
                 closeLoading()
               }).catch(e => closeLoading())
