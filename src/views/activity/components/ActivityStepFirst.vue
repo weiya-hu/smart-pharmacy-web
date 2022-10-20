@@ -38,9 +38,9 @@
         <el-button @click="showRuleScupes = !showRuleScupes" link type="primary">
           <span v-show="handleType === 'query'">查看&nbsp;<span
               v-show="form.ruleScupes.length>0">已选择业务结构（{{ form.ruleScupes.length }}）个</span></span>
-          <span v-show="handleType === 'edit'">编辑 &nbsp;<span
+          <span v-show="handleType === 'edit'">编辑&nbsp;<span
               v-show="form.ruleScupes.length>0">已选择业务结构（{{ form.ruleScupes.length }}）个</span></span>
-          <span v-show="handleType === 'add'">新增 &nbsp;<span
+          <span v-show="handleType === 'add'">新增&nbsp;<span
               v-show="form.ruleScupes.length>0">已选择业务结构（{{ form.ruleScupes.length }}）个</span></span>
         </el-button>
       </el-form-item>
@@ -514,7 +514,6 @@ const onSuccessRuleScupes = () => {
   let resultData = businessTreeParticipantsRef.value.getMenuAllCheckedKeys()
   form.value.ruleScupes = resultData.map(item => ({nodeId: item.id}))
   form.value.ruleScupesLength = getStoreArray(resultData)
-  console.log(form.value.ruleScupesLength)
   showRuleScupes.value = false
   proxy.$refs["activityRef"].validateField('ruleScupes')
 }
