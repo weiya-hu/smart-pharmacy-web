@@ -548,7 +548,8 @@ const thirdFormModels = ref({
     jobs: cloneFunction(jobList.value),
     filter: {
       ids: [], specifications: [], brands: [], productTypes: []
-    }
+    },
+    stores: []
   }]
 })
 const resetThirdForm = () => {
@@ -562,7 +563,8 @@ const resetThirdForm = () => {
     jobs: [],
     filter: {
       ids: [], specifications: [], brands: [], productTypes: []
-    }
+    },
+    stores: []
   }
 
 }
