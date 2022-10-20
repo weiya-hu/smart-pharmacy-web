@@ -36,32 +36,32 @@
       </el-form-item>
       <el-form-item class="label" label="活动范围" prop="ruleScupes">
         <el-button @click="showRuleScupes = !showRuleScupes" link type="primary">
-          <span v-show="handleType === 'query'">查看<span
-              v-show="form.ruleScupes.length>0">已选择（{{ form.ruleScupes.length }}）个</span></span>
-          <span v-show="handleType === 'edit'">编辑<span
-              v-show="form.ruleScupes.length>0">已选择（{{ form.ruleScupes.length }}）个</span></span>
-          <span v-show="handleType === 'add'">新增<span
-              v-show="form.ruleScupes.length>0">已选择（{{ form.ruleScupes.length }}）个</span></span>
+          <span v-show="handleType === 'query'">查看&nbsp;<span
+              v-show="form.ruleScupes.length>0">已选择业务结构（{{ form.ruleScupes.length }}）个</span></span>
+          <span v-show="handleType === 'edit'">编辑 &nbsp;<span
+              v-show="form.ruleScupes.length>0">已选择业务结构（{{ form.ruleScupes.length }}）个</span></span>
+          <span v-show="handleType === 'add'">新增 &nbsp;<span
+              v-show="form.ruleScupes.length>0">已选择业务结构（{{ form.ruleScupes.length }}）个</span></span>
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="活动负责人" prop="ruleResponsibleUsers">
         <el-button @click="chickShowUsers" link type="primary">
-          <span v-show="handleType === 'query'">查看<span
-              v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
-          <span v-show="handleType === 'edit'">编辑<span
-              v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
-          <span v-show="handleType === 'add'">新增<span
-              v-show="form.responsibleUsers.length>0">已选择（{{ form.responsibleUsers.length }}）个</span></span>
+          <span v-show="handleType === 'query'">查看&nbsp;<span
+              v-show="form.responsibleUsers.length>0">已选择负责人（{{ form.responsibleUsers.length }}）个</span></span>
+          <span v-show="handleType === 'edit'">编辑&nbsp;<span
+              v-show="form.responsibleUsers.length>0">已选择负责人（{{ form.responsibleUsers.length }}）个</span></span>
+          <span v-show="handleType === 'add'">新增&nbsp;<span
+              v-show="form.responsibleUsers.length>0">已选择负责人（{{ form.responsibleUsers.length }}）个</span></span>
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="活动参与方" prop="participants">
         <el-button @click="showRarticipants = !showRarticipants" link type="primary">
-          <span v-show="handleType === 'query'">查看 <span
-              v-show="form.participants.length>0">已选择（{{ form.participants.length }}）个</span></span>
-          <span v-show="handleType === 'edit'">编辑<span
-              v-show="form.participants.length>0">已选择（{{ form.participants.length }}）个</span></span>
-          <span v-show="handleType === 'add'">新增<span
-              v-show="form.participants.length>0">已选择（{{ form.participants.length }}）个</span></span>
+          <span v-show="handleType === 'query'">查看&nbsp; <span
+              v-show="form.participants.length>0">已选择参与方（{{ form.participants.length }}）个</span></span>
+          <span v-show="handleType === 'edit'">编辑&nbsp;<span
+              v-show="form.participants.length>0">已选择参与方（{{ form.participants.length }}）个</span></span>
+          <span v-show="handleType === 'add'">新增&nbsp;<span
+              v-show="form.participants.length>0">已选择参与方（{{ form.participants.length }}）个</span></span>
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="任务描述" prop="comment">
@@ -70,6 +70,7 @@
             :autosize="{ minRows: 3, maxRows: 9 }"
             type="textarea"
             placeholder="请输入任务描述"
+            :disabled="formDisabled"
             style="width: 400px"/>
       </el-form-item>
       <!--      <el-form-item label="任务截止类型" prop="endType">-->
@@ -541,13 +542,13 @@ const onCancelRuleScupes = () => {
 //任务负责人选择确定
 const onSuccessResponsibleUsers = () => {
   showResponsibleUsers.value = false
-  if(responsibleUsersRef.value.getSelectUsers().length >0){
+  if (responsibleUsersRef.value.getSelectUsers().length > 0) {
     form.value.responsibleUsers = responsibleUsersRef.value.getSelectUsers().map(item => {
-    return {
-      userId: item.userId,
-      name: item.userName
-    }
-  })
+      return {
+        userId: item.userId,
+        name: item.userName
+      }
+    })
   }
 
   proxy.$refs["activityRef"].validateField('ruleResponsibleUsers')
@@ -577,11 +578,11 @@ const queryActivityEventId = async (eventId) => {
   }
 }
 
-const chickShowUsers = ()=>{
+const chickShowUsers = () => {
   showResponsibleUsers.value = !showResponsibleUsers.value
 
   //设置默认选中
-  nextTick(()=>{
+  nextTick(() => {
     responsibleUsersRef.value.defineSelected()
     responsibleUsersRef.value.setPageNum()
   })

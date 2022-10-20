@@ -48,7 +48,7 @@ export default {
 import ActivityStepFirst from './components/ActivityStepFirst'
 import ActivityStepSecond from './components/ActivityStepSecond'
 import {queryEventRule, publish, getEventInfoByid} from '@/api/activity/eventInfo'
-import {nextTick} from "vue";
+import {nextTick, onMounted} from "vue";
 import {List, Ticket, UserFilled, Promotion} from '@element-plus/icons-vue';
 
 const route = useRoute();
@@ -172,8 +172,10 @@ const loadInfo = () => {
   eventId.value = route.query.eventId
   handleType.value = route.query.handleType
 }
-loadInfo()
-getTaskInfo()
+onMounted(() => {
+  loadInfo()
+  getTaskInfo()
+})
 </script>
 
 <style scoped lang="scss">
