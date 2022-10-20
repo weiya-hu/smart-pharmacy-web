@@ -47,11 +47,11 @@
       <el-form-item class="label" label="活动负责人" prop="ruleResponsibleUsers">
         <el-button @click="chickShowUsers" link type="primary">
           <span v-show="handleType === 'query'">查看&nbsp;<span
-              v-show="form.responsibleUsers.length>0">已选择负责人（{{ form.responsibleUsers.length }}）个</span></span>
+              v-show="form.responsibleUsers.length>0">已选择负责人（{{ form.responsibleUsers.length }}）人</span></span>
           <span v-show="handleType === 'edit'">编辑&nbsp;<span
-              v-show="form.responsibleUsers.length>0">已选择负责人（{{ form.responsibleUsers.length }}）个</span></span>
+              v-show="form.responsibleUsers.length>0">已选择负责人（{{ form.responsibleUsers.length }}）人</span></span>
           <span v-show="handleType === 'add'">新增&nbsp;<span
-              v-show="form.responsibleUsers.length>0">已选择负责人（{{ form.responsibleUsers.length }}）个</span></span>
+              v-show="form.responsibleUsers.length>0">已选择负责人（{{ form.responsibleUsers.length }}）人</span></span>
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="活动参与方" prop="participants">
