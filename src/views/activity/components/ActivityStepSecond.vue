@@ -281,14 +281,14 @@
             <el-row>
               <div class="moudelTitle">参与门店</div>
             </el-row>
-            <el-button v-if="thirdFormModels.formListData[index].filter.ids.length==0" type="primary" link
+            <el-button v-if="thirdFormModels.formListData[index].stores.length==0" type="primary" link
                        @click="openStoreDialog(index, thirdFormModel)">添加门店
             </el-button>
             <el-button type="primary" link>已选（{{
-                thirdFormModels.formListData[index].filter.ids.length
+                thirdFormModels.formListData[index].stores.length
               }}）个
             </el-button>
-            <el-button v-if="thirdFormModels.formListData[index].filter.ids.length!==0" type="primary"
+            <el-button v-if="thirdFormModels.formListData[index].stores.length!==0" type="primary"
                        @click="openStoreDialog(index, thirdFormModel)">点击查看门店列表
             </el-button>
             <el-divider content-position="left"></el-divider>
