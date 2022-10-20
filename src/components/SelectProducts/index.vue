@@ -43,7 +43,7 @@
         v-model:limit="queryParam.pageSize"
         @pagination="getList"
     />
-    <el-divider content-position="left">已选择产品</el-divider>
+    <el-divider content-position="left">已选择产品&nbsp;&nbsp;&nbsp;&nbsp;未设置则商品数量默认为1</el-divider>
     <div class="handler">
       <el-button @click="clearSelected" link type="primary" v-if="props.handleType !== 'query'">清空已选</el-button>
     </div>
@@ -55,7 +55,8 @@
       <el-table-column label="规格" prop="specification" show-overflow-tooltip min-width="120px"/>
       <el-table-column label="数量" align="center">
         <template #default="scope">
-          <el-input type="number" size="small" v-model.number="scope.row.account" min="1"></el-input>
+          <el-input oninput="value=value.replace(/^0|[^0-9]/g, 1)" type="number" size="small"
+                    v-model.number="scope.row.account" min="1"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width"
@@ -191,9 +192,16 @@ const handleDelete = (row) => {
 }
 //获取已选择商品
 const getProductPackageResultList = () => {
-  return productResultList.value.map(item => ({
+  let selectedGoods = productResultList.value.map(item => ({
     ...cloneFunction(item)
   }))
+  return selectedGoods.map(item => {
+    if (item.account > 0) {
+      return item
+    } else {
+      return Object.assign(item, {account: 1})
+    }
+  })
 }
 const getProductResultList = () => {
   return productResultList.value.map(item => ({account: 1, ...cloneFunction(item)}))
