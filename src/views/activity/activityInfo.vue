@@ -172,10 +172,9 @@ const loadInfo = () => {
   eventId.value = route.query.eventId
   handleType.value = route.query.handleType
 }
-onMounted(() => {
-  loadInfo()
-  getTaskInfo()
-})
+loadInfo()
+getTaskInfo()
+
 </script>
 
 <style scoped lang="scss">
