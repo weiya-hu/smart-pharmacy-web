@@ -18,7 +18,7 @@
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-table v-loading="loading" :data="productList" height="270">
+    <el-table v-loading="loading" element-loading-text="加载中..." :data="productList" height="270">
       <el-table-column label="编码" prop="code" show-overflow-tooltip/>
       <el-table-column label="名称" prop="name" show-overflow-tooltip min-width="135px"/>
       <el-table-column label="品类" prop="productType" show-overflow-tooltip/>
@@ -47,7 +47,7 @@
     <div class="handler">
       <el-button @click="clearSelected" link type="primary" v-if="props.handleType !== 'query'">清空已选</el-button>
     </div>
-    <el-table v-loading="loading" :data="productResultList" height="150">
+    <el-table :data="productResultList" height="150">
       <el-table-column label="编码" prop="code" show-overflow-tooltip/>
       <el-table-column label="名称" prop="name" show-overflow-tooltip min-width="100px"/>
       <el-table-column label="品类" prop="productType" show-overflow-tooltip/>
@@ -125,11 +125,13 @@ const getList = () => {
   if (props.eventId) {
     queryParam.value.eventId = props.eventId
     currentPageData.value = []
+    loading.value = true
     queryProductList(queryParam.value).then(res => {
       if (res.code === 200) {
         currentPageData.value = cloneFunction(res.data.list)
         productList.value = res.data.list
         total.value = Number(res.data.total)
+        loading.value = false
         if (selectProductId.value.length > 0) {
           selectProductId.value.forEach(item => {
             let exists = productList.value.filter(f => item === f.productId)
