@@ -607,6 +607,7 @@ const getBrandList = () => {
 const onSuccessStoreDialog = () => {
   showStoreDialog.value = false
   thirdFormModels.value.formListData[formStoreIndex.value].filter.ids = selectStoreRef.value.getStoreResultList()
+  thirdFormModels.value.formListData[formStoreIndex.value].stores = selectStoreRef.value.getStoreResultListInfo()
 //  获取门店规则下的职务
   queryJobList(props.eventId, {nodeIds: thirdFormModels.value.formListData[formStoreIndex.value].filter.ids})
       .then(res => {
@@ -620,6 +621,8 @@ const onSuccessStoreDialog = () => {
         }
       })
 }
+
+
 //查询职务列表
 const getJobList = () => {
   if (props.handleType === 'query') return
@@ -836,14 +839,21 @@ const saveFormAndAdd = async (index, type) => {
               }).catch(e => closeLoading())
         } else {
           openLoading()
+          if (firstFormModels.value.formListData[index].products.length == 0) {
+            proxy.$modal.msgError("未选择参与规则的商品")
+            closeLoading()
+            return
+          }
           changeEventRule(firstFormModels.value.formListData[index])
               .then(res => {
                 if (res.code === 200) {
                   proxy.$modal.msgSuccess("修改规则成功");
-                  if (type === 'saveAndAdd') {
-                    firstFormModels.value.formListData.push(resetFirstForm())
-                    scrollBottom()
-                  }
+                  getActivityRules().then(res => {
+                    if (type === 'saveAndAdd') {
+                      firstFormModels.value.formListData.push(resetFirstForm())
+                      scrollBottom()
+                    }
+                  })
                   queryEventRuleInfo(firstFormModels.value.formListData[index].eventRuleId).then(res => {
                     if (res.code === 200) {
                       firstFormModels.value.formListData[index].comment = res.data.comment
@@ -880,10 +890,12 @@ const saveFormAndAdd = async (index, type) => {
               .then(res => {
                 if (res.code === 200) {
                   proxy.$modal.msgSuccess("修改规则成功");
-                  if (type === 'saveAndAdd') {
-                    secondFormModels.value.formListData.push(resetSecondForm())
-                    scrollBottom()
-                  }
+                  getActivityRules().then(res => {
+                    if (type === 'saveAndAdd') {
+                      secondFormModels.value.formListData.push(resetSecondForm())
+                      scrollBottom()
+                    }
+                  })
                   queryEventRuleInfo(secondFormModels.value.formListData[index].eventRuleId).then(res => {
                     if (res.code === 200) {
                       secondFormModels.value.formListData[index].comment = res.data.comment
@@ -920,10 +932,12 @@ const saveFormAndAdd = async (index, type) => {
               .then(res => {
                 if (res.code === 200) {
                   proxy.$modal.msgSuccess("修改规则成功");
-                  if (type === 'saveAndAdd') {
-                    thirdFormModels.value.formListData.push(resetThirdForm())
-                    scrollBottom()
-                  }
+                  getActivityRules().then(res => {
+                    if (type === 'saveAndAdd') {
+                      thirdFormModels.value.formListData.push(resetThirdForm())
+                      scrollBottom()
+                    }
+                  })
                   queryEventRuleInfo(thirdFormModels.value.formListData[index].eventRuleId).then(res => {
                     if (res.code === 200) {
                       thirdFormModels.value.formListData[index].comment = res.data.comment

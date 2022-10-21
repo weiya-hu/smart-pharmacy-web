@@ -127,9 +127,13 @@ const handleDelete = (row) => {
   }
   storeList.value.push(row)
 }
-//获取已选择门店
+//获取已选择门店id
 const getStoreResultList = () => {
   return storeResultList.value.map(item => (item.storeId))
+}
+//获取已选中的门店
+const getStoreResultListInfo = () => {
+  return storeResultList.value
 }
 
 const props = defineProps({
@@ -149,6 +153,7 @@ const props = defineProps({
 
 defineExpose({
   getStoreResultList,
+  getStoreResultListInfo,
   getList
 })
 
