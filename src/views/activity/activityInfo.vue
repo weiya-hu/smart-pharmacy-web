@@ -216,7 +216,6 @@ const loadInfo = () => {
   eventId.value = route.query.eventId
   handleType.value = route.query.handleType
   stateName.value = route.query.stateName
-  console.log(eventId.value,'1hjksdhajkdh ',handleType.value,'1hjksdhajkdh ',stateName.value)
 }
 
 loadInfo()

@@ -1089,7 +1089,6 @@ const disableScroll = () => {
   var scrollTopVal = document.documentElement.scrollTop || document.body.scrollTop;
   // 禁止滑动
   let dom = document.getElementsByClassName('main-container')[0]
-  console.log(dom)
   dom.style.position = "fixed";
   dom.style.top = "-" + scrollTopVal + 'px';
   dom.style.width = 'auto';
