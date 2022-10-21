@@ -207,7 +207,7 @@ const getProductPackageResultList = () => {
   })
 }
 const getProductResultList = () => {
-  return productResultList.value.map(item => ({account: 1, ...cloneFunction(item)}))
+  return productResultList.value.map(item => ({...cloneFunction(item), account: 1,}))
 }
 const props = defineProps({
   eventId: {
