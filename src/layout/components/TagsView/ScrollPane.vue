@@ -62,10 +62,10 @@ function moveToTarget(currentTag) {
     let nextTag = null
     for (const k in tagListDom) {
       if (k !== 'length' && Object.hasOwnProperty.call(tagListDom, k)) {
-        if (tagListDom[k].dataset.path === visitedViews.value[currentIndex - 1].path) {
+        if (tagListDom[k].dataset.path === visitedViews.value[currentIndex - 1].fullPath) {
           prevTag = tagListDom[k];
         }
-        if (tagListDom[k].dataset.path === visitedViews.value[currentIndex + 1].path) {
+        if (tagListDom[k].dataset.path === visitedViews.value[currentIndex + 1].fullPath) {
           nextTag = tagListDom[k];
         }
       }
@@ -73,7 +73,7 @@ function moveToTarget(currentTag) {
 
     // the tag's offsetLeft after of nextTag
     const afterNextTagOffsetLeft = nextTag.offsetLeft + nextTag.offsetWidth + tagAndTagSpacing.value
-
+    
     // the tag's offsetLeft before of prevTag
     const beforePrevTagOffsetLeft = prevTag.offsetLeft - tagAndTagSpacing.value
     if (afterNextTagOffsetLeft > $scrollWrapper.scrollLeft + $containerWidth) {
