@@ -11,13 +11,14 @@ const useTagsViewStore = defineStore(
         this.addCachedView(view)
       },
       addVisitedView(view) {
-        if (this.visitedViews.some(v => v.path === view.path)) return
-        // if (this.visitedViews.some(v => v.path === view.path && view.path !=='/markteCenter/activityInfo')) return
+        // if (this.visitedViews.some(v => v.fullPath === view.fullPath)) return
+        if (this.visitedViews.some(v => v.fullPath === view.fullPath)) return
         this.visitedViews.push(
           Object.assign({}, view, {
             title: view.meta.title || 'no-name'
           })
         )
+        console.log(this.visitedViews)
       },
       addCachedView(view) {
         if (this.cachedViews.includes(view.name)) return
@@ -38,7 +39,7 @@ const useTagsViewStore = defineStore(
       delVisitedView(view) {
         return new Promise(resolve => {
           for (const [i, v] of this.visitedViews.entries()) {
-            if (v.path === view.path) {
+            if (v.fullPath === view.fullPath) {
               this.visitedViews.splice(i, 1)
               break
             }
@@ -66,7 +67,7 @@ const useTagsViewStore = defineStore(
       delOthersVisitedViews(view) {
         return new Promise(resolve => {
           this.visitedViews = this.visitedViews.filter(v => {
-            return v.meta.affix || v.path === view.path
+            return v.meta.affix || v.fullPath === view.fullPath
           })
           resolve([...this.visitedViews])
         })
@@ -107,7 +108,7 @@ const useTagsViewStore = defineStore(
       },
       updateVisitedView(view) {
         for (let v of this.visitedViews) {
-          if (v.path === view.path) {
+          if (v.fullPath === view.fullPath) {
             v = Object.assign(v, view)
             break
           }
@@ -115,7 +116,7 @@ const useTagsViewStore = defineStore(
       },
       delRightTags(view) {
         return new Promise(resolve => {
-          const index = this.visitedViews.findIndex(v => v.path === view.path)
+          const index = this.visitedViews.findIndex(v => v.fullPath === view.fullPath)
           if (index === -1) {
             return
           }
@@ -134,7 +135,7 @@ const useTagsViewStore = defineStore(
       },
       delLeftTags(view) {
         return new Promise(resolve => {
-          const index = this.visitedViews.findIndex(v => v.path === view.path)
+          const index = this.visitedViews.findIndex(v => v.fullPath === view.fullPath)
           if (index === -1) {
             return
           }
