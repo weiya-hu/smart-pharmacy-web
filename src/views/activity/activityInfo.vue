@@ -76,35 +76,35 @@
     </div>
 
     <div v-else>
-    <el-steps :active="step" align-center simple process-status="finish" finish-status="process">
-      <el-step title="基本信息">
-        <template #icon>
-          <img src="../../assets/images/step-hide-1.png" v-show="step == 0"/>
-          <img src="../../assets/images/step-success.png" v-show="step !== 0"/>
-        </template>
-      </el-step>
-      <el-step title="规则配置">
-        <template #icon>
-          <img src="../../assets/images/step-hide-2.png" v-show="step == 1"/>
-          <img src="../../assets/images/step-show-2.png" v-show="step !== 1 && step < 1"/>
-          <img src="../../assets/images/step-success.png" v-show="step > 1"/>
-        </template>
-      </el-step>
-      <el-step title="提交审核">
-        <template #icon>
-          <img src="../../assets/images/step-hide-3.png" v-show="step == 2"/>
-          <img src="../../assets/images/step-show-3.png" v-show="step !== 2 && step < 2"/>
-          <img src="../../assets/images/step-success.png" v-show="step > 2"/>
-        </template>
-      </el-step>
-      <el-step title="完成发布">
-        <template #icon>
-          <img src="../../assets/images/step-hide-4.png" v-show="step == 3"/>
-          <img src="../../assets/images/step-show-4.png" v-show="step !== 3">
-        </template>
-      </el-step>
-    </el-steps>
-  </div>
+      <el-steps :active="step" align-center simple process-status="finish" finish-status="process">
+        <el-step title="基本信息">
+          <template #icon>
+            <img src="../../assets/images/step-hide-1.png" v-show="step == 0"/>
+            <img src="../../assets/images/step-success.png" v-show="step !== 0"/>
+          </template>
+        </el-step>
+        <el-step title="规则配置">
+          <template #icon>
+            <img src="../../assets/images/step-hide-2.png" v-show="step == 1"/>
+            <img src="../../assets/images/step-show-2.png" v-show="step !== 1 && step < 1"/>
+            <img src="../../assets/images/step-success.png" v-show="step > 1"/>
+          </template>
+        </el-step>
+        <el-step title="提交审核">
+          <template #icon>
+            <img src="../../assets/images/step-hide-3.png" v-show="step == 2"/>
+            <img src="../../assets/images/step-show-3.png" v-show="step !== 2 && step < 2"/>
+            <img src="../../assets/images/step-success.png" v-show="step > 2"/>
+          </template>
+        </el-step>
+        <el-step title="完成发布">
+          <template #icon>
+            <img src="../../assets/images/step-hide-4.png" v-show="step == 3"/>
+            <img src="../../assets/images/step-show-4.png" v-show="step !== 3">
+          </template>
+        </el-step>
+      </el-steps>
+    </div>
 
     <ActivityStepFirst ref="activityStepFirstRef" :handleType="handleType" :eventId="eventId" :canEdit='canEdit'
                        v-show="step === 0"></ActivityStepFirst>
@@ -196,9 +196,11 @@ const handleNext = async () => {
           }
         } else {
           loadingBtn.value = false
+          activityStepFirstRef.value.closeLoading()
         }
       }).catch(err => {
         loadingBtn.value = false
+        activityStepFirstRef.value.closeLoading()
       })
     }
     if (eventId.value !== undefined) {
@@ -268,7 +270,7 @@ const loadInfo = () => {
   eventId.value = route.query.eventId
   handleType.value = route.query.handleType
   stateName.value = route.query.stateName
-  console.log(eventId.value,'1hjksdhajkdh ',handleType.value,'1hjksdhajkdh ',stateName.value)
+  console.log(eventId.value, '1hjksdhajkdh ', handleType.value, '1hjksdhajkdh ', stateName.value)
 }
 
 loadInfo()

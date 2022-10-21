@@ -37,11 +37,11 @@
       <el-form-item class="label" label="活动范围" prop="ruleScupes">
         <el-button @click="showRuleScupes = !showRuleScupes" link type="primary">
           <span v-show="handleType === 'query'">查看&nbsp;<span
-              v-show="form.ruleScupes.length>0">已选择业务结构（{{ form.ruleScupes.length }}）个</span></span>
+              v-show="form.ruleScupes.length>0">已选择活动范围（{{ form.ruleScupes.length }}）个</span></span>
           <span v-show="handleType === 'edit'">编辑&nbsp;<span
-              v-show="form.ruleScupes.length>0">已选择业务结构（{{ form.ruleScupes.length }}）个</span></span>
+              v-show="form.ruleScupes.length>0">已选择活动范围（{{ form.ruleScupes.length }}）个</span></span>
           <span v-show="handleType === 'add'">新增&nbsp;<span
-              v-show="form.ruleScupes.length>0">已选择业务结构（{{ form.ruleScupes.length }}）个</span></span>
+              v-show="form.ruleScupes.length>0">已选择活动范围（{{ form.ruleScupes.length }}）个</span></span>
         </el-button>
       </el-form-item>
       <el-form-item class="label" label="活动负责人" prop="ruleResponsibleUsers">
@@ -151,7 +151,7 @@
                     :data="data.form.ruleScupes"></BusinessTree>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="onSuccessRuleScupes">确 定</el-button>
+          <el-button type="primary" @click="onSuccessRuleScupes" v-if="handleType !== 'query'">确 定</el-button>
           <el-button @click="onCancelRuleScupes">取 消</el-button>
         </div>
       </template>
@@ -161,7 +161,7 @@
       <SelectUsers :data="data.form.responsibleUsers" ref="responsibleUsersRef"></SelectUsers>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="onSuccessResponsibleUsers">确 定</el-button>
+          <el-button type="primary" @click="onSuccessResponsibleUsers" v-if="handleType !== 'query'">确 定</el-button>
           <el-button @click="onCancelResponsibleUsers">取 消</el-button>
         </div>
       </template>
