@@ -1,6 +1,81 @@
 <template>
   <div class="app-container">
-    <div v-if="stateName == '审批中' || stateName == '暂存'">
+    <div v-if="stateName == '进行中' || stateName == '已结束' || stateName == '停用中'">
+      <el-steps :active="3" align-center simple finish-status="process">
+        <el-step title="基本信息">
+          <template #icon>
+            <img src="../../assets/images/step-success.png"/>
+          </template>
+        </el-step>
+        <el-step title="规则配置">
+          <template #icon>
+            <img src="../../assets/images/step-success.png"/>
+          </template>
+        </el-step>
+        <el-step title="提交审核">
+          <template #icon>
+            <img src="../../assets/images/step-success.png"/>
+          </template>
+        </el-step>
+        <el-step title="完成发布">
+          <template #icon>
+            <img src="../../assets/images/step-success.png"/>
+          </template>
+        </el-step>
+      </el-steps>
+    </div>
+
+    <div v-else-if="stateName == '审批中' || stateName == '待开始' || stateName == '审批未通过'">
+      <el-steps :active="2" align-center simple finish-status="process">
+        <el-step title="基本信息">
+          <template #icon>
+            <img src="../../assets/images/step-success.png"/>
+          </template>
+        </el-step>
+        <el-step title="规则配置">
+          <template #icon>
+            <img src="../../assets/images/step-success.png"/>
+          </template>
+        </el-step>
+        <el-step title="提交审核">
+          <template #icon>
+            <img src="../../assets/images/step-success.png"/>
+          </template>
+        </el-step>
+        <el-step title="完成发布">
+          <template #icon>
+            <img src="../../assets/images/step-show-4.png">
+          </template>
+        </el-step>
+      </el-steps>
+    </div>
+
+    <div v-else-if="stateName == '暂存'">
+      <el-steps :active="1" align-center simple finish-status="process">
+        <el-step title="基本信息">
+          <template #icon>
+            <img src="../../assets/images/step-success.png"/>
+          </template>
+        </el-step>
+        <el-step title="规则配置">
+          <template #icon>
+            <img src="../../assets/images/step-success.png"/>
+          </template>
+        </el-step>
+        <el-step title="提交审核">
+          <template #icon>
+            <img src="../../assets/images/step-show-3.png"/>
+          </template>
+        </el-step>
+        <el-step title="完成发布">
+          <template #icon>
+            <img src="../../assets/images/step-show-4.png">
+          </template>
+        </el-step>
+      </el-steps>
+    </div>
+
+    <div v-else>
       <el-steps :active="step" align-center simple process-status="finish" finish-status="process">
         <el-step title="基本信息">
           <template #icon>
@@ -25,30 +100,7 @@
         <el-step title="完成发布">
           <template #icon>
             <img src="../../assets/images/step-hide-4.png" v-show="step == 3"/>
-          </template>
-        </el-step>
-      </el-steps>
-    </div>
-    <div v-else>
-      <el-steps :active="3" align-center simple finish-status="process">
-        <el-step title="基本信息">
-          <template #icon>
-            <img src="../../assets/images/step-success.png"/>
-          </template>
-        </el-step>
-        <el-step title="规则配置">
-          <template #icon>
-            <img src="../../assets/images/step-success.png"/>
-          </template>
-        </el-step>
-        <el-step title="提交审核">
-          <template #icon>
-            <img src="../../assets/images/step-success.png"/>
-          </template>
-        </el-step>
-        <el-step title="完成发布">
-          <template #icon>
-            <img src="../../assets/images/step-success.png"/>
+            <img src="../../assets/images/step-show-4.png" v-show="step !== 3">
           </template>
         </el-step>
       </el-steps>
@@ -144,9 +196,11 @@ const handleNext = async () => {
           }
         } else {
           loadingBtn.value = false
+          activityStepFirstRef.value.closeLoading()
         }
       }).catch(err => {
         loadingBtn.value = false
+        activityStepFirstRef.value.closeLoading()
       })
     }
     if (eventId.value !== undefined) {
