@@ -3,8 +3,8 @@
     <scroll-pane ref="scrollPaneRef" class="tags-view-wrapper" @scroll="handleScroll">
       <router-link
         v-for="tag in visitedViews"
-        :key="tag.path"
-        :data-path="tag.path"
+        :key="tag.fullPath"
+        :data-path="tag.fullPath"
         :class="isActive(tag) ? 'active' : ''"
         :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
         class="tags-view-item"
@@ -80,7 +80,7 @@ onMounted(() => {
 })
 
 function isActive(r) {
-  return r.path === route.path
+  return r.fullPath === route.fullPath
 }
 function activeStyle(tag) {
   if (!isActive(tag)) return {};
