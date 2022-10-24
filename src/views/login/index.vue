@@ -120,15 +120,18 @@ const wecomControlLogin = () => {
     state: 'oauthLoginsplit',
   }
   if (params.authCode !== '') {
+    loading.value = true
     oauthLogin(params).then(res => {
       if (res.code === 200) {
         setToken(res.data.access_token)
         router.push({path: "/index"});
       } else {
+        loading.value = false
         router.push({path: '/login'});
       }
     })
   } else {
+    loading.value = false
     router.push({path: "/login"});
   }
 }
