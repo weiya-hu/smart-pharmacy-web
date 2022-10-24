@@ -2,13 +2,13 @@ import request from '@/utils/request'
 import axios from 'axios'
 
 // 查询订单列表
-export function getOrderList(query) {
-    return request({
-        url: '/es/orderList/getAllList',
-        method: 'get',
-        params: query
-    })
-}
+// export function getOrderList(query) {
+//     return request({
+//         url: '/es/orderList/getAllList',
+//         method: 'get',
+//         params: query
+//     })
+// }
 
 // 自定义上传
 export function addDynamicHeaderExcelUrl(query) {
@@ -42,6 +42,15 @@ export function queryProductOrderDynamicHeaderData() {
     return request({
         url: `/product/dynamicddi/queryProductOrderDynamicHeaderData`,
         method: 'get',
+    })
+}
+
+//获取自定义表头数据
+export function getOrderList(data) {
+    return request({
+        url: `/es/orderListPage/getOrderList`,
+        method: 'get',
+        params:data
     })
 }
 

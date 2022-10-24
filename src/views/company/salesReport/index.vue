@@ -15,7 +15,7 @@
       </el-form-item>
       <el-form-item class="label" label="时间范围" prop="name">
         <el-select style="width: 220px;" v-model="queryParams.timeRangeQuickSelection"
-                   placeholder="请选择要查看的区域" clearable>
+                   placeholder="请选择要查看的时间范围" clearable>
           <el-option v-for="(item,key) in fastSelectDate" :key="key" :label="item.label" :value="item.value"/>
         </el-select>
 
@@ -1340,6 +1340,22 @@ const formatSalesActiveInfo = (data) => {
           normal: {
             show: true,
             position: 'insideTop',
+            formatter: '{c}元',         // 显示的总数
+            textStyle: {
+              color: '#333333',
+              fontWeight: "bolder",
+              fontSize: '12',
+            }
+          }
+        },
+      }
+    } else if (item == 0) {
+      return {
+        value: item,
+        label: {
+          normal: {
+            show: true,
+            position: 'insideBottom',
             formatter: '{c}元',         // 显示的总数
             textStyle: {
               color: '#333333',

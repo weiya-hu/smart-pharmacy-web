@@ -182,7 +182,7 @@
 
 
     <div class="tableList">
-      <el-table v-loading="loading" :data="orderList">
+      <el-table v-loading="loading" element-loading-text="加载中..." :data="orderList">
         <el-table-column min-width="100px" v-if="columns[0].visible" label="产品名" key="productName"
                          prop="productName" show-overflow-tooltip/>
         <el-table-column min-width="90px" v-if="columns[1].visible" label="销售金额" key="paidinAmount"
@@ -203,25 +203,34 @@
                          prop="userName" show-overflow-tooltip/>
       </el-table>
 
-      <div class="pagination-container pagination" v-show="total > 0">
-        <div class="total">共{{ totalCount }}条</div>
-        <el-button :icon="ArrowLeft" text bg @click="queryNextpage(true)" :disabled="currentPage + 1 == 1"></el-button>
-        <div class="page-box">
-          <el-tag v-for="item in pageItem" effect="dark" :type="currentPage + 1 === item ? '' : 'info'"
-                  style="margin: 0 5px;">{{ item }}
-            <el-icon v-show="item == ''">
-              <MoreFilled/>
-            </el-icon>
-          </el-tag>
-        </div>
-        <el-button :icon="ArrowRight" text bg @click="queryNextpage(false)"
-                   :disabled="currentPage + 1 == Math.ceil(totalCount / 10)"></el-button>
-      </div>
+      <!--      <div class="pagination-container pagination" v-show="total > 0">-->
+      <!--        <div class="total">共{{ totalCount }}条</div>-->
+      <!--        <el-button :icon="ArrowLeft" text bg @click="queryNextpage(true)" :disabled="currentPage + 1 == 1"></el-button>-->
+      <!--        <div class="page-box">-->
+      <!--          <el-tag v-for="item in pageItem" effect="dark" :type="currentPage + 1 === item ? '' : 'info'"-->
+      <!--                  style="margin: 0 5px;">{{ item }}-->
+      <!--            <el-icon v-show="item == ''">-->
+      <!--              <MoreFilled/>-->
+      <!--            </el-icon>-->
+      <!--          </el-tag>-->
+      <!--        </div>-->
+      <!--        <el-button :icon="ArrowRight" text bg @click="queryNextpage(false)"-->
+      <!--                   :disabled="currentPage + 1 == Math.ceil(totalCount / 10)"></el-button>-->
+      <!--      </div>-->
       <!--      <div style="padding: 20px;display: flex;justifyContent: flex-end">-->
       <!--        <span style="marginRight:10px">共{{ totalCount }}条 </span>-->
       <!--        <span style="marginRight:10px">共{{ total }}页 </span>-->
       <!--        <span>当前页:{{ currentPage + 1 }}</span>-->
       <!--      </div>-->
+
+
+      <pagination
+          v-show="total > 0"
+          :total="total"
+          v-model:page="queryParams.pageNum"
+          v-model:limit="queryParams.pageSize"
+          @pagination="getList"
+      />
     </div>
 
   </div>
@@ -263,6 +272,7 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     otherFilter: undefined,
+    searchKey: undefined,
   }
 });
 const orderList = ref([]);
@@ -501,20 +511,30 @@ function getList() {
     }
   }
   loading.value = true;
+  // getOrderList({
+  //   ...timeObject,
+  //   ...queryParams.value,
+  //   nextSearchAfter: pageQueryParams.value[currentPage.value].nextSearchAfter
+  // }).then(res => {
+  //   orderList.value = res.data.orders
+  //   nextSearchAfter.value = res.data.nextSearchAfter
+  //   let nextIndex = currentPage.value + 1
+  //   pageQueryParams.value[nextIndex] = res.data.nextSearchAfter
+  //   total.value = Number(res.data.pages);
+  //   totalCount.value = Number(res.data.total)
+  //   loading.value = false;
+  // })
   getOrderList({
     ...timeObject,
     ...queryParams.value,
-    nextSearchAfter: pageQueryParams.value[currentPage.value].nextSearchAfter
   }).then(res => {
     orderList.value = res.data.orders
-    nextSearchAfter.value = res.data.nextSearchAfter
-    let nextIndex = currentPage.value + 1
-    pageQueryParams.value[nextIndex] = res.data.nextSearchAfter
-    total.value = Number(res.data.pages);
-    totalCount.value = Number(res.data.total)
+    queryParams.value.searchKey = res.data.searchKey
+    total.value = Number(res.data.total);
     loading.value = false;
-
   })
+
+
 };
 
 /** 下载模板操作 */
@@ -533,6 +553,7 @@ function handleExport() {
 function handleQuery() {
   queryParams.value.pageNum = 1;
   nextSearchAfter.value = undefined
+  queryParams.value.searchKey = undefined
   restPageQueryParams()
   getList();
 };
@@ -540,6 +561,8 @@ function handleQuery() {
 /** 重置搜索 */
 function resetQuery() {
   queryParams.value.pageNum = 1;
+  queryParams.value.pageSize = 10;
+  queryParams.value.searchKey = undefined;
   nextSearchAfter.value = undefined
   currentPage.value = 0
   restPageQueryParams()
