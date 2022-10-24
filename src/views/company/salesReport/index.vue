@@ -15,7 +15,7 @@
       </el-form-item>
       <el-form-item class="label" label="时间范围" prop="name">
         <el-select style="width: 220px;" v-model="queryParams.timeRangeQuickSelection"
-                   placeholder="请选择要查看的区域" clearable>
+                   placeholder="请选择要查看的时间范围" clearable>
           <el-option v-for="(item,key) in fastSelectDate" :key="key" :label="item.label" :value="item.value"/>
         </el-select>
 
@@ -476,6 +476,7 @@ const chart_one_Option = ref({
     // // 提示框浮层内容格式器，支持字符串模板和回调函数两种形式 折线（区域）图、柱状（条形）图、K线图
     // // {a}（系列名称），{b}（类目值），{c}（数值）, {d}（无）
     formatter: function (value) {
+      console.log(value)
       return value[0].name + '<br />' + "活动销售额: " + value[0].data + '元' + '<br/>' + "日常销售额: " + value[1].data.value + "元" + '<br/>' + "销售总额: " + value[2].data.value + "元" + '<br/>' + "日常占比:" + charts_one_dataRatio.value[value[0].dataIndex].dailyRatio + '<br/>' + "活动占比:" + charts_one_dataRatio.value[value[0].dataIndex].activityRatio
     },
   },
@@ -1340,6 +1341,22 @@ const formatSalesActiveInfo = (data) => {
           normal: {
             show: true,
             position: 'insideTop',
+            formatter: '{c}元',         // 显示的总数
+            textStyle: {
+              color: '#333333',
+              fontWeight: "bolder",
+              fontSize: '12',
+            }
+          }
+        },
+      }
+    } else if (item == 0) {
+      return {
+        value: item,
+        label: {
+          normal: {
+            show: true,
+            position: 'insideBottom',
             formatter: '{c}元',         // 显示的总数
             textStyle: {
               color: '#333333',

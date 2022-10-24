@@ -36,7 +36,7 @@
         </el-form-item>
         <el-form-item class="label" label="时间范围">
           <el-select style="width: 220px;" v-model="queryParams.timeRangeQuickSelection"
-                     placeholder="请选择要查看的区域" clearable>
+                     placeholder="请选择要查看的时间范围" clearable>
             <el-option v-for="(item,key) in fastSelectDate" :key="key" :label="item.label" :value="item.value"/>
           </el-select>
         </el-form-item>
@@ -146,7 +146,7 @@
           <div class="salesBrand sales">
             <div class="sales-header">
               <div class="active">品牌销量</div>
-<!--              <div>个</div>-->
+              <!--              <div>个</div>-->
             </div>
             <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReportBrand"
                             :contentTableConfig="storeBrandTableConfig">
@@ -187,7 +187,7 @@
           <div class="salesSingle sales">
             <div class="sales-header">
               <div class="active">单品销量</div>
-<!--              <div>个</div>-->
+              <!--              <div>个</div>-->
             </div>
             <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReportProduct"
                             :contentTableConfig="storeProductTableConfig">
