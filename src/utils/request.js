@@ -76,7 +76,7 @@ service.interceptors.response.use(res => {
       if (res.request.responseType === 'blob' || res.request.responseType === 'arraybuffer') {
         return res.data
       }
-      if (code === 401) {
+      if (code === 401 || code === 403) {
         if (!isRelogin.show) {
           isRelogin.show = true;
           ElMessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', {
@@ -105,7 +105,13 @@ service.interceptors.response.use(res => {
           type: 'error'
         })
         return Promise.reject(new Error(msg))
-      } else if (code !== 200) {
+      }else if(code === 999){//维护状态，跳转404页面
+        ElMessage({
+          message: msg,
+          type: 'error'
+        })
+        location.href = '/404';
+      }else if (code !== 200) {
         ElNotification.error({
           title: msg
         })
