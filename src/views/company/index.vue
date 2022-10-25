@@ -8,7 +8,7 @@
       </el-affix>
   </div>
     <div class="form-box">
-      <el-form v-model="form" label-width="105px">
+      <el-form ref="formRef" :rules="rules" :model="form" label-width="105px">
         <el-form-item label="企业logo" prop="logo">
           <div>
             <el-upload
@@ -55,13 +55,13 @@
             <el-option v-for="item in legalPersonList" :key="item.userId" :label="item.userName" :value="item.userId" />
           </el-select>
         </el-form-item>
-        <el-form-item label="企业名称" prop="name">
+        <el-form-item label="企业简称" prop="name">
           <el-input v-model="form.name" :disabled="inputType==='readey'" />
         </el-form-item>
         <el-form-item label="企业全称" prop="fullname">
           <el-input v-model="form.fullname" :disabled="inputType==='readey'" />
         </el-form-item>
-        <el-form-item label="企业类型">
+        <el-form-item label="企业类型" prop="corpType">
           <el-select v-model="form.corpType" :disabled="inputType==='readey'" placeholder=" " filterable style="width: 500px;">
             <el-option v-for="item in corpTypeList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
@@ -122,6 +122,7 @@ import useUserStore from "../../store/modules/user";
 import {ElMessage} from "element-plus";
 
 const userStore = useUserStore(), corpId = userStore.userInfo.corpId
+const {proxy} = getCurrentInstance();
 let inputType = ref('readey')
 let store = useStore()
 let uploadData = reactive({
@@ -160,6 +161,12 @@ const corpTypeList = [
   {value: 5, label: '其他'},
 ]
 
+const rules = reactive({
+  legalPersonId: [{ required: true, message: '请选择法人代表', trigger: 'change' }],
+  name: [{ required: true, message: '请输入企业简称', trigger: 'blur' }],
+  // fullname: [{ required: true, message: '请输入企业全称', trigger: 'blur' }],
+  corpType: [{ required: true, message: '请选择企业类型', trigger: 'change' }]
+})
 // 法定代表人
 const legalPersonList = ref([])
 // 法定代表人数据
@@ -182,7 +189,7 @@ function handleAvatarSuccess(res) {
 // 上传验证
 function beforeAvatarUpload(file) {
   const isPicture = file.type === 'image/jpeg' || file.type === 'image/png'
-  const isLt2M = file.size / 702 / 180 < 2
+  const isLt2M = file.size / 1024 / 1024 < 2
   if (!isPicture) {
     ElMessage.error('请上传jepg,png,jpg格式的图片!')
     return false
@@ -211,20 +218,23 @@ function handelRead(type) {
   if (type === 'edit'){
     inputType.value='write'
   } else if (type === 'sure') {
-    inputType.value='readey'
     onSubmit()
   } else if (type === 'cancel') {
     inputType.value='readey'
     getFormData()
   }
 }
-function onSubmit() {
-  getCorpEdit(form.value).then(res => {
-    if (res.code === 200) {
-      ElMessage.success('修改成功')
-      getFormData()
-    }
-  })
+async function onSubmit() {
+  let v = await proxy.$refs["formRef"].validate();
+  if (v) {
+    getCorpEdit(form.value).then(res => {
+      if (res.code === 200) {
+        inputType.value = 'readey'
+        ElMessage.success('修改成功')
+        getFormData()
+      }
+    })
+  }
 }
 getSelectData()
 getFormData()
