@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="scaleLoading" element-loading-text="加载中..." style="width: 100%;height: 100%">
+  <div style="width: 100%;height: 100%">
     <div style="width: 100%;height: 100%;" class="container"
          ref="containerBox">
     </div>
@@ -65,8 +65,6 @@ const setOption = function (option) {
 }
 defineExpose({
   setOption,
-  turnUpLoading,
-  turnDownLoading
 })
 </script>
 

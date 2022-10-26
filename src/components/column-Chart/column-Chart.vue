@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="columnLoading" element-loading-text="加载中..." :style="{width:size.width,height:size.height}">
+  <div :style="{width:size.width,height:size.height}">
     <div :style="{width:size.width,height:size.height,paddingRight:size.paddingRight}" class="container"
          ref="containerBox">
     </div>
@@ -12,7 +12,6 @@
 import * as echarts from 'echarts'
 import {onMounted, reactive} from "vue";
 
-let columnLoading = ref(true)
 let props = defineProps({
   dataOption: {
     type: Object,
@@ -36,7 +35,6 @@ let myEcharts = reactive({});
 const init = () => {
   //3.初始化container容器
   myEcharts = echarts.init(containerBox.value);
-  console.log(props.dataOption)
   //5.传入数据
   myEcharts.setOption(props.dataOption);
   //additional：图表大小自适应窗口大小变化
@@ -47,16 +45,8 @@ const init = () => {
 const setOption = function (option) {
   myEcharts.setOption(option);
 }
-const turnUpLoading = () => {
-  columnLoading.value = true
-}
-const turnDownLoading = () => {
-  columnLoading.value = false
-}
 defineExpose({
   setOption,
-  turnUpLoading,
-  turnDownLoading
 })
 </script>
 

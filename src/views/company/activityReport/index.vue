@@ -1,5 +1,5 @@
 <template>
-  <div class="outBox" v-loading="loading">
+  <div class="outBox" v-loading="entiretyLoading" element-loading-text="加载中...">
     <div class="desc">
       <span>激励活动报表 —— 对激励活动所产生的数据做基础的统计和分析</span>
     </div>
@@ -13,8 +13,9 @@
               type="daterange"
               start-placeholder="开始时间"
               end-placeholder="结束时间"
+              :default-time="defaultTime"
               format="YYYY-MM-DD"
-              value-format="YYYY-MM-DD hh:mm:ss"
+              value-format="YYYY-MM-DD HH:mm:ss"
           />
         </el-form-item>
         <el-form-item class="label" label="区域">
@@ -88,11 +89,11 @@
     </div>
     <!--    图形统计-->
     <div class="barChart">
-      <div class="chart chart_two">
+      <div class="chart chart_two" v-loading="chart_two_loading" element-loading-text="加载中...">
         <scaleChart ref="chart_two_ref" v-show="chart_two_isNull == false" :dataOption="chart_two_data"></scaleChart>
         <el-empty description="暂无奖励数据" v-show="chart_two_isNull == true"/>
       </div>
-      <div class="chart chart_one">
+      <div class="chart chart_one" v-loading="chart_one_loading" element-loading-text="加载中...">
         <scaleChart ref="chart_one_ref" v-show="chart_one_isNull == false" :dataOption="chart_one_data"></scaleChart>
         <el-empty description="暂无销售数据" v-show="chart_one_isNull == true"/>
       </div>
@@ -387,15 +388,18 @@ import useActivityReportStore from "@/store/modules/Company/activityReport.js";
 import {cloneFunction} from "@/utils/globalFunction";
 
 const {proxy} = getCurrentInstance();
-
+let defaultTime = ref([new Date(2022, 9, 10, 0, 0, 0), new Date(2022, 9, 10, 23, 59, 59)])
+//整体loading控制
+let entiretyLoading = ref(false)
+//图表loading控制
+let chart_one_loading = ref(false)
+let chart_two_loading = ref(false)
 let chart_one_isNull = ref(false)
 let chart_two_isNull = ref(false)
 /**echarts实例*/
 let chart_one_ref = ref()
 let chart_two_ref = ref()
 let chart_three_ref = ref()
-/**整体loading*/
-let loading = ref(false)
 /**tab所处位置*/
 const salesBrand = ref('first')
 const salesSingle = ref('first')
@@ -462,12 +466,6 @@ const fastSelectDate = ref([
     label: "本月",
     value: 3
   },
-  {
-    label: "所有",
-    value: 4
-  },
-
-
 ])
 /**图形一配置*/
 let chart_one_data = {
@@ -1174,7 +1172,6 @@ function resetQuery() {
     betweenDate: [],
     timeRangeQuickSelection: ''
   }
-  loading.value = true
   getList();
 }
 
@@ -1201,19 +1198,24 @@ function getList() {
   getActivityReportNumbers({...cloneFunction(queryParams.value), ...timeObject}).then(res => {
     if (res.code == 200) {
       reportTotalNumber.value = Object.assign(reportTotalNumber.value, res.data)
+      entiretyLoading.value = false
     }
   })
+  chart_one_loading.value = true
+  chart_two_loading.value = true
   /**获取统计图数据*/
   getSalesHistogram({...cloneFunction(queryParams.value), ...timeObject}).then(res => {
     if (res.code == 200) {
       if (res.data.length !== 0) {
         innitBarChartData(res.data)
+        chart_one_loading.value = false
+        chart_two_loading.value = false
       } else {
         chart_one_data = chart_one_data_none
         chart_two_data = chart_two_data_none
+        chart_one_loading.value = false
+        chart_two_loading.value = false
         nextTick(() => {
-          chart_two_ref.value.turnDownLoading()
-          chart_one_ref.value.turnDownLoading()
           chart_one_isNull.value = true
           chart_two_isNull.value = true
         })
@@ -1270,20 +1272,17 @@ function innitBarChartData(data) {
     chart_one_ref.value.setOption(chart_one_data, true)
     chart_two_ref.value.setOption(chart_two_data, true)
     // chart_three_ref.value.setOption(chart_three_data, true)
-    loading.value = false
-    chart_two_ref.value.turnDownLoading()
-    chart_one_ref.value.turnDownLoading()
+
   })
 }
 
 /**下拉选项初始化*/
 function innitSelectOption() {
-  loading.value = true
+  entiretyLoading.value = true
   /**获取区域下拉统计*/
   getAreaTree({allChild: true}).then(res => {
     if (res.code == 200) {
       options.value = res.data
-      loading.value = false
     }
   })
   getList()
@@ -1298,8 +1297,7 @@ innitSelectOption()
 }
 
 .outBox::v-deep(.el-loading-spinner) {
-  height: 20vh;
-  margin-top: 10vh;
+  top: 25% !important;
 }
 
 //选中时样式设置

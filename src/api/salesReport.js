@@ -37,3 +37,22 @@ export function getProductRatio(data) {
         params: data
     })
 }
+
+//获取总数据和任务下拉列表
+export function getOrderList(data) {
+    return request({
+        url: `/es/productOrder/getProductOrder`,
+        method: 'get',
+        params: data
+    })
+}
+
+//获取不同任务下的销售活动占比
+
+export function getActivityAndNormal(data) {
+    return request({
+        url: `/es/productOrder/getActivityAndNormal`,
+        method: 'get',
+        params: data
+    })
+}
