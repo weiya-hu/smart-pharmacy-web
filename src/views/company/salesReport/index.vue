@@ -7,8 +7,9 @@
                         end-placeholder="结束时间"
                         v-model="queryParams.betweenDates"
                         type="daterange"
-                        format="YYYY-MM-DD"
-                        value-format="YYYY-MM-DD hh:mm:ss"
+                        format="YYYY-MM-DD "
+                        value-format="YYYY-MM-DD HH:mm:ss"
+                        :default-time="defaultTime"
                         clearable
                         style="width: 220px;"
         />
@@ -95,9 +96,21 @@
           v-model="activeName"
           type="card"
           class="demo-tabs"
+          v-loading="chartLoading"
+          element-loading-text="加载中..."
           @tab-change=chartTabChange
       >
-        <el-tab-pane label="销售活动占比" name="first">
+        <el-tab-pane name="first">
+          <template #label>
+            <div v-if="activeName!=='first'">销售活动占比</div>
+            <el-select @change="changeActive" v-model="selectedActive" v-if="activeName =='first'"
+                       placeholder="请选择要查看的活动">
+              <el-option v-for="(item) in eventActiveSelectOptions" :label="item.name" :value="item.eventId"
+                         :key="item.eventId">
+
+              </el-option>
+            </el-select>
+          </template>
           <div class="itemChart">
             <scaleChart ref="charts_one_instance" v-show="charts_one_isNull == false"
                         :registeredLegendEvent="legendEvent"
@@ -331,10 +344,18 @@ import scaleChart from '@/components/scale-Chart/scale-Chart.vue'
 import * as echarts from "echarts";
 import columnChart from "@/components/column-Chart/column-Chart.vue"
 import pagevxeContent from "@/components/page-vxeContent/page-vxeContent.vue";
-import {getSalesProductOrder, getStoreRatio, getBrandRatio, getProductRatio} from '@/api/salesReport.js'
+import {
+  getSalesProductOrder,
+  getStoreRatio,
+  getBrandRatio,
+  getProductRatio,
+  getOrderList,
+  getActivityAndNormal
+} from '@/api/salesReport.js'
 import {cloneFunction} from "@/utils/globalFunction";
 import {getRegionMulti} from "@/api/salesReport/salesBI.js"
 
+let defaultTime = ref([new Date(2022, 9, 10, 0, 0, 0), new Date(2022, 9, 10, 23, 59, 59)])
 const {proxy} = getCurrentInstance();
 /**自定义结构列表数据*/
 let regionTableList = ref([])
@@ -369,10 +390,6 @@ const fastSelectDate = ref([
     label: "本月",
     value: 3
   },
-  {
-    label: "所有",
-    value: 4
-  },
 
 
 ])
@@ -390,6 +407,8 @@ let props = ref({multiple: true, label: 'name', value: 'id', checkStrictly: fals
 let areaOptions = ref([])
 /**整个界面的loading*/
 let salesLoading = ref(false)
+/**控制chart图表tab栏切换的loading*/
+let chartLoading = ref(false)
 /**控制tab列表切换的loading*/
 let areaNameLoading = ref(false)
 /**看板基本统计信息*/
@@ -400,6 +419,10 @@ let baseInfo = ref({
   sumAmount: 0,
   sumEventAmount: 0
 })
+/**图一任务下拉选项*/
+let eventActiveSelectOptions = ref([])
+/**图一销售活动占比活动下拉值*/
+let selectedActive = ref('')
 /**控制echarts图形是否为空展示的内容*/
 let charts_one_isNull = ref(false)
 let charts_two_isNull = ref(false)
@@ -448,7 +471,8 @@ const chart_one_Option = ref({
       xAxisIndex: [0],
       right: '93%',  //滑动条位置
       start: 1,    //初始化时，滑动条宽度开始标度
-      end: 100
+      end: 50,
+      maxSpan: 30
     },   //初始化时，滑动条宽度结束标度 //y轴内置滑动
     {
       type: 'inside',  //内置滑动，随鼠标滚轮展示
@@ -643,7 +667,8 @@ const chart_two_Option = {
       yAxisIndex: [0],
       right: '93%',  //滑动条位置
       start: 1,    //初始化时，滑动条宽度开始标度
-      end: 50
+      end: 10,
+      maxSpan: 2,
     },   //初始化时，滑动条宽度结束标度 //y轴内置滑动
     {
       type: 'inside',  //内置滑动，随鼠标滚轮展示
@@ -989,7 +1014,8 @@ const chart_four_Option = {
       yAxisIndex: [0],
       right: '93%',  //滑动条位置
       start: 1,    //初始化时，滑动条宽度开始标度
-      end: 20
+      end: 10,
+      maxSpan: 10,
     },   //初始化时，滑动条宽度结束标度 //y轴内置滑动
     {
       type: 'inside',  //内置滑动，随鼠标滚轮展示
@@ -1258,13 +1284,38 @@ const getListInfo = (name) => {
 const formatBaseInfo = (data) => {
   baseInfo.value = data
 }
+/**任务改变获取活动报表数据*/
+const changeActive = () => {
+  let timeObject = {
+    startTime: undefined,
+    endTime: undefined
+  }
+  if (queryParams.value.betweenDates.length !== 0) {
+    timeObject = {
+      startTime: queryParams.value.betweenDates[0],
+      endTime: queryParams.value.betweenDates[1]
+    }
+  }
+//  重新获取不同任务活动下的销售活动占比数据
+  getActivityAndNormal({
+    ...cloneFunction(queryParams.value), ...timeObject,
+    eventId: selectedActive.value
+  }).then(res => {
+    if (res.code == 200) {
+      formatSalesActiveInfo(res.data)
+    }
+  })
+
+}
 /**格式化销售活动占比图表的数据*/
 const formatSalesActiveInfo = (data) => {
   charts_one_isNull.value = false
   //横坐标的值
-  let horizontalData = Object.keys(data).sort()
+  let horizontalData = data.map(item => {
+    return item.day
+  })
   if (horizontalData.length == 0) {
-    charts_one_instance.value.turnDownLoading()
+    chartLoading.value = false
     charts_one_isNull.value = true
     return null
   }
@@ -1274,10 +1325,10 @@ const formatSalesActiveInfo = (data) => {
   let dailyData = []
   //  总销售额
   let totalData = []
-  horizontalData.forEach(itemKey => {
-    activityData.push(data[itemKey].activity.toFixed(2))
-    dailyData.push(data[itemKey].daily.toFixed(2))
-    totalData.push((data[itemKey].daily + data[itemKey].activity).toFixed(2))
+  data.forEach(item => {
+    activityData.push(item.detail.activity.toFixed(2))
+    dailyData.push(item.detail.daily.toFixed(2))
+    totalData.push((item.detail.daily + item.detail.activity).toFixed(2))
   })
   //  日常销售额在总销售额当中的销售占比  活动销售额在总销售额当中的销售占比
   charts_one_dataRatio.value = horizontalData.map((itemKey, index) => {
@@ -1313,7 +1364,6 @@ const formatSalesActiveInfo = (data) => {
         value: item,
       }
     }
-
   })
   chart_one_Option.value.series[1].data = dailyData
   totalData = totalData.map(item => {
@@ -1367,27 +1417,41 @@ const formatSalesActiveInfo = (data) => {
       }
     }
   })
-
-
   chart_one_Option.value.series[2].data = totalData
   nextTick(() => {
     charts_one_instance.value.setOption(chart_one_Option.value, true)
-    charts_one_instance.value.turnDownLoading()
+    chartLoading.value = false
   })
 
 }
+/**对象按属性值排序*/
+const sortObject = (data) => {
+  let result = Object.values(data).sort((a, b) => {
+    return b - a;
+  });
+  let new_obj = {};
+  for (let i = 0; i < result.length; i++) {
+    Object.keys(data).map((item, index) => {
+      if (data[item] === result[i]) {
+        new_obj[item] = result[i];
+      }
+    });
+  }
+  return new_obj
+}
 /**格式化动销店铺占比的基本数据*/
 const formatStoreInfo = (data) => {
+  data = sortObject(data)
   charts_two_isNull.value = false
 //  纵坐标的值
   let ordinatesData = []
   ordinatesData = Object.keys(data)
   if (ordinatesData.length == 0) {
-    charts_two_instance.value.turnDownLoading()
+    chartLoading.value = false
     charts_two_isNull.value = true
     return null
   }
-  //  店铺的销售额
+//  店铺的销售额
   let storeSalesAccount = []
 // 所有店铺的销售总额
   let totalStoreSalesAccount = null
@@ -1400,23 +1464,98 @@ const formatStoreInfo = (data) => {
     return calculateRatio(data[itemKey], storeSalesAccount)
   })
   chart_two_Option.yAxis.data = ordinatesData
-  chart_two_Option.series[0].data = storeSalesAccount
-  chart_two_Option.series[1].data = storeSalesAccount
+  chart_two_Option.series[0].data = storeSalesAccount.map(item => {
+    if (item > 0) {
+      return {
+        value: item,
+        itemStyle: {
+          normal: {
+            barBorderRadius: [0, 12, 12, 0], // （顺时针左上，右上，右下，左下）
+          }
+        }
+      }
+    } else if (item < 0) {
+      return {
+        value: item,
+        itemStyle: {
+          normal: {
+            barBorderRadius: [12, 0, 0, 12], // （顺时针左上，右上，右下，左下）
+          }
+        }
+      }
+    } else if (item == 0) {
+      return {
+        value: item,
+      }
+    }
+  })
+  chart_two_Option.series[1].data = storeSalesAccount.map(item => {
+    if (item > 0) {
+      return {
+        value: item,
+        label: {
+          normal: {
+            show: true,
+            position: 'insideLeft',
+            formatter: '{c}元',         // 显示的总数
+            textStyle: {
+              color: '#333333',
+              fontWeight: "bolder",
+              fontSize: '12',
+            }
+          }
+        },
+      }
+    } else if (item < 0) {
+      return {
+        value: item,
+        label: {
+          normal: {
+            show: true,
+            position: 'insideRight',
+            formatter: '{c}元',         // 显示的总数
+            textStyle: {
+              color: '#333333',
+              fontWeight: "bolder",
+              fontSize: '12',
+            }
+          }
+        },
+      }
+    } else if (item == 0) {
+      return {
+        value: item,
+        label: {
+          normal: {
+            show: true,
+            position: 'insideLeft',
+            formatter: '{c}元',         // 显示的总数
+            textStyle: {
+              color: '#333333',
+              fontWeight: "bolder",
+              fontSize: '12',
+            }
+          }
+        },
+      }
+    }
+  })
   charts_two_dataRatio.value = storeSalesRatio
   nextTick(() => {
     charts_two_instance.value.setOption(chart_two_Option, true)
-    charts_two_instance.value.turnDownLoading()
+    chartLoading.value = false
   })
 
 }
 /** 格式化动销品牌占比的基本数据*/
 const formatBrandInfo = (data) => {
+  data = sortObject(data)
   charts_three_isNull.value = false
 //  纵坐标的值
   let ordinatesData = []
   ordinatesData = Object.keys(data)
   if (ordinatesData.length == 0) {
-    charts_three_instance.value.turnDownLoading()
+    chartLoading.value = false
     charts_three_isNull.value = true
     return null
   }
@@ -1438,17 +1577,18 @@ const formatBrandInfo = (data) => {
   charts_three_dataRatio.value = brandSalesRatio
   nextTick(() => {
     charts_three_instance.value.setOption(chart_three_Option, true)
-    charts_three_instance.value.turnDownLoading()
+    chartLoading.value = false
   })
 }
 /** 格式化动销单品占比图表的基本数据*/
 const formatProductInfo = (data) => {
   charts_four_isNull.value = false
+  data = sortObject(data)
 //  纵坐标的值
   let ordinatesData = []
   ordinatesData = Object.keys(data)
   if (ordinatesData.length == 0) {
-    charts_four_instance.value.turnDownLoading()
+    chartLoading.value = false
     charts_four_isNull.value = true
     return null
   }
@@ -1465,12 +1605,86 @@ const formatProductInfo = (data) => {
     return calculateRatio(data[itemKey], totalProductSalesAccount)
   })
   chart_four_Option.yAxis.data = ordinatesData
-  chart_four_Option.series[0].data = productSalesAccount
-  chart_four_Option.series[1].data = productSalesAccount
+  chart_four_Option.series[0].data = productSalesAccount.map(item => {
+    if (item > 0) {
+      return {
+        value: item,
+        itemStyle: {
+          normal: {
+            barBorderRadius: [0, 12, 12, 0], // （顺时针左上，右上，右下，左下）
+          }
+        }
+      }
+    } else if (item < 0) {
+      return {
+        value: item,
+        itemStyle: {
+          normal: {
+            barBorderRadius: [12, 0, 0, 12], // （顺时针左上，右上，右下，左下）
+          }
+        }
+      }
+    } else if (item == 0) {
+      return {
+        value: item,
+      }
+    }
+  })
+  chart_four_Option.series[1].data = productSalesAccount.map(item => {
+    if (item > 0) {
+      return {
+        value: item,
+        label: {
+          normal: {
+            show: true,
+            position: 'insideLeft',
+            formatter: '{c}元',         // 显示的总数
+            textStyle: {
+              color: '#333333',
+              fontWeight: "bolder",
+              fontSize: '12',
+            }
+          }
+        },
+      }
+    } else if (item < 0) {
+      return {
+        value: item,
+        label: {
+          normal: {
+            show: true,
+            position: 'insideRight',
+            formatter: '{c}元',         // 显示的总数
+            textStyle: {
+              color: '#333333',
+              fontWeight: "bolder",
+              fontSize: '12',
+            }
+          }
+        },
+      }
+    } else if (item == 0) {
+      return {
+        value: item,
+        label: {
+          normal: {
+            show: true,
+            position: 'insideLeft',
+            formatter: '{c}元',         // 显示的总数
+            textStyle: {
+              color: '#333333',
+              fontWeight: "bolder",
+              fontSize: '12',
+            }
+          }
+        },
+      }
+    }
+  })
   charts_four_dataRatio.value = productSalesRatio
   nextTick(() => {
     charts_four_instance.value.setOption(chart_four_Option, true)
-    charts_four_instance.value.turnDownLoading()
+    chartLoading.value = false
   })
 }
 /**看板基本信息初始化*/
@@ -1486,14 +1700,37 @@ const innitDataInfo = function (tags = "first") {
     }
   }
   queryParams.value.nodeId = Array.from(new Set(queryParams.value.nodeId.flat()));
+  chartLoading.value = true
   if (tags == "first") {
     //  获取看板基本统计信息
-    getSalesProductOrder({...cloneFunction(queryParams.value), ...timeObject}).then(res => {
+    getOrderList({...cloneFunction(queryParams.value), ...timeObject}).then(res => {
       if (res.code == 200) {
-        let {brandCount, productCount, storeCount, sumAmount, sumEventAmount, saleActivityProportion} = res.data
+        let {brandCount, productCount, storeCount, sumAmount, sumEventAmount, events} = res.data
+        if (events && events.length !== 0) {
+          selectedActive.value = events[0].eventId
+          eventActiveSelectOptions.value = events.map(item => {
+            return {
+              name: item.name,
+              eventId: item.eventId
+            }
+          })
+          //  获取当前任务的echarts图表信息
+          getActivityAndNormal({
+            ...cloneFunction(queryParams.value), ...timeObject,
+            eventId: events[0].eventId
+          }).then(res => {
+            if (res.code == 200) {
+              formatSalesActiveInfo(res.data)
+            }
+          })
+        } else {
+          eventActiveSelectOptions.value = []
+          formatSalesActiveInfo([])
+        }
+
         let baseInfoObj = {brandCount, productCount, storeCount, sumAmount, sumEventAmount}
         formatBaseInfo(baseInfoObj)
-        formatSalesActiveInfo(saleActivityProportion)
+
       }
     })
   } else if (tags == "second") {
@@ -1554,6 +1791,7 @@ const formatToTree = (data) => {
 }
 /**查询*/
 const handleQuery = () => {
+  selectedActive.value = undefined
   activeName.value = 'first'
   areaName.value = 'fourth'
   innitDataInfo()
@@ -1569,6 +1807,7 @@ const resetQuery = () => {
     brand: [],
     timeRangeQuickSelection: 3
   }
+  selectedActive.value = undefined
   handleQuery()
 }
 /**获取整个看板的基本信息*/
@@ -1579,11 +1818,14 @@ const innit = function () {
 }
 innit()
 </script>
-
 <style scoped lang="scss">
 .label::v-deep( .el-form-item__label) {
   color: #606266;
   font-weight: 600;
+}
+
+.chartShow::v-deep( .el-tabs__nav-scroll) {
+  padding-bottom: 10px;
 }
 
 // 先把整体的线去掉
@@ -1708,6 +1950,11 @@ innit()
     margin-top: 40px;
     border: 1px solid #d9dad9;
     padding: 10px;
+
+    .demo-tabs : {
+
+
+    }
 
     .itemChart {
       width: 90vw;

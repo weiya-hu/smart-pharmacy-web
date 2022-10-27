@@ -8,9 +8,10 @@ export const allAreaTableConfig = {
         {field: 'yearOnYear', title: '同比', minWidth: '20', slotName: 'yearOnYearSlot'},
         {field: 'monthOnMonth', title: '环比', minWidth: '20', slotName: 'monthOnMonthSlot'},
         {field: 'shelfSalesRatio', title: '动销率', minWidth: '20',},
-        {field: 'sumMoney', title: '销售额(元)', minWidth: '20',},
-        {field: 'count', title: '品/单数', minWidth: '20',},
+        {field: 'sumMoney', title: '销售额(元)', minWidth: '20', sortable: true},
+        {field: 'count', title: '品/单数', minWidth: '20', sortable: true},
     ],
-    tableHeight: 550
+    tableHeight: 550,
+    isSort: {trigger: 'cell', defaultSort: {field: 'sumMoney', order: 'desc'}, orders: ['desc', 'asc', null]}
 
 }
