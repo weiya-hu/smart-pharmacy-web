@@ -299,8 +299,10 @@ const loadSelectJobs = () => {
 function getList() {
   loading.value = true;
   listPage(queryParams.value).then(response => {
-    deptList.value = proxy.handleTree(response.data.list, "nodeId", "parentNodeId");
-    loading.value = false;
+    if (response.code === 200) {
+      deptList.value = proxy.handleTree(response.data.list, "nodeId", "parentNodeId");
+      loading.value = false;
+    }
   });
 }
 
@@ -410,8 +412,12 @@ function submitForm() {
         if (exists.length > 0) {
           // form.value.name = exists[0].name
         } else {
-          form.value.name = form.value.relationId
-          form.value.relationId = undefined
+          if (form.value.relationId == undefined){
+            form.value.name = form.value.name
+          } else {
+            form.value.name = form.value.relationId
+            form.value.relationId = undefined
+          }
         }
       }
       formTableRef.value.validate((v) => {
