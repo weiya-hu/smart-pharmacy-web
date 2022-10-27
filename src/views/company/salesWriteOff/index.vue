@@ -187,9 +187,11 @@
         <p>
           发现新商品{{ cantSaveList.length }} 个，其销售数据都没导入
         </p>
-        <div>
-          <span v-for="item in cantSaveList" :key="item.storeProductCode">{{ item.storeProductCode }},</span>
-        </div>
+        <el-scrollbar height="20vh">
+          <div class="goodsId">
+            <span v-for="item in cantSaveList" :key="item.storeProductCode">{{ item.storeProductCode }},</span>
+          </div>
+        </el-scrollbar>
         <p>
           请截图并保存此条通知后，将新商品加入到 商品中心 - 连锁商品库，加入成功后，再次导入数据即可。
         </p>
@@ -632,6 +634,18 @@ getList()
 
 .tips {
   font-size: 18px;
+
+  .goodsId {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    width: 100%;
+
+    span {
+      padding: 20px 10px;
+      width: 20%;
+    }
+  }
 }
 
 .pagination {
