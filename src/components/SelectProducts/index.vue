@@ -43,7 +43,7 @@
         v-model:limit="queryParam.pageSize"
         @pagination="getList"
     />
-    <el-divider content-position="left">已选择产品&nbsp;&nbsp;&nbsp;&nbsp;未设置则商品数量默认为1</el-divider>
+    <el-divider content-position="left">已选择商品&nbsp;&nbsp;&nbsp;&nbsp;未设置则商品数量默认为1</el-divider>
     <div class="handler">
       <el-button @click="clearSelected" link type="primary" v-if="props.handleType !== 'query'">清空已选</el-button>
     </div>

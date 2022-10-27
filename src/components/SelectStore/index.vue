@@ -32,12 +32,12 @@
         v-model:limit="queryParam.pageSize"
         @pagination="getList"
     />
-    <el-divider content-position="left">已选择产品</el-divider>
+    <el-divider content-position="left">已选择门店</el-divider>
     <div class="handler" v-if="props.handleType !== 'query'">
       <el-button @click="cleanAllStore" link type="primary">清空已选</el-button>
     </div>
     <el-table v-loading="loading" :data="storeResultList" height="200">
-      <el-table-column label="门店编号" prop="storeId"/>
+      <el-table-column label="门店编号" prop="id"/>
       <el-table-column label="门店名称" prop="name" show-overflow-tooltip min-width="150px"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width"
                        v-if="props.handleType !== 'query'">
@@ -53,6 +53,7 @@
 
 <script setup>
 import {queryStoreList} from '@/api/activity/activityProduct'
+import {cloneFunction} from "../../utils/globalFunction";
 
 const queryParam = ref({
   name: '',
@@ -67,7 +68,7 @@ const loading = ref(false)
 const storeList = ref([])
 const total = ref(0)
 const queryForm = ref()
-const storeResultList = ref([])
+let storeResultList = ref([])
 //搜索产品
 const handleQuery = () => {
   queryParam.pageNum = 1
@@ -83,9 +84,9 @@ const getList = () => {
       keyword: queryParam.value.name
     }).then(res => {
       if (res.code === 200) {
-        storeList.value = res.data.list
         total.value = Number(res.data.total)
-
+        storeList.value = res.data.list
+        storeResultList.value = cloneFunction(props.selectedInfo)
         let obj = storeList.value.filter(item => props.filterIds.indexOf(item.storeId) > -1)
         obj.forEach(items => {
           handleAdd(items)
@@ -113,9 +114,10 @@ const resetQuery = () => {
 //选择门店
 const handleAdd = (row) => {
   storeList.value.splice(storeList.value.indexOf(row), 1)
-  let isExists = storeResultList.value.some(r => r.storeId === row.storeId)
+  let isExists = storeResultList.value.some(r => r.id === row.storeId)
   if (!isExists) {
     row.account = 1
+    row.id = row.storeId
     storeResultList.value.push(row)
   }
 }
@@ -148,6 +150,10 @@ const props = defineProps({
   handleType: {
     type: String,
     default: undefined
+  },
+  selectedInfo: {
+    type: Array,
+    default: []
   }
 })
 

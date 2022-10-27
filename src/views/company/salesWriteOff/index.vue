@@ -179,8 +179,29 @@
     <!--        </div>-->
     <!--      </template>-->
     <!--    </el-dialog>-->
-
-
+    <el-dialog
+        @close="colseTipsDialog"
+        v-model="notImportGoodsTips" width="50%" append-to-body :close-on-click-modal="false" center
+        draggable>
+      <div class="tips">
+        <p>
+          发现新商品{{ cantSaveList.length }} 个，其销售数据都没导入
+        </p>
+        <div>
+          <span v-for="item in cantSaveList" :key="item.storeProductCode">{{ item.storeProductCode }},</span>
+        </div>
+        <p>
+          请截图并保存此条通知后，将新商品加入到 商品中心 - 连锁商品库，加入成功后，再次导入数据即可。
+        </p>
+      </div>
+      <template #footer>
+        <div style="marginTop:20px">
+          <el-button size=" large" type="primary" :disabled="uploadData.isLoading" @click="notImportGoodsTips = false">
+            我已截图保存此对话框
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
     <div class="tableList">
       <el-table v-loading="loading" element-loading-text="加载中..." :data="orderList">
         <el-table-column min-width="100px" v-if="columns[0].visible" label="产品名" key="productName"
@@ -238,7 +259,7 @@
 
 <script setup>
 import {ArrowLeft, ArrowRight} from '@element-plus/icons-vue'
-import {getCurrentInstance, reactive, toRefs} from "vue";
+import {computed, getCurrentInstance, reactive, toRefs} from "vue";
 import {getToken} from "@/utils/auth";
 import {getOrderList, addDynamicHeaderExcelUrl, uploadSaleOrder} from "@/api/system/order";
 import customizeImportFirst from './component/customizeImportFirst'
@@ -251,6 +272,9 @@ const showSearch = ref(true);
 const {proxy} = getCurrentInstance()
 let nextSearchAfter = ref([])
 let betweenTime = ref([])
+//未导入数据
+let cantSaveList = ref([])
+let notImportGoodsTips = ref(false)
 //存储当前页数
 let currentPage = ref(0)
 //保存每一页的查询参数
@@ -352,6 +376,11 @@ const handleCustomizeFileUploadProgress = () => {
   uploadData.isUploading = true
   uploadData.open = true
 }
+/**关闭未导入商品提示弹框*/
+const colseTipsDialog = () => {
+  notImportGoodsTips.value = false
+  cantSaveList.value = []
+}
 /**自定义上传成功的回调*/
 const handleCustomizeSuccess = function (res) {
   if (res.code == 200) {
@@ -359,9 +388,14 @@ const handleCustomizeSuccess = function (res) {
     uploadData.isLoading = false
     customizeList.value = []
     proxy.$modal.msgSuccess(`上传文件成功 未保存:${cantSave.length}条 新增:${insert.length}条 更新:${update.length}条`)
+    cantSaveList.value = cantSave
+    if (cantSaveList.value.length !== 0) {
+      notImportGoodsTips.value = true
+    }
     uploadData.open = false
     uploadData.isLoading = false
     uploadData.isUploading = false
+
   } else {
     uploadData.isLoading = false
     customizeList.value = []
@@ -594,6 +628,10 @@ getList()
 .label::v-deep( .el-form-item__label) {
   color: #606266;
   font-weight: 600;
+}
+
+.tips {
+  font-size: 18px;
 }
 
 .pagination {

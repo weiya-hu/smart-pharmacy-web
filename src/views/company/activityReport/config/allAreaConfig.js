@@ -58,7 +58,7 @@ export const storeAreaTableConfig = {
 export const storeBrandTableConfig = {
     propList: [
         {field: 'name', title: '品牌名', minWidth: '20',},
-        {field: 'salesAmount', title: '销售额', minWidth: '20', slotName: "salesAmountSlot"},
+        {field: 'salesAmount', title: '销售额', minWidth: '20', slotName: "salesAmountSlot", sortable: true},
         {
             field: 'salesProportion',
             title: '销售占比',
@@ -77,13 +77,14 @@ export const storeBrandTableConfig = {
             slotName: 'monthOnMonthSlot'
         },
     ],
-    tableHeight: 550
+    tableHeight: 550,
+    isSort: {trigger: 'cell', defaultSort: {field: 'salesAmount', order: 'desc'}, orders: ['desc', 'asc', null]}
 }
 //单品列表配置
 export const storeProductTableConfig = {
     propList: [
         {field: 'name', title: '品牌名', minWidth: '20',},
-        {field: 'salesAmount', title: '销售额', minWidth: '20', slotName: "salesAmountSlot"},
+        {field: 'salesAmount', title: '销售额', minWidth: '20', slotName: "salesAmountSlot", sortable: true},
         {
             field: 'salesProportion',
             title: '销售占比',
@@ -102,5 +103,6 @@ export const storeProductTableConfig = {
             slotName: 'monthOnMonthSlot'
         },
     ],
-    tableHeight: 550
+    tableHeight: 550,
+    isSort: {trigger: 'cell', defaultSort: {field: 'salesAmount', order: 'desc'}, orders: ['desc', 'asc', null]}
 }

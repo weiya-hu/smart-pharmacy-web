@@ -305,7 +305,7 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'" 
+              <el-form-item class="label" label="核算周期" :prop="'formListData.' + index + '.timeRange'"
               >
                 <el-input type="number" min="1" :disabled="handleType=='query'" v-model="thirdFormModel.timeRange"
                           oninput="value=value.replace(/^(0+)|[^\d]+/g,'')"
@@ -414,7 +414,8 @@
     <el-dialog title="门店列表" v-model="showStoreDialog" width="70%" top="8vh" append-to-body
                :close-on-click-modal="false"
                draggable destroy-on-close>
-      <SelectStore :eventId="props.eventId" :handleType="props.handleType" :filterIds="storeList"
+      <SelectStore :selectedInfo="selectedInfo" :eventId="props.eventId" :handleType="props.handleType"
+                   :filterIds="storeList"
                    ref="selectStoreRef"></SelectStore>
       <template #footer>
         <div class="dialog-footer">
@@ -461,6 +462,7 @@ let itemRuleId = ref(null)
 const productList = ref([])
 const storeList = ref([])
 let selectedGoodsAccount = ref([])
+let selectedInfo = ref([])
 const firstFormModels = ref({
       formListData: [{
         eventCalcRewardType: 1,
@@ -678,7 +680,6 @@ const openProductsDialog = (index, row) => {
     itemRuleId.value = null
   }
   selectedGoodsAccount.value = row.products
-  console.log(selectedGoodsAccount.value)
   productList.value = row.products.map(m => {
     return m.productId
   })
@@ -689,6 +690,7 @@ const openProductsDialog = (index, row) => {
 
 const openStoreDialog = (index, data) => {
   storeList.value = data.filter.ids
+  selectedInfo.value = data.stores
   showStoreDialog.value = true
   formStoreIndex.value = index
 }

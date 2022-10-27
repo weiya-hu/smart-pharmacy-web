@@ -10,6 +10,7 @@
         align="center"
         :header-cell-style="{background: '#efefef'}"
         class="mytable-scrollbar"
+        :sort-config="isSort?isSort:undefined"
     >
       <vxe-column type="seq" title="序号">
       </vxe-column>
@@ -73,6 +74,10 @@ export default defineComponent({
     tableHeight: {
       type: Number,
       default: 500
+    },
+    isSort: {
+      type: Object,
+      default: undefined
     },
   },
   emits: ['selectionChange', 'update:page'],
