@@ -93,7 +93,7 @@
     <el-dialog :title="title" v-model="open" width="60%" append-to-body :close-on-click-modal="false" draggable>
       <el-form ref="deptRef" :model="form" :rules="rules" label-width="100px">
         <el-row>
-          <el-col :span="24" v-if="form.parentNodeId !== 0">
+          <el-col :span="24" v-if="form.parentNodeId !== null">
             <el-form-item label="上级机构" prop="parentNodeId">
               <el-tree-select
                   style="width: 100%"
