@@ -26,13 +26,13 @@
                 :before-upload="beforeAvatarUpload">
               <div class="demo-image__placeholder">
                 <div class="block">
-                  <el-image :src="form.logo" v-if="form.logo !== null && form.logo !== ''"
+                  <el-image fit="contain" :src="form.logo" v-if="form.logo !== null && form.logo !== ''"
                             style="width: 500px;height: 180px;border: 1px solid var(--el-border-color);border-radius: 4px; overflow: hidden">
                     <template #placeholder>
                       <div class="image-slot">Loading<span class="dot">...</span></div>
                     </template>
                   </el-image>
-                  <el-image v-if="form.logo == null || form.logo == '' || form.logo == undefined"
+                  <el-image fit="contain" v-if="form.logo == null || form.logo == '' || form.logo == undefined"
                             style="width: 500px;height: 180px;border: 1px solid var(--el-border-color);border-radius: 4px; overflow: hidden">
                     <template #error>
                       <div class="image-slot"
@@ -167,7 +167,7 @@ const corpTypeList = [
 ]
 
 const rules = reactive({
-  legalPersonId: [{required: true, message: '请选择法人代表', trigger: 'change'}],
+  legalPersonId: [{required: true, message: '请选择法人代表', trigger: 'blur'}],
   name: [{required: true, message: '请输入企业简称', trigger: 'blur'}],
   // fullname: [{ required: true, message: '请输入企业全称', trigger: 'blur' }],
   corpType: [{required: true, message: '请选择企业类型', trigger: 'change'}]

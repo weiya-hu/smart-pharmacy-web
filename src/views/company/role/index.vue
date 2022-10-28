@@ -660,7 +660,7 @@ handleQuery();
 <style lang="scss" scoped>
 .dialog-form {
   .el-tree {
-    max-height: 258px;
+    height: 258px;
     overflow: auto;
   }
 }

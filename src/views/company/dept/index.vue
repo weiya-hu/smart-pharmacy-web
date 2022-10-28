@@ -124,7 +124,6 @@
                         :render-after-expand="false"
                         :props="{ value: 'id', label: 'name', children: 'children' }"
                         value-key="id"
-                        clearable
                         placeholder="选择上级机构"
                         check-strictly
                         style="width: 100%"
