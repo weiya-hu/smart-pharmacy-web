@@ -1,8 +1,8 @@
 <template>
-  <div class="login" v-loading="loading"  element-loading-text="登录中···">
+  <div class="login" v-loading="loading" element-loading-text="登录中···">
     <div class="login-box">
       <div class="login-left">
-<!--        <img src="../../assets/images/login_left.png" alt=""/>-->
+        <!--        <img src="../../assets/images/login_left.png" alt=""/>-->
         <video width="520" height="435" playsinline="" autoplay="" muted="" loop="">
           <source src="../../assets/video/login_left.mp4" type="video/mp4">
         </video>
@@ -43,7 +43,8 @@
 import wxlogin from 'vue-wxlogin';
 import {oauthLogin, wechatLogin} from "../../api/login";
 import {GetQueryString} from '@/utils/validate';
-import {setToken, getToken,removeToken} from "../../utils/auth";
+import {setToken, getToken, removeToken} from "../../utils/auth";
+import useUserStore from '@/store/modules/user';
 
 const {proxy} = getCurrentInstance();
 const router = useRouter(), route = useRoute();
@@ -72,12 +73,12 @@ function getWechatLogin() {
         router.push({path: "/index"});
       } else {
         loading.value = false
-        window.history.pushState(null,null,'/')
+        window.history.pushState(null, null, '/')
         dialogVisible.value = true
       }
     }).catch(e => {
       // dialogVisible.value = true
-      window.history.pushState(null,null,'/')
+      window.history.pushState(null, null, '/')
       dialogVisible.value = true
       loading.value = false
     })
@@ -100,12 +101,12 @@ function getOauthLogin() {
         router.push({path: "/index"});
       } else {
         loading.value = false
-        window.history.pushState(null,null,'/')
+        window.history.pushState(null, null, '/')
         dialogUrlVisible.value = true
       }
     }).catch(err => {
       // dialogUrlVisible.value = true
-      window.history.pushState(null,null,'/')
+      window.history.pushState(null, null, '/')
       dialogUrlVisible.value = true
       loading.value = false
     })
@@ -114,31 +115,36 @@ function getOauthLogin() {
   }
 }
 
+console.log('getToken', getToken())
 const wecomControlLogin = () => {
   let params = {
     authCode: GetQueryString('auth_code') ? GetQueryString('auth_code') : '',
     state: 'oauthLoginsplit',
   }
-  if (params.authCode !== '') {
-    loading.value = true
-    oauthLogin(params).then(res => {
-      if (res.code === 200) {
-        setToken(res.data.access_token)
-        router.push({path: "/index"});
-      } else {
-        loading.value = false
-        router.push({path: '/login'});
-      }
-    })
+  if (!getToken()) {
+    if (params.authCode !== '') {
+      loading.value = true
+      oauthLogin(params).then(res => {
+        if (res.code === 200) {
+          setToken(res.data.access_token)
+          router.push({path: "/index"});
+        } else {
+          loading.value = false
+          router.push({path: '/login'});
+        }
+      })
+    } else {
+      loading.value = false
+      router.push({path: "/login"});
+    }
   } else {
-    loading.value = false
-    router.push({path: "/login"});
+    removeToken()
   }
 }
 
 const login = async () => {
   if (process.env.NODE_ENV == "development") {
-    setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcyNDc0NzU5NDQxNjIwOTkyLCJ1c2VyX2tleSI6ImI1MDY1ODZjNzk2MTQ2NzdhZTcwYTBmNDYxZGEyNGYyIiwidXNlcm5hbWUiOiLnjovnvo7ojJwifQ.fLvAPd02wnPxT1WPBJPnuSEx9fLF7fqinTDABrkgnlpqe8gyYlpF55taB5i1KCXEIaepqDkHrq0hXcw00Pp7fA')
+    setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcyNDc0NzU5NDQxNjIwOTkyLCJ1c2VyX2tleSI6ImI0MDFmMjcxMDQ5MTQ0NTk5YzliOGQyNDExODkyOWIyIiwidXNlcm5hbWUiOiLnjovnvo7ojJwifQ.o06jCBdhQoBi7xwfhqZJatkipI2_ieX8eyRCMantC894zHIO4R0c8RGFSH6OllAXZrTXC_oUTgm24vYer3MJ4w')
     //开发环境
   } else if (process.env.NODE_ENV == "production") {
     //生产环境
