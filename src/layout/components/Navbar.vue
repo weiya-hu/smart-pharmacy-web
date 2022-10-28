@@ -2,7 +2,7 @@
   <div class="navbar">
     <hamburger id="hamburger-container" :is-active="appStore.sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
     <div class="right-menu">
-      <div class="cprp-con">{{ data.corpName }}</div>
+      <div class="cprp-con">{{ (userStore.corpInfo && userStore.corpInfo.corpName) || data.corpName }}</div>
       <el-divider direction="vertical" />
       <div class="term-con">
         <span class="term-time term-time-border">{{ data.packageName }}</span>

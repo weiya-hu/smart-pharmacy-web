@@ -218,6 +218,7 @@ function getFormData() {
   getCorpInfo(corpId).then(res => {
     if (res.code === 200) {
       form.value = res.data
+      userStore.setCorpInfo({...res.data,corpName:res.data.name})
     }
   })
 }
