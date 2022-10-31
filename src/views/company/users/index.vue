@@ -56,7 +56,6 @@
             <el-select
                 v-model="queryParams.isActivate"
                 placeholder="请选择成员状态"
-                clearable
                 style="width: 220px"
             >
               <!--                     <el-option-->
@@ -388,7 +387,7 @@ const data = reactive({
     pageSize: 10,
     userName: undefined,
     mobile: undefined,
-    isActivate: undefined,
+    isActivate: 1,
     deptIds: []
   },
   rules: {
