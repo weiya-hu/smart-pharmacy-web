@@ -105,6 +105,7 @@
                   placeholder="请选择上级机构"
                   check-strictly
                   clearable
+                  default-expand-all
               />
             </el-form-item>
           </el-col>
@@ -121,7 +122,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="名称" prop="relationId">
+            <el-form-item label="名称" prop="relationId" v-if="form.type !==5">
               <el-select
                   v-model="form.relationId"
                   filterable
@@ -131,12 +132,13 @@
                   placeholder="请选择名称 / 如没有需要的供应商，请输入名称"
                   clearable
                   style="width: 100%"
-                  v-if="form.type !==5"
               >
                 <el-option v-for="item in nameList" :key="item.id" :label="item.name" :value="item.storeId"/>
               </el-select>
 
-              <el-input v-if="form.type === 5" v-model="form.name" placeholder="请输入名称"></el-input>
+            </el-form-item>
+            <el-form-item label="名称" prop="name" v-if="form.type === 5">
+              <el-input v-model="form.name" placeholder="请输入名称"></el-input>
             </el-form-item>
             <el-form-item prop="code" v-show="form.type !== 5">
               <template #label>
@@ -250,6 +252,8 @@ const data = reactive({
   },
   rules: {
     type: [{required: true, message: "类型不能为空", trigger: "change"}],
+    relationId: [{required: true, message: "名称不能为空", trigger: "change"}],
+    name: [{required: true, message: "名称不能为空", trigger: "blur"}]
   },
 });
 const nameList = ref([])
@@ -412,7 +416,7 @@ function submitForm() {
         if (exists.length > 0) {
           // form.value.name = exists[0].name
         } else {
-          if (form.value.parentNodeId == null){
+          if (form.value.parentNodeId == null) {
             form.value.name = form.value.name
             form.value.relationId = undefined
           } else {

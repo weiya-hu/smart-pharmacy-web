@@ -115,33 +115,28 @@ function getOauthLogin() {
   }
 }
 
-console.log('getToken', getToken())
-const wecomControlLogin = () => {
+const wecomControlLogin = async () => {
+  await useUserStore().logOut().then(() => {
+    location.href = '/';
+  })
   let params = {
     authCode: GetQueryString('auth_code') ? GetQueryString('auth_code') : '',
     state: 'oauthLoginsplit',
   }
-  if (!getToken()) {
-    if (params.authCode !== '') {
-      loading.value = true
-      oauthLogin(params).then(res => {
-        if (res.code === 200) {
-          setToken(res.data.access_token)
-          router.push({path: "/index"});
-        } else {
-          loading.value = false
-          router.push({path: '/login'});
-        }
-      })
-    } else {
-      loading.value = false
-      router.push({path: "/login"});
-    }
-  } else {
-    removeToken()
-    useUserStore().logOut().then(() => {
-      location.href = '/';
+  if (params.authCode !== '') {
+    loading.value = true
+    await oauthLogin(params).then(res => {
+      if (res.code === 200) {
+        setToken(res.data.access_token)
+        router.push({path: "/index"});
+      } else {
+        loading.value = false
+        router.push({path: '/login'});
+      }
     })
+  } else {
+    loading.value = false
+    router.push({path: "/login"});
   }
 }
 
