@@ -390,7 +390,9 @@ const handleCustomizeSuccess = function (res) {
     uploadData.isLoading = false
     customizeList.value = []
     proxy.$modal.msgSuccess(`上传文件成功 未保存:${cantSave.length}条 新增:${insert.length}条 更新:${update.length}条`)
-    cantSaveList.value = cantSave
+    cantSaveList.value = cantSave.filter(item=>{
+      return item.msg=="未找到产品"
+    })
     if (cantSaveList.value.length !== 0) {
       notImportGoodsTips.value = true
     }
