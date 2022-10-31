@@ -139,12 +139,15 @@ const wecomControlLogin = () => {
     }
   } else {
     removeToken()
+    useUserStore().logOut().then(() => {
+      location.href = '/';
+    })
   }
 }
 
 const login = async () => {
   if (process.env.NODE_ENV == "development") {
-    setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcxODE3NjA1ODYzODc4NjU2LCJ1c2VyX2tleSI6ImNiMTE5Yjg2Yzk0NDQ3NGNhZDM3YjMyMjQzNDQzN2VlIiwidXNlcm5hbWUiOiLnjovnvo7ojJwifQ.uf7cw8KBT7iRLhJiu8jpkFL3Em4Mdarhdr-CV-Z9XnbivxVWfi4rash1IFCFEerETiLXyPiYKpQ8YQzLqro_Jw')
+    setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTgyNjIwMjIzMTgzODI2OTQ0LCJ1c2VyX2tleSI6IjAxNzQwNjQ2YmIzMjRkOTg5NjAyZjFjMWYwZDBmNzA1IiwidXNlcm5hbWUiOiLosK3njonnkLQifQ.Cy6gew8i28M4pGG1rgLs436hh6PZRtr7lxZJvbqKA1PfVBwJp0OtFb3XNleqODjij5eby4EiEly0cvF0WAWRMg')
     //开发环境
   } else if (process.env.NODE_ENV == "production") {
     //生产环境
