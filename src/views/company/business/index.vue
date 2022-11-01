@@ -184,7 +184,8 @@
             <template #default="{ row, column, $index }">
               <el-form-item :prop=" 'tableData.' + $index + '.jobId' " :rules="rulesTable.job">
                 <el-select v-model="row.jobId" filterable placeholder="请选择职务" style="width: 90%">
-                  <el-option v-for="item in selectJobs" :key="item.jobId" :label="item.name" :value="item.jobId"/>
+                  <el-option v-for="item in selectJobs" :key="item.jobId" :label="item.name" :value="item.jobId"
+                             :disabled="item.disabled"/>
                 </el-select>
               </el-form-item>
             </template>
@@ -295,6 +296,14 @@ const loadSelectJobs = () => {
   listPost({pageNum: 1, pageSize: 10000})
       .then(res => {
         selectJobs.value = res.data.list
+
+        selectJobs.value.forEach(item => {
+          if (item.state === 0) {
+            item.disabled = true
+          } else {
+            item.disabled = false
+          }
+        })
       })
 }
 

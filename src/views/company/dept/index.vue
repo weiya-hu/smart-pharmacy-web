@@ -126,6 +126,7 @@
                         value-key="id"
                         placeholder="选择上级机构"
                         check-strictly
+                        default-expand-all
                         style="width: 100%"
                      />
                   </el-form-item>
