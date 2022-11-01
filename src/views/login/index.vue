@@ -115,39 +115,31 @@ function getOauthLogin() {
   }
 }
 
-console.log('getToken', getToken())
 const wecomControlLogin = () => {
   let params = {
     authCode: GetQueryString('auth_code') ? GetQueryString('auth_code') : '',
     state: 'oauthLoginsplit',
   }
-  if (!getToken()) {
-    if (params.authCode !== '') {
-      loading.value = true
-      oauthLogin(params).then(res => {
-        if (res.code === 200) {
-          setToken(res.data.access_token)
-          router.push({path: "/index"});
-        } else {
-          loading.value = false
-          router.push({path: '/login'});
-        }
-      })
-    } else {
-      loading.value = false
-      router.push({path: "/login"});
-    }
-  } else {
-    removeToken()
-    useUserStore().logOut().then(() => {
-      location.href = '/';
+  if (params.authCode !== '') {
+    loading.value = true
+    oauthLogin(params).then(res => {
+      if (res.code === 200) {
+        setToken(res.data.access_token)
+        router.push({path: "/index"});
+      } else {
+        loading.value = false
+        router.push({path: '/login'});
+      }
     })
+  } else {
+    loading.value = false
+    router.push({path: "/login"});
   }
 }
 
 const login = async () => {
   if (process.env.NODE_ENV == "development") {
-    setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTgyNjIwMjIzMTgzODI2OTQ0LCJ1c2VyX2tleSI6IjAxNzQwNjQ2YmIzMjRkOTg5NjAyZjFjMWYwZDBmNzA1IiwidXNlcm5hbWUiOiLosK3njonnkLQifQ.Cy6gew8i28M4pGG1rgLs436hh6PZRtr7lxZJvbqKA1PfVBwJp0OtFb3XNleqODjij5eby4EiEly0cvF0WAWRMg')
+    setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcyNDc0NzU5NDQxNjIwOTkyLCJ1c2VyX2tleSI6ImZhMTE2OTVhYTlmOTRhODdiMzE3YWIzYTAzN2ZjNjBjIiwidXNlcm5hbWUiOiLnjovnvo7ojJwifQ.Mai4PtJjHktrAkYCg0XLrVLWCWVLdjRII7oPDkUsAxS6QYV4Qd6yv0rsyKGhEgOnIf1JYzRp-c9YVoEGaSnwuQ')
     //开发环境
   } else if (process.env.NODE_ENV == "production") {
     //生产环境

@@ -32,7 +32,7 @@ export default defineConfig(({mode, command}) => {
             proxy: {
                 // https://cn.vitejs.dev/config/#server-proxy
                 '/dev-api': {
-                    // target:'http://127.0.0.1:8080/',
+                    // target:'http://192.168.1.85:8080/',
                     // target: 'http://testv2.api.shanhaiping.com',
                     // target: 'http://192.168.123.91:8080',
                     // target: 'http://192.168.123.96:8080',

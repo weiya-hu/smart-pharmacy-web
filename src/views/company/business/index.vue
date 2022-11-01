@@ -58,14 +58,6 @@
       </el-table-column>
       <el-table-column label="操作" class-name="small-padding fixed-width" width="180">
         <template #default="scope">
-          <!--          <el-button-->
-          <!--              type="text"-->
-          <!--              icon="Plus"-->
-          <!--              size="small"-->
-          <!--              @click="handleAdd(scope.row)"-->
-          <!--              v-hasPermi="['system:dept:add']"-->
-          <!--          >新增-->
-          <!--          </el-button>-->
           <div class="btn-col">
             <el-button
                 type="text"
@@ -105,6 +97,7 @@
                   placeholder="请选择上级机构"
                   check-strictly
                   clearable
+                  default-expand-all
               />
             </el-form-item>
           </el-col>
@@ -121,22 +114,23 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="名称" prop="relationId">
+            <el-form-item label="名称" prop="relationId" v-if="form.type !==5">
               <el-select
                   v-model="form.relationId"
                   filterable
                   allow-create
                   default-first-option
                   :reserve-keyword="false"
-                  placeholder="请选择名称 / 如没有需要的供应商，请输入名称"
+                  placeholder="请从业务架构中选择，如没有，请输入新的业务节点名称"
                   clearable
                   style="width: 100%"
-                  v-if="form.type !==5"
               >
                 <el-option v-for="item in nameList" :key="item.id" :label="item.name" :value="item.storeId"/>
               </el-select>
 
-              <el-input v-if="form.type === 5" v-model="form.name" placeholder="请输入名称"></el-input>
+            </el-form-item>
+            <el-form-item label="名称" prop="name" v-if="form.type === 5">
+              <el-input v-model="form.name" placeholder="请输入名称"></el-input>
             </el-form-item>
             <el-form-item prop="code" v-show="form.type !== 5">
               <template #label>
@@ -180,9 +174,13 @@
           </el-table-column>
           <el-table-column prop="job" label="职务">
             <template #default="{ row, column, $index }">
-              <el-form-item :prop=" 'tableData.' + $index + '.jobId' " :rules="rulesTable.job">
-                <el-select v-model="row.jobId" filterable placeholder="请选择职务" style="width: 90%">
-                  <el-option v-for="item in selectJobs" :key="item.jobId" :label="item.name" :value="item.jobId"/>
+              <el-form-item :prop=" 'tableData.' + $index + '.jobId' " :rules="rulesTable.job" :class="row.isJob == true ? 'job' : ''">
+                <el-select v-model="row.jobId" filterable placeholder="请选择职务" style="width: 90%;">
+                  <el-option v-for="item in selectJobs" :key="item.jobId" :label="item.name" :value="item.jobId"
+                             :disabled="item.disabled" class="name_info">
+                    <span style="float: left;">{{ item.name }}</span>
+                    <span style="float: right;font-size: 12px;">{{ item.disabled == true ? '已停用' : '' }}</span>
+                  </el-option>
                 </el-select>
               </el-form-item>
             </template>
@@ -250,6 +248,8 @@ const data = reactive({
   },
   rules: {
     type: [{required: true, message: "类型不能为空", trigger: "change"}],
+    relationId: [{required: true, message: "名称不能为空", trigger: "change"}],
+    name: [{required: true, message: "名称不能为空", trigger: "blur"}]
   },
 });
 const nameList = ref([])
@@ -291,9 +291,16 @@ const loadSelectJobs = () => {
   listPost({pageNum: 1, pageSize: 10000})
       .then(res => {
         selectJobs.value = res.data.list
+
+        selectJobs.value.forEach(item => {
+          if (item.state === 0) {
+            item.disabled = true
+          } else {
+            item.disabled = false
+          }
+        })
       })
 }
-
 
 /** 查询部门列表 */
 function getList() {
@@ -361,14 +368,8 @@ function setDisable(data) {
 function handleAdd() {
   reset();
   listReltree({allChild: true, queryRoot: true}).then(response => {
-    // deptOptions.value = proxy.handleTree(response.data, "id");
     deptOptions.value = setDisable(response.data)
-    console.log(deptOptions.value)
-    // deptOptions.value = response.data
   });
-  // if (row != undefined) {
-  //   form.value.parentNodeId = row.nodeId;
-  // }
   open.value = true;
   title.value = "添加机构";
 }
@@ -386,20 +387,22 @@ function toggleExpandAll() {
 async function handleUpdate(row) {
   reset();
   await getNameData(row)
-  // listReltree({nodeId: row.id}).then(response => {
   await listReltree({allChild: true, queryRoot: true}).then(response => {
-    // deptOptions.value = proxy.handleTree(response.data, "id");
     deptOptions.value = setDisable(response.data)
-    // deptOptions.value = response.data
   });
   await getReltree(row.nodeId).then(response => {
     form.value = response.data;
     form.value.parentNodeId = response.data.parentId
-    tableUsers.tableData = response.data.users
+    tableUsers.tableData = response.data.users.map(item => {
+      return {...item, isJob: false}
+    })
     open.value = true;
     title.value = "修改机构";
     changeUser()
   });
+  tableUsers.tableData.filter(item => selectJobs.value.filter(items => items.state == 0).some(i => i.jobId === item.jobId)).forEach(item => {
+    item.isJob = true
+  })
 }
 
 /** 提交按钮 */
@@ -412,7 +415,7 @@ function submitForm() {
         if (exists.length > 0) {
           // form.value.name = exists[0].name
         } else {
-          if (form.value.parentNodeId == null){
+          if (form.value.parentNodeId == null) {
             form.value.name = form.value.name
             form.value.relationId = undefined
           } else {
@@ -480,6 +483,11 @@ getList();
 .table-data {
   .el-form-item {
     margin-bottom: 0 !important;
+  }
+}
+.job {
+  :deep(.el-input__inner) {
+    color: red;
   }
 }
 
