@@ -4,19 +4,19 @@
       <span>所有商品 —— 用户管理自己归属的所有商品</span>
     </div>
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item class="label" label="产品编号" prop="code">
+      <el-form-item label="产品编号" prop="code">
         <el-input style="width: 300px" v-model="queryParams.code" placeholder="请输入产品编号" clearable
                   @keyup.enter="handleQuery"/>
       </el-form-item>
-      <el-form-item class="label" label="产品简称" prop="name">
+      <el-form-item label="产品简称" prop="name">
         <el-input style="width: 300px" v-model="queryParams.name" placeholder="请输入产品简称" clearable
                   @keyup.enter="handleQuery"/>
       </el-form-item>
-      <el-form-item class="label" label="产品类别" prop="productType">
+      <el-form-item label="产品类别" prop="productType">
         <el-input style="width: 300px" v-model="queryParams.productType" placeholder="请输入产品类别" clearable
                   @keyup.enter="handleQuery"/>
       </el-form-item>
-      <el-form-item class="label" label="品牌" prop="brands">
+      <el-form-item label="品牌" prop="brands">
         <el-input style="width: 300px" v-model="queryParams.brands" placeholder="请输入产品品牌" clearable
                   @keyup.enter="handleQuery"/>
       </el-form-item>

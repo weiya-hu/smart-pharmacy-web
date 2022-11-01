@@ -193,13 +193,13 @@
           </div>
         </el-scrollbar>
         <p>
-          请截图并保存此条通知后，将新商品加入到 商品中心 - 连锁商品库，加入成功后，再次导入数据即可。
+          请复制并保存此条通知当中的商品编码，将新商品加入到 商品中心 - 连锁商品库，加入成功后，再次导入数据即可。
         </p>
       </div>
       <template #footer>
         <div style="marginTop:20px">
           <el-button size=" large" type="primary" :disabled="uploadData.isLoading" @click="notImportGoodsTips = false">
-            我已截图保存此对话框
+            我已复制此对话框当中的编码
           </el-button>
         </div>
       </template>
