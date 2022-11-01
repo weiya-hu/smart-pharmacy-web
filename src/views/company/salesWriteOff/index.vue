@@ -67,7 +67,7 @@
           <div class="el-upload__tip text-center">
             <div class="el-upload__tip">
               <el-checkbox v-model="upload.updateSupport"/>
-              是否更新已经存在的用户数据
+              是否更新已经存在的订单数据
             </div>
             <span>仅允许导入xls、xlsx格式文件。</span>
             <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;"
@@ -189,7 +189,7 @@
         </p>
         <el-scrollbar height="20vh">
           <div class="goodsId">
-            <span v-for="item in cantSaveList" :key="item.storeProductCode">{{ item.storeProductCode }},</span>
+            <span v-for="item in cantSaveList" :key="item">{{ item }},</span>
           </div>
         </el-scrollbar>
         <p>
@@ -390,9 +390,14 @@ const handleCustomizeSuccess = function (res) {
     uploadData.isLoading = false
     customizeList.value = []
     proxy.$modal.msgSuccess(`上传文件成功 未保存:${cantSave.length}条 新增:${insert.length}条 更新:${update.length}条`)
-    cantSaveList.value = cantSave.filter(item=>{
-      return item.msg=="未找到产品"
+    cantSaveList.value = cantSave.filter(item => {
+      return item.msg == "未找到产品"
     })
+
+    cantSaveList.value = Array.from(new Set(cantSaveList.value.map(item => {
+      return item.storeProductCode
+    })))
+    console.log(cantSaveList.value)
     if (cantSaveList.value.length !== 0) {
       notImportGoodsTips.value = true
     }

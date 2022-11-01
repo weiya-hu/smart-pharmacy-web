@@ -102,14 +102,24 @@
       >
         <el-tab-pane name="first">
           <template #label>
-            <div v-if="activeName!=='first'">销售活动占比</div>
-            <el-select @change="changeActive" v-model="selectedActive" v-if="activeName =='first'"
-                       placeholder="请选择要查看的活动">
-              <el-option v-for="(item) in eventActiveSelectOptions" :label="item.name" :value="item.eventId"
-                         :key="item.eventId">
+            <div class="saleActiveProportion">销售活动占比{{ saleChartTaskName ? `(${saleChartTaskName})` : '' }}
+              <el-popover width="220px" placement="right" trigger="click">
+                <template #reference>
+                  <el-icon>
+                    <Switch/>
+                  </el-icon>
+                </template>
+                <el-select @change="changeActive" style="width: 200px;" ref="activeSelectInstance"
+                           v-model="selectedActive"
+                           placeholder="请选择要查看的活动">
+                  <el-option v-for="(item,index) in eventActiveSelectOptions" :label="item.name" :value="item.eventId"
+                             :key="item.eventId">
 
-              </el-option>
-            </el-select>
+                  </el-option>
+                </el-select>
+              </el-popover>
+            </div>
+
           </template>
           <div class="itemChart">
             <scaleChart ref="charts_one_instance" v-show="charts_one_isNull == false"
@@ -327,7 +337,7 @@
 </template>
 
 <script setup>
-import {nextTick, reactive, toRefs} from "vue";
+import {nextTick, reactive, toRefs, watch} from "vue";
 import useSalesReport from "@/store/modules/Company/salesReport.js"
 import {
   contentTableSalesReportToStore,
@@ -393,6 +403,8 @@ const fastSelectDate = ref([
 
 
 ])
+/**活动任务下拉框实例*/
+const activeSelectInstance = ref()
 /**图形tab切换栏*/
 let activeName = ref('first')
 /**表格tab切换栏*/
@@ -445,6 +457,8 @@ const charts_three_instance = ref()
 /**图四的实例*/
 const charts_four_instance = ref()
 /**图形比例*/
+/**下拉任务查看销售占比的任务名称*/
+let saleChartTaskName = ref('')
 const twoChartSize = {
   width: '90vw',
   height: '50vh',
@@ -1284,8 +1298,14 @@ const getListInfo = (name) => {
 const formatBaseInfo = (data) => {
   baseInfo.value = data
 }
+
 /**任务改变获取活动报表数据*/
-const changeActive = () => {
+const changeActive = (e) => {
+  let mapActive = eventActiveSelectOptions.value.filter(item => {
+    return item.eventId == e
+  })
+  console.log(eventActiveSelectOptions.value, mapActive)
+  saleChartTaskName.value = mapActive[0].name
   let timeObject = {
     startTime: undefined,
     endTime: undefined
@@ -1296,7 +1316,7 @@ const changeActive = () => {
       endTime: queryParams.value.betweenDates[1]
     }
   }
-//  重新获取不同任务活动下的销售活动占比数据
+  // 重新获取不同任务活动下的销售活动占比数据
   getActivityAndNormal({
     ...cloneFunction(queryParams.value), ...timeObject,
     eventId: selectedActive.value
@@ -1708,12 +1728,8 @@ const innitDataInfo = function (tags = "first") {
         let {brandCount, productCount, storeCount, sumAmount, sumEventAmount, events} = res.data
         if (events && events.length !== 0) {
           selectedActive.value = events[0].eventId
-          eventActiveSelectOptions.value = events.map(item => {
-            return {
-              name: item.name,
-              eventId: item.eventId
-            }
-          })
+          saleChartTaskName.value = events[0].name
+          eventActiveSelectOptions.value = cloneFunction(events)
           //  获取当前任务的echarts图表信息
           getActivityAndNormal({
             ...cloneFunction(queryParams.value), ...timeObject,
@@ -1797,6 +1813,10 @@ const handleQuery = () => {
   innitDataInfo()
   listTabChange()
 }
+/**销售活动占比选择任务*/
+const saleSelectedActive = () => {
+  activeSelectInstance.value.change()
+}
 /**重置*/
 const resetQuery = () => {
   queryParams.value = {
@@ -1819,6 +1839,25 @@ const innit = function () {
 innit()
 </script>
 <style scoped lang="scss">
+.saleActiveProportion {
+  position: relative;
+}
+
+.saleActiveProportion::v-deep(.el-select) {
+  position: absolute;
+  left: 0;
+  top: -10px;
+}
+
+.saleActiveProportion::v-deep(.el-icon) {
+  top: 3px;
+}
+
+.saleActiveProportion::v-deep(.el-popover) {
+  height: 20vh;
+  overflow: auto;
+}
+
 .label::v-deep( .el-form-item__label) {
   color: #606266;
   font-weight: 600;

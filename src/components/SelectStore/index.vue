@@ -131,7 +131,7 @@ const handleDelete = (row) => {
 }
 //获取已选择门店id
 const getStoreResultList = () => {
-  return storeResultList.value.map(item => (item.storeId))
+  return storeResultList.value.map(item => (item.id))
 }
 //获取已选中的门店
 const getStoreResultListInfo = () => {

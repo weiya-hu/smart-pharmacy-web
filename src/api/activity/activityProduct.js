@@ -35,3 +35,16 @@ export function queryJobList(eventId, data = []) {
     })
 }
 
+//任务范围中的职务列表
+export function queryJobListByID(eventId, data = []) {
+    let query = '?'
+    data.forEach(item => {
+        query = query + `nodeIds=${item}&`
+    })
+    query = query.slice(0, query.length - 1)
+    return request({
+        url: `/sop/event/info/job/${eventId}${query}`,
+        method: 'get',
+    })
+}
+

@@ -429,7 +429,7 @@
 
 <script setup>
 import {
-  queryBrandList, queryStoreList, queryJobList,
+  queryBrandList, queryStoreList, queryJobList, queryJobListByID
 } from "@/api/activity/activityProduct";
 import {
   addEventRule,
@@ -607,19 +607,41 @@ const getBrandList = () => {
 
 //门店弹出确定
 const onSuccessStoreDialog = () => {
+  let totalJobs = null
+  let saveJobs = null
   showStoreDialog.value = false
   thirdFormModels.value.formListData[formStoreIndex.value].filter.ids = selectStoreRef.value.getStoreResultList()
   thirdFormModels.value.formListData[formStoreIndex.value].stores = selectStoreRef.value.getStoreResultListInfo()
 //  获取门店规则下的职务
-  queryJobList(props.eventId, {nodeIds: thirdFormModels.value.formListData[formStoreIndex.value].filter.ids})
+  queryJobListByID(props.eventId, thirdFormModels.value.formListData[formStoreIndex.value].filter.ids)
       .then(res => {
-        if (res.code === 200) {
-          thirdFormModels.value.formListData[formStoreIndex.value].jobs = res.data.list.map(job => ({
+        if (res.code == 200) {
+          totalJobs = res.data.list.map(job => ({
             ...job,
             targetRange: 0,
             price: 0
           }))
-
+          if (thirdFormModels.value.formListData[formStoreIndex.value].eventRuleId) {
+            //查询规则详情获取已保存的职位
+            queryEventRuleInfo(thirdFormModels.value.formListData[formStoreIndex.value].eventRuleId).then(res => {
+              if (res.code === 200) {
+                saveJobs = cloneFunction(res.data.jobs)
+                saveJobs = saveJobs.filter(item => {
+                  return totalJobs.some(nextItem => {
+                    return nextItem.jobId == item.jobId
+                  })
+                })
+                totalJobs = totalJobs.filter(item => {
+                  return saveJobs.every(nextItem => {
+                    return nextItem.jobId !== item.jobId
+                  })
+                })
+                thirdFormModels.value.formListData[formStoreIndex.value].jobs = [...saveJobs, ...totalJobs]
+              }
+            })
+          } else {
+            thirdFormModels.value.formListData[formStoreIndex.value].jobs = totalJobs
+          }
         }
       })
 }
