@@ -701,7 +701,7 @@ const openProductsDialog = (index, row) => {
   } else {
     itemRuleId.value = null
   }
-  selectedGoodsAccount.value = row.products
+  selectedGoodsAccount.value = cloneFunction(row.products)
   productList.value = row.products.map(m => {
     return m.productId
   })

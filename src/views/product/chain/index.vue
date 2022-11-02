@@ -29,7 +29,7 @@
     <div class="btn-back">
       <el-row :gutter="10" class="mb8">
         <el-col :span="1.5">
-          <el-button type="primary" icon="Plus" @click="handleAdd" plain>新增产品</el-button>
+<!--          <el-button type="primary" icon="Plus" @click="handleAdd" plain>新增产品</el-button>-->
           <el-button
               type="info"
               plain

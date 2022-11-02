@@ -114,7 +114,7 @@
         <template #tip>
           <div class="el-upload__tip text-center">
             <el-checkbox v-model="uploadData.customizeParam.isOverRide "/>
-            是否更新已经存在的用户数据
+            是否更新已经存在的清单数据
           </div>
           <div class="el-upload__tip text-center">
                 <span>温馨提示请确认，在上传清单以前，已经完成您销售清单的表头与系统表头的匹配
@@ -391,7 +391,7 @@ const handleCustomizeSuccess = function (res) {
     customizeList.value = []
     proxy.$modal.msgSuccess(`上传文件成功 未保存:${cantSave.length}条 新增:${insert.length}条 更新:${update.length}条`)
     cantSaveList.value = cantSave.filter(item => {
-      return item.errCode == "1001"
+      return item.errCode == "1002"
     })
 
     cantSaveList.value = Array.from(new Set(cantSaveList.value.map(item => {
