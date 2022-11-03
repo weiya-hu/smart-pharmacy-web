@@ -1,6 +1,8 @@
 <template>
   <el-checkbox v-model="menuExpand" @change="handleCheckedTreeExpand($event, )">展开/折叠</el-checkbox>
-  <el-checkbox v-model="menuNodeAll" @change="handleCheckedTreeNodeAll($event, )">全选/全不选</el-checkbox>
+  <el-checkbox v-if="handelType!=='query'" v-model="menuNodeAll" @change="handleCheckedTreeNodeAll($event, )">
+    全选/全不选
+  </el-checkbox>
   <el-checkbox v-if="isShowMenuCheckStrictly" v-model="menuCheckStrictly" @change="handleCheckedTreeConnect($event, )">
     父子联动
   </el-checkbox>
@@ -14,7 +16,7 @@
         default-expand-all
         :check-strictly="!menuCheckStrictly"
         empty-text="加载中，请稍候"
-        :props="{ label: 'name', children: 'children' }"
+        :props="{ label: 'name', children: 'children' ,disabled:'disabled'}"
     ></el-tree>
   </el-scrollbar>
 
@@ -34,11 +36,25 @@ const queryParams = ref({
   allChild: true,
   queryRoot: true
 })
+/**添加禁用*/
+const isDisabled = (data) => {
+  data.forEach(item => {
+    item.disabled = true
+    if (item.children.length !== 0) {
+      isDisabled(item.children)
+    }
+  })
+}
 const loadTree = () => {
   listReltree(queryParams.value)
       .then(res => {
         if (res.code === 200) {
-          treeData.value = res.data
+          if (props.handelType === 'query') {
+            treeData.value = res.data
+            isDisabled(treeData.value)
+          } else {
+            treeData.value = res.data
+          }
           if (props.handelType === 'query' || props.handelType === 'edit') {
             nextTick(() => {
               menuRef.value.setCheckedKeys(props.data.map(m => m.nodeId));

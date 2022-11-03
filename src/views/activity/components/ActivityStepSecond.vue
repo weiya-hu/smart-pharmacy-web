@@ -701,7 +701,7 @@ const openProductsDialog = (index, row) => {
   } else {
     itemRuleId.value = null
   }
-  selectedGoodsAccount.value = row.products
+  selectedGoodsAccount.value = cloneFunction(row.products)
   productList.value = row.products.map(m => {
     return m.productId
   })
@@ -952,6 +952,11 @@ const saveFormAndAdd = async (index, type) => {
               }).catch(e => closeLoading())
         } else {
           openLoading()
+          if (thirdFormModels.value.formListData[index].filter.ids.length == 0) {
+            proxy.$modal.msgError("未选择参与规则的门店")
+            closeLoading()
+            return
+          }
           changeEventRule(thirdFormModels.value.formListData[index])
               .then(res => {
                 if (res.code === 200) {

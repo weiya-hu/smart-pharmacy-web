@@ -1810,8 +1810,13 @@ const handleQuery = () => {
   selectedActive.value = undefined
   activeName.value = 'first'
   areaName.value = 'fourth'
-  innitDataInfo()
-  listTabChange()
+  if (queryParams.value.betweenDates.length !== 0 || queryParams.value.timeRangeQuickSelection) {
+    innitDataInfo()
+    listTabChange()
+  } else {
+    proxy.$modal.msgError("请选择查询时间")
+    return
+  }
 }
 /**销售活动占比选择任务*/
 const saleSelectedActive = () => {

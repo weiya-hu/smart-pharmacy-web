@@ -59,14 +59,16 @@
         </el-form>
 
         <div class="table-box">
-          <el-table row-key="userId" ref="userListRef" height="325px" v-loading="loading" :data="userList" 
-             highlight-current-row @current-change="handleCurrentChange">
-            <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" show-overflow-tooltip/>
+          <el-table row-key="userId" ref="userListRef" height="325px" v-loading="loading" :data="userList"
+                    highlight-current-row @current-change="handleCurrentChange">
+            <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible"
+                             show-overflow-tooltip/>
             <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible"
                              :show-overflow-tooltip="true"/>
             <el-table-column label="部门" align="center" key="deptname" prop="deptname" v-if="columns[3].visible"
                              :show-overflow-tooltip="true"/>
-            <el-table-column label="手机号码" align="center" key="mobile" prop="mobile" v-if="columns[4].visible" show-overflow-tooltip/>
+            <el-table-column label="手机号码" align="center" key="mobile" prop="mobile" v-if="columns[4].visible"
+                             show-overflow-tooltip/>
           </el-table>
         </div>
         <pagination
@@ -190,10 +192,16 @@ function resetQuery() {
 
 /** 选择  */
 function handleCurrentChange(currentRow) {
-  if(currentRow){
+  if (props.handelType == 'edit') {
     selectUsers.value[0] = currentRow
+  } else {
+    userList.value.forEach(row => {
+      if (defineSelectedId.value.indexOf(row.userId) >= 0) {
+        userListRef.value.setCurrentRow(row);
+      }
+    })
   }
-  
+
 }
 
 /** 初始化部门数据 */
@@ -228,7 +236,7 @@ const selectedNodeId = () => {
     return item.userId
   })
 
-  
+
 }
 watch(() => queryParams.value.pageNum, () => {
   defineSelected()
@@ -240,9 +248,13 @@ const props = defineProps({
   data: {
     type: Array,
     default: undefined
+  },
+  handelType: {
+    type: String,
+    required: true
   }
 })
-const setPageNum = () =>{
+const setPageNum = () => {
   queryParams.value.pageNum = 1;
   getList();
 }
@@ -252,7 +264,7 @@ defineExpose({
   setPageNum
 })
 
-function onShowTips(e){
+function onShowTips(e) {
   let textLength = e.target.clientWidth
   let containerLength = e.target.scrollWidth
   if (textLength < containerLength) {
@@ -273,6 +285,7 @@ selectedNodeId()
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
 .table-box {
   :deep(.el-table__body tr.current-row>td.el-table__cell) {
     background-color: #ffe3df;
