@@ -400,8 +400,8 @@ async function handleUpdate(row) {
     title.value = "修改机构";
     changeUser()
   });
-  tableUsers.tableData.filter(item => selectJobs.value.filter(items => items.state == 0).some(i => i.jobId === item.jobId)).forEach(item => {
-    item.isJob = true
+  tableUsers.tableData.filter(item => selectJobs.value.filter(items => items.state == 0).some(i => i.jobId === item.jobId)).forEach(j => {
+    j.isJob = true
   })
 }
 
