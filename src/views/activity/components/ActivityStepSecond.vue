@@ -952,6 +952,11 @@ const saveFormAndAdd = async (index, type) => {
               }).catch(e => closeLoading())
         } else {
           openLoading()
+          if (thirdFormModels.value.formListData[index].filter.ids.length == 0) {
+            proxy.$modal.msgError("未选择参与规则的门店")
+            closeLoading()
+            return
+          }
           changeEventRule(thirdFormModels.value.formListData[index])
               .then(res => {
                 if (res.code === 200) {

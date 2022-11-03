@@ -55,6 +55,7 @@
 import {queryStoreList} from '@/api/activity/activityProduct'
 import {cloneFunction} from "../../utils/globalFunction";
 
+let saveOldList = ref(null)
 const queryParam = ref({
   name: '',
   productTypes: '',
@@ -85,10 +86,10 @@ const getList = () => {
     }).then(res => {
       if (res.code === 200) {
         total.value = Number(res.data.total)
+        saveOldList.value = cloneFunction(res.data.list)
         storeList.value = res.data.list
-        storeResultList.value = cloneFunction(props.selectedInfo)
-        let obj = storeList.value.filter(item => props.filterIds.indexOf(item.storeId) > -1)
-        obj.forEach(items => {
+        let commonArray = storeList.value.filter(item => storeResultList.value.some(nextItem => nextItem.id == item.storeId))
+        commonArray.forEach(items => {
           handleAdd(items)
         })
       }
@@ -108,7 +109,7 @@ const cleanAllStore = () => {
 
 //重置搜索
 const resetQuery = () => {
-  queryForm.value.resetFields()
+  queryParam.value.name = null
   getList()
 }
 //选择门店
@@ -127,7 +128,10 @@ const handleDelete = (row) => {
   if (index !== -1) {
     storeResultList.value.splice(index, 1)
   }
-  storeList.value.push(row)
+  if (saveOldList.value.some(item => item.storeId == row.id)) {
+    row.storeId = row.id
+    storeList.value.push(row)
+  }
 }
 //获取已选择门店id
 const getStoreResultList = () => {
@@ -156,13 +160,15 @@ const props = defineProps({
     default: []
   }
 })
-
+const innitList = () => {
+  storeResultList.value = cloneFunction(props.selectedInfo)
+}
 defineExpose({
   getStoreResultList,
   getStoreResultListInfo,
   getList
 })
-
+innitList()
 getList()
 </script>
 

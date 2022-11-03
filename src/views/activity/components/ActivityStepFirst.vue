@@ -123,15 +123,18 @@
     <!--    let specificationsOption = ref([])-->
     <el-dialog title="任务范围" v-model="showRuleScupes" width="50%">
       <el-form :model="queryRuleScupesParams">
-        <el-form-item @change="changeGoodsRange" label="品类" prop="productTypes">
-          <el-select v-model="queryRuleScupesParams.productTypes" multiple clearable style="width: 100%;">
+        <el-form-item label="品类" prop="productTypes">
+          <el-select :disabled="handleType=='query'" @change="changeGoodsRange"
+                     v-model="queryRuleScupesParams.productTypes" multiple clearable
+                     style="width: 100%;">
             <el-option v-for="item in productTypesOption" :value="item" :key="item"
                        :label="item">{{ item }}
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="品牌" prop="brands">
-          <el-select @change="changeGoodsRange" v-model="queryRuleScupesParams.brands" clearable multiple
+          <el-select :disabled="handleType=='query'" @change="changeGoodsRange" v-model="queryRuleScupesParams.brands"
+                     clearable multiple
                      style="width: 100%;">
             <el-option v-for="item in brandsOption" :value="item" :key="item"
                        :label="item">{{ item }}
@@ -139,7 +142,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="规格" prop="specifications">
-          <el-select @change="changeGoodsRange" v-model="queryRuleScupesParams.specifications" clearable multiple
+          <el-select :disabled="handleType=='query'" @change="changeGoodsRange"
+                     v-model="queryRuleScupesParams.specifications" clearable multiple
                      style="width: 100%;">
             <el-option v-for="item in specificationsOption" :value="item" :key="item"
                        :label="item">{{ item }}
@@ -158,7 +162,8 @@
     </el-dialog>
 
     <el-dialog title="任务负责人选择" v-model="showResponsibleUsers" width="70%" :close-on-click-modal="false">
-      <SelectUsers :data="data.form.responsibleUsers" ref="responsibleUsersRef"></SelectUsers>
+      <SelectUsers :handelType="props.handleType" :data="data.form.responsibleUsers"
+                   ref="responsibleUsersRef"></SelectUsers>
       <template #footer>
         <div class="dialog-footer">
           <el-button type="primary" @click="onSuccessResponsibleUsers" v-if="handleType !== 'query'">确 定</el-button>
