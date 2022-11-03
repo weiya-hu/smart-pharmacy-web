@@ -162,7 +162,7 @@
     </el-dialog>
 
     <el-dialog title="任务负责人选择" v-model="showResponsibleUsers" width="70%" :close-on-click-modal="false">
-      <SelectUsers :handelType="props.handleType" :data="data.form.responsibleUsers"
+      <SelectUsers :data="data.form.responsibleUsers"
                    ref="responsibleUsersRef"></SelectUsers>
       <template #footer>
         <div class="dialog-footer">

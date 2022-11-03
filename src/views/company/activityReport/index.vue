@@ -579,11 +579,11 @@ let chart_one_data = {
       color: '#6e7079', // 刻度标签文字的颜色
       // 使用字符串模板，模板变量为刻度默认标签 {value}
       formatter: function (value) {
-        if (value.length > 5) {
-          return value.slice(0, 5) + "..."
-        } else {
+        // if (value.length > 5) {
+        //   return value.slice(0, 5) + "..."
+        // } else {
           return value
-        }
+        // }
       }
     },
     splitLine: {
@@ -827,11 +827,11 @@ let chart_two_data = {
       color: '#6e7079', // 刻度标签文字的颜色
       // 使用字符串模板，模板变量为刻度默认标签 {value}
       formatter: function (value) {
-        if (value.length > 5) {
-          return value.slice(0, 5) + "..."
-        } else {
+        // if (value.length > 5) {
+        //   return value.slice(0, 5) + "..."
+        // } else {
           return value
-        }
+        // }
       }
     },
     splitLine: {
