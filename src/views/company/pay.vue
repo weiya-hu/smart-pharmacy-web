@@ -16,7 +16,7 @@
           <p class="form-tips btn-col">获取路径：企业管理 — 应用管理 — 企业支付 — Secret <el-button size="small" type="primary" link @click="openUrl('https://work.weixin.qq.com/wework_admin/frame#hongbao/guide/hongbaoGuideEntry')">前往复制</el-button></p>
         </el-form-item>
         <el-divider />
-        <p class="form-tips btn-col">获取途径：<el-button size="small" type="primary" link @click="openUrl('https://work.weixin.qq.com/wework_admin/frame#hongbao/guide/hongbaoGuideEntry')">企业微信后台</el-button> — 应用管理 — 支付 — 商号管理（如未户户绑定，清绑定后获取）</p>
+<!--        <p class="form-tips btn-col">获取途径：<el-button size="small" type="primary" link @click="openUrl('https://work.weixin.qq.com/wework_admin/frame#hongbao/guide/hongbaoGuideEntry')">企业微信后台</el-button> — 应用管理 — 支付 — 商号管理（如未户户绑定，清绑定后获取）</p>-->
 <!--        <el-form-item label="商户号">-->
 <!--          <el-input v-model="form.payMchId" :disabled="inputType==='readey'" />-->
 <!--          <p class="form-tips">获取途径：<el-button size="small" type="primary" link @click="openUrl('https://work.weixin.qq.com/wework_admin/frame#hongbao/guide/hongbaoGuideEntry')">企业微信后台</el-button> — 应用管理 — 支付 — 商号管理（如未户户绑定，清绑定后获取）</p>-->
