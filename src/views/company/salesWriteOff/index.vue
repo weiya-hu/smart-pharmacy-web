@@ -12,8 +12,9 @@
             v-model="betweenTime"
             start-placeholder="开始时间"
             end-placeholder="结束时间"
-            format="YYYY-MM-DD HH-mm-ss"
+            format="YYYY-MM-DD HH:mm:ss"
             value-format="YYYY-MM-DD HH:mm:ss"
+            :default-time="defaultTime"
             style="width: 360px"
         />
       </el-form-item>
@@ -284,6 +285,7 @@ let pageQueryParams = ref([[
   undefined
 ]
 ])
+let defaultTime = ref([new Date(2022, 9, 10, 0, 0, 0), new Date(2022, 9, 10, 23, 59, 59)])
 //控制进度条是否显示
 let isShowProgress = ref(false)
 //进度条控制
