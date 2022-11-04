@@ -103,43 +103,43 @@
       <!--      </div>-->
     </div>
     <!--    区域销售列表展示-->
-    <div class="areaMarket">
-      <el-table
-          :data="store.activityReportAreaListToTree"
-          :default-expand-all="false"
-          row-key="nodeId"
-          style="width: 100%;height: 100%"
-          :tree-props="{ children: 'children' }"
-          :cell-style="{'text-align':'center'}"
-          :header-cell-style="{backgroundColor: '#efefef !important','text-align':'center'}"
-      >
-        <el-table-column type="index" label="序号" width="200"/>
-        <el-table-column prop="name" label="名称" show-tooltip-when-overflow></el-table-column>
-        <el-table-column prop="saleAmount" label="销售额" show-tooltip-when-overflow>
-          <template #default="{row}">
-            <span>{{ row.saleAmount }}元</span>
-          </template>
-        </el-table-column>
-      </el-table>
+<!--    <div class="areaMarket">-->
+<!--      <el-table-->
+<!--          :data="store.activityReportAreaListToTree"-->
+<!--          :default-expand-all="false"-->
+<!--          row-key="nodeId"-->
+<!--          style="width: 100%;height: 100%"-->
+<!--          :tree-props="{ children: 'children' }"-->
+<!--          :cell-style="{'text-align':'center'}"-->
+<!--          :header-cell-style="{backgroundColor: '#efefef !important','text-align':'center'}"-->
+<!--      >-->
+<!--        <el-table-column type="index" label="序号" width="200"/>-->
+<!--        <el-table-column prop="name" label="名称" show-tooltip-when-overflow></el-table-column>-->
+<!--        <el-table-column prop="saleAmount" label="销售额" show-tooltip-when-overflow>-->
+<!--          <template #default="{row}">-->
+<!--            <span>{{ row.saleAmount }}元</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+<!--      </el-table>-->
 
-      <!--      <div v-for="(item,index) in store.activityReportAreaList" :key="index" class="allArea area">-->
-      <!--        <vxe-table-->
-      <!--            align="center"-->
-      <!--            height="600px"-->
-      <!--            border="none"-->
-      <!--            class="mytable-scrollbar"-->
-      <!--            :header-cell-style="{background: '#efefef'}"-->
-      <!--            :data="item.saleList">-->
-      <!--          <vxe-column type="seq" title="序号" width="60"></vxe-column>-->
-      <!--          <vxe-column field="name" show-header-overflow show-overflow show-footer-overflow title="名称"></vxe-column>-->
-      <!--          <vxe-column field="saleAmount" title="销售额">-->
-      <!--            <template #default="{row}">-->
-      <!--              <span>{{ row.saleAmount }}元</span>-->
-      <!--            </template>-->
-      <!--          </vxe-column>-->
-      <!--        </vxe-table>-->
-      <!--      </div>-->
-    </div>
+<!--      &lt;!&ndash;      <div v-for="(item,index) in store.activityReportAreaList" :key="index" class="allArea area">&ndash;&gt;-->
+<!--      &lt;!&ndash;        <vxe-table&ndash;&gt;-->
+<!--      &lt;!&ndash;            align="center"&ndash;&gt;-->
+<!--      &lt;!&ndash;            height="600px"&ndash;&gt;-->
+<!--      &lt;!&ndash;            border="none"&ndash;&gt;-->
+<!--      &lt;!&ndash;            class="mytable-scrollbar"&ndash;&gt;-->
+<!--      &lt;!&ndash;            :header-cell-style="{background: '#efefef'}"&ndash;&gt;-->
+<!--      &lt;!&ndash;            :data="item.saleList">&ndash;&gt;-->
+<!--      &lt;!&ndash;          <vxe-column type="seq" title="序号" width="60"></vxe-column>&ndash;&gt;-->
+<!--      &lt;!&ndash;          <vxe-column field="name" show-header-overflow show-overflow show-footer-overflow title="名称"></vxe-column>&ndash;&gt;-->
+<!--      &lt;!&ndash;          <vxe-column field="saleAmount" title="销售额">&ndash;&gt;-->
+<!--      &lt;!&ndash;            <template #default="{row}">&ndash;&gt;-->
+<!--      &lt;!&ndash;              <span>{{ row.saleAmount }}元</span>&ndash;&gt;-->
+<!--      &lt;!&ndash;            </template>&ndash;&gt;-->
+<!--      &lt;!&ndash;          </vxe-column>&ndash;&gt;-->
+<!--      &lt;!&ndash;        </vxe-table>&ndash;&gt;-->
+<!--      &lt;!&ndash;      </div>&ndash;&gt;-->
+<!--    </div>-->
     <!--    品牌销量和单品销量-->
     <div class="salesBrandAndSingle">
       <el-row :gutter="20">
@@ -579,11 +579,11 @@ let chart_one_data = {
       color: '#6e7079', // 刻度标签文字的颜色
       // 使用字符串模板，模板变量为刻度默认标签 {value}
       formatter: function (value) {
-        // if (value.length > 5) {
-        //   return value.slice(0, 5) + "..."
-        // } else {
+        if (value.length > 5) {
+          return value.slice(0, 5) + "..."
+        } else {
           return value
-        // }
+        }
       }
     },
     splitLine: {
@@ -827,11 +827,11 @@ let chart_two_data = {
       color: '#6e7079', // 刻度标签文字的颜色
       // 使用字符串模板，模板变量为刻度默认标签 {value}
       formatter: function (value) {
-        // if (value.length > 5) {
-        //   return value.slice(0, 5) + "..."
-        // } else {
+        if (value.length > 5) {
+          return value.slice(0, 5) + "..."
+        } else {
           return value
-        // }
+        }
       }
     },
     splitLine: {
