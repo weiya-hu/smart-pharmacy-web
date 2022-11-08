@@ -192,6 +192,7 @@ const handleNext = async () => {
           if (handleType.value) {
             nextTick(() => {
               activityStepSecondRef.value.loadEventRule()
+              activityStepSecondRef.value.getBrandList()
             })
           }
         } else {
@@ -265,6 +266,7 @@ const getTaskInfo = () => {
   } else {
     return
   }
+
 }
 const loadInfo = () => {
   eventId.value = route.query.eventId

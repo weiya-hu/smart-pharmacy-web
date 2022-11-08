@@ -223,6 +223,7 @@ import SelectUsers from '@/components/SelectUsers/index'
 import {nextTick, reactive} from "vue";
 import {getToken} from "@/utils/auth";
 import {ElMessage, ElMessageBox} from "element-plus";
+import {queryBrandList} from "@/api/activity/activityProduct";
 
 let ruleScupes = (rule, value, callback) => {
   if (form.value.ruleScupes === undefined || form.value.ruleScupes.length === 0) {
@@ -344,6 +345,7 @@ async function submitForm() {
     firstLoading.value = true
     if (props.eventId != null && props.canEdit) {
       form.value.eventId = props.eventId
+      form.value.productFilter = queryRuleScupesParams.value
       return updateEventInfo(form.value)
     } else if (props.eventId === undefined) {
       return createEventInfo(form.value)
@@ -535,12 +537,23 @@ const onCancelRuleScupes = () => {
   //关闭弹窗
   showRuleScupes.value = false
   //清空数据
-  queryRuleScupesParams.value = {
-    productTypes: [], //品类
-    brands: [], //品牌
-    specifications: [], //规格
-    storeIds: [] //门店范围
+  if (props.eventId) {
+    queryBrandList(props.eventId).then(res => {
+      if (res.code === 200) {
+        queryRuleScupesParams.value.brands = res.data.brands
+        queryRuleScupesParams.value.productTypes = res.data.productTypes
+        queryRuleScupesParams.value.specifications = res.data.specifications
+      }
+    })
+  } else {
+    queryRuleScupesParams.value = {
+      productTypes: [], //品类
+      brands: [], //品牌
+      specifications: [], //规格
+      storeIds: [] //门店范围
+    }
   }
+
 }
 
 //任务负责人选择确定
@@ -578,7 +591,17 @@ const onCancelRarticipants = () => {
 const queryActivityEventId = async (eventId) => {
   let {code, data: resultData} = await getEventInfoByid(eventId)
   if (code === 200) {
-    data.form = resultData
+    data.form = Object.assign(form.value, resultData)
+  }
+//  查询任务范围
+  if (eventId) {
+    queryBrandList(eventId).then(res => {
+      if (res.code === 200) {
+        queryRuleScupesParams.value.brands = res.data.brands
+        queryRuleScupesParams.value.productTypes = res.data.productTypes
+        queryRuleScupesParams.value.specifications = res.data.specifications
+      }
+    })
   }
 }
 

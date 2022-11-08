@@ -445,7 +445,7 @@ import {
 import SelectProducts from '@/components/SelectProducts/index'
 import SelectStore from '@/components/SelectStore/index'
 import {cloneFunction} from "@/utils/globalFunction";
-import {nextTick} from "vue";
+import {nextTick, onMounted, watch} from "vue";
 
 const {proxy} = getCurrentInstance();
 const {
@@ -1161,7 +1161,8 @@ defineExpose({
   getJobList,
   publishActivity,
   openLoading,
-  closeLoading
+  closeLoading,
+  getBrandList
 })
 
 </script>
