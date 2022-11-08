@@ -411,9 +411,10 @@
       </template>
     </el-dialog>
     <!-- 门店列表弹窗-->
-    <el-dialog title="门店列表" v-model="showStoreDialog" width="70%" top="8vh" append-to-body
+    <el-dialog title="门店列表" v-model="showStoreDialog" width="70%" top="8vh" append-to-body 
                :close-on-click-modal="false"
-               draggable destroy-on-close>
+               draggable destroy-on-close
+               @close="selectProductsClose">
       <SelectStore :selectedInfo="selectedInfo" :eventId="props.eventId" :handleType="props.handleType"
                    :filterIds="storeList"
                    ref="selectStoreRef"></SelectStore>
@@ -715,6 +716,7 @@ const openStoreDialog = (index, data) => {
   selectedInfo.value = data.stores
   showStoreDialog.value = true
   formStoreIndex.value = index
+  disableScroll()
 }
 const onSuccessProductsDialog = (e) => {
   showProductsDialog.value = false

@@ -1,8 +1,8 @@
 <template>
   <div class="">
-    <el-form v-model="queryParam" ref="queryForm" :inline="true">
+    <el-form v-model="queryParam" ref="queryForm" :inline="true" @submit.native.prevent >
       <el-form-item label="门店名称">
-        <el-input v-model="queryParam.name" placeholder="请输入门店名称"></el-input>
+        <el-input v-model="queryParam.name" placeholder="请输入门店名称" @keyup.enter="handleQuery"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
