@@ -69,12 +69,14 @@ function getWechatLogin() {
     loading.value = true
     wechatLogin(params).then(res => {
       if (res.code === 200) {
-        setToken(res.data.access_token)
-        router.push({path: "/index"});
-      } else {
-        loading.value = false
-        window.history.pushState(null, null, '/')
-        dialogVisible.value = true
+        if (res.data.need_register) {
+          loading.value = false
+          window.history.pushState(null, null, '/')
+          dialogVisible.value = true
+        } else {
+          setToken(res.data.access_token)
+          router.push({path: "/index"});
+        }
       }
     }).catch(e => {
       // dialogVisible.value = true
