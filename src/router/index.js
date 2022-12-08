@@ -42,12 +42,12 @@ export const constantRoutes = [
     //     component: () => import('@/views/login'),
     //     hidden: true
     // },
-    {
-        path: '/',
-        component: () => import('@/views/login/index'),
-        redirect: '/login',
-        hidden: true,
-    },
+    // {
+    //     path: '/',
+    //     component: () => import('@/views/login/index'),
+    //     redirect: '/login',
+    //     hidden: true,
+    // },
     {
         path: '/login',
         component: () => import('@/views/login/index'),
@@ -67,6 +67,11 @@ export const constantRoutes = [
     {
         path: '/404',
         component: () => import('@/views/error/404'),
+        hidden: true
+    },
+    {
+        path:'/noaccess',
+        component:()=>import("@/views/noaccess/index"),
         hidden: true
     },
     {
