@@ -105,12 +105,12 @@ service.interceptors.response.use(res => {
           type: 'error'
         })
         return Promise.reject(new Error(msg))
-      }else if(code === 999){//维护状态，跳转404页面
+      }else if(code === 999){//维护状态，跳转无权限页面
         ElMessage({
           message: msg,
           type: 'error'
         })
-        location.href = '/404';
+        location.href = '/noaccess';
       }else if (code !== 200) {
         ElNotification.error({
           title: msg
