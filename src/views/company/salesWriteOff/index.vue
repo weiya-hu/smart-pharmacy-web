@@ -21,70 +21,52 @@
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+        <el-button
+            type="primary"
+            plain
+            icon="Upload"
+            @click="customizeImport"
+        >自定义导入
+        </el-button>
       </el-form-item>
     </el-form>
     <div class="btn-back">
       <el-row :gutter="10" class="mb8">
-
         <el-col :span="1.5">
-          <el-button
-              type="primary"
-              plain
-              icon="Upload"
-              @click="customizeImport"
-          >自定义导入
-          </el-button>
+          <div>
+            <div v-if="analysisStatus==2" class="uploadInfo">
+              <p class="desc">当前数据截至 {{ lastImportTime }}导入,其中{{ insertCount }}条导入成功，{{
+                  updateCount
+                }}条更新，
+                {{ cantSaveCount }}条导入失败。</p>
+              <el-button
+                  type="primary"
+                  plain
+                  v-if="cantSaveList.length!==0"
+                  @click="uploadErrorProCode"
+              >查看导入失败
+              </el-button>
+              <el-button
+                  type="info"
+                  plain
+                  v-if="cantSaveList.length==0"
+              >查看导入失败
+              </el-button>
+            </div>
+            <div v-if="analysisStatus==3" class="uploadInfo">
+              <p style="marginRight:10px" class="desc">上传导入计算失败 ！！！</p>
+              <el-button
+                  type="primary"
+                  plain
+                  @click="()=>{waitDialog = true}"
+              >查看计算失败原因
+              </el-button>
+            </div>
+          </div>
         </el-col>
-        <!--        <el-col :span="1.5">-->
-        <!--          <el-button type="primary" plain @click="queryNextpage(true)">上一页</el-button>-->
-        <!--        </el-col>-->
-        <!--        <el-col :span="1.5">-->
-        <!--          <el-button type="primary" plain @click="queryNextpage(false)">下一页</el-button>-->
-        <!--        </el-col>-->
-
         <right-toolbar v-model:showSearch="showSearch" @queryTable="refreshList" :columns="columns"></right-toolbar>
       </el-row>
     </div>
-
-    <el-dialog title="订单导入" v-model="upload.open" width="50%" append-to-body :close-on-click-modal="false"
-               draggable>
-      <el-upload
-          ref="uploadRef"
-          :limit="1"
-          accept=".xlsx, .xls"
-          :headers="upload.headers"
-          :action="upload.url + '?updateSupport=' + upload.updateSupport"
-          :disabled="upload.isUploading"
-          :on-progress="handleFileUploadProgress"
-          :on-success="handleFileSuccess"
-          :auto-upload="false"
-          drag
-      >
-        <el-icon class="el-icon--upload">
-          <upload-filled/>
-        </el-icon>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <template #tip>
-          <div class="el-upload__tip text-center">
-            <div class="el-upload__tip">
-              <el-checkbox v-model="upload.updateSupport"/>
-              是否更新已经存在的清单数据
-            </div>
-            <span>仅允许导入xls、xlsx格式文件。</span>
-            <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;"
-                     @click="importTemplate">下载模板
-            </el-link>
-          </div>
-        </template>
-      </el-upload>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button type="primary" @click="submitFileForm">确 定</el-button>
-          <el-button @click="upload.open = false">取 消</el-button>
-        </div>
-      </template>
-    </el-dialog>
-    <!--    自定义导入-->
     <el-dialog
         title="导入销售清单" v-model="uploadData.open" width="50%" append-to-body :close-on-click-modal="false"
         draggable>
@@ -133,53 +115,6 @@
         </div>
       </template>
     </el-dialog>
-    <!--http自定义上传-->
-    <!--    <el-dialog-->
-    <!--        title="导入销售清单" v-model="uploadData.open" width="50%" append-to-body :close-on-click-modal="false"-->
-    <!--        draggable>-->
-    <!--      <el-upload-->
-    <!--          :disabled="uploadData.isUploading"-->
-    <!--          ref="customizeUploadRef"-->
-    <!--          style="margin: 0 10px"-->
-    <!--          :limit="1"-->
-    <!--          accept=".xlsx, .xls"-->
-    <!--          action="#"-->
-    <!--          method:="POST"-->
-    <!--          :file-list="customizeList"-->
-    <!--          :show-file-list="true"-->
-    <!--          :on-success="handleCustomizeSuccess"-->
-    <!--          :on-progress="handleCustomizeFileUploadProgress"-->
-    <!--          :http-request="customizeUpload"-->
-    <!--          :auto-upload="false"-->
-    <!--          :on-error="handleCustomizeError"-->
-    <!--          drag-->
-    <!--      >-->
-    <!--        <el-icon class="el-icon&#45;&#45;upload">-->
-    <!--          <upload-filled/>-->
-    <!--        </el-icon>-->
-    <!--        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>-->
-    <!--        <template #tip>-->
-    <!--          <div class="el-upload__tip text-center">-->
-    <!--            <el-checkbox v-model="uploadData.customizeParam.isOverRide "/>-->
-    <!--            是否更新已经存在的用户数据-->
-    <!--          </div>-->
-    <!--          <div class="el-upload__tip text-center">-->
-    <!--            <span>温馨提示请确认，在上传清单以前，已经完成您销售清单的表头与系统表头的匹配-->
-    <!--              如没有匹配，请点击：</span>-->
-    <!--            <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;"-->
-    <!--                     @click="matchFormHeader">去匹配表头-->
-    <!--            </el-link>-->
-    <!--          </div>-->
-    <!--        </template>-->
-    <!--      </el-upload>-->
-    <!--      <el-progress v-if="isShowProgress" :percentage="percentage" :color="customColors"/>-->
-    <!--      <template #footer>-->
-    <!--        <div style="marginTop:20px" class="dialog-footer">-->
-    <!--          <el-button :disabled="uploadData.isLoading" type="primary" @click="submitFileForm">确 定</el-button>-->
-    <!--          <el-button :disabled="uploadData.isLoading" @click="uploadData.open = false">取 消</el-button>-->
-    <!--        </div>-->
-    <!--      </template>-->
-    <!--    </el-dialog>-->
     <el-dialog
         @close="colseTipsDialog"
         v-model="notImportGoodsTips" width="50%" append-to-body :close-on-click-modal="false" center
@@ -205,49 +140,83 @@
         </div>
       </template>
     </el-dialog>
+
+    <el-dialog
+        v-model="waitDialog"
+        width="25%"
+        :modal-append-to-body='false'
+        :show-close="false"
+        :close-on-click-modal="true"
+        center
+        draggable>
+      <div class="uploadStatus">
+        <p v-if="analysisStatus==1" class="waitDesc">
+          <span>数据导入完成，系统正在计算中，
+            <span v-if="analysisTime>1">估计需要<span style="color: red">{{
+                analysisTime
+              }}</span>分钟，请耐心等待</span>
+            <span v-if="analysisTime==1">
+            请耐心等待...
+          </span>
+          </span><br/>
+          <span>  您还可以离开本页面，待计算完成再返回</span>
+        </p>
+        <p v-if="analysisStatus==2" class="finishDesc">
+          本次导入数据已计算完成
+        </p>
+        <p v-if="analysisStatus==3" class="errorDesc">
+          <span>
+            订单解析失败
+          </span><br/>
+          <span style="color:red;">
+            {{ analysisErrorMsg }}
+          </span>
+        </p>
+      </div>
+      <template v-if="analysisStatus==2||analysisStatus==3" #footer>
+        <div style="marginTop:20px">
+          <el-button size=" large" type="primary" @click="caculateOver">
+            我知道了
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+
     <div class="tableList">
       <el-table v-loading="loading" element-loading-text="加载中..." :data="orderList">
-        <el-table-column min-width="100px" v-if="columns[0].visible" label="产品名" key="productName"
+
+        <el-table-column v-if="columns[0].visible" label="产品名" key="productName"
                          prop="productName" show-overflow-tooltip/>
-        <el-table-column min-width="90px" v-if="columns[1].visible" label="销售金额" key="paidinAmount"
+        <el-table-column v-if="columns[1].visible" label="销售金额" key="paidinAmount"
                          prop="paidinAmount" show-overflow-tooltip/>
-        <el-table-column min-width="90px" v-if="columns[2].visible" label="销售数量" key="saleNumber"
+        <el-table-column v-if="columns[2].visible" label="销售数量" key="saleNumber"
                          prop="saleNumber" show-overflow-tooltip/>
-        <el-table-column min-width="160px" v-if="columns[3].visible" label="销售时间" key="saleTime"
+        <el-table-column v-if="columns[3].visible" label="销售时间" key="saleTime"
                          prop="saleTime" show-overflow-tooltip/>
+
         <el-table-column label="规格" v-if="columns[4].visible" key="specification"
                          prop="specification" show-overflow-tooltip/>
-        <el-table-column label="门店ID" min-width="150px" v-if="columns[5].visible" key="storeId" prop="storeId"
+        <el-table-column label="门店ID" v-if="columns[5].visible" key="storeId" prop="storeId"
                          show-overflow-tooltip/>
-        <el-table-column label="门店名" min-width="150px" v-if="columns[6].visible" key="storeName"
+        <el-table-column label="门店名" v-if="columns[6].visible" key="storeName"
                          prop="storeName" show-overflow-tooltip/>
-        <el-table-column label="门店订单ID" min-width="90px" v-if="columns[7].visible" key="storeOrderNumber"
+        <el-table-column label="门店订单ID" v-if="columns[7].visible" key="storeOrderNumber"
                          prop="storeOrderNumber" show-overflow-tooltip/>
-        <el-table-column min-width="100px" v-if="columns[8].visible" label="销售员" key="userName"
+        <el-table-column v-if="columns[8].visible" label="销售员" key="userName"
                          prop="userName" show-overflow-tooltip/>
+        <el-table-column v-if="columns[9].visible" label="是否核销" key="userName"
+                         prop="isWriteOff" show-overflow-tooltip>
+          <template #default="{row}">
+              <span v-if="row.isWriteOff==null">
+                否
+              </span>
+            <span v-else>
+                是
+              </span>
+          </template>
+        </el-table-column>
       </el-table>
-
-      <!--      <div class="pagination-container pagination" v-show="total > 0">-->
-      <!--        <div class="total">共{{ totalCount }}条</div>-->
-      <!--        <el-button :icon="ArrowLeft" text bg @click="queryNextpage(true)" :disabled="currentPage + 1 == 1"></el-button>-->
-      <!--        <div class="page-box">-->
-      <!--          <el-tag v-for="item in pageItem" effect="dark" :type="currentPage + 1 === item ? '' : 'info'"-->
-      <!--                  style="margin: 0 5px;">{{ item }}-->
-      <!--            <el-icon v-show="item == ''">-->
-      <!--              <MoreFilled/>-->
-      <!--            </el-icon>-->
-      <!--          </el-tag>-->
-      <!--        </div>-->
-      <!--        <el-button :icon="ArrowRight" text bg @click="queryNextpage(false)"-->
-      <!--                   :disabled="currentPage + 1 == Math.ceil(totalCount / 10)"></el-button>-->
-      <!--      </div>-->
-      <!--      <div style="padding: 20px;display: flex;justifyContent: flex-end">-->
-      <!--        <span style="marginRight:10px">共{{ totalCount }}条 </span>-->
-      <!--        <span style="marginRight:10px">共{{ total }}页 </span>-->
-      <!--        <span>当前页:{{ currentPage + 1 }}</span>-->
-      <!--      </div>-->
-
-
       <pagination
           v-show="total > 0"
           :total="total"
@@ -256,18 +225,18 @@
           @pagination="getList"
       />
     </div>
-
   </div>
 </template>
 
 <script setup>
 import {ArrowLeft, ArrowRight} from '@element-plus/icons-vue'
-import {computed, getCurrentInstance, reactive, toRefs} from "vue";
+import {computed, getCurrentInstance, nextTick, onBeforeUnmount, reactive, toRefs} from "vue";
 import {getToken} from "@/utils/auth";
 import {getOrderList, addDynamicHeaderExcelUrl, uploadSaleOrder} from "@/api/system/order";
 import customizeImportFirst from './component/customizeImportFirst'
 
 import router from "@/router";
+import {recentlyFileInfo} from "../../../api/system/order";
 //自定义导入列表
 const customizeUploadRef = ref()
 const customizeList = ref([])
@@ -301,9 +270,21 @@ const data = reactive({
     pageSize: 10,
     otherFilter: undefined,
     searchKey: undefined,
+    total: undefined
   }
 });
 const orderList = ref([]);
+/*上传文件计算等待弹框*/
+const waitDialog = ref(false)
+let waitTimer = ref()
+const analysisTime = ref()
+const analysisStatus = ref()
+const analysisErrorMsg = ref()
+const cantSaveCount = ref()
+const updateCount = ref()
+const insertCount = ref()
+const lastImportTime = ref()
+const isCaculateOver = ref(false)
 //列表loading
 let loading = ref(false)
 const total = ref(0);
@@ -322,6 +303,7 @@ const upload = reactive({
   // 上传的地址
   url: import.meta.env.VITE_APP_BASE_API + "/product/order/importOrder"
 });
+
 /*** 重置每一页的查询参数*/
 const restPageQueryParams = () => {
   currentPage.value = 0
@@ -338,7 +320,7 @@ let uploadData = reactive({
   isLoading: false,
   isUploading: false,
   // 是否禁用上传
-  customizeUrl: import.meta.env.VITE_APP_BASE_API + '/product/order/addDynamicHeaderExcelFile',
+  customizeUrl: import.meta.env.VITE_APP_BASE_API + '/product/order/addDynamicHeaderExcelFileNew',
   customizeParam: {
     path: '/Company/Customize', isOverRide: true,
   },
@@ -373,6 +355,11 @@ const uploadProgressCallback = (progressEvent) => {
   let persent = (progressEvent.loaded / progressEvent.total * 100 | 0)
   percentage.value = persent
 }
+/**订单计算完成*/
+const caculateOver = () => {
+  waitDialog.value = false
+  getList()
+}
 
 //自定义上传前的回调
 const handleCustomizeFileUploadProgress = () => {
@@ -383,29 +370,139 @@ const handleCustomizeFileUploadProgress = () => {
 /**关闭未导入商品提示弹框*/
 const colseTipsDialog = () => {
   notImportGoodsTips.value = false
-  cantSaveList.value = []
+  // cantSaveList.value = []
 }
 /**自定义上传成功的回调*/
+    //点击查看导入失败
+const uploadErrorProCode = () => {
+      if (cantSaveList.value.length !== 0) {
+        notImportGoodsTips.value = true
+      }
+    }
+
+//定时器轮询回调
+const getRecentlyFileInfo = () => {
+  recentlyFileInfo().then(res => {
+    if (res.code == 200) {
+      let {
+        predictTime,
+        productOrderImportInfo: {importTime, status, errorMsg, cantsaveDetail, insertNum, updateNum, cantsaveNum}
+      } = res.data
+      analysisStatus.value = status
+      let remainTime = predictTime * 60000 - (new Date().getTime() - new Date(importTime).getTime())
+      if ((remainTime > 0 && remainTime <= 60000) || remainTime <= 0) {
+        analysisTime.value = 1
+      } else if (remainTime > 60000) {
+        analysisTime.value = Math.ceil(remainTime / 60000)
+      }
+      switch (status) {
+        case 1:
+          isCaculateOver.value = false
+          break;
+        case 2:
+          if (JSON.parse(cantsaveDetail).length !== 0) {
+            cantSaveList.value = JSON.parse(cantsaveDetail).filter(item => {
+              return item.errCode == "1002"
+            })
+            cantSaveList.value = Array.from(new Set(cantSaveList.value.map(item => {
+              return item.storeProductCode
+            })))
+          }
+          console.log(cantSaveList.value, "？？？")
+
+          analysisTime.value = predictTime
+          cantSaveCount.value = cantsaveNum
+          updateCount.value = updateNum
+          insertCount.value = insertNum
+          lastImportTime.value = importTime
+          isCaculateOver.value = true
+          nextTick(() => {
+            clearInterval(waitTimer.value)
+          })
+          break;
+        case 3:
+          waitDialog.value = true
+          isCaculateOver.value = true
+          analysisErrorMsg.value = errorMsg.split("||").join(",") ? errorMsg.split("||").join(",") : errorMsg
+          nextTick(() => {
+            clearInterval(waitTimer.value)
+          })
+          break
+      }
+    }
+  })
+}
+
+//    轮询最近一次上传文件的 计算状态
+const recentlyUploadFileStatus = () => {
+  uploadData.open = false
+  recentlyFileInfo().then(res => {
+    if (res.data.productOrderImportInfo !== null) {
+      if (res.code == 200) {
+        let {
+          predictTime,
+          productOrderImportInfo: {importTime, status, errorMsg, cantsaveDetail, insertNum, updateNum, cantsaveNum}
+        } = res.data
+        analysisStatus.value = status
+        let remainTime = predictTime * 60000 - (new Date().getTime() - new Date(importTime).getTime())
+        if ((remainTime > 0 && remainTime <= 60000) || remainTime <= 0) {
+          analysisTime.value = 1
+        } else if (remainTime > 60000) {
+          analysisTime.value = Math.ceil(remainTime / 60000)
+        }
+        switch (status) {
+          case 1:
+            waitDialog.value = true
+            isCaculateOver.value = false
+            waitTimer.value = setInterval(() => {
+              getRecentlyFileInfo()
+            }, 5000)
+            break;
+          case 2:
+            if (JSON.parse(cantsaveDetail).length !== 0) {
+              cantSaveList.value = JSON.parse(cantsaveDetail).filter(item => {
+                return item.errCode == "1002"
+              })
+              cantSaveList.value = Array.from(new Set(cantSaveList.value.map(item => {
+                return item.storeProductCode
+              })))
+            }
+            isCaculateOver.value = true
+            analysisTime.value = predictTime
+            cantSaveCount.value = cantsaveNum
+            updateCount.value = updateNum
+            insertCount.value = insertNum
+            lastImportTime.value = importTime
+            nextTick(() => {
+              clearInterval(waitTimer.value)
+            })
+            break;
+          case 3:
+            isCaculateOver.value = true
+            analysisErrorMsg.value = errorMsg.split("||").join(",") ? errorMsg.split("||").join(",") : errorMsg
+            nextTick(() => {
+              clearInterval(waitTimer.value)
+            })
+            break
+        }
+      }
+    } else if (res.data.productOrderImportInfo == null) {
+      isCaculateOver.value = true
+      return
+    }
+
+  })
+
+}
 const handleCustomizeSuccess = function (res) {
   if (res.code == 200) {
-    let {cantSave, insert, update} = res.data
-    uploadData.isLoading = false
-    customizeList.value = []
-    proxy.$modal.msgSuccess(`上传文件成功 未保存:${cantSave.length}条 新增:${insert.length}条 更新:${update.length}条`)
-    cantSaveList.value = cantSave.filter(item => {
-      return item.errCode == "1002"
-    })
-
-    cantSaveList.value = Array.from(new Set(cantSaveList.value.map(item => {
-      return item.storeProductCode
-    })))
-    if (cantSaveList.value.length !== 0) {
-      notImportGoodsTips.value = true
-    }
-    uploadData.open = false
+    let {status, predictTime} = res.data
+    analysisTime.value = predictTime
     uploadData.isLoading = false
     uploadData.isUploading = false
-
+    customizeList.value = []
+    proxy.$modal.msgSuccess("上传文件成功")
+    recentlyUploadFileStatus()
   } else {
     uploadData.isLoading = false
     customizeList.value = []
@@ -415,6 +512,8 @@ const handleCustomizeSuccess = function (res) {
     uploadData.isUploading = false
   }
 }
+
+
 /**自定义上传失败的回调 */
 const handleCustomizeError = function () {
   uploadData.isLoading = false
@@ -435,34 +534,23 @@ const columns = ref([
   {key: 5, label: `门店ID`, visible: true},
   {key: 6, label: `门店名`, visible: true},
   {key: 7, label: `门店订单ID`, visible: true},
-  {key: 8, label: `销售员`, visible: true}
+  {key: 8, label: `销售员`, visible: true},
+  {key: 9, label: `是否核销`, visible: true}
 ]);
-/** 文件上传成功处理 */
-const handleFileSuccess = (response, file, fileList) => {
-  proxy.$refs["customizeUploadRef"].handleRemove(file);
-  proxy.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入结果", {dangerouslyUseHTMLString: true});
-  upload.open = false
-  getList();
-};
-/**文件上传中处理 */
-const handleFileUploadProgress = (event, file, fileList) => {
-  upload.isUploading = true;
-};
 
 /** 提交上传文件 */
 function submitFileForm() {
   proxy.$refs["customizeUploadRef"].submit();
 };
 
-/** 导入按钮操作 */
-function handleImport() {
-  upload.title = "用户导入";
-  upload.open = true;
-};
 
 //自定义上传
 function customizeImport() {
-  uploadData.open = true;
+  if (isCaculateOver.value) {
+    uploadData.open = true;
+  } else {
+    proxy.$modal.msgError("请等待上次导入计算完成后再导入")
+  }
 }
 
 //匹配表头
@@ -476,6 +564,7 @@ function refreshList() {
     pageNum: 1,
     pageSize: 10,
     otherFilter: undefined,
+    total: undefined
   }
   betweenTime.value = []
   nextSearchAfter.value = undefined
@@ -483,64 +572,6 @@ function refreshList() {
 
   currentPage.value = 0
 }
-
-/**查询下一页*/
-function queryNextpage(type) {
-
-  let timeObject = {
-    startTime: undefined,
-    endTime: undefined
-  }
-  if (betweenTime.value.length !== 0) {
-    timeObject = {
-      startTime: betweenTime.value[0],
-      endTime: betweenTime.value[1]
-    }
-  }
-  if (type) {
-    let previousIndex = currentPage.value - 1
-    if (previousIndex < 0) {
-      proxy.$modal.msgError("已经是第一页")
-      return;
-    } else {
-      getOrderList({
-        ...timeObject,
-        ...queryParams.value,
-        nextSearchAfter: pageQueryParams.value[previousIndex]
-      }).then(res => {
-        if (res.code == 200) {
-          currentPage.value = currentPage.value - 1
-          orderList.value = res.data.orders
-          total.value = Number(res.data.pageSize * res.data.pages);
-          loading.value = false;
-        }
-      })
-    }
-  } else {
-    let nextIndex = currentPage.value + 1
-    if (pageQueryParams.value[nextIndex] == null) {
-      proxy.$modal.msgError("已经是最后一页")
-      return
-    } else {
-      getOrderList({
-        ...timeObject,
-        ...queryParams.value,
-        nextSearchAfter: pageQueryParams.value[nextIndex]
-      }).then(res => {
-        if (res.code == 200) {
-          currentPage.value = currentPage.value + 1
-          orderList.value = res.data.orders
-          nextSearchAfter.value = res.data.nextSearchAfter
-          let nextIndex = currentPage.value + 1
-          pageQueryParams.value[nextIndex] = res.data.nextSearchAfter
-          total.value = Number(res.data.pages);
-          loading.value = false;
-        }
-      })
-    }
-  }
-}
-
 
 /** 查询用订单列表 */
 function getList() {
@@ -555,25 +586,18 @@ function getList() {
     }
   }
   loading.value = true;
-  // getOrderList({
-  //   ...timeObject,
-  //   ...queryParams.value,
-  //   nextSearchAfter: pageQueryParams.value[currentPage.value].nextSearchAfter
-  // }).then(res => {
-  //   orderList.value = res.data.orders
-  //   nextSearchAfter.value = res.data.nextSearchAfter
-  //   let nextIndex = currentPage.value + 1
-  //   pageQueryParams.value[nextIndex] = res.data.nextSearchAfter
-  //   total.value = Number(res.data.pages);
-  //   totalCount.value = Number(res.data.total)
-  //   loading.value = false;
-  // })
   getOrderList({
     ...timeObject,
     ...queryParams.value,
   }).then(res => {
     orderList.value = res.data.orders
+    if (orderList.value == null && queryParams.value.pageNum !== 1) {
+      proxy.$modal.msgError("数据计算中请稍后再试")
+    } else if (orderList.value == null && queryParams.value.pageNum == 1) {
+      orderList.value = []
+    }
     queryParams.value.searchKey = res.data.searchKey
+    queryParams.value.total = Number(res.data.total);
     total.value = Number(res.data.total);
     loading.value = false;
   })
@@ -625,11 +649,22 @@ const pageItem = computed(() => {
     return [1, '', start - 2, start - 1, start, start + 1, start + 2, '', end]
   }
 })
-
 getList()
+recentlyUploadFileStatus()
+onBeforeUnmount(() => {
+  clearInterval(waitTimer.value)
+})
 </script>
 
 <style scoped lang="scss">
+
+::v-deep(.el-dialog__wrapper) {
+  position: absolute !important;
+}
+
+::v-deep(.v-modal) {
+  position: absolute !important;
+}
 
 ::v-deep(.el-progress) {
   display: none !important;
@@ -653,6 +688,45 @@ getList()
       padding: 20px 10px;
       width: 20%;
     }
+  }
+}
+
+.uploadStatus {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .finishDesc {
+    text-align: center;
+  }
+
+  .errorDesc {
+    text-align: center;
+
+    span:last-child {
+      display: inline-block;
+      margin-top: 20px;
+    }
+  }
+
+  .waitDesc {
+    text-align: center;
+
+    span:last-child {
+      display: inline-block;
+      margin-top: 20px;
+    }
+  }
+}
+
+.uploadInfo {
+  display: flex;
+  align-items: center;
+
+  .desc {
+    font-size: 14px;
+    color: red;
   }
 }
 

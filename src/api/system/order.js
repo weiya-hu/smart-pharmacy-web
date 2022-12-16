@@ -50,7 +50,7 @@ export function getOrderList(data) {
     return request({
         url: `/es/orderListPage/getOrderList`,
         method: 'get',
-        params:data
+        params: data
     })
 }
 
@@ -69,4 +69,12 @@ export function uploadSaleOrder(obj) {
     })
 
 
+}
+
+//获取最近一次上传文件的状态
+export function recentlyFileInfo() {
+    return request({
+        url: `/product/productOrderImport/getRecent`,
+        method: 'get',
+    })
 }
