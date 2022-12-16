@@ -11,17 +11,24 @@
 
 <script setup>
 import useTagsViewStore from '@/store/modules/tagsView'
+import {onBeforeUnmount, onMounted} from "vue";
 
 const tagAndTagSpacing = ref(4);
 const { proxy } = getCurrentInstance();
 
-const scrollWrapper = computed(() => proxy.$refs.scrollContainer.$refs.wrap$);
+const scrollWrapper = ref()
 
 onMounted(() => {
-  scrollWrapper.value.addEventListener('scroll', emitScroll, true)
+  setTimeout(() => {
+    scrollWrapper.value = computed(() => proxy.$refs.scrollContainer.$refs.wrap$);
+    scrollWrapper.value.addEventListener('scroll', emitScroll, true)
+  }, 10);
+
 })
 onBeforeUnmount(() => {
-  scrollWrapper.value.removeEventListener('scroll', emitScroll)
+  if(scrollWrapper.value.removeEventListener instanceof  Function){
+    scrollWrapper.value.removeEventListener('scroll', emitScroll)
+  }
 })
 
 function handleScroll(e) {
