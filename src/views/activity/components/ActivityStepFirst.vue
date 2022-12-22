@@ -73,55 +73,9 @@
             :disabled="formDisabled"
             style="width: 400px"/>
       </el-form-item>
-      <!--      <el-form-item label="任务截止类型" prop="endType">-->
-      <!--        <el-select v-model="form.endType" clearablestyle="width: 100%">-->
-      <!--          <el-option v-for="item in activity_type" :value="item.value" :key="item.value" :label="item.label">-->
-      <!--            {{ item.label }}-->
-      <!--          </el-option>-->
-      <!--        </el-select>-->
-      <!--      </el-form-item>-->
 
-      <!--      <el-form-item class="label" label="活动附件" prop="filesInfos">-->
-      <!--        <el-upload-->
-      <!--            :disabled="formDisabled"-->
-      <!--            :action="uploadData.imgBannerUrl"-->
-      <!--            :headers="{'Authorization':uploadData.token}"-->
-      <!--            :data="uploadData.imgBannerParam"-->
-      <!--            method:="POST"-->
-      <!--            accept="image/jpg,image/jpeg,image/png"-->
-      <!--            :limit="1"-->
-      <!--            :file-list="imgBannerList"-->
-      <!--            :show-file-list="false"-->
-      <!--            :on-success="handleImgBannerSuccess">-->
-      <!--          <div class="demo-image__placeholder">-->
-      <!--            <div class="block">-->
-      <!--              <el-image :src="form.files[0].url" v-if="form.files.length!==0"-->
-      <!--                        style="width: 400px;height: 150px;border: 1px solid #c0c4cc">-->
-      <!--                <template #placeholder>-->
-      <!--                  <div class="image-slot">Loading<span class="dot">...</span></div>-->
-      <!--                </template>-->
-      <!--              </el-image>-->
-      <!--              <el-image-->
-      <!--                  v-if="form.files.length==0"-->
-      <!--                  style="width: 400px;height: 100px;border: 1px solid #c0c4cc">-->
-      <!--                <template #error>-->
-      <!--                  <div class="image-slot"-->
-      <!--                       style="display: flex;justify-content:center;align-items:center;height: 100px">-->
-      <!--                    <el-icon :size="48">-->
-      <!--                      <Picture/>-->
-      <!--                    </el-icon>-->
-      <!--                  </div>-->
-      <!--                </template>-->
-      <!--              </el-image>-->
-      <!--            </div>-->
-      <!--          </div>-->
-      <!--        </el-upload>-->
-      <!--      </el-form-item>-->
     </el-form>
-    <!--    let brandsOption = ref([])-->
-    <!--    let productTypesOption = ref([])-->
-    <!--    let specificationsOption = ref([])-->
-    <el-dialog title="任务范围" v-model="showRuleScupes" width="50%">
+    <el-dialog :show-close="false" title="活动范围" v-model="showRuleScupes" width="50%">
       <el-form :model="queryRuleScupesParams">
         <el-form-item label="品类" prop="productTypes">
           <el-select :disabled="handleType=='query'" @change="changeGoodsRange"
@@ -151,7 +105,7 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <BusinessTree :isShowMenuCheckStrictly="false" ref="businessTreeParticipantsRef" :handelType="props.handleType"
+      <BusinessTree :isShowMenuCheckStrictly="false" ref="businessTreeRegionRef" :handelType="props.handleType"
                     :data="data.form.ruleScupes"></BusinessTree>
       <template #footer>
         <div class="dialog-footer">
@@ -172,30 +126,9 @@
       </template>
     </el-dialog>
 
-    <el-dialog title="任务参与方" v-model="showRarticipants" width="50%" :close-on-click-modal="false">
-      <!--      <el-form :model="queryRuleScupesParams" label-width="68px">-->
-      <!--        <el-form-item label="品类" prop="productTypes">-->
-      <!--          <el-select v-model="queryRuleScupesParams.productTypes" multiple clearable>-->
-      <!--            <el-option v-for="item in activity_type" :value="item.value" :key="item.value"-->
-      <!--                       :label="item.label">{{ item.label }}-->
-      <!--            </el-option>-->
-      <!--          </el-select>-->
-      <!--        </el-form-item>-->
-      <!--        <el-form-item label="品牌" prop="brands">-->
-      <!--          <el-select v-model="queryRuleScupesParams.brands" clearable multiple>-->
-      <!--            <el-option v-for="item in activity_type" :value="item.value" :key="item.value"-->
-      <!--                       :label="item.label">{{ item.label }}-->
-      <!--            </el-option>-->
-      <!--          </el-select>-->
-      <!--        </el-form-item>-->
-      <!--        <el-form-item label="规格" prop="specifications">-->
-      <!--          <el-select v-model="queryRuleScupesParams.specifications" clearable multiple>-->
-      <!--            <el-option v-for="item in activity_type" :value="item.value" :key="item.value"-->
-      <!--                       :label="item.label">{{ item.label }}-->
-      <!--            </el-option>-->
-      <!--          </el-select>-->
-      <!--        </el-form-item>-->
-      <!--      </el-form>-->
+    <el-dialog :show-close="false" title="活动参与方" v-model="showRarticipants" width="50%"
+               :close-on-click-modal="false">
+
       <BusinessTree ref="businessTreeParticipantsRef" :handelType="props.handleType"
                     :data="data.form.participants"></BusinessTree>
       <template #footer>
@@ -247,6 +180,7 @@ const showResponsibleUsers = ref(false)
 const showRarticipants = ref(false)
 let firstLoading = ref(false)
 const businessTreeParticipantsRef = ref()
+const businessTreeRegionRef = ref()
 const responsibleUsersRef = ref()
 const data = reactive({
   form: {
@@ -278,7 +212,8 @@ const data = reactive({
     }],
   }
 });
-
+const isConfirmRuleScupes = ref(false)
+const isConfirmRarticipants = ref(false)
 const {form, rules} = toRefs(data);
 
 // 表单重置
@@ -358,28 +293,6 @@ async function submitForm() {
     proxy.$modal.msgError("请输入完整信息");
   }
 }
-
-// const open = (value) => {
-//   ElMessageBox.confirm(
-//       '修改任务信息可能会导致活动规则错误,是否继续修改?',
-//       'Warning',
-//       {
-//         confirmButtonText: '确定',
-//         cancelButtonText: '取消',
-//         type: 'warning',
-//       }
-//   )
-//       .then(() => {
-//         return updateEventInfo(value)
-//       })
-//       .catch(() => {
-//         ElMessage({
-//           type: 'info',
-//           message: '取消修改',
-//         })
-//       })
-// }
-
 
 let brandsOption = ref([])
 let productTypesOption = ref([])
@@ -503,6 +416,7 @@ const onSuccessRuleScupes = () => {
     brands: [],
     specifications: [],
   }
+  isConfirmRuleScupes.value = true
   if (queryRuleScupesParams.value.productTypes.length == 0) {
     form.value.productFilter.productTypes = undefined
   } else {
@@ -518,7 +432,7 @@ const onSuccessRuleScupes = () => {
   } else {
     form.value.productFilter.specifications = queryRuleScupesParams.value.specifications
   }
-  let resultData = businessTreeParticipantsRef.value.getMenuAllCheckedKeys()
+  let resultData = businessTreeRegionRef.value.getMenuAllCheckedKeys()
   form.value.ruleScupes = resultData.map(item => ({nodeId: item.id}))
   form.value.ruleScupesLength = getStoreArray(resultData)
   showRuleScupes.value = false
@@ -545,13 +459,18 @@ const onCancelRuleScupes = () => {
         queryRuleScupesParams.value.specifications = res.data.specifications
       }
     })
-  } else {
+    businessTreeRegionRef.value.loadTree()
+  } else if (isConfirmRuleScupes.value == false && props.handleType == 'add') {
     queryRuleScupesParams.value = {
       productTypes: [], //品类
       brands: [], //品牌
       specifications: [], //规格
       storeIds: [] //门店范围
     }
+    businessTreeRegionRef.value.handleCancelAllSelected()
+  } else if (isConfirmRuleScupes.value == true && props.handleType == 'add') {
+    form.value.ruleScupes = form.value.ruleScupes
+    businessTreeRegionRef.value.handleSelected()
   }
 
 }
@@ -577,6 +496,7 @@ const onCancelResponsibleUsers = () => {
 //任务参与方选择确定
 const onSuccessRarticipants = () => {
   showRarticipants.value = false
+  isConfirmRarticipants.value = true
   form.value.participants = businessTreeParticipantsRef.value.getMenuAllCheckedKeys().map(item => ({
     nodeId: item.id,
     name: item.name
@@ -585,6 +505,15 @@ const onSuccessRarticipants = () => {
 //任务参与方选择取消
 const onCancelRarticipants = () => {
   showRarticipants.value = false
+  //清空数据
+  if (props.eventId) {
+    businessTreeParticipantsRef.value.loadTree()
+  } else if (isConfirmRarticipants.value == false && props.handleType == 'add') {
+    businessTreeParticipantsRef.value.handleCancelAllSelected()
+  } else if (isConfirmRarticipants.value == true && props.handleType == 'add') {
+    form.value.participants = form.value.participants
+    businessTreeParticipantsRef.value.handleSelected()
+  }
 }
 
 //查询任务数据

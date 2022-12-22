@@ -63,6 +63,12 @@ const loadTree = () => {
         }
       })
 }
+/**设置选中*/
+const handleSelected = () => {
+  nextTick(() => {
+    menuRef.value.setCheckedKeys(props.data.map(m => m.nodeId));
+  })
+}
 
 /** 树权限（展开/折叠）*/
 function handleCheckedTreeExpand(value) {
@@ -75,6 +81,11 @@ function handleCheckedTreeExpand(value) {
 /** 树权限（全选/全不选） */
 function handleCheckedTreeNodeAll(value) {
   menuRef.value.setCheckedNodes(value ? treeData.value : []);
+}
+
+/**取消全选*/
+function handleCancelAllSelected(value) {
+  menuRef.value.setCheckedNodes([]);
 }
 
 /** 树权限（父子联动） */
@@ -107,7 +118,10 @@ function getMenuAllChildCheckedKeys() {
 
 defineExpose({
   getMenuAllCheckedKeys,
-  getMenuAllChildCheckedKeys
+  getMenuAllChildCheckedKeys,
+  handleCancelAllSelected,
+  loadTree,
+  handleSelected
 })
 const props = defineProps({
   handelType: {
