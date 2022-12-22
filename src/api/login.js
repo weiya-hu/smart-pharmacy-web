@@ -73,3 +73,14 @@ export function oauthLogin(data) {
     params: data
   })
 }
+
+/**
+ * @name 账号密码登录
+ */
+ export function authLogin_api (data){
+  return request({
+    url: '/auth/login',
+    method: 'post',
+    data: data
+  })
+}
