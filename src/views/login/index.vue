@@ -7,7 +7,7 @@
           <source src="../../assets/video/login_left.mp4" type="video/mp4">
         </video>
       </div>
-      <div class="login-right">
+      <div class="login-right" :class="envMode === 'staging' && 'login-right-stage'">
         <el-tabs v-model="activeName" class="demo-tabs">
           <el-tab-pane label="微信扫码登录" name="first">
             <wxlogin
@@ -22,6 +22,46 @@
           </el-tab-pane>
           <el-tab-pane label="企业微信扫码登陆" name="second">
             <iframe :src="authUrl" height="400px" width="100%" frameborder="0"></iframe>
+          </el-tab-pane>
+          <el-tab-pane v-if="envMode === 'staging'" label="账号密码登录" name="third">
+            <div class="password-login">
+              <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
+                <el-form-item prop="username">
+                  <el-input
+                    v-model="loginForm.username"
+                    auto-complete="off"
+                    placeholder="请输入账号"
+                    size="large"
+                    type="text"
+                  >
+                  </el-input>
+                </el-form-item>
+                <el-form-item prop="password">
+                  <el-input
+                    v-model="loginForm.password"
+                    auto-complete="off"
+                    placeholder="请输入密码"
+                    show-password
+                    size="large"
+                    type="password"
+                    @keyup.enter="passwordLogin"
+                  >
+                  </el-input>
+                </el-form-item>
+                <el-form-item style="width: 100%">
+                  <el-button
+                    :loading="loading"
+                    size="large"
+                    style="width: 100%"
+                    type="primary"
+                    @click.prevent="passwordLogin"
+                  >
+                    <span v-if="!loading">登 录</span>
+                    <span v-else>登 录 中...</span>
+                  </el-button>
+                </el-form-item>
+              </el-form>
+            </div>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -41,7 +81,7 @@
 
 <script setup>
 import wxlogin from 'vue-wxlogin';
-import {oauthLogin, wechatLogin} from "../../api/login";
+import {oauthLogin, wechatLogin, authLogin_api} from "../../api/login";
 import {GetQueryString} from '@/utils/validate';
 import {setToken, getToken, removeToken} from "../../utils/auth";
 import useUserStore from '@/store/modules/user';
@@ -53,6 +93,19 @@ const activeName = ref('first')
 const dialogVisible = ref(false)
 const dialogUrlVisible = ref(false)
 const loading = ref(false)
+const envMode = ref(import.meta.env.MODE)
+const loginForm = ref({
+  username: '',
+  password: '',
+  platformProductId: 'dianji',
+})
+
+const loginRules = {
+  username: [{ required: true, trigger: 'blur', message: '请输入您的账号' }],
+  password: [{ required: true, trigger: 'blur', message: '请输入您的密码' }],
+}
+
+const loginRef = ref()
 
 // 微信扫码登录
 const redirectUri = encodeURIComponent("http://platform.shanhaiping.com/")
@@ -157,6 +210,29 @@ const login = async () => {
   }
 }
 
+//账号密码登录入口
+const passwordLogin = () => {
+  loginRef.value.validate((valid) => {
+    if (valid) {
+      loading.value = true
+      authLogin_api(loginForm.value)
+        .then((res) => {
+          if (res.code === 200) {
+            setToken(res.data.access_token)
+            router.replace({ path: "/index" })
+          } else {
+            loading.value = false
+            window.history.pushState(null, '', '/')
+          }
+        })
+        .catch((err) => {
+          window.history.pushState(null, '', '/')
+          loading.value = false
+        })
+    }
+  })
+}
+
 
 login()
 </script>
@@ -209,6 +285,15 @@ login()
       #pane-first {
         text-align: center;
       }
+    }
+    .login-right-stage {
+      :deep(.el-tabs__nav) {
+        transform: translateX(0) !important;
+      }
+    }
+    .password-login {
+      height: 404px;
+      padding: 30px 40px;
     }
   }
 
