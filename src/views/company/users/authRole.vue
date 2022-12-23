@@ -64,8 +64,9 @@ const form = ref({
 
 const userInfoData = ref([])
 const queryParams = ref({
-    pageNum: 1,
-    pageSize: 10000,
+  pageNum: 1,
+  pageSize: 10000,
+  status: 1
 })
 
 /** 单击选中行数据 */

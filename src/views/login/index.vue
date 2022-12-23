@@ -194,7 +194,7 @@ const wecomControlLogin = () => {
 
 const login = async () => {
   if (process.env.NODE_ENV == "development") {
-  setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcyNDc0NzU5NDQxNjIwOTkyLCJ1c2VyX2tleSI6ImY0ZDBlMTQwZjU5MTQ1ZjQ4NmE3MTJmMjZhMTY3MTBjIiwidXNlcm5hbWUiOiLnjovnvo7ojJwifQ.XDij-LYS5rXtPND3xHQZMvbTx9FjSBRvEsEu6K3fsLu5yHZyX4p-o_pPTdV6iGx2yKhpBZOTE2m3A1E4m3n_zQ')
+  setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcyNDc0NzU5NDQxNjIwOTkyLCJ1c2VyX2tleSI6IjkzMDljYzAxOGE1MDQxOTg4YzlkN2FlOTg1NWYyMDRlIiwidXNlcm5hbWUiOiLnjovnvo7ojJwifQ.6rM9wk7M1YR-eXUwb7Gyl5VU3zlCO4BZt2utVxj3-GYV5p6p6q3uYPEUmbzkzCQfU6Oe2hKuzsgUmD4rDUDmiQ')
     //开发环境
   } else if (process.env.NODE_ENV == "production") {
     //生产环境
