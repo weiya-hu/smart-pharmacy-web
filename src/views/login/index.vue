@@ -7,7 +7,7 @@
           <source src="../../assets/video/login_left.mp4" type="video/mp4">
         </video>
       </div>
-      <div class="login-right" :class="envMode === 'staging' && 'login-right-stage'">
+      <div class="login-right" :class="(envMode === 'development' || envMode === 'staging') && 'login-right-stage'">
         <el-tabs v-model="activeName" class="demo-tabs">
           <el-tab-pane label="微信扫码登录" name="first">
             <wxlogin
@@ -23,7 +23,7 @@
           <el-tab-pane label="企业微信扫码登陆" name="second">
             <iframe :src="authUrl" height="400px" width="100%" frameborder="0"></iframe>
           </el-tab-pane>
-          <el-tab-pane v-if="envMode === 'staging'" label="账号密码登录" name="third">
+          <el-tab-pane v-if="envMode === 'development' || envMode === 'staging'" label="账号密码登录" name="third">
             <div class="password-login">
               <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
                 <el-form-item prop="username">
@@ -194,7 +194,7 @@ const wecomControlLogin = () => {
 
 const login = async () => {
   if (process.env.NODE_ENV == "development") {
-  setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcyNDc0NzU5NDQxNjIwOTkyLCJ1c2VyX2tleSI6IjViNjYyNDViNjI5YjQ3YzM5NDJiNWJjOGEyOTExOGJkIiwidXNlcm5hbWUiOiLnjovnvo7ojJwifQ.rNs6FNAiSQBhtqtyJ2TIQCRTrRHRNwMn_aWgyS1IkR0Qv5aPWnwb0Qpmyh3pPBXuia9T445CZgW2VgggMckAMQ')
+  setToken('eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxNTcyNDc0NzU5NDQxNjIwOTkyLCJ1c2VyX2tleSI6ImY0ZDBlMTQwZjU5MTQ1ZjQ4NmE3MTJmMjZhMTY3MTBjIiwidXNlcm5hbWUiOiLnjovnvo7ojJwifQ.XDij-LYS5rXtPND3xHQZMvbTx9FjSBRvEsEu6K3fsLu5yHZyX4p-o_pPTdV6iGx2yKhpBZOTE2m3A1E4m3n_zQ')
     //开发环境
   } else if (process.env.NODE_ENV == "production") {
     //生产环境

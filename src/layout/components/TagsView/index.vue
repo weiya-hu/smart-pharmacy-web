@@ -13,7 +13,8 @@
         @contextmenu.prevent="openMenu(tag, $event)"
       >
         {{ tag.title }}
-        <span v-if="!isAffix(tag)" @click.prevent.stop="closeSelectedTag(tag)">
+        <!-- 首页打开后不允许关闭，防止所有页签关闭后跳转404 -->
+        <span v-if="!isAffix(tag) && tag.path !== '/dashboard/index'" @click.prevent.stop="closeSelectedTag(tag)">
           <close class="el-icon-close" style="width: 1em; height: 1em;vertical-align: middle;" />
         </span>
       </router-link>

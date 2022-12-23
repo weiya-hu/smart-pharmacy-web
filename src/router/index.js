@@ -42,12 +42,14 @@ export const constantRoutes = [
     //     component: () => import('@/views/login'),
     //     hidden: true
     // },
-    // {
-    //     path: '/',
-    //     component: () => import('@/views/login/index'),
-    //     redirect: '/login',
-    //     hidden: true,
-    // },
+
+    //关闭所有页签后会重定向到首页，不然会跳到404，首页打开后不能关闭
+    {
+        path: '/',
+        component: () => import('@/views/login/index'),
+        redirect: '/login',
+        hidden: true,
+    },
     {
         path: '/login',
         component: () => import('@/views/login/index'),
