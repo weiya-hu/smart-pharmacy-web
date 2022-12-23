@@ -214,6 +214,7 @@ const data = reactive({
 });
 const isConfirmRuleScupes = ref(false)
 const isConfirmRarticipants = ref(false)
+
 const {form, rules} = toRefs(data);
 
 // 表单重置
@@ -450,6 +451,9 @@ const getStoreArray = (data) => {
 const onCancelRuleScupes = () => {
   //关闭弹窗
   showRuleScupes.value = false
+  queryRuleScupesParams.value.productTypes = form.value.productFilter.productTypes
+  queryRuleScupesParams.value.brands = form.value.productFilter.brands
+  queryRuleScupesParams.value.specifications = form.value.productFilter.specifications
   //清空数据
   if (props.eventId) {
     queryBrandList(props.eventId).then(res => {
