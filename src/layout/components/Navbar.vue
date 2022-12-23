@@ -111,7 +111,8 @@ getInfo()
       }
       .term-time-border {
         border: 1px solid #e2e2e2;
-        width: 80px;
+        //width: 80px;
+        padding: 0 7px;
         height: 24px;
         line-height: 22px;
         text-align: center;

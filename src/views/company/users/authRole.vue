@@ -59,12 +59,14 @@ const pageSize = ref(10);
 const roleIds = ref([]);
 const roles = ref([]);
 const form = ref({
-  // nickName: undefined,
-  // userName: undefined,
   userId: undefined
 });
 
 const userInfoData = ref([])
+const queryParams = ref({
+    pageNum: 1,
+    pageSize: 10000,
+})
 
 /** 单击选中行数据 */
 function clickRow(row) {
@@ -117,7 +119,7 @@ function getList() {
 }
 
 function getRoleList() {
-  listRole().then(res => {
+  listRole(queryParams.value).then(res => {
     if (res.code === 200) {
       userInfoData.value = res.data.list
       getList()

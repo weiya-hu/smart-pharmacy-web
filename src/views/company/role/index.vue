@@ -530,12 +530,12 @@ function getRoleMenuTreeselect(roleId) {
   });
 }
 /** 根据角色ID查询部门树结构 */
-function getRoleDeptTreeselect(roleId) {
-  return roleDeptTreeselect(roleId).then(response => {
-    deptOptions.value = response.data;
-    return response;
-  });
-}
+// function getRoleDeptTreeselect(roleId) {
+//   return roleDeptTreeselect(roleId).then(response => {
+//     deptOptions.value = response.data;
+//     return response;
+//   });
+// }
 
 /** 树权限（展开/折叠）*/
 function handleCheckedTreeExpand(value, type) {
@@ -611,20 +611,22 @@ function dataScopeSelectChange(value) {
 }
 
 /** 查询菜单树结构 */
-function getDeptTreeselect() {
-  relTree().then(response => {
-    deptOptions.value = response.data;
-  });
-}
+// function getDeptTreeselect() {
+//   relTree().then(response => {
+//     deptOptions.value = response.data;
+//   });
+// }
 
 /** 分配数据权限操作 */
 function handleDataScope(row) {
   reset();
   title.value = "分配数据权限";
   const roleId = row.roleId || ids.value;
-  relTree().then(response => {
+  getRole(roleId).then(res => {
+    form.value = res.data
+  })
+  relTree({allChild: true}).then(response => {
     deptOptions.value = response.data;
-      form.value = row
       openDataScope.value = true;
       roleDeptTreeselect(roleId).then(res=>{
         let checkedKeys = res.data.nodes.map(item=>{

@@ -426,7 +426,7 @@ watch(deptName, val => {
 
 /** 查询部门下拉树结构 */
 function getTreeselect() {
-  treeselect().then(response => {
+  treeselect({stopUse: true}).then(response => {
     deptOptions.value = response.data.list;
   });
 };

@@ -4,6 +4,7 @@
       <el-form-item label="职务编码" prop="jobId">
         <el-input
             v-model="queryParams.jobId"
+            oninput="value=value.replace(/[^0-9.]/g,'')"
             placeholder="请输入职务编码"
             clearable
             style="width: 220px"
@@ -166,11 +167,6 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :span="24">
-            <el-form-item label="备注" prop="remark">
-              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
-            </el-form-item>
-          </el-col>
         </el-row>
       </el-form>
       <template #footer>
@@ -240,8 +236,7 @@ function reset() {
     jobId: undefined,
     name: undefined,
     sort: 0,
-    state: 1,
-    remark: undefined
+    state: 1
   };
   proxy.resetForm("postRef");
 }

@@ -35,10 +35,11 @@ export function treeselect(query) {
 }
 
 // 关系树
-export function relTree() {
+export function relTree(query) {
   return request({
     url: '/wecom/corpinfo/reltree/tree',
-    method: 'GET'
+    method: 'GET',
+    params: query
   })
 }
 // 根据角色ID查询部门树结构
