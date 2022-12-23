@@ -11,6 +11,7 @@
         <el-tabs v-model="activeName" class="demo-tabs">
           <el-tab-pane label="微信扫码登录" name="first">
             <wxlogin
+                v-if="activeName == 'first'"
                 appid="wx3a6a5cc2924a2405"
                 :scope="'snsapi_login'"
                 :theme="'black'"
@@ -21,10 +22,10 @@
             </wxlogin>
           </el-tab-pane>
           <el-tab-pane label="企业微信扫码登陆" name="second">
-            <iframe :src="authUrl" height="400px" width="100%" frameborder="0"></iframe>
+            <iframe :src="authUrl" height="400px" width="100%" frameborder="0" v-if="activeName == 'second'"></iframe>
           </el-tab-pane>
           <el-tab-pane v-if="envMode === 'development' || envMode === 'staging'" label="账号密码登录" name="third">
-            <div class="password-login">
+            <div class="password-login" v-if="activeName == 'third'">
               <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
                 <el-form-item prop="username">
                   <el-input
@@ -83,8 +84,7 @@
 import wxlogin from 'vue-wxlogin';
 import {oauthLogin, wechatLogin, authLogin_api} from "../../api/login";
 import {GetQueryString} from '@/utils/validate';
-import {setToken, getToken, removeToken} from "../../utils/auth";
-import useUserStore from '@/store/modules/user';
+import {setToken, removeToken} from "../../utils/auth";
 
 const {proxy} = getCurrentInstance();
 const router = useRouter(), route = useRoute();
