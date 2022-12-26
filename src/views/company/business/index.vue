@@ -412,18 +412,18 @@ function submitForm() {
       if (form.value.relationId) {
         //判断是否存在于集合中
         let exists = nameList.value.filter(item => item.storeId === form.value.relationId)
-        if (exists.length > 0) {
-          // form.value.name = exists[0].name
-        } else {
-          if (form.value.parentNodeId == null) {
-            form.value.name = form.value.name
-            // form.value.name = form.value.relationId
-            form.value.relationId = undefined
-          } else {
+        // if (exists.length > 0) {
+        //   // form.value.name = exists[0].name
+        // } else {
+          // if (form.value.parentNodeId == null) {
+          //   // form.value.name = form.value.name
+          //   form.value.name = form.value.relationId
+          //   form.value.relationId = undefined
+          // } else {
             form.value.name = form.value.relationId
             form.value.relationId = undefined
-          }
-        }
+          // }
+        // }
       }
       formTableRef.value.validate((v) => {
         if (v) {
