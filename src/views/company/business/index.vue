@@ -417,6 +417,7 @@ function submitForm() {
         } else {
           if (form.value.parentNodeId == null) {
             form.value.name = form.value.name
+            // form.value.name = form.value.relationId
             form.value.relationId = undefined
           } else {
             form.value.name = form.value.relationId
