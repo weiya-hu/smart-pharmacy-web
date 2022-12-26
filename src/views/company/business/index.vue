@@ -415,14 +415,13 @@ function submitForm() {
         // if (exists.length > 0) {
         //   // form.value.name = exists[0].name
         // } else {
-          // if (form.value.parentNodeId == null) {
-          //   // form.value.name = form.value.name
-          //   form.value.name = form.value.relationId
-          //   form.value.relationId = undefined
-          // } else {
+          if (form.value.nodeId != undefined) {
+            form.value.name = exists[0].name
+            // form.value.relationId = undefined
+          } else {
             form.value.name = form.value.relationId
             form.value.relationId = undefined
-          // }
+          }
         // }
       }
       formTableRef.value.validate((v) => {
