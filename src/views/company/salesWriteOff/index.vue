@@ -423,7 +423,11 @@ const getRecentlyFileInfo = () => {
         case 3:
           waitDialog.value = true
           isCaculateOver.value = true
-          analysisErrorMsg.value = errorMsg.split("||").join(",") ? errorMsg.split("||").join(",") : errorMsg
+          try {
+            analysisErrorMsg.value = errorMsg.split("||").join(",") ? errorMsg.split("||").join(",") : errorMsg
+          } catch {
+            clearInterval(waitTimer.value)
+          }
           nextTick(() => {
             clearInterval(waitTimer.value)
           })
@@ -479,7 +483,11 @@ const recentlyUploadFileStatus = () => {
             break;
           case 3:
             isCaculateOver.value = true
-            analysisErrorMsg.value = errorMsg.split("||").join(",") ? errorMsg.split("||").join(",") : errorMsg
+            try {
+              analysisErrorMsg.value = errorMsg.split("||").join(",") ? errorMsg.split("||").join(",") : errorMsg
+            } catch {
+              clearInterval(waitTimer.value)
+            }
             nextTick(() => {
               clearInterval(waitTimer.value)
             })
