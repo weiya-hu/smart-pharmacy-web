@@ -1,6 +1,6 @@
 <!--@checkbox-change="handleSelectionChange"-->
 <template>
-  <div class="ll-table">
+  <div class="ltable">
     <vxe-table
         :data="listData"
         border="none"
@@ -24,7 +24,9 @@
           </template>
         </vxe-column>
       </template>
-
+      <template v-if="listData.length ==0" #empty>
+        <slot name="slotEmpty"></slot>
+      </template>
     </vxe-table>
 
   </div>
@@ -124,11 +126,11 @@ export default defineComponent({
   background-color: #FFFFFF;
 }
 
-//.ll-table::v-deep(.vxe-header--column) {
+//.ltable::v-deep(.vxe-header--column) {
 //  background-color: #fff !important;
 //}
 //
-//.ll-table::v-deep(.vxe-header--gutter) {
+//.ltable::v-deep(.vxe-header--gutter) {
 //  background-color: #fff !important;
 //}
 

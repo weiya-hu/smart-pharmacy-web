@@ -12,8 +12,8 @@
         <el-input style="width: 300px" v-model="queryParams.name" placeholder="请输入产品简称" clearable
                   @keyup.enter="handleQuery"/>
       </el-form-item>
-      <el-form-item label="产品类别" prop="productType">
-        <el-input style="width: 300px" v-model="queryParams.productType" placeholder="请输入产品类别" clearable
+      <el-form-item label="产品类别" prop="productTypes">
+        <el-input style="width: 300px" v-model="queryParams.productTypes" placeholder="请输入产品类别" clearable
                   @keyup.enter="handleQuery"/>
       </el-form-item>
       <el-form-item label="品牌" prop="brands">
@@ -29,7 +29,7 @@
     <div class="btn-back">
       <el-row :gutter="10" class="mb8">
         <el-col :span="1.5">
-<!--          <el-button type="primary" icon="Plus" @click="handleAdd" plain>新增产品</el-button>-->
+          <!--          <el-button type="primary" icon="Plus" @click="handleAdd" plain>新增产品</el-button>-->
           <el-button
               type="info"
               plain
@@ -77,8 +77,10 @@
           </div>
         </template>
       </el-table-column>
+      <template #empty>
+        <span>暂无产品数据</span>
+      </template>
     </el-table>
-
     <pagination
         v-show="total>0"
         :total="total"
@@ -89,32 +91,59 @@
 
     <!-- 添加或修改连锁门店销售的所有产品的数据对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body :close-on-click-modal="false" draggable>
-      <el-form ref="productRef" :model="form" :rules="rules" label-width="100px">
-        <el-form-item class="label" label="商家产品ID" prop="productChainId">
-          <el-input v-model="form.productChainId" placeholder="请输入商家产品ID"/>
+      <!--      <el-form ref="productRef" :model="form_Chain" :rules="rules" label-width="100px">-->
+      <!--        <el-form-item class="label" label="商家产品ID" prop="productChainId">-->
+      <!--          <el-input v-model="form_Chain.productChainId" placeholder="请输入商家产品ID"/>-->
+      <!--        </el-form-item>-->
+      <!--        <el-form-item class="label" label="产品ID" prop="productId">-->
+      <!--          <el-input v-model="form_Chain.productId" placeholder="请输入产品ID"/>-->
+      <!--        </el-form-item>-->
+      <!--        <el-form-item class="label" label="公司ID">-->
+      <!--          <el-input v-model="form_Chain.corpId" placeholder="请输入公司ID"/>-->
+      <!--        </el-form-item>-->
+      <!--        <el-form-item class="label" label="自定义标签" prop="tag">-->
+      <!--          <el-input v-model="form_Chain.tag" type="textarea" placeholder="请输入自定义标签"/>-->
+      <!--        </el-form-item>-->
+      <!--        <el-form-item class="label" label="序号" prop="sort">-->
+      <!--          <el-input v-model="form_Chain.sort" placeholder="请输入序号"/>-->
+      <!--        </el-form-item>-->
+      <!--        <el-form-item class="label" label="创建人" prop="createUserId">-->
+      <!--          <el-input v-model="form_Chain.createUserId" placeholder="请输入创建人"/>-->
+      <!--        </el-form-item>-->
+      <!--        <el-form-item class="label" label="修改人" prop="updateUserId">-->
+      <!--          <el-input v-model="form_Chain.updateUserId" placeholder="请输入修改人"/>-->
+      <!--        </el-form-item>-->
+      <!--      </el-form>-->
+      <el-form @change="validateProductChange" :model="form_All" label-width="100px">
+        <!--新增-->
+        <el-form-item class="label" label="产品编号">
+          <el-input v-model="form_All.code" placeholder="输入产品编号"/>
         </el-form-item>
-        <el-form-item class="label" label="产品ID" prop="productId">
-          <el-input v-model="form.productId" placeholder="请输入产品ID"/>
+        <el-form-item class="label" label="产品简称">
+          <el-input v-model="form_All.name" placeholder="请输入产品简称"/>
         </el-form-item>
-        <el-form-item class="label" label="公司ID">
-          <el-input v-model="form.corpId" placeholder="请输入公司ID"/>
+        <el-form-item class="label" label="产品全称">
+          <el-input v-model="form_All.name" placeholder="请输入产品全称"/>
         </el-form-item>
-        <el-form-item class="label" label="自定义标签" prop="tag">
-          <el-input v-model="form.tag" type="textarea" placeholder="请输入内容"/>
+        <el-form-item class="label" label="产品类别">
+          <el-input v-model="form_All.productType" placeholder="请输入产品类别"/>
         </el-form-item>
-        <el-form-item class="label" label="序号" prop="sort">
-          <el-input v-model="form.sort" placeholder="请输入序号"/>
+        <el-form-item class="label" label="产品等级">
+          <el-input v-model="form_All.level" placeholder="请输入产品等级"/>
         </el-form-item>
-        <el-form-item class="label" label="创建人" prop="createUserId">
-          <el-input v-model="form.createUserId" placeholder="请输入创建人"/>
+        <el-form-item class="label" label="品牌">
+          <el-input v-model="form_All.brand" placeholder="请输入品牌"/>
         </el-form-item>
-        <el-form-item class="label" label="修改人" prop="updateUserId">
-          <el-input v-model="form.updateUserId" placeholder="请输入修改人"/>
+        <el-form-item class="label" label="规格">
+          <el-input v-model="form_All.specification" placeholder="请输入规格"/>
+        </el-form-item>
+        <el-form-item class="label" label="最小计量单位">
+          <el-input v-model="form_All.unit" placeholder="请输入最小计量单位"/>
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="submitForm">确 定</el-button>
+          <el-button :disabled="isChange" type="primary" @click="submitForm">确 定</el-button>
           <el-button @click="cancel">取 消</el-button>
         </div>
       </template>
@@ -162,12 +191,21 @@
 </template>
 
 <script setup name="Chain">
-import {listProduct, getProduct, delProduct, addProduct, updateProduct} from "@/api/product/chainProduct";
+import {
+  listProduct,
+  getAllProductInfo,
+  getProduct,
+  delProduct,
+  addProduct,
+  updateProduct,
+  updateAllProductInfo
+} from "@/api/product/chainProduct";
 import {getToken} from "@/utils/auth";
+import {reactive, toRefs} from "vue";
 
 const {proxy} = getCurrentInstance();
 // const { ${dictsNoSymbol} } = proxy.useDict(${dicts});
-
+const isChange = ref(true)
 const productList = ref([]);
 const open = ref(false);
 const loading = ref(true);
@@ -179,12 +217,31 @@ const total = ref(0);
 const title = ref("");
 
 const data = reactive({
-  form: {},
+  form_Chain: {
+    productChainId: null,
+    productId: null,
+    companyId: null,
+    tag: null,
+    sort: null,
+    createUserId: null,
+    createTime: null,
+    updateUserId: null,
+    updateTime: null
+  },
+  form_All: {
+    code: null,
+    name: null,
+    productType: null,
+    level: null,
+    brand: null,
+    specification: null,
+    unit: null,
+  },
   queryParams: {
     pageNum: 1,
     pageSize: 10,
     code: null,
-    productType: null,
+    productTypes: null,
     brands: null
   },
   rules: {
@@ -196,7 +253,7 @@ const data = reactive({
   }
 });
 
-const {queryParams, form, rules} = toRefs(data);
+const {queryParams, form_All, form_Chain, rules} = toRefs(data);
 
 /** 查询连锁门店销售的所有产品的数据列表 */
 function getList() {
@@ -216,7 +273,7 @@ function cancel() {
 
 // 表单重置
 function reset() {
-  form.value = {
+  form_Chain.value = {
     productChainId: null,
     productId: null,
     companyId: null,
@@ -227,6 +284,22 @@ function reset() {
     updateUserId: null,
     updateTime: null
   };
+  form_All.value = {
+    code: null,
+    name: null,
+    productType: null,
+    level: null,
+    brand: null,
+    specification: null,
+    unit: null,
+  }
+  queryParams.value = {
+    pageNum: 1,
+    pageSize: 10,
+    code: null,
+    productTypes: null,
+    brands: null
+  }
   proxy.resetForm("productRef");
 }
 
@@ -273,11 +346,18 @@ function handleImport() {
 
 /** 文件上传成功处理 */
 const handleFileSuccess = (response, file, fileList) => {
-  proxy.$refs["uploadRef"].handleRemove(file);
-  proxy.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入结果", {dangerouslyUseHTMLString: true});
-  upload.open = false
-  upload.isUploading = false;
-  getList();
+  try {
+    if (response.code == 200) {
+      proxy.$modal.msgSuccess("产品导入成功")
+    } else {
+      proxy.$alert("<div style='color:red;overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入异常", {dangerouslyUseHTMLString: true});
+    }
+  } finally {
+    proxy.$refs["uploadRef"].handleRemove(file);
+    upload.open = false
+    upload.isUploading = false;
+    getList();
+  }
 };
 /**文件上传中处理 */
 const handleFileUploadProgress = (event, file, fileList) => {
@@ -298,37 +378,70 @@ function handleAdd() {
   title.value = "添加连锁门店销售的所有产品的数据";
 }
 
+/** 是否修改产品数据*/
+const validateProductChange = () => {
+  isChange.value = false
+}
+
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
-  // let _productChainid = row.productChainId || ids.value
   let _productChainid = row.productChainId;
-  getProduct(_productChainid).then(response => {
-    form.value = response.data;
-    open.value = true;
-    title.value = "修改连锁门店销售的所有产品的数据";
-  });
+  let _productId = row.productId
+  Promise.all([getProduct(_productChainid), getAllProductInfo(_productId)]).then(resArray => {
+    if (resArray[0].code == 200 && resArray[1].code == 200) {
+      open.value = true;
+      title.value = "修改连锁门店销售的所有产品的数据";
+      // Object.keys(form_Chain.value).forEach(key => {
+      //   Object.keys(resArray[0].data).forEach(nextKey => {
+      //     if (key == nextKey) {
+      //       form_Chain.value[key] = resArray[0].data[nextKey]
+      //     }
+      //   })
+      // })
+      // Object.keys(form_All.value).forEach(key => {
+      //   Object.keys(resArray[1].data).forEach(nextKey => {
+      //     if (key == nextKey) {
+      //       form_All.value[key] = resArray[1].data[nextKey]
+      //     }
+      //   })
+      // })
+      form_All.value = resArray[1].data
+    }
+  })
 }
 
 /** 提交按钮 */
 function submitForm() {
-  proxy.$refs["productRef"].validate(valid => {
-    if (valid) {
-      if (form.value.productChainId != null) {
-        updateProduct(form.value).then(response => {
-          proxy.$modal.msgSuccess("修改成功");
-          open.value = false;
-          getList();
-        });
-      } else {
-        addProduct(form.value).then(response => {
-          proxy.$modal.msgSuccess("新增成功");
-          open.value = false;
-          getList();
-        });
-      }
+  // proxy.$refs["productRef"].validate(valid => {
+  //   if (valid) {
+  //     if (form_Chain.value.productChainId != null) {
+  //       updateProduct(form_Chain.value).then(response => {
+  //         proxy.$modal.msgSuccess("修改成功");
+  //         open.value = false;
+  //         getList();
+  //       });
+  //     } else {
+  //       addProduct(form_Chain.value).then(response => {
+  //         proxy.$modal.msgSuccess("新增成功");
+  //         open.value = false;
+  //         getList();
+  //       });
+  //     }
+  //   }
+  // });
+  updateAllProductInfo(form_All.value).then(res => {
+    if (res.code == 200) {
+      proxy.$modal.msgSuccess("修改成功")
     }
-  });
+  }).catch(() => {
+    proxy.$modal.msgError("修改失败")
+  }).finally(() => {
+    open.value = false
+    isChange.value = true
+    getList()
+  })
+
 }
 
 /** 删除按钮操作 */

@@ -72,6 +72,9 @@
           </div>
         </template>
       </el-table-column>
+      <template #empty>
+        <el-empty description="暂无任务"/>
+      </template>
     </el-table>
 
     <pagination

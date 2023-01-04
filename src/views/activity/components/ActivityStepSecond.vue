@@ -52,7 +52,8 @@
                           @change="()=>{if(!firstFormModel.timeRange) firstFormModel.timeRange=1}"
                           class="input-with-select" style="width: 220px">
                   <template #append>
-                    <el-select v-model="firstFormModel.timeRangeUnit" style="width: 100px">
+                    <el-select :disabled="handleType=='query'" v-model="firstFormModel.timeRangeUnit"
+                               style="width: 100px">
                       <el-option v-for="item in sop_time_range_unit" :key="item.value" :value="item.value"
                                  :label="item.label">
                         {{ item.label }}
@@ -184,7 +185,8 @@
                           @change="()=>{if(!secondFormModel.timeRange) secondFormModel.timeRange=1}"
                           class="input-with-select" style="width: 220px;">
                   <template #append>
-                    <el-select v-model="secondFormModel.timeRangeUnit" style="width: 100px">
+                    <el-select :disabled="handleType=='query'" v-model="secondFormModel.timeRangeUnit"
+                               style="width: 100px">
                       <el-option v-for="item in sop_time_range_unit" :key="item.value" :value="item.value"
                                  :label="item.label">
                         {{ item.label }}
@@ -312,7 +314,8 @@
                           @change="()=>{if(!thirdFormModel.timeRange) thirdFormModel.timeRange=1}"
                           class="input-with-select" style="width: 220px;">
                   <template #append>
-                    <el-select v-model="thirdFormModel.timeRangeUnit" style="width: 100px;">
+                    <el-select :disabled="handleType=='query'" v-model="thirdFormModel.timeRangeUnit"
+                               style="width: 100px;">
                       <el-option v-for="item in sop_time_range_unit" :key="item.value" :value="item.value"
                                  :label="item.label">
                         {{ item.label }}
@@ -411,7 +414,7 @@
       </template>
     </el-dialog>
     <!-- 门店列表弹窗-->
-    <el-dialog title="门店列表" v-model="showStoreDialog" width="70%" top="8vh" append-to-body 
+    <el-dialog title="门店列表" v-model="showStoreDialog" width="70%" top="8vh" append-to-body
                :close-on-click-modal="false"
                draggable destroy-on-close
                @close="selectProductsClose">

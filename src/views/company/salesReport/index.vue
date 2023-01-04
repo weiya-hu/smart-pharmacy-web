@@ -19,7 +19,6 @@
                    placeholder="请选择要查看的时间范围" clearable>
           <el-option v-for="(item,key) in fastSelectDate" :key="key" :label="item.label" :value="item.value"/>
         </el-select>
-
       </el-form-item>
       <el-form-item class="label" label="区域" prop="name">
         <el-cascader v-model="queryParams.nodeId" style="width: 220px;"
@@ -193,6 +192,9 @@
                   </span>
                 </div>
               </template>
+              <template #slotEmpty>
+                <el-empty description="暂无数据"/>
+              </template>
             </pagevxeContent>
           </div>
         </el-tab-pane>
@@ -225,7 +227,9 @@
                   </span>
                 </div>
               </template>
-
+              <template #slotEmpty>
+                <el-empty description="暂无数据"/>
+              </template>
             </pagevxeContent>
           </div>
         </el-tab-pane>
@@ -258,7 +262,9 @@
                   </span>
                 </div>
               </template>
-
+              <template #slotEmpty>
+                <el-empty description="暂无数据"/>
+              </template>
             </pagevxeContent>
           </div>
         </el-tab-pane>
@@ -330,6 +336,9 @@
             </el-table>
           </div>
         </el-tab-pane>
+        <template #empty>
+          <el-empty description="暂无数据"/>
+        </template>
       </el-tabs>
     </div>
 

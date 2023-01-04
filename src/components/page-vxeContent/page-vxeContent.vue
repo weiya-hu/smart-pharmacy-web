@@ -1,11 +1,16 @@
 <!--        v-model:page="pageInfo"-->
 <template>
   <div class="page-content">
-    <LLTable
+    <LTable
         v-bind="contentTableConfig"
         :listData="dataList"
         :listCount="dataCount"
     >
+      <template #slotEmpty>
+        <slot name="slotEmpty">
+
+        </slot>
+      </template>
       <template #handler="scope">
         <!-- 根据审批状态确定操作框内的操作权限 -->
         <div class="handle-btns">
@@ -43,19 +48,19 @@
           <slot :name="item.slotName" :row="scope.row"></slot>
         </template>
       </template>
-    </LLTable>
+    </LTable>
   </div>
 </template>
 
 <script>
 import {defineComponent, computed, ref, watch} from 'vue'
-import LLTable from '@/baseui/vxeTable'
+import LTable from '@/baseui/vxeTable'
 import {tableStore} from "@/utils/mapTableStore";
 import {cloneFunction} from '@/utils/globalFunction.js'
 //导入所有表格数据的pinia
 export default defineComponent({
   components: {
-    LLTable
+    LTable
   },
   props: {
     contentTableConfig: {

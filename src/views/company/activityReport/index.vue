@@ -91,11 +91,11 @@
     <div class="barChart">
       <div class="chart chart_two" v-loading="chart_two_loading" element-loading-text="加载中...">
         <scaleChart ref="chart_two_ref" v-show="chart_two_isNull == false" :dataOption="chart_two_data"></scaleChart>
-        <el-empty description="暂无奖励数据" v-show="chart_two_isNull == true"/>
+        <el-empty description="暂无数据" v-show="chart_two_isNull == true"/>
       </div>
       <div class="chart chart_one" v-loading="chart_one_loading" element-loading-text="加载中...">
         <scaleChart ref="chart_one_ref" v-show="chart_one_isNull == false" :dataOption="chart_one_data"></scaleChart>
-        <el-empty description="暂无销售数据" v-show="chart_one_isNull == true"/>
+        <el-empty description="暂无数据" v-show="chart_one_isNull == true"/>
       </div>
 
       <!--      <div class="chart chart_three">-->
@@ -103,43 +103,49 @@
       <!--      </div>-->
     </div>
     <!--    区域销售列表展示-->
-<!--    <div class="areaMarket">-->
-<!--      <el-table-->
-<!--          :data="store.activityReportAreaListToTree"-->
-<!--          :default-expand-all="false"-->
-<!--          row-key="nodeId"-->
-<!--          style="width: 100%;height: 100%"-->
-<!--          :tree-props="{ children: 'children' }"-->
-<!--          :cell-style="{'text-align':'center'}"-->
-<!--          :header-cell-style="{backgroundColor: '#efefef !important','text-align':'center'}"-->
-<!--      >-->
-<!--        <el-table-column type="index" label="序号" width="200"/>-->
-<!--        <el-table-column prop="name" label="名称" show-tooltip-when-overflow></el-table-column>-->
-<!--        <el-table-column prop="saleAmount" label="销售额" show-tooltip-when-overflow>-->
-<!--          <template #default="{row}">-->
-<!--            <span>{{ row.saleAmount }}元</span>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--      </el-table>-->
+    <!--    <div class="areaMarket">-->
+    <!--      &lt;!&ndash;      <el-table&ndash;&gt;-->
+    <!--      &lt;!&ndash;          :data="store.activityReportAreaListToTree"&ndash;&gt;-->
+    <!--      &lt;!&ndash;          :default-expand-all="false"&ndash;&gt;-->
+    <!--      &lt;!&ndash;          row-key="nodeId"&ndash;&gt;-->
+    <!--      &lt;!&ndash;          style="width: 100%;height: 100%"&ndash;&gt;-->
+    <!--      &lt;!&ndash;          :tree-props="{ children: 'children' }"&ndash;&gt;-->
+    <!--      &lt;!&ndash;          :cell-style="{'text-align':'center'}"&ndash;&gt;-->
+    <!--      &lt;!&ndash;          :header-cell-style="{backgroundColor: '#efefef !important','text-align':'center'}"&ndash;&gt;-->
+    <!--      &lt;!&ndash;      >&ndash;&gt;-->
+    <!--      &lt;!&ndash;        <el-table-column type="index" label="序号" width="200"/>&ndash;&gt;-->
+    <!--      &lt;!&ndash;        <el-table-column prop="name" label="名称" show-tooltip-when-overflow></el-table-column>&ndash;&gt;-->
+    <!--      &lt;!&ndash;        <el-table-column prop="saleAmount" label="销售额" show-tooltip-when-overflow>&ndash;&gt;-->
+    <!--      &lt;!&ndash;          <template #default="{row}">&ndash;&gt;-->
+    <!--      &lt;!&ndash;            <span>{{ row.saleAmount }}元</span>&ndash;&gt;-->
+    <!--      &lt;!&ndash;          </template>&ndash;&gt;-->
+    <!--      &lt;!&ndash;        </el-table-column>&ndash;&gt;-->
+    <!--      &lt;!&ndash;      </el-table>&ndash;&gt;-->
 
-<!--      &lt;!&ndash;      <div v-for="(item,index) in store.activityReportAreaList" :key="index" class="allArea area">&ndash;&gt;-->
-<!--      &lt;!&ndash;        <vxe-table&ndash;&gt;-->
-<!--      &lt;!&ndash;            align="center"&ndash;&gt;-->
-<!--      &lt;!&ndash;            height="600px"&ndash;&gt;-->
-<!--      &lt;!&ndash;            border="none"&ndash;&gt;-->
-<!--      &lt;!&ndash;            class="mytable-scrollbar"&ndash;&gt;-->
-<!--      &lt;!&ndash;            :header-cell-style="{background: '#efefef'}"&ndash;&gt;-->
-<!--      &lt;!&ndash;            :data="item.saleList">&ndash;&gt;-->
-<!--      &lt;!&ndash;          <vxe-column type="seq" title="序号" width="60"></vxe-column>&ndash;&gt;-->
-<!--      &lt;!&ndash;          <vxe-column field="name" show-header-overflow show-overflow show-footer-overflow title="名称"></vxe-column>&ndash;&gt;-->
-<!--      &lt;!&ndash;          <vxe-column field="saleAmount" title="销售额">&ndash;&gt;-->
-<!--      &lt;!&ndash;            <template #default="{row}">&ndash;&gt;-->
-<!--      &lt;!&ndash;              <span>{{ row.saleAmount }}元</span>&ndash;&gt;-->
-<!--      &lt;!&ndash;            </template>&ndash;&gt;-->
-<!--      &lt;!&ndash;          </vxe-column>&ndash;&gt;-->
-<!--      &lt;!&ndash;        </vxe-table>&ndash;&gt;-->
-<!--      &lt;!&ndash;      </div>&ndash;&gt;-->
-<!--    </div>-->
+    <!--      <div v-for="(item,index) in store.activityReportAreaList" :key="index" class="allArea area">-->
+    <!--        <vxe-table-->
+    <!--            align="center"-->
+    <!--            height="600px"-->
+    <!--            border="none"-->
+    <!--            class="mytable-scrollbar"-->
+    <!--            :header-cell-style="{background: '#efefef'}"-->
+    <!--            :data="item.saleList">-->
+    <!--          <vxe-column-->
+    <!--              sortable-->
+    <!--              type="seq" :title="`区域`+(index+1)" width="60"></vxe-column>-->
+    <!--          <vxe-column :filters="index==0?store.firstSelectOption:null"-->
+    <!--                      :filter-multiple=false-->
+    <!--                      :filter-method="(node)=>{store.filterShowData(node,proxy)}" field="name" show-header-overflow-->
+    <!--                      show-overflow-->
+    <!--                      show-footer-overflow title="名称"></vxe-column>-->
+    <!--          <vxe-column field="saleAmount" title="销售额">-->
+    <!--            <template #default="{row}">-->
+    <!--              <span>{{ row.saleAmount }}元</span>-->
+    <!--            </template>-->
+    <!--          </vxe-column>-->
+    <!--        </vxe-table>-->
+    <!--      </div>-->
+    <!--    </div>-->
     <!--    品牌销量和单品销量-->
     <div class="salesBrandAndSingle">
       <el-row :gutter="20">
@@ -147,7 +153,6 @@
           <div class="salesBrand sales">
             <div class="sales-header">
               <div class="active">品牌销量</div>
-              <!--              <div>个</div>-->
             </div>
             <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReportBrand"
                             :contentTableConfig="storeBrandTableConfig">
@@ -179,8 +184,10 @@
                     </span>
                 </div>
               </template>
+              <template #slotEmpty>
+                <el-empty description="暂无数据"/>
+              </template>
             </pagevxeContent>
-
           </div>
         </el-col>
 
@@ -188,7 +195,6 @@
           <div class="salesSingle sales">
             <div class="sales-header">
               <div class="active">单品销量</div>
-              <!--              <div>个</div>-->
             </div>
             <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReportProduct"
                             :contentTableConfig="storeProductTableConfig">
@@ -220,6 +226,9 @@
                     </span>
                 </div>
               </template>
+              <template #slotEmpty>
+                  <el-empty description="暂无数据"/>
+              </template>
             </pagevxeContent>
           </div>
         </el-col>
@@ -227,145 +236,145 @@
       </el-row>
     </div>
     <!--      奖励列表-->
-    <!--    <div>-->
-    <!--      <div class="rewardList">-->
-    <!--        <div class="rewardTypeList listInfo">-->
-    <!--          <el-tabs-->
-    <!--              v-model="rewardType"-->
-    <!--              type="border-card"-->
-    <!--          >-->
-    <!--            <el-tab-pane label="单品激励" name="first">-->
-    <!--              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
-    <!--                              :contentTableConfig="allAreaTableConfig">-->
-    <!--                <template #chainRatioSlot="{row}">-->
-    <!--                  <div>-->
-    <!--                    {{ row.chainRatio }}-->
-    <!--                    <span v-if="row.isUp">-->
-    <!--                          <el-icon color="green"><Top/></el-icon>-->
-    <!--                      </span>-->
-    <!--                    <span v-else>-->
-    <!--                        <el-icon color="red"><Bottom/></el-icon>-->
-    <!--                      </span>-->
+    <!--        <div>-->
+    <!--          <div class="rewardList">-->
+    <!--            <div class="rewardTypeList listInfo">-->
+    <!--              <el-tabs-->
+    <!--                  v-model="rewardType"-->
+    <!--                  type="border-card"-->
+    <!--              >-->
+    <!--                <el-tab-pane label="单品激励" name="first">-->
+    <!--                  <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
+    <!--                                  :contentTableConfig="allAreaTableConfig">-->
+    <!--                    <template #chainRatioSlot="{row}">-->
+    <!--                      <div>-->
+    <!--                        {{ row.chainRatio }}-->
+    <!--                        <span v-if="row.isUp">-->
+    <!--                              <el-icon color="green"><Top/></el-icon>-->
+    <!--                          </span>-->
+    <!--                        <span v-else>-->
+    <!--                            <el-icon color="red"><Bottom/></el-icon>-->
+    <!--                          </span>-->
 
-    <!--                  </div>-->
-    <!--                </template>-->
-    <!--              </pagevxeContent>-->
-    <!--            </el-tab-pane>-->
-    <!--            <el-tab-pane label="品牌激励" name="second">-->
-    <!--              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
-    <!--                              :contentTableConfig="allAreaTableConfig">-->
-    <!--                <template #chainRatioSlot="{row}">-->
-    <!--                  <div>-->
-    <!--                    {{ row.chainRatio }}-->
-    <!--                    <span v-if="row.isUp">-->
-    <!--                          <el-icon color="green"><Top/></el-icon>-->
-    <!--                      </span>-->
-    <!--                    <span v-else>-->
-    <!--                        <el-icon color="red"><Bottom/></el-icon>-->
-    <!--                      </span>-->
+    <!--                      </div>-->
+    <!--                    </template>-->
+    <!--                  </pagevxeContent>-->
+    <!--                </el-tab-pane>-->
+    <!--                <el-tab-pane label="品牌激励" name="second">-->
+    <!--                  <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
+    <!--                                  :contentTableConfig="allAreaTableConfig">-->
+    <!--                    <template #chainRatioSlot="{row}">-->
+    <!--                      <div>-->
+    <!--                        {{ row.chainRatio }}-->
+    <!--                        <span v-if="row.isUp">-->
+    <!--                              <el-icon color="green"><Top/></el-icon>-->
+    <!--                          </span>-->
+    <!--                        <span v-else>-->
+    <!--                            <el-icon color="red"><Bottom/></el-icon>-->
+    <!--                          </span>-->
 
-    <!--                  </div>-->
-    <!--                </template>-->
-    <!--              </pagevxeContent>-->
-    <!--            </el-tab-pane>-->
-    <!--            <el-tab-pane label="门店激励" name="third">-->
-    <!--              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
-    <!--                              :contentTableConfig="allAreaTableConfig">-->
-    <!--                <template #chainRatioSlot="{row}">-->
-    <!--                  <div>-->
-    <!--                    {{ row.chainRatio }}-->
-    <!--                    <span v-if="row.isUp">-->
-    <!--                          <el-icon color="green"><Top/></el-icon>-->
-    <!--                      </span>-->
-    <!--                    <span v-else>-->
-    <!--                        <el-icon color="red"><Bottom/></el-icon>-->
-    <!--                      </span>-->
+    <!--                      </div>-->
+    <!--                    </template>-->
+    <!--                  </pagevxeContent>-->
+    <!--                </el-tab-pane>-->
+    <!--                <el-tab-pane label="门店激励" name="third">-->
+    <!--                  <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
+    <!--                                  :contentTableConfig="allAreaTableConfig">-->
+    <!--                    <template #chainRatioSlot="{row}">-->
+    <!--                      <div>-->
+    <!--                        {{ row.chainRatio }}-->
+    <!--                        <span v-if="row.isUp">-->
+    <!--                              <el-icon color="green"><Top/></el-icon>-->
+    <!--                          </span>-->
+    <!--                        <span v-else>-->
+    <!--                            <el-icon color="red"><Bottom/></el-icon>-->
+    <!--                          </span>-->
 
-    <!--                  </div>-->
-    <!--                </template>-->
-    <!--              </pagevxeContent>-->
-    <!--            </el-tab-pane>-->
+    <!--                      </div>-->
+    <!--                    </template>-->
+    <!--                  </pagevxeContent>-->
+    <!--                </el-tab-pane>-->
 
-    <!--          </el-tabs>-->
+    <!--              </el-tabs>-->
 
 
+    <!--            </div>-->
+    <!--            <div class="rewardInfoList listInfo">-->
+    <!--              <el-tabs-->
+    <!--                  v-model="rewardInfo"-->
+    <!--                  type="border-card"-->
+    <!--              >-->
+    <!--                <el-tab-pane label="品牌获奖" name="first">-->
+    <!--                  <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
+    <!--                                  :contentTableConfig="allAreaTableConfig">-->
+    <!--                    <template #chainRatioSlot="{row}">-->
+    <!--                      <div>-->
+    <!--                        {{ row.chainRatio }}-->
+    <!--                        <span v-if="row.isUp">-->
+    <!--                              <el-icon color="green"><Top/></el-icon>-->
+    <!--                          </span>-->
+    <!--                        <span v-else>-->
+    <!--                            <el-icon color="red"><Bottom/></el-icon>-->
+    <!--                          </span>-->
+
+    <!--                      </div>-->
+    <!--                    </template>-->
+    <!--                  </pagevxeContent>-->
+    <!--                </el-tab-pane>-->
+    <!--                <el-tab-pane label="区域获奖" name="second">-->
+    <!--                  <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
+    <!--                                  :contentTableConfig="allAreaTableConfig">-->
+    <!--                    <template #chainRatioSlot="{row}">-->
+    <!--                      <div>-->
+    <!--                        {{ row.chainRatio }}-->
+    <!--                        <span v-if="row.isUp">-->
+    <!--                              <el-icon color="green"><Top/></el-icon>-->
+    <!--                          </span>-->
+    <!--                        <span v-else>-->
+    <!--                            <el-icon color="red"><Bottom/></el-icon>-->
+    <!--                          </span>-->
+
+    <!--                      </div>-->
+    <!--                    </template>-->
+    <!--                  </pagevxeContent>-->
+    <!--                </el-tab-pane>-->
+    <!--                <el-tab-pane label="门店获奖" name="third">-->
+    <!--                  <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
+    <!--                                  :contentTableConfig="allAreaTableConfig">-->
+    <!--                    <template #chainRatioSlot="{row}">-->
+    <!--                      <div>-->
+    <!--                        {{ row.chainRatio }}-->
+    <!--                        <span v-if="row.isUp">-->
+    <!--                              <el-icon color="green"><Top/></el-icon>-->
+    <!--                          </span>-->
+    <!--                        <span v-else>-->
+    <!--                            <el-icon color="red"><Bottom/></el-icon>-->
+    <!--                          </span>-->
+
+    <!--                      </div>-->
+    <!--                    </template>-->
+    <!--                  </pagevxeContent>-->
+    <!--                </el-tab-pane>-->
+    <!--                <el-tab-pane label="个人获奖" name="four">-->
+    <!--                  <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
+    <!--                                  :contentTableConfig="allAreaTableConfig">-->
+    <!--                    <template #chainRatioSlot="{row}">-->
+    <!--                      <div>-->
+    <!--                        {{ row.chainRatio }}-->
+    <!--                        <span v-if="row.isUp">-->
+    <!--                              <el-icon color="green"><Top/></el-icon>-->
+    <!--                          </span>-->
+    <!--                        <span v-else>-->
+    <!--                            <el-icon color="red"><Bottom/></el-icon>-->
+    <!--                          </span>-->
+    <!--                      </div>-->
+    <!--                    </template>-->
+    <!--                  </pagevxeContent>-->
+    <!--                </el-tab-pane>-->
+    <!--              </el-tabs>-->
+    <!--            </div>-->
+    <!--          </div>-->
     <!--        </div>-->
-    <!--        <div class="rewardInfoList listInfo">-->
-    <!--          <el-tabs-->
-    <!--              v-model="rewardInfo"-->
-    <!--              type="border-card"-->
-    <!--          >-->
-    <!--            <el-tab-pane label="品牌获奖" name="first">-->
-    <!--              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
-    <!--                              :contentTableConfig="allAreaTableConfig">-->
-    <!--                <template #chainRatioSlot="{row}">-->
-    <!--                  <div>-->
-    <!--                    {{ row.chainRatio }}-->
-    <!--                    <span v-if="row.isUp">-->
-    <!--                          <el-icon color="green"><Top/></el-icon>-->
-    <!--                      </span>-->
-    <!--                    <span v-else>-->
-    <!--                        <el-icon color="red"><Bottom/></el-icon>-->
-    <!--                      </span>-->
-
-    <!--                  </div>-->
-    <!--                </template>-->
-    <!--              </pagevxeContent>-->
-    <!--            </el-tab-pane>-->
-    <!--            <el-tab-pane label="区域获奖" name="second">-->
-    <!--              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
-    <!--                              :contentTableConfig="allAreaTableConfig">-->
-    <!--                <template #chainRatioSlot="{row}">-->
-    <!--                  <div>-->
-    <!--                    {{ row.chainRatio }}-->
-    <!--                    <span v-if="row.isUp">-->
-    <!--                          <el-icon color="green"><Top/></el-icon>-->
-    <!--                      </span>-->
-    <!--                    <span v-else>-->
-    <!--                        <el-icon color="red"><Bottom/></el-icon>-->
-    <!--                      </span>-->
-
-    <!--                  </div>-->
-    <!--                </template>-->
-    <!--              </pagevxeContent>-->
-    <!--            </el-tab-pane>-->
-    <!--            <el-tab-pane label="门店获奖" name="third">-->
-    <!--              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
-    <!--                              :contentTableConfig="allAreaTableConfig">-->
-    <!--                <template #chainRatioSlot="{row}">-->
-    <!--                  <div>-->
-    <!--                    {{ row.chainRatio }}-->
-    <!--                    <span v-if="row.isUp">-->
-    <!--                          <el-icon color="green"><Top/></el-icon>-->
-    <!--                      </span>-->
-    <!--                    <span v-else>-->
-    <!--                        <el-icon color="red"><Bottom/></el-icon>-->
-    <!--                      </span>-->
-
-    <!--                  </div>-->
-    <!--                </template>-->
-    <!--              </pagevxeContent>-->
-    <!--            </el-tab-pane>-->
-    <!--            <el-tab-pane label="个人获奖" name="four">-->
-    <!--              <pagevxeContent :listName="'activityReportList'" :storeConfig="contentTableActivityReport"-->
-    <!--                              :contentTableConfig="allAreaTableConfig">-->
-    <!--                <template #chainRatioSlot="{row}">-->
-    <!--                  <div>-->
-    <!--                    {{ row.chainRatio }}-->
-    <!--                    <span v-if="row.isUp">-->
-    <!--                          <el-icon color="green"><Top/></el-icon>-->
-    <!--                      </span>-->
-    <!--                    <span v-else>-->
-    <!--                        <el-icon color="red"><Bottom/></el-icon>-->
-    <!--                      </span>-->
-    <!--                  </div>-->
-    <!--                </template>-->
-    <!--              </pagevxeContent>-->
-    <!--            </el-tab-pane>-->
-    <!--          </el-tabs>-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--    </div>-->
   </div>
 </template>
 
@@ -628,7 +637,7 @@ let chart_one_data = {
 }
 const chart_one_data_none = {
   title: {
-    text: '暂无销售数据',
+    text: '暂无数据',
     x: 'center',
     y: 'center',
     textStyle: {
@@ -927,7 +936,7 @@ let chart_two_data = {
 }
 const chart_two_data_none = {
   title: {
-    text: '暂无奖励数据',
+    text: '暂无数据',
     x: 'center',
     y: 'center',
     textStyle: {

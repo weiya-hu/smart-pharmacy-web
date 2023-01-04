@@ -10,6 +10,7 @@
       <div>
         <el-button type="primary" @click="changeHeader">修改我的表头</el-button>
         <el-button type="primary" @click="saveMatchHeader">保存</el-button>
+        <el-button @click="resetMatchHeader">重置</el-button>
         <el-button @click="comeBack">返回</el-button>
       </div>
     </div>
@@ -40,14 +41,9 @@
       </el-form>
 
     </div>
-
-
     <div class="footer">
-
     </div>
   </div>
-
-
 </template>
 <script setup>
 import {getMapping, setConvertMapping, queryProductOrderDynamicHeaderData} from "@/api/system/order";
@@ -101,40 +97,6 @@ const innitBaseInfo = () => {
     ElMessage.error(rej.message)
   })
 }
-//初始化默认选中的状态
-const innitDefaultSelectedStatus = () => {
-  let selectedArray = []
-  allHeader.value.data.forEach(item => {
-    if (item.excelTitle !== '') {
-      selectedArray.push(item.excelTitle)
-    }
-    selectOption.value.forEach(nextItem => {
-      if (item.excelTitle == nextItem.label) {
-        nextItem.disable = true
-      }
-    })
-  })
-  console.log(selectedArray)
-  selectOption.value.forEach(item => {
-    if (selectedArray.some(nextItem => {
-      return nextItem == item.label
-    })) {
-      item.disable = true
-    } else {
-      item.disable = false
-    }
-
-  })
-
-}
-//清空选中
-const clearSelected = () => {
-  innitDefaultSelectedStatus()
-}
-//选中值时的回调
-const changeSelected = (value) => {
-  innitDefaultSelectedStatus()
-}
 //如果上传的header长度不为零格式化基础信息
 const formatBaseInfo = () => {
 //在allheader当中新增字段名称objField 值为field 初始化一个excelTitle值为空
@@ -152,6 +114,39 @@ const formatBaseInfo = () => {
   })
   innitDefaultSelectedStatus()
 }
+//初始化默认选中的状态
+const innitDefaultSelectedStatus = () => {
+  let selectedArray = []
+  allHeader.value.data.forEach(item => {
+    if (item.excelTitle !== '') {
+      selectedArray.push(item.excelTitle)
+    }
+    selectOption.value.forEach(nextItem => {
+      if (item.excelTitle == nextItem.label) {
+        nextItem.disable = true
+      }
+    })
+  })
+  selectOption.value.forEach(item => {
+    if (selectedArray.some(nextItem => {
+      return nextItem == item.label
+    })) {
+      item.disable = true
+    } else {
+      item.disable = false
+    }
+  })
+
+}
+//清空选中
+const clearSelected = () => {
+  innitDefaultSelectedStatus()
+}
+//选中值时的回调
+const changeSelected = (value) => {
+  innitDefaultSelectedStatus()
+}
+
 const uploadSuccess = () => {
   innitBaseInfo()
 }
@@ -159,6 +154,7 @@ const uploadSuccess = () => {
 //提交表头映射
 const saveMatchHeader = async () => {
   let isSend = await formRef.value.validate()
+  console.log(isSend)
   if (isSend) {
     setConvertMapping(allHeader.value.data).then(res => {
       if (res.code == 200) {
@@ -169,6 +165,18 @@ const saveMatchHeader = async () => {
     })
   }
 }
+//重置匹配表头
+const resetMatchHeader = () => {
+//将映射过的表头信息格式化到allheader当中
+  matchHeaderInfo.value.forEach((item, index) => {
+    allHeader.value.data.forEach(dataItem => {
+      if (dataItem.objField == item.objField) {
+        dataItem.excelTitle = ''
+      }
+    })
+  })
+  innitDefaultSelectedStatus()
+}
 //返回
 const comeBack = () => {
   router.push({path: '/enterpriseCenter/order'})
@@ -176,10 +184,7 @@ const comeBack = () => {
 //修改表头
 const changeHeader = () => {
   uploadRef.value.showDialog()
-  // router.push({path: '/enterpriseCenter/order/customizeImportFirst'})
 }
-// onLoad()
-
 </script>
 
 <style scoped lang="scss">

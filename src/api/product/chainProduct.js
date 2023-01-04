@@ -16,6 +16,13 @@ export function getProduct(productChainid) {
         method: 'get'
     })
 }
+//查询产品大库当中产品的基本信息
+export function getAllProductInfo(productId) {
+    return request({
+        url: `/product/product/${productId}`,
+        method: 'get'
+    })
+}
 
 // 新增连锁门店销售的所有产品的数据
 export function addProduct(data) {
@@ -30,6 +37,14 @@ export function addProduct(data) {
 export function updateProduct(data) {
     return request({
         url: '/product/chain/product',
+        method: 'put',
+        data: data
+    })
+}
+// 修改产品大库当中的产品信息
+export function updateAllProductInfo(data) {
+    return request({
+        url: '/product/product',
         method: 'put',
         data: data
     })
