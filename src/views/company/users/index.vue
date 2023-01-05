@@ -324,7 +324,7 @@
 
 <script setup name="User">
 import {getToken} from "@/utils/auth";
-import {treeselect} from "@/api/system/dept";
+import {treeselect, listDept} from "@/api/system/dept";
 import {listRole} from "@/api/system/role";
 import {listPost} from "@/api/system/post";
 import {listUser, delUser, getUser, updateUser, addUser, synchWeUser} from "@/api/system/user";
@@ -568,19 +568,20 @@ function handleAdd() {
   title.value = "添加成员";
 };
 
+const listArr = ref([])
 /** 修改按钮操作 */
 async function handleUpdate(row) {
-  console.log('sys_user_sex',sys_user_sex)
   reset();
   await initTreeData();
   const userId = row.userId || ids.value;
+  await listDept({pageNum: 1, pageSize: 1000, state: 1}).then(res => {
+    listArr.value = res.data.list
+  })
   await getUser(userId).then(response => {
-      form.value = response.data;
-    //   postOptions.value = response.posts;
-    //   roleOptions.value = response.roles;
-    //   form.value.roleName = response.data.roleName;
+    form.value = response.data;
     open.value = true;
     title.value = "修改成员";
+    form.value.deptIds = response.data.deptIds.filter(item => listArr.value.some(items => items.deptId == item))
   });
 
 };
