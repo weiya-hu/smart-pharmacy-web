@@ -51,7 +51,14 @@
         height="720px"
     >
       <el-table-column prop="name" label="机构名称" width="450" show-tooltip-when-overflow></el-table-column>
-      <el-table-column prop="code" label="业务方编码" width="400" show-tooltip-when-overflow></el-table-column>
+      <el-table-column prop="code" label="业务方编码" width="270" show-tooltip-when-overflow></el-table-column>
+      <el-table-column prop="type" label="类型">
+        <template #default="scope">
+          <span v-if="scope.row.type === 4">门店</span>
+          <span v-else-if="scope.row.type === 5">片区</span>
+          <span v-else>公司</span>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间" prop="createTime" show-tooltip-when-overflow>
         <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
