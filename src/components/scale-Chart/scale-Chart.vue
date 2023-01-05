@@ -5,7 +5,6 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import * as echarts from 'echarts'
 import {onMounted, reactive} from "vue";
@@ -34,25 +33,17 @@ let props = defineProps({
 onMounted(() => {
   init();
 })
-
-
 const containerBox = ref('')
 let myEcharts = reactive({});
-//初始化echarts实例方法
 const init = () => {
-  //3.初始化container容器
   myEcharts = echarts.init(containerBox.value);
   if (props.registeredLegendEvent.isRegistered) {
     myEcharts.on('legendselectchanged', props.registeredLegendEvent.callBackFunction)
   }
-
-  //5.传入数据
   myEcharts.setOption(props.dataOption);
-
   window.addEventListener("resize", function () {
     myEcharts.resize();
   });
-
 }
 const turnUpLoading = () => {
   scaleLoading.value = true
