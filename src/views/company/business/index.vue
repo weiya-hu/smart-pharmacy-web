@@ -51,6 +51,7 @@
         height="720px"
     >
       <el-table-column prop="name" label="机构名称" width="450" show-tooltip-when-overflow></el-table-column>
+      <el-table-column prop="code" label="业务方编码" width="400" show-tooltip-when-overflow></el-table-column>
       <el-table-column label="创建时间" prop="createTime" show-tooltip-when-overflow>
         <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -102,7 +103,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="类型" prop="type">
+            <el-form-item label="类型" prop="type" v-if="form.parentNodeId !== null">
               <el-select v-model="form.type" placeholder="请选择类型" @change="handleChange" style="width: 100%">
                 <el-option
                     v-for="dict in wecom_reltree_type"
@@ -114,7 +115,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="名称" prop="relationId" v-if="form.type !==5">
+            <el-form-item label="名称" prop="relationId" v-if="form.type === 4">
               <el-select
                   v-model="form.relationId"
                   filterable
@@ -129,13 +130,13 @@
               </el-select>
 
             </el-form-item>
-            <el-form-item label="名称" prop="name" v-if="form.type === 5">
+            <el-form-item label="名称" prop="name" v-if="form.type !== 4">
               <el-input v-model="form.name" placeholder="请输入名称"></el-input>
             </el-form-item>
-            <el-form-item prop="code" v-show="form.type !== 5">
+            <el-form-item prop="code" v-show="form.type === 4">
               <template #label>
                 <span>
-                  <el-tooltip content="业务方编码说明" placement="top">
+                  <el-tooltip content="业务部门在商户的组织中的编码，例如：xx药业新华路店，编号 3127，这里3127就是新华路店的编码" placement="top-start">
                     <el-icon><question-filled/></el-icon>
                   </el-tooltip>
                    业务方编码
@@ -396,6 +397,7 @@ async function handleUpdate(row) {
     tableUsers.tableData = response.data.users.map(item => {
       return {...item, isJob: false}
     })
+    tableUsers.tableData = response.data.users.filter(item => selectUsers.value.some(items => items.userId == item.userId))
     open.value = true;
     title.value = "修改机构";
     changeUser()
