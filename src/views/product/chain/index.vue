@@ -41,10 +41,7 @@
         <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
     </div>
-
-    <!--    <el-table v-loading="loading" :data="productList" @selection-change="handleSelectionChange">-->
     <el-table v-loading="loading" :data="productList">
-      <!--      <el-table-column type="selection" width="55" align="center"/>-->
       <el-table-column label="69码" prop="barCode" show-tooltip-when-overflow/>
       <el-table-column label="产品ID" prop="productId" show-tooltip-when-overflow width="200"/>
       <el-table-column label="产品编号" prop="code" show-tooltip-when-overflow/>
@@ -116,9 +113,9 @@
       <!--      </el-form>-->
       <el-form @change="validateProductChange" :model="form_All" label-width="100px">
         <!--新增-->
-        <el-form-item class="label" label="产品编号">
-          <el-input v-model="form_All.code" placeholder="输入产品编号"/>
-        </el-form-item>
+        <!--        <el-form-item class="label" label="产品编号">-->
+        <!--          <el-input v-model="form_All.code" placeholder="输入产品编号"/>-->
+        <!--        </el-form-item>-->
         <el-form-item class="label" label="产品简称">
           <el-input v-model="form_All.name" placeholder="请输入产品简称"/>
         </el-form-item>
@@ -392,20 +389,7 @@ function handleUpdate(row) {
     if (resArray[0].code == 200 && resArray[1].code == 200) {
       open.value = true;
       title.value = "修改连锁门店销售的所有产品的数据";
-      // Object.keys(form_Chain.value).forEach(key => {
-      //   Object.keys(resArray[0].data).forEach(nextKey => {
-      //     if (key == nextKey) {
-      //       form_Chain.value[key] = resArray[0].data[nextKey]
-      //     }
-      //   })
-      // })
-      // Object.keys(form_All.value).forEach(key => {
-      //   Object.keys(resArray[1].data).forEach(nextKey => {
-      //     if (key == nextKey) {
-      //       form_All.value[key] = resArray[1].data[nextKey]
-      //     }
-      //   })
-      // })
+      form_Chain.value = resArray[0].data
       form_All.value = resArray[1].data
     }
   })
