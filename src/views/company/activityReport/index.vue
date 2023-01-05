@@ -748,7 +748,7 @@ function innitBarChartData(data) {
   // chart_three_data.series[2].data = remainingAwardAmountArray
   nextTick(() => {
     chart_one_ref.value.setOption(chart_one_data.value, true)
-    chart_two_ref.value.setOption(chart_two_data, true)
+    chart_two_ref.value.setOption(chart_two_data.value, true)
     // chart_three_ref.value.setOption(chart_three_data, true)
 
   })
