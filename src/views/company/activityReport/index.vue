@@ -98,9 +98,9 @@
         <el-empty description="暂无数据" v-show="chart_one_isNull == true"/>
       </div>
 
-      <!--      <div class="chart chart_three">-->
-      <!--        <scaleChart ref="chart_three_ref" :dataOption="chart_three_data"></scaleChart>-->
-      <!--      </div>-->
+<!--            <div class="chart chart_three">-->
+<!--              <scaleChart ref="chart_three_ref" :dataOption="chart_three_data"></scaleChart>-->
+<!--            </div>-->
     </div>
     <!--    区域销售列表展示-->
     <!--    <div class="areaMarket">-->
@@ -750,7 +750,6 @@ function innitBarChartData(data) {
     chart_one_ref.value.setOption(chart_one_data.value, true)
     chart_two_ref.value.setOption(chart_two_data.value, true)
     // chart_three_ref.value.setOption(chart_three_data, true)
-
   })
 }
 
@@ -896,7 +895,7 @@ innitSelectOption()
 
   .statistic {
     margin: 20px 10px;
-    border-top: 2px solid #d6dde4;
+    border-top: 1px solid #d6dde4;
     padding-top: 20px;
 
     .totalItem {
@@ -985,13 +984,12 @@ innitSelectOption()
 
       .sales-header {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         padding: 15px;
         box-sizing: border-box;
         color: #999999;
-
         .active {
-          color: #ff5a40;
+          color: #000033;
           font-weight: bold;
           font-size: 14px;
           cursor: default;

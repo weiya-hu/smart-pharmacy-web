@@ -94,6 +94,9 @@ export default defineComponent({
 })
 </script>
 <style scoped lang="scss">
+::v-deep(.sort--active){
+  color: #FF5A40 !important;
+}
 /*滚动条整体部分*/
 .mytable-scrollbar ::-webkit-scrollbar {
   width: 5px;

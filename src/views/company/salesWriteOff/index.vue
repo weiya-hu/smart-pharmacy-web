@@ -35,7 +35,9 @@
         <el-col :span="1.5">
           <div>
             <div v-if="analysisStatus==2" class="uploadInfo">
-              <p class="desc">当前数据截至 {{ lastImportTime }}导入,其中{{ insertCount }}条导入成功，{{
+              <p class="desc">{{
+                  lastImportTime
+                }}由{{ importUserName }}导入,数据截止到{{ lastDataTime }}，其中{{ insertCount }}条导入成功，{{
                   updateCount
                 }}条更新，
                 {{ cantSaveCount }}条导入失败。</p>
@@ -232,11 +234,15 @@
 import {ArrowLeft, ArrowRight} from '@element-plus/icons-vue'
 import {computed, getCurrentInstance, nextTick, onBeforeUnmount, reactive, toRefs} from "vue";
 import {getToken} from "@/utils/auth";
-import {getOrderList, addDynamicHeaderExcelUrl, uploadSaleOrder} from "@/api/system/order";
+import {
+  getOrderList,
+  addDynamicHeaderExcelUrl,
+  uploadSaleOrder,
+  getUserNameByUserId,
+  recentlyFileInfo
+} from "@/api/system/order";
 import customizeImportFirst from './component/customizeImportFirst'
-
 import router from "@/router";
-import {recentlyFileInfo} from "../../../api/system/order";
 //自定义导入列表
 const customizeUploadRef = ref()
 const customizeList = ref([])
@@ -284,6 +290,8 @@ const cantSaveCount = ref()
 const updateCount = ref()
 const insertCount = ref()
 const lastImportTime = ref()
+const lastDataTime = ref()
+const importUserName = ref()
 const isCaculateOver = ref(false)
 //列表loading
 let loading = ref(false)
@@ -408,8 +416,6 @@ const getRecentlyFileInfo = () => {
               return item.storeProductCode
             })))
           }
-          console.log(cantSaveList.value, "？？？")
-
           analysisTime.value = predictTime
           cantSaveCount.value = cantsaveNum
           updateCount.value = updateNum
@@ -445,7 +451,17 @@ const recentlyUploadFileStatus = () => {
       if (res.code == 200) {
         let {
           predictTime,
-          productOrderImportInfo: {importTime, status, errorMsg, cantsaveDetail, insertNum, updateNum, cantsaveNum}
+          recentSaleTime,
+          productOrderImportInfo: {
+            createBy,
+            importTime,
+            status,
+            errorMsg,
+            cantsaveDetail,
+            insertNum,
+            updateNum,
+            cantsaveNum
+          }
         } = res.data
         analysisStatus.value = status
         let remainTime = predictTime * 60000 - (new Date().getTime() - new Date(importTime).getTime())
@@ -473,10 +489,17 @@ const recentlyUploadFileStatus = () => {
             }
             isCaculateOver.value = true
             analysisTime.value = predictTime
+            lastDataTime.value = recentSaleTime
             cantSaveCount.value = cantsaveNum
             updateCount.value = updateNum
             insertCount.value = insertNum
             lastImportTime.value = importTime
+            //获取人名
+            getUserNameByUserId(createBy).then(res => {
+              if (res.code == 200) {
+                importUserName.value = res.data.userName
+              }
+            })
             nextTick(() => {
               clearInterval(waitTimer.value)
             })

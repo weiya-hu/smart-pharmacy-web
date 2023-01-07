@@ -94,7 +94,7 @@
       <el-tabs
           v-model="activeName"
           type="card"
-          class="demo-tabs"
+          class="demo-tabs chartTabs"
           v-loading="chartLoading"
           element-loading-text="加载中..."
           @tab-change=chartTabChange
@@ -108,17 +108,18 @@
                     <Switch/>
                   </el-icon>
                 </template>
-                <el-select @change="changeActive" style="width: 200px;" ref="activeSelectInstance"
-                           v-model="selectedActive"
-                           placeholder="请选择要查看的活动">
-                  <el-option v-for="(item,index) in eventActiveSelectOptions" :label="item.name" :value="item.eventId"
-                             :key="item.eventId">
+                <template #default>
+                  <el-select @change="changeActive" style="width: 200px;" ref="activeSelectInstance"
+                             v-model="selectedActive"
+                             placeholder="请选择要查看的活动">
+                    <el-option v-for="(item,index) in eventActiveSelectOptions" :label="item.name" :value="item.eventId"
+                               :key="item.eventId">
 
-                  </el-option>
-                </el-select>
+                    </el-option>
+                  </el-select>
+                </template>
               </el-popover>
             </div>
-
           </template>
           <div class="itemChart">
             <scaleChart ref="charts_one_instance" v-show="charts_one_isNull == false"
@@ -268,7 +269,7 @@
             </pagevxeContent>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="其他" name="seven">
+        <el-tab-pane label="区域" name="seven">
           <!-- 自定义结构统计表      :cell-style="{'text-align':'center'}" -->
           <div class="tableList">
             <el-table
@@ -478,7 +479,7 @@ const chart_one_Option = ref({
   title: {
     text: '销售活动占比'
   },
-  color: ['#e4e4e6', '#ffab9c'],
+  color: ['#81AFD5', '#ffab9c'],
   // 设置图表的位置
   grid: {
     x: 60, // 左间距
@@ -523,7 +524,7 @@ const chart_one_Option = ref({
     // // 提示框浮层内容格式器，支持字符串模板和回调函数两种形式 折线（区域）图、柱状（条形）图、K线图
     // // {a}（系列名称），{b}（类目值），{c}（数值）, {d}（无）
     formatter: function (value) {
-      return value[0].name + '<br />' + "活动销售额: " + value[0].data + '元' + '<br/>' + "日常销售额: " + value[1].data.value + "元" + '<br/>' + "销售总额: " + value[2].data.value + "元" + '<br/>' + "日常占比:" + charts_one_dataRatio.value[value[0].dataIndex].dailyRatio + '<br/>' + "活动占比:" + charts_one_dataRatio.value[value[0].dataIndex].activityRatio
+      return value[0].name + '<br />' + "活动销售额: " + value[0].data.value + '元' + '<br/>' + "日常销售额: " + value[1].data.value + "元" + '<br/>' + "销售总额: " + value[2].data.value + "元" + '<br/>' + "日常占比:" + charts_one_dataRatio.value[value[0].dataIndex].dailyRatio + '<br/>' + "活动占比:" + charts_one_dataRatio.value[value[0].dataIndex].activityRatio
     },
   },
   // 图例组件
@@ -546,6 +547,7 @@ const chart_one_Option = ref({
     // 坐标轴轴线
     axisLine: { // 是否显示坐标轴轴线 默认显示
       show: true, // 是否显示坐标轴轴线 默认显示
+      symbol: ['none', 'arrow'],
       lineStyle: { // 坐标轴线线的颜色
         color: '#6e7079'
       }
@@ -605,7 +607,7 @@ const chart_one_Option = ref({
       name: '活动', // 系列名称, 用于tooltip的显示, legend 的图例筛选
       // 数据堆叠，同个类目轴上系列配置相同的stack值后，后一个系列的值会在前一个系列的值上相加
       stack: '总量',
-      barMaxWidth: 55, // 柱条的最大宽度，不设时自适应
+      barMaxWidth: 20, // 柱条的最大宽度，不设时自适应
       // 图形上的文本标签
       label: {
         show: true,
@@ -630,7 +632,7 @@ const chart_one_Option = ref({
       name: '日常', // 系列名称, 用于tooltip的显示, legend 的图例筛选
       // 数据堆叠，同个类目轴上系列配置相同的stack值后，后一个系列的值会在前一个系列的值上相加
       stack: '总量',
-      barMaxWidth: 55, // 柱条的最大宽度，不设时自适应
+      barMaxWidth: 20, // 柱条的最大宽度，不设时自适应
       // 图形上的文本标签
       label: {
         show: true,
@@ -648,11 +650,11 @@ const chart_one_Option = ref({
         }
       },
 
-      itemStyle: {
-        normal: {
-          barBorderRadius: [12, 12, 0, 0], // （顺时针左上，右上，右下，左下）
-        }
-      },
+      // itemStyle: {
+      //   normal: {
+      //     barBorderRadius: [12, 12, 0, 0], // （顺时针左上，右上，右下，左下）
+      //   }
+      // },
       data: [] // 系列中的数据内容数组
     },
     {
@@ -768,6 +770,7 @@ const chart_two_Option = ref({
     },
     axisLine: { // 是否显示坐标轴轴线 默认显示
       show: true, // 是否显示坐标轴轴线 默认显示
+      symbol: ['none', 'arrow'],
       lineStyle: { // 坐标轴线线的颜色
         color: '#6e7079'
       }
@@ -797,7 +800,7 @@ const chart_two_Option = ref({
     name: '店铺销量',
     type: 'bar',
     stack: '总量',
-    barMaxWidth: 55, // 柱条的最大宽度，不设时自适应
+    barMaxWidth: 20, // 柱条的最大宽度，不设时自适应
     label: {
       show: true,
       // 标签的位置 left right bottom top inside  // 绝对的像素值 position: [10, 10]
@@ -821,7 +824,7 @@ const chart_two_Option = ref({
       name: '总数',    // 总数显示，生成一个总数的柱状图，将颜色设为透明，
       type: 'bar',     // label将位置设备内部底部，造成一个总数显示在
       stack: '总量',    // 柱状图上方的假象
-      barMaxWidth: 55, // 柱条的最大宽度，不设时自适应
+      barMaxWidth: 20, // 柱条的最大宽度，不设时自适应
       label: {
         show: true,
         // 标签的位置 left right bottom top inside  // 绝对的像素值 position: [10, 10]
@@ -931,6 +934,7 @@ const chart_three_Option = ref({
       show: false // 是否显示坐标轴刻度 默认显示
     },
     axisLine: { // 是否显示坐标轴轴线 默认显示
+      symbol: ['none', 'arrow'],
       show: true, // 是否显示坐标轴轴线 默认显示
       lineStyle: { // 坐标轴线线的颜色
         color: '#6e7079'
@@ -954,7 +958,7 @@ const chart_three_Option = ref({
     name: '品牌销量',
     type: 'bar',
     stack: '总量',
-    barMaxWidth: 55, // 柱条的最大宽度，不设时自适应
+    barMaxWidth: 20, // 柱条的最大宽度，不设时自适应
     label: {
       show: true,
       // 标签的位置 left right bottom top inside  // 绝对的像素值 position: [10, 10]
@@ -978,7 +982,7 @@ const chart_three_Option = ref({
       name: '总数',    // 总数显示，生成一个总数的柱状图，将颜色设为透明，
       type: 'bar',     // label将位置设备内部底部，造成一个总数显示在
       stack: '总量',    // 柱状图上方的假象
-      barMaxWidth: 55, // 柱条的最大宽度，不设时自适应
+      barMaxWidth: 20, // 柱条的最大宽度，不设时自适应
       label: {
         show: true,
         // 标签的位置 left right bottom top inside  // 绝对的像素值 position: [10, 10]
@@ -1089,6 +1093,7 @@ const chart_four_Option = ref({
       show: false // 是否显示坐标轴刻度 默认显示
     },
     axisLine: { // 是否显示坐标轴轴线 默认显示
+      symbol: ['none', 'arrow'],
       show: true, // 是否显示坐标轴轴线 默认显示
       lineStyle: { // 坐标轴线线的颜色
         color: '#6e7079'
@@ -1118,7 +1123,7 @@ const chart_four_Option = ref({
     name: '单品销量',
     type: 'bar',
     stack: '总量',
-    barMaxWidth: 55, // 柱条的最大宽度，不设时自适应
+    barMaxWidth: 20, // 柱条的最大宽度，不设时自适应
     label: {
       show: true,
       // 标签的位置 left right bottom top inside  // 绝对的像素值 position: [10, 10]
@@ -1142,7 +1147,7 @@ const chart_four_Option = ref({
       name: '总数',    // 总数显示，生成一个总数的柱状图，将颜色设为透明，
       type: 'bar',     // label将位置设备内部底部，造成一个总数显示在
       stack: '总量',    // 柱状图上方的假象
-      barMaxWidth: 55, // 柱条的最大宽度，不设时自适应
+      barMaxWidth: 20, // 柱条的最大宽度，不设时自适应
       label: {
         show: true,
         // 标签的位置 left right bottom top inside  // 绝对的像素值 position: [10, 10]
@@ -1368,8 +1373,64 @@ const formatSalesActiveInfo = (data) => {
   })
   //给图表数据重新赋值，重新渲染图标
   chart_one_Option.value.xAxis[0].data = horizontalData
-  chart_one_Option.value.series[0].data = activityData
-  dailyData = dailyData.map(item => {
+  chart_one_Option.value.series[0].data = activityData.map((item, index) => {
+    if (dailyData[index] > 0) {
+      if (item < 0) {
+        return {
+          value: item,
+          itemStyle: {
+            normal: {
+              barBorderRadius: [12, 12, 0, 0], // （顺时针左上，右上，右下，左下）
+            }
+          }
+        }
+      } else {
+        return {
+          value: item,
+        }
+      }
+    } else if (dailyData[index] < 0) {
+      if (item > 0) {
+        return {
+          value: item,
+          itemStyle: {
+            normal: {
+              barBorderRadius: [12, 12, 0, 0], // （顺时针左上，右上，右下，左下）
+            }
+          }
+        }
+      } else {
+        return {
+          value: item,
+        }
+      }
+    } else if (dailyData[index] == 0) {
+      if (item > 0) {
+        return {
+          value: item,
+          itemStyle: {
+            normal: {
+              barBorderRadius: [12, 12, 0, 0], // （顺时针左上，右上，右下，左下）
+            }
+          }
+        }
+      } else if (item < 0) {
+        return {
+          value: item,
+          itemStyle: {
+            normal: {
+              barBorderRadius: [12, 12, 0, 0], // （顺时针左上，右上，右下，左下）
+            }
+          }
+        }
+      } else if (item == 0) {
+        return {
+          value: item,
+        }
+      }
+    }
+  })
+  chart_one_Option.value.series[1].data = dailyData.map(item => {
     if (item > 0) {
       return {
         value: item,
@@ -1394,8 +1455,7 @@ const formatSalesActiveInfo = (data) => {
       }
     }
   })
-  chart_one_Option.value.series[1].data = dailyData
-  totalData = totalData.map(item => {
+  totalData = totalData.map((item, index) => {
     if (item > 0) {
       return {
         value: item,
@@ -1853,6 +1913,11 @@ const innit = function () {
 innit()
 </script>
 <style scoped lang="scss">
+.chartTabs::v-deep(.el-tabs__nav-scroll) {
+  display: flex;
+  justify-content: center;
+}
+
 .saleActiveProportion {
   position: relative;
 }

@@ -78,3 +78,14 @@ export function recentlyFileInfo() {
         method: 'get',
     })
 }
+
+//根据用户id获取人名
+export function getUserNameByUserId(id) {
+    return request({
+        url: `/wecom/corpinfo/user/getUserInfoById`,
+        method: 'get',
+        params:{
+            userId:id
+        }
+    })
+}
