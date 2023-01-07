@@ -81,7 +81,7 @@
       </el-form-item>
 
     </el-form>
-    <el-dialog :show-close="false" title="活动范围" v-model="showRuleScupes" width="50%">
+    <el-dialog :show-close="false" title="活动范围" v-model="showRuleScupes" width="700px">
       <el-form :model="queryRuleScupesParams">
         <el-form-item label="品类" prop="productTypes">
           <el-select :disabled="handleType=='query'" @change="changeGoodsRange"
@@ -132,7 +132,7 @@
       </template>
     </el-dialog>
 
-    <el-dialog :show-close="false" title="活动参与方" v-model="showRarticipants" width="50%"
+    <el-dialog :show-close="false" title="活动参与方" v-model="showRarticipants" width="700px"
                :close-on-click-modal="false">
 
       <BusinessTree ref="businessTreeParticipantsRef" :handelType="props.handleType"
