@@ -263,6 +263,9 @@ getFormData()
     .el-form-item {
       max-width: 680px;
       margin: 0 auto 18px;
+      :deep(.el-form-item__label) {
+        margin-right: 20px;
+      }
     }
 
     .form-tips {

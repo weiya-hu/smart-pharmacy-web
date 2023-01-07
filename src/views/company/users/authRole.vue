@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
     <h4 class="form-header h4">基本信息</h4>
     <el-form :model="form" label-width="80px">
       <el-row>
@@ -45,6 +46,7 @@
 </template>
 
 <script setup name="AuthRole">
+import Breadcrumb from '@/components/Breadcrumb'
 import {getAuthRole, updateAuthRole} from "@/api/system/user";
 import {listRole} from "@/api/system/role";
 import {nextTick} from "vue";

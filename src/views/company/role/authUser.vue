@@ -1,6 +1,6 @@
-
 <template>
    <div class="app-container">
+     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
       <el-form :model="queryParams" ref="queryRef" v-show="showSearch" :inline="true" @submit.native.prevent>
          <el-form-item label="用户名称" prop="userName">
             <el-input
@@ -85,6 +85,7 @@
 </template>
 
 <script setup name="AuthUser">
+import Breadcrumb from '@/components/Breadcrumb'
 import SelectUser from "./selectUser";
 import { allocatedUserList, authUserCancel, authUserCancelAll } from "@/api/system/role";
 

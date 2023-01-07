@@ -131,7 +131,7 @@
     />
 
     <!-- 添加或修改职务对话框 -->
-    <el-dialog :title="title" v-model="open" width="50%" append-to-body :close-on-click-modal="false" draggable>
+    <el-dialog :title="title" v-model="open" width="700px" append-to-body :close-on-click-modal="false" draggable>
       <el-form ref="postRef" :model="form" :rules="rules" label-width="100px">
         <el-row>
           <el-col :span="24">
