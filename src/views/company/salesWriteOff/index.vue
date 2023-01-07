@@ -21,13 +21,7 @@
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-        <el-button
-            type="primary"
-            plain
-            icon="Upload"
-            @click="customizeImport"
-        >自定义导入
-        </el-button>
+        <el-button icon="Upload" @click="customizeImport">自定义导入</el-button>
       </el-form-item>
     </el-form>
     <div class="btn-back">
@@ -70,7 +64,7 @@
       </el-row>
     </div>
     <el-dialog
-        title="导入销售清单" v-model="uploadData.open" width="50%" append-to-body :close-on-click-modal="false"
+        title="导入销售清单" v-model="uploadData.open" width="700px" append-to-body :close-on-click-modal="false"
         draggable>
       <el-upload
           v-loading="uploadData.isLoading"
@@ -119,7 +113,7 @@
     </el-dialog>
     <el-dialog
         @close="colseTipsDialog"
-        v-model="notImportGoodsTips" width="50%" append-to-body :close-on-click-modal="false" center
+        v-model="notImportGoodsTips" width="700px" append-to-body :close-on-click-modal="false" center
         draggable>
       <div class="tips">
         <p>

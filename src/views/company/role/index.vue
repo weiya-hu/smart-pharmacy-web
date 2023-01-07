@@ -114,7 +114,7 @@
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="280">
+         <el-table-column label="操作" class-name="small-padding fixed-width" width="280">
             <template #default="scope">
               <div class="btn-col">
                 <el-button
@@ -264,7 +264,7 @@
       </el-dialog>
 
       <!-- 分配角色数据权限对话框 -->
-      <el-dialog :title="title" v-model="openDataScope" width="650px" append-to-body :close-on-click-modal="false" draggable>
+      <el-dialog :title="title" v-model="openDataScope" width="700px" append-to-body :close-on-click-modal="false" draggable>
          <el-form :model="form" label-width="80px" class="dialog-form2">
             <el-form-item label="角色名称">
               <el-input v-model="form.name" :disabled="true" />

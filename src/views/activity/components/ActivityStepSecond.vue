@@ -396,7 +396,7 @@
       </el-tab-pane>
     </el-tabs>
     <!-- 商品列表弹窗-->
-    <el-dialog title="商品列表" v-model="showProductsDialog" width="70%" top="6vh" append-to-body
+    <el-dialog title="商品列表" v-model="showProductsDialog" width="1000px" top="6vh" append-to-body
                :close-on-click-modal="false"
                draggable destroy-on-close
                @close="selectProductsClose"
@@ -414,7 +414,7 @@
       </template>
     </el-dialog>
     <!-- 门店列表弹窗-->
-    <el-dialog title="门店列表" v-model="showStoreDialog" width="70%" top="8vh" append-to-body
+    <el-dialog title="门店列表" v-model="showStoreDialog" width="1000px" top="8vh" append-to-body
                :close-on-click-modal="false"
                draggable destroy-on-close
                @close="selectProductsClose">

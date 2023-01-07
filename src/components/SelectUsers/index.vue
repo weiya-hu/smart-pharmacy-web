@@ -2,8 +2,8 @@
   <div class="">
     <el-row :gutter="20">
       <!--部门数据-->
-      <el-col :span="4" :xs="24">
-        <div class="head-container">
+      <el-col :span="6">
+        <div class="left-container">
           <el-input
               v-model="deptName"
               placeholder="请输入部门名称"
@@ -32,7 +32,7 @@
         </div>
       </el-col>
       <!--用户数据-->
-      <el-col :span="20" :xs="24">
+      <el-col :span="18">
         <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
           <el-form-item label="用户名称" prop="userName">
             <el-input
@@ -276,6 +276,17 @@ selectedNodeId()
 .table-box {
   :deep(.el-table__body tr.current-row>td.el-table__cell) {
     background-color: #ffe3df;
+  }
+}
+.left-container {
+  .el-tree {
+    background: #f9f9f9;
+  }
+  :deep(.el-tree--highlight-current) .el-tree-node.is-current>.el-tree-node__content {
+    background-color: rgba(35, 56, 94, 0.1);
+  }
+  :deep(.el-tree-node__content):hover {
+    background-color: rgba(35, 56, 94, 0.03);
   }
 }
 </style>

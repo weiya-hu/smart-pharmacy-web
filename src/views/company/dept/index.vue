@@ -59,7 +59,7 @@
          height="680px"
       >
          <el-table-column prop="name" label="机构名称" min-width="200px" show-tooltip-when-overflow></el-table-column>
-         <el-table-column prop="fullname"  min-width="200px" label="机构全称" show-tooltip-when-overflow></el-table-column>
+         <el-table-column prop="fullname" min-width="200px" label="机构全称" show-tooltip-when-overflow></el-table-column>
          <el-table-column prop="sort" label="排序" ></el-table-column>
          <el-table-column prop="state" label="状态" >
             <template #default="scope">
@@ -68,12 +68,12 @@
               <span v-if="scope.row.state == 0" class="state-item2">停用</span>
             </template>
          </el-table-column>
-         <el-table-column label="创建时间" align="center" prop="createTime" show-tooltip-when-overflow>
+         <el-table-column label="创建时间" prop="createTime" show-tooltip-when-overflow>
             <template #default="scope">
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="200">
+         <el-table-column label="操作" class-name="small-padding fixed-width" width="150">
             <template #default="scope">
 <!--              <el-button-->
 <!--                  type="text"-->
@@ -113,7 +113,7 @@
 <!--     />-->
 
       <!-- 添加或修改部门对话框 -->
-      <el-dialog :title="title" v-model="open" width="750px" append-to-body :close-on-click-modal="false" draggable>
+      <el-dialog :title="title" v-model="open" width="700px" append-to-body :close-on-click-modal="false" draggable>
          <el-form ref="deptRef" :model="form" :rules="rules" label-width="100px">
             <el-row>
                <el-col :span="24">

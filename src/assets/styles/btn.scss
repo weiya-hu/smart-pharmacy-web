@@ -103,6 +103,12 @@
     background: 0;
     border: 1px solid #dcdfe6;
   }
+  .el-button:hover {
+    color: var(--el-color-primary);
+    border-color: var(--el-color-primary-light-7);
+    background-color: var(--el-color-primary-light-9);
+    outline: 0;
+  }
 }
 .btn-col {
   .el-button {
