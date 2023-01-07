@@ -1,109 +1,112 @@
 <template>
   <div class="app-container">
-    <div v-if="stateName == '进行中' || stateName == '已结束' || stateName == '停用中'">
-      <el-steps :active="3" align-center simple finish-status="process">
-        <el-step title="基本信息">
-          <template #icon>
-            <img src="../../assets/images/step-success.png"/>
-          </template>
-        </el-step>
-        <el-step title="规则配置">
-          <template #icon>
-            <img src="../../assets/images/step-success.png"/>
-          </template>
-        </el-step>
-        <el-step title="提交审核">
-          <template #icon>
-            <img src="../../assets/images/step-success.png"/>
-          </template>
-        </el-step>
-        <el-step title="完成发布">
-          <template #icon>
-            <img src="../../assets/images/step-success.png"/>
-          </template>
-        </el-step>
-      </el-steps>
-    </div>
+    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
+    <div class="steps">
+      <div v-if="stateName == '进行中' || stateName == '已结束' || stateName == '停用中'">
+        <el-steps :active="3" align-center simple finish-status="process">
+          <el-step title="基本信息">
+            <template #icon>
+              <img src="../../assets/images/step-success.png"/>
+            </template>
+          </el-step>
+          <el-step title="规则配置">
+            <template #icon>
+              <img src="../../assets/images/step-success.png"/>
+            </template>
+          </el-step>
+          <el-step title="提交审核">
+            <template #icon>
+              <img src="../../assets/images/step-success.png"/>
+            </template>
+          </el-step>
+          <el-step title="完成发布">
+            <template #icon>
+              <img src="../../assets/images/step-success.png"/>
+            </template>
+          </el-step>
+        </el-steps>
+      </div>
 
-    <div v-else-if="stateName == '审批中' || stateName == '待开始' || stateName == '审批未通过'">
-      <el-steps :active="2" align-center simple finish-status="process">
-        <el-step title="基本信息">
-          <template #icon>
-            <img src="../../assets/images/step-success.png"/>
-          </template>
-        </el-step>
-        <el-step title="规则配置">
-          <template #icon>
-            <img src="../../assets/images/step-success.png"/>
-          </template>
-        </el-step>
-        <el-step title="提交审核">
-          <template #icon>
-            <img src="../../assets/images/step-success.png"/>
-          </template>
-        </el-step>
-        <el-step title="完成发布">
-          <template #icon>
-            <img src="../../assets/images/step-show-4.png">
-          </template>
-        </el-step>
-      </el-steps>
-    </div>
+      <div v-else-if="stateName == '审批中' || stateName == '待开始' || stateName == '审批未通过'">
+        <el-steps :active="2" align-center simple finish-status="process">
+          <el-step title="基本信息">
+            <template #icon>
+              <img src="../../assets/images/step-success.png"/>
+            </template>
+          </el-step>
+          <el-step title="规则配置">
+            <template #icon>
+              <img src="../../assets/images/step-success.png"/>
+            </template>
+          </el-step>
+          <el-step title="提交审核">
+            <template #icon>
+              <img src="../../assets/images/step-success.png"/>
+            </template>
+          </el-step>
+          <el-step title="完成发布">
+            <template #icon>
+              <img src="../../assets/images/step-show-4.png">
+            </template>
+          </el-step>
+        </el-steps>
+      </div>
 
-    <div v-else-if="stateName == '暂存'">
-      <el-steps :active="1" align-center simple finish-status="process">
-        <el-step title="基本信息">
-          <template #icon>
-            <img src="../../assets/images/step-success.png"/>
-          </template>
-        </el-step>
-        <el-step title="规则配置">
-          <template #icon>
-            <img src="../../assets/images/step-success.png"/>
-          </template>
-        </el-step>
-        <el-step title="提交审核">
-          <template #icon>
-            <img src="../../assets/images/step-show-3.png"/>
-          </template>
-        </el-step>
-        <el-step title="完成发布">
-          <template #icon>
-            <img src="../../assets/images/step-show-4.png">
-          </template>
-        </el-step>
-      </el-steps>
-    </div>
+      <div v-else-if="stateName == '暂存'">
+        <el-steps :active="1" align-center simple finish-status="process">
+          <el-step title="基本信息">
+            <template #icon>
+              <img src="../../assets/images/step-success.png"/>
+            </template>
+          </el-step>
+          <el-step title="规则配置">
+            <template #icon>
+              <img src="../../assets/images/step-success.png"/>
+            </template>
+          </el-step>
+          <el-step title="提交审核">
+            <template #icon>
+              <img src="../../assets/images/step-show-3.png"/>
+            </template>
+          </el-step>
+          <el-step title="完成发布">
+            <template #icon>
+              <img src="../../assets/images/step-show-4.png">
+            </template>
+          </el-step>
+        </el-steps>
+      </div>
 
-    <div v-else>
-      <el-steps :active="step" align-center simple process-status="finish" finish-status="process">
-        <el-step title="基本信息">
-          <template #icon>
-            <img src="../../assets/images/step-hide-1.png" v-show="step == 0"/>
-            <img src="../../assets/images/step-success.png" v-show="step !== 0"/>
-          </template>
-        </el-step>
-        <el-step title="规则配置">
-          <template #icon>
-            <img src="../../assets/images/step-hide-2.png" v-show="step == 1"/>
-            <img src="../../assets/images/step-show-2.png" v-show="step !== 1 && step < 1"/>
-            <img src="../../assets/images/step-success.png" v-show="step > 1"/>
-          </template>
-        </el-step>
-        <el-step title="提交审核">
-          <template #icon>
-            <img src="../../assets/images/step-hide-3.png" v-show="step == 2"/>
-            <img src="../../assets/images/step-show-3.png" v-show="step !== 2 && step < 2"/>
-            <img src="../../assets/images/step-success.png" v-show="step > 2"/>
-          </template>
-        </el-step>
-        <el-step title="完成发布">
-          <template #icon>
-            <img src="../../assets/images/step-hide-4.png" v-show="step == 3"/>
-            <img src="../../assets/images/step-show-4.png" v-show="step !== 3">
-          </template>
-        </el-step>
-      </el-steps>
+      <div v-else>
+        <el-steps :active="step" align-center simple process-status="finish" finish-status="process">
+          <el-step title="基本信息">
+            <template #icon>
+              <img src="../../assets/images/step-hide-1.png" v-show="step == 0"/>
+              <img src="../../assets/images/step-success.png" v-show="step !== 0"/>
+            </template>
+          </el-step>
+          <el-step title="规则配置">
+            <template #icon>
+              <img src="../../assets/images/step-hide-2.png" v-show="step == 1"/>
+              <img src="../../assets/images/step-show-2.png" v-show="step !== 1 && step < 1"/>
+              <img src="../../assets/images/step-success.png" v-show="step > 1"/>
+            </template>
+          </el-step>
+          <el-step title="提交审核">
+            <template #icon>
+              <img src="../../assets/images/step-hide-3.png" v-show="step == 2"/>
+              <img src="../../assets/images/step-show-3.png" v-show="step !== 2 && step < 2"/>
+              <img src="../../assets/images/step-success.png" v-show="step > 2"/>
+            </template>
+          </el-step>
+          <el-step title="完成发布">
+            <template #icon>
+              <img src="../../assets/images/step-hide-4.png" v-show="step == 3"/>
+              <img src="../../assets/images/step-show-4.png" v-show="step !== 3">
+            </template>
+          </el-step>
+        </el-steps>
+      </div>
     </div>
 
     <ActivityStepFirst ref="activityStepFirstRef" :handleType="handleType" :eventId="eventId" :canEdit='canEdit'
@@ -141,6 +144,7 @@ export default {
 };
 </script>
 <script setup>
+import Breadcrumb from '@/components/Breadcrumb'
 import ActivityStepFirst from './components/ActivityStepFirst'
 import ActivityStepSecond from './components/ActivityStepSecond'
 import {queryEventRule, publish, getEventInfoByid} from '@/api/activity/eventInfo'
@@ -299,7 +303,6 @@ getTaskInfo()
 
   .auditLoadiang {
     flex: 1;
-
   }
 
   .finish {
@@ -313,6 +316,15 @@ getTaskInfo()
       margin-top: 20px;
       display: flex;
       flex-direction: column;
+    }
+  }
+
+  .steps {
+    :deep(.el-step).is-simple .el-step__arrow::after, :deep(.el-step).is-simple .el-step__arrow::before{
+      display: none;
+    }
+    :deep(.el-step).is-simple .el-step__arrow {
+      background: url("../../assets/images/step-right.png") no-repeat 50%;
     }
   }
 }
