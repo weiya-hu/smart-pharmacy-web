@@ -10,14 +10,21 @@
         <a href="#">续费</a>
       </div>
       <el-divider direction="vertical" />
-      <div class="avatar-con">
-        <img :src="data.headImageUrl" alt="" v-if="isWecomAccount !== 1"/>
-        <span class="user-name">{{ data.userName }}</span>
-      </div>
-      <el-divider direction="vertical" />
-      <el-button text @click="logout">
-        <el-icon :size="16"><SwitchButton /></el-icon>
-      </el-button>
+      <el-dropdown style="cursor: pointer;">
+        <div class="avatar-con">
+          <img :src="data.headImageUrl || header_img" alt="" class="head-portrait"/>
+          <span class="user-name">{{ data.userName }}</span>
+          <img src="@/assets/images/user_header_bon.png" alt="下拉" class="header-drop-down" />
+        </div>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item>
+              <img src="../../assets/images/user_header_out.png" alt=""/>
+              <span @click="logout" style="padding-left: 5px;">退出登录</span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </div>
   </div>
 </template>
@@ -28,11 +35,11 @@ import Hamburger from '@/components/Hamburger'
 import useAppStore from '@/store/modules/app'
 import useUserStore from '@/store/modules/user'
 import {getCurrUserBaseInfo} from '../../api/company/info'
+import header_img from '@/assets/images/user_header.png'
 
 const appStore = useAppStore()
 const userStore = useUserStore()
 
-const isWecomAccount = ref()
 const data = ref({
   corpName: '',
   packageName: '',
@@ -63,7 +70,6 @@ function getInfo() {
     getCurrUserBaseInfo().then(res => {
       if (res.code === 200) {
         data.value = res.data
-        isWecomAccount.value = res.data.isWecomAccount
         userStore.setCorpInfo(data.value)
       }
     })
@@ -130,21 +136,26 @@ getInfo()
     .avatar-con {
       display: flex;
       align-items: center;
-      img {
+      padding-right: 20px;
+      .head-portrait {
         width: 24px;
         height: 24px;
         margin-right: 7px;
       }
       .user-name {
+        min-width: 42px;
+        text-align: center;
         font-size: 14px;
         font-family: Source Han Sans CN;
         font-weight: 400;
         color: #999999;
         white-space: nowrap;
       }
-    }
-    .el-button {
-      transform: translateX(-7px);
+      .header-drop-down {
+        margin-left: 10px;
+        width: 8px;
+        height: 7px;
+      }
     }
   }
 }
