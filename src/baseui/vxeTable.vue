@@ -2,7 +2,7 @@
 <template>
   <div class="ltable">
     <vxe-table
-        border="outer"
+        border="none"
         :data="listData"
         style="width: 100%;height: 100%"
         v-bind="childrenProps"
