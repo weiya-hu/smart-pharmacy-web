@@ -100,7 +100,6 @@ export default defineComponent({
 /*滚动条整体部分*/
 .mytable-scrollbar ::-webkit-scrollbar {
   width: 5px;
-  height: 10px;
 }
 
 /*滚动条的轨道*/
@@ -140,6 +139,7 @@ export default defineComponent({
 .header {
   display: flex;
   height: 45px;
+  width: 100%;
   padding: 0 5px;
   justify-content: space-between;
   align-items: center;

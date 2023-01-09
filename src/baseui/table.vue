@@ -1,5 +1,5 @@
 <template>
-  <div class="ll-table">
+  <div >
     <el-table
         :data="listData"
         :border="isShowBorder"

@@ -513,7 +513,7 @@ const chart_one_Option = ref({
       // 'cross' 十字准星指示器 其实是种简写，表示启用两个正交的轴的 axisPointer
       type: 'shadow',
       shadowStyle: {
-        color: 'rgba(153, 153, 153, 0.2)',
+        color: 'rgba(254, 198, 185, 0.2)',
         width: '1'
       }
     },
@@ -716,7 +716,7 @@ const chart_two_Option = ref({
       // 'cross' 十字准星指示器 其实是种简写，表示启用两个正交的轴的 axisPointer
       type: 'shadow',
       shadowStyle: {
-        color: 'rgba(153, 153, 153, 0.2)',
+        color: 'rgba(254, 198, 185, 0.2)',
         width: '1'
       }
     },
@@ -881,7 +881,7 @@ const chart_three_Option = ref({
       // 'cross' 十字准星指示器 其实是种简写，表示启用两个正交的轴的 axisPointer
       type: 'shadow',
       shadowStyle: {
-        color: 'rgba(153, 153, 153, 0.2)',
+        color: 'rgba(254, 198, 185, 0.2)',
         width: '1'
       }
     },
@@ -1023,7 +1023,7 @@ const chart_four_Option = ref({
       // 'cross' 十字准星指示器 其实是种简写，表示启用两个正交的轴的 axisPointer
       type: 'shadow',
       shadowStyle: {
-        color: 'rgba(153, 153, 153, 0.2)',
+        color: 'rgba(254, 198, 185, 0.2)',
         width: '1'
       }
     },

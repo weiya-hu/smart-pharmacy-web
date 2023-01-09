@@ -93,14 +93,15 @@
         <scaleChart ref="chart_two_ref" v-show="chart_two_isNull == false" :dataOption="chart_two_data"></scaleChart>
         <el-empty description="暂无数据" v-show="chart_two_isNull == true"/>
       </div>
+      <div class="line"></div>
       <div class="chart chart_one" v-loading="chart_one_loading" element-loading-text="加载中...">
         <scaleChart ref="chart_one_ref" v-show="chart_one_isNull == false" :dataOption="chart_one_data"></scaleChart>
         <el-empty description="暂无数据" v-show="chart_one_isNull == true"/>
       </div>
 
-<!--            <div class="chart chart_three">-->
-<!--              <scaleChart ref="chart_three_ref" :dataOption="chart_three_data"></scaleChart>-->
-<!--            </div>-->
+      <!--            <div class="chart chart_three">-->
+      <!--              <scaleChart ref="chart_three_ref" :dataOption="chart_three_data"></scaleChart>-->
+      <!--            </div>-->
     </div>
     <!--    区域销售列表展示-->
     <!--    <div class="areaMarket">-->
@@ -909,16 +910,17 @@ innitSelectOption()
       flex-direction: column;
 
       .data {
-        color: #474747;
-        font-weight: 800;
-        font-size: 20px;
+        font-weight: 400;
+        font-size: 30px;
+        color: #333333;
+        line-height: 25px;
       }
 
       .title {
-        margin-top: 5px;
-        color: #999999;
-        font-weight: 600;
         font-size: 16px;
+        font-weight: 500;
+        color: #999999;
+        line-height: 25px;
       }
     }
   }
@@ -928,14 +930,20 @@ innitSelectOption()
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    margin: 20px 10px;
+    margin: 20px 0px;
     border: 1px solid #D6D6D6;
     background-color: #fafafa;
     border-radius: 10px;
     overflow: hidden;
 
     .chart_two {
-      border-right: 2px solid #D6D6D6;
+      //border-right: 2px solid #D6D6D6;
+    }
+
+    .line {
+      width: 1px;
+      height: 700px;
+      background-color: #D6D6D6;
     }
 
     .chart {
@@ -988,6 +996,7 @@ innitSelectOption()
         padding: 15px;
         box-sizing: border-box;
         color: #999999;
+
         .active {
           color: #000033;
           font-weight: bold;
