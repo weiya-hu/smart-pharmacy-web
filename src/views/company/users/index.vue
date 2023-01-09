@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row :gutter="20">
       <!--部门数据-->
-      <el-col :span="4" :xs="24" style="background: #f9f9f9;">
+      <el-col :span="4" :xs="24" style="background: #f9f9f9;border-right: 1px solid #D9D9D9;">
           <div class="left-container">
             <el-input
                 v-model="deptName"

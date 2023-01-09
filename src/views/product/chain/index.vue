@@ -87,7 +87,7 @@
     />
 
     <!-- 添加或修改连锁门店销售的所有产品的数据对话框 -->
-    <el-dialog :title="title" v-model="open" width="500px" append-to-body :close-on-click-modal="false" draggable>
+    <el-dialog :title="title" v-model="open" width="700px" append-to-body :close-on-click-modal="false" draggable>
       <!--      <el-form ref="productRef" :model="form_Chain" :rules="rules" label-width="100px">-->
       <!--        <el-form-item class="label" label="商家产品ID" prop="productChainId">-->
       <!--          <el-input v-model="form_Chain.productChainId" placeholder="请输入商家产品ID"/>-->
@@ -146,7 +146,7 @@
       </template>
     </el-dialog>
     <!-- 产品导入和模板下载   -->
-    <el-dialog title="产品导入" v-model="upload.open" width="50%" append-to-body :close-on-click-modal="false"
+    <el-dialog title="产品导入" v-model="upload.open" width="700px" append-to-body :close-on-click-modal="false"
                draggable>
       <el-upload
           ref="uploadRef"

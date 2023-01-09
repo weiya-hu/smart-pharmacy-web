@@ -31,6 +31,7 @@
          <el-col :span="1.5">
            <el-button
                plain
+               type="info"
                icon="CircleClose"
                :disabled="multiple"
                @click="cancelAuthUserAll"
@@ -39,7 +40,6 @@
          </el-col>
          <el-col :span="1.5">
            <el-button
-               type="warning"
                plain
                icon="Close"
                @click="handleClose"
