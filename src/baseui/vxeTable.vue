@@ -2,8 +2,8 @@
 <template>
   <div class="ltable">
     <vxe-table
+        border="outer"
         :data="listData"
-        border="none"
         style="width: 100%;height: 100%"
         v-bind="childrenProps"
         :height="tableHeight"
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue'
+import {defineComponent, onMounted} from 'vue'
 
 export default defineComponent({
   props: {
@@ -83,23 +83,26 @@ export default defineComponent({
     },
   },
   emits: ['selectionChange', 'update:page'],
+
   setup(props, {emit}) {
     const handleSelectionChange = (value) => {
       emit('selectionChange', value)
     }
-
-
     return {handleSelectionChange}
   }
 })
 </script>
 <style scoped lang="scss">
-::v-deep(.sort--active){
+::v-deep(.sort--active) {
   color: #FF5A40 !important;
+}
+.vxe-body--row{
+  border-bottom: 1px solid red !important;
 }
 /*滚动条整体部分*/
 .mytable-scrollbar ::-webkit-scrollbar {
   width: 5px;
+  //height: 7px !important;
 }
 
 /*滚动条的轨道*/
@@ -135,6 +138,23 @@ export default defineComponent({
 //.ltable::v-deep(.vxe-header--gutter) {
 //  background-color: #fff !important;
 //}
+::v-deep(.vxe-header--row) {
+
+}
+
+::v-deep(.vxe-header--column) {
+}
+
+::v-deep(.vxe-header--gutter) {
+  display: none;
+}
+
+::v-deep(.vxe-table) {
+  colgroup col[name='col_gutter'] {
+    display: none;
+    width: 0;
+  }
+}
 
 .header {
   display: flex;
