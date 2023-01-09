@@ -141,6 +141,7 @@ getInfo()
         width: 24px;
         height: 24px;
         margin-right: 7px;
+        border-radius: 50%;
       }
       .user-name {
         min-width: 42px;
