@@ -1,6 +1,6 @@
 export const allAreaTableConfig = {
     propList: [
-        {field: 'group', title: '名称', minWidth: '20',},
+        {field: 'group', title: '名称', minWidth: '80',},
         {field: 'maxMoney', title: '峰值(元)', minWidth: '20',},
         {field: 'avgMoney', title: '均值(元)', minWidth: '20',},
         {field: 'maxTime', title: '峰值日期', minWidth: '20',},

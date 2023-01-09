@@ -93,7 +93,9 @@
         <scaleChart ref="chart_two_ref" v-show="chart_two_isNull == false" :dataOption="chart_two_data"></scaleChart>
         <el-empty description="暂无数据" v-show="chart_two_isNull == true"/>
       </div>
-      <div class="line"></div>
+      <div>
+        <div class="line"></div>
+      </div>
       <div class="chart chart_one" v-loading="chart_one_loading" element-loading-text="加载中...">
         <scaleChart ref="chart_one_ref" v-show="chart_one_isNull == false" :dataOption="chart_one_data"></scaleChart>
         <el-empty description="暂无数据" v-show="chart_one_isNull == true"/>
@@ -149,7 +151,7 @@
     <!--    </div>-->
     <!--    品牌销量和单品销量-->
     <div class="salesBrandAndSingle">
-      <el-row :gutter="20">
+      <el-row :gutter="24">
         <el-col :sm="24" :md="12" :xs="24">
           <div class="salesBrand sales">
             <div class="sales-header">
@@ -191,7 +193,6 @@
             </pagevxeContent>
           </div>
         </el-col>
-
         <el-col :sm="24" :md="12" :xs="24">
           <div class="salesSingle sales">
             <div class="sales-header">
@@ -233,7 +234,6 @@
             </pagevxeContent>
           </div>
         </el-col>
-
       </el-row>
     </div>
     <!--      奖励列表-->
@@ -1023,8 +1023,8 @@ innitSelectOption()
         border-radius: 10px;
         overflow: hidden;
 
-        :deep(.el-tabs__content) {
-          //background: #FAFAFA;
+        ::v-deep(.el-tabs__content) {
+          background: #FAFAFA;
           padding: 0;
         }
       }

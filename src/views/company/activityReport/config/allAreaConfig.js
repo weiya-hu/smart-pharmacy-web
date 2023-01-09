@@ -64,18 +64,18 @@ export const storeBrandTableConfig = {
             title: '销售占比',
             minWidth: '40',
         },
-        {
-            field: 'yearOnYear',
-            title: '同比',
-            minWidth: '40',
-            slotName: 'yearOnYearSlot'
-        },
-        {
-            field: 'monthOnMonth',
-            title: '环比',
-            minWidth: '40',
-            slotName: 'monthOnMonthSlot'
-        },
+        // {
+        //     field: 'yearOnYear',
+        //     title: '同比',
+        //     minWidth: '40',
+        //     slotName: 'yearOnYearSlot'
+        // },
+        // {
+        //     field: 'monthOnMonth',
+        //     title: '环比',
+        //     minWidth: '40',
+        //     slotName: 'monthOnMonthSlot'
+        // },
     ],
     tableHeight: 550,
     isSort: {
@@ -94,18 +94,18 @@ export const storeProductTableConfig = {
             title: '销售占比',
             minWidth: '40',
         },
-        {
-            field: 'yearOnYear',
-            title: '同比',
-            minWidth: '40',
-            slotName: 'yearOnYearSlot'
-        },
-        {
-            field: 'monthOnMonth',
-            title: '环比',
-            minWidth: '40',
-            slotName: 'monthOnMonthSlot'
-        },
+        // {
+        //     field: 'yearOnYear',
+        //     title: '同比',
+        //     minWidth: '40',
+        //     slotName: 'yearOnYearSlot'
+        // },
+        // {
+        //     field: 'monthOnMonth',
+        //     title: '环比',
+        //     minWidth: '40',
+        //     slotName: 'monthOnMonthSlot'
+        // },
     ],
     tableHeight: 550,
     isSort: {trigger: 'cell', defaultSort: {field: 'salesAmount', order: 'desc'}, orders: ['desc', 'asc', null]}
