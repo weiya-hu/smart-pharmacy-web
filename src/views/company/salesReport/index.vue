@@ -2035,7 +2035,7 @@ innit()
     //display: flex;
     //flex-direction: row;
     //justify-content: space-evenly;
-    border-top: 2px solid #d6dde4;
+    border-top: 1px solid #d6dde4;
     padding-top: 20px;
 
     .totalItem {
@@ -2050,16 +2050,17 @@ innit()
       flex-direction: column;
 
       .data {
-        color: #474747;
-        font-weight: 800;
-        font-size: 20px;
+        font-weight: 400;
+        font-size: 30px;
+        color: #333333;
+        line-height: 25px;
       }
 
       .title {
-        margin-top: 5px;
-        color: #999999;
-        font-weight: 600;
         font-size: 16px;
+        font-weight: 500;
+        color: #999999;
+        line-height: 25px;
       }
     }
   }
