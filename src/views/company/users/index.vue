@@ -101,7 +101,7 @@
                 <el-tooltip effect="dark" content="同步仅适用开通了企业微信的企业" placement="top">
                   <el-button
                       plain
-                      type="warning"
+                      type="info"
                       icon="Sort"
                       @click="handleSynchro"
                   >同步

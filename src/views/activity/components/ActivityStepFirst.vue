@@ -121,16 +121,19 @@
       </template>
     </el-dialog>
 
-    <el-dialog title="任务负责人选择" v-model="showResponsibleUsers" width="1000px" :close-on-click-modal="false">
-      <SelectUsers :data="data.form.responsibleUsers"
-                   ref="responsibleUsersRef"></SelectUsers>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button type="primary" @click="onSuccessResponsibleUsers" v-if="handleType !== 'query'">确 定</el-button>
-          <el-button @click="onCancelResponsibleUsers">取 消</el-button>
-        </div>
-      </template>
-    </el-dialog>
+    <div class="user-dialog">
+      <el-dialog title="任务负责人选择" v-model="showResponsibleUsers" width="1000px" :close-on-click-modal="false">
+        <SelectUsers :data="data.form.responsibleUsers"
+                     ref="responsibleUsersRef"></SelectUsers>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button type="primary" @click="onSuccessResponsibleUsers" v-if="handleType !== 'query'">确 定</el-button>
+            <el-button @click="onCancelResponsibleUsers">取 消</el-button>
+          </div>
+        </template>
+      </el-dialog>
+    </div>
+
 
     <el-dialog :show-close="false" title="活动参与方" v-model="showRarticipants" width="700px"
                :close-on-click-modal="false">
@@ -614,5 +617,10 @@ onLoad()
 .label::v-deep( .el-form-item__label) {
   color: #606266;
   font-weight: 600;
+}
+.user-dialog {
+  :deep(.el-dialog__body) {
+    padding: 0 10px;
+  }
 }
 </style>
