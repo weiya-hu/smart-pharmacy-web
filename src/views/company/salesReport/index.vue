@@ -513,7 +513,7 @@ const chart_one_Option = ref({
       // 'cross' 十字准星指示器 其实是种简写，表示启用两个正交的轴的 axisPointer
       type: 'shadow',
       shadowStyle: {
-        color: 'rgba(153, 153, 153, 0.2)',
+        color: 'rgba(254, 198, 185, 0.2)',
         width: '1'
       }
     },
@@ -716,7 +716,7 @@ const chart_two_Option = ref({
       // 'cross' 十字准星指示器 其实是种简写，表示启用两个正交的轴的 axisPointer
       type: 'shadow',
       shadowStyle: {
-        color: 'rgba(153, 153, 153, 0.2)',
+        color: 'rgba(254, 198, 185, 0.2)',
         width: '1'
       }
     },
@@ -741,7 +741,7 @@ const chart_two_Option = ref({
   },
   xAxis: {
     // 坐标轴刻度标签
-    name: '销售额（元）',
+    name: '销售额',
     splitLine: {
       show: true // 是否显示分隔线。默认数值轴显示
     },
@@ -759,7 +759,7 @@ const chart_two_Option = ref({
       // fontSize: 16, // 文字的字体大小
       // color: '#cdd3ee', // 刻度标签文字的颜色
       // 使用字符串模板，模板变量为刻度默认标签 {value}
-      formatter: '{value}'
+      formatter: '{value}元'
     },
   },
   yAxis: {
@@ -881,7 +881,7 @@ const chart_three_Option = ref({
       // 'cross' 十字准星指示器 其实是种简写，表示启用两个正交的轴的 axisPointer
       type: 'shadow',
       shadowStyle: {
-        color: 'rgba(153, 153, 153, 0.2)',
+        color: 'rgba(254, 198, 185, 0.2)',
         width: '1'
       }
     },
@@ -906,7 +906,7 @@ const chart_three_Option = ref({
   },
   xAxis: {
     // 坐标轴刻度标签
-    name: '销售额（元）',
+    name: '销售额',
     splitLine: {
       show: true // 是否显示分隔线。默认数值轴显示
     },
@@ -924,7 +924,7 @@ const chart_three_Option = ref({
       // fontSize: 16, // 文字的字体大小
       // color: '#cdd3ee', // 刻度标签文字的颜色
       // 使用字符串模板，模板变量为刻度默认标签 {value}
-      formatter: '{value}'
+      formatter: '{value}元'
     },
   },
   yAxis: {
@@ -1023,7 +1023,7 @@ const chart_four_Option = ref({
       // 'cross' 十字准星指示器 其实是种简写，表示启用两个正交的轴的 axisPointer
       type: 'shadow',
       shadowStyle: {
-        color: 'rgba(153, 153, 153, 0.2)',
+        color: 'rgba(254, 198, 185, 0.2)',
         width: '1'
       }
     },
@@ -1064,7 +1064,7 @@ const chart_four_Option = ref({
     top: 13, // 定位
   },
   xAxis: {
-    name: '销售额（元）',
+    name: '销售额',
     // 坐标轴刻度标签
     splitLine: {
       show: true // 是否显示分隔线。默认数值轴显示
@@ -1083,7 +1083,7 @@ const chart_four_Option = ref({
       // fontSize: 16, // 文字的字体大小
       // color: '#cdd3ee', // 刻度标签文字的颜色
       // 使用字符串模板，模板变量为刻度默认标签 {value}
-      formatter: '{value}'
+      formatter: '{value}元'
     },
   },
   yAxis: {
@@ -2035,7 +2035,7 @@ innit()
     //display: flex;
     //flex-direction: row;
     //justify-content: space-evenly;
-    border-top: 2px solid #d6dde4;
+    border-top: 1px solid #d6dde4;
     padding-top: 20px;
 
     .totalItem {
@@ -2050,16 +2050,17 @@ innit()
       flex-direction: column;
 
       .data {
-        color: #474747;
-        font-weight: 800;
-        font-size: 20px;
+        font-weight: 400;
+        font-size: 30px;
+        color: #333333;
+        line-height: 25px;
       }
 
       .title {
-        margin-top: 5px;
-        color: #999999;
-        font-weight: 600;
         font-size: 16px;
+        font-weight: 500;
+        color: #999999;
+        line-height: 25px;
       }
     }
   }

@@ -1,5 +1,5 @@
-export const chart_Two_DataConfig = {
-    color: ['#8fd5f3'],
+ let chart_Two_DataConfig = {
+    color: ['#81AFD5'],
     dataZoom: [                 //Y轴滑动条
         {
             type: 'slider', //滑动条
@@ -30,7 +30,7 @@ export const chart_Two_DataConfig = {
             // 'cross' 十字准星指示器 其实是种简写，表示启用两个正交的轴的 axisPointer
             type: 'shadow',
             shadowStyle: {
-                color: 'rgba(153, 153, 153, 0.2)',
+                color: 'rgba(160, 202, 236, 0.2)',
                 width: '1'
             }
         },
@@ -108,7 +108,8 @@ export const chart_Two_DataConfig = {
             show: true, // 是否显示坐标轴轴线 默认显示
             lineStyle: { // 坐标轴线线的颜色
                 color: '#dedede'
-            }
+            },
+
         },
 
         axisLabel: {
@@ -155,7 +156,7 @@ export const chart_Two_DataConfig = {
                 color: '#7fafd8'
             },
         },
-        data: []
+        data: [0,]
     },
         {
             name: '奖励剩余',
@@ -182,7 +183,7 @@ export const chart_Two_DataConfig = {
             itemStyle: {
                 normal: {
                     barBorderRadius: [8, 0, 0, 8], // （顺时针左上，右上，右下，左下）
-                    color: '#d3dae1'
+                    color: '#81AFD5'
                 }
             },
             data: []
@@ -216,7 +217,7 @@ export const chart_Two_DataConfig = {
         }
     ]
 }
-export const chart_Two_NoneConfig = {
+ let chart_Two_NoneConfig = {
     title: {
         text: '暂无数据',
         x: 'center',
@@ -296,7 +297,7 @@ export const chart_Two_NoneConfig = {
         data: []
     },
 }
-export default {
+export  {
     chart_Two_DataConfig,
     chart_Two_NoneConfig
 }

@@ -83,7 +83,6 @@ export default defineComponent({
           store[props.storeConfig.requestMethodName]()
         }
       }
-
     }
     // getPageData()
     // 1.双向绑定pageInfo

@@ -1,4 +1,4 @@
-export const chart_One_DataConfig = {
+ let chart_One_DataConfig = {
     color: ['#8fd5f3'],
     // grid: {
     //   x: 60, // 左间距
@@ -156,7 +156,7 @@ export const chart_One_DataConfig = {
     },
     ]
 }
-export const chart_One_NoneConfig = {
+ let chart_One_NoneConfig = {
     title: {
         text: '暂无数据',
         x: 'center',
@@ -236,7 +236,7 @@ export const chart_One_NoneConfig = {
         data: []
     },
 }
-export default {
+export  {
     chart_One_DataConfig,
     chart_One_NoneConfig
 }

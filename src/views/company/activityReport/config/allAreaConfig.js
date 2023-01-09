@@ -78,7 +78,11 @@ export const storeBrandTableConfig = {
         },
     ],
     tableHeight: 550,
-    isSort: {trigger: 'cell', defaultSort: {field: 'salesAmount', order: 'desc'}, orders: ['desc', 'asc', null]}
+    isSort: {
+        trigger: 'cell',
+        defaultSort: {field: 'salesAmount', order: 'desc'},
+        orders: ['desc', 'asc', null]
+    }
 }
 //单品列表配置
 export const storeProductTableConfig = {
