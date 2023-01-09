@@ -2,7 +2,7 @@
   <div class="">
     <el-row :gutter="20">
       <!--部门数据-->
-      <el-col :span="6">
+      <el-col :span="6" style="background: #f9f9f9;border-right: 1px solid #D9D9D9;">
         <div class="left-container">
           <el-input
               v-model="deptName"
@@ -33,49 +33,51 @@
       </el-col>
       <!--用户数据-->
       <el-col :span="18">
-        <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-          <el-form-item label="用户名称" prop="userName">
-            <el-input
-                v-model="queryParams.userName"
-                placeholder="请输入用户名称"
-                clearable
-                style="width: 220px"
-                @keyup.enter="handleQuery"
-            />
-          </el-form-item>
-          <el-form-item label="手机号码" prop="mobile">
-            <el-input
-                v-model="queryParams.mobile"
-                placeholder="请输入手机号码"
-                clearable
-                style="width: 220px"
-                @keyup.enter="handleQuery"
-            />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-          </el-form-item>
-        </el-form>
+        <div class="right-container">
+          <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+            <el-form-item label="用户名称" prop="userName">
+              <el-input
+                  v-model="queryParams.userName"
+                  placeholder="请输入用户名称"
+                  clearable
+                  style="width: 220px"
+                  @keyup.enter="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="手机号码" prop="mobile">
+              <el-input
+                  v-model="queryParams.mobile"
+                  placeholder="请输入手机号码"
+                  clearable
+                  style="width: 220px"
+                  @keyup.enter="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+              <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            </el-form-item>
+          </el-form>
 
-        <div class="table-box">
-          <el-table row-key="userId" ref="userListRef" height="325px" v-loading="loading" :data="userList"
-             highlight-current-row @current-change="handleCurrentChange">
-            <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" show-overflow-tooltip/>
-            <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible"
-                             :show-overflow-tooltip="true"/>
-            <el-table-column label="部门" align="center" key="deptname" prop="deptname" v-if="columns[3].visible"
-                             :show-overflow-tooltip="true"/>
-            <el-table-column label="手机号码" align="center" key="mobile" prop="mobile" v-if="columns[4].visible" show-overflow-tooltip/>
-          </el-table>
+          <div class="table-box">
+            <el-table row-key="userId" ref="userListRef" height="325px" v-loading="loading" :data="userList"
+                      highlight-current-row @current-change="handleCurrentChange">
+              <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" show-overflow-tooltip/>
+              <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible"
+                               :show-overflow-tooltip="true"/>
+              <el-table-column label="部门" align="center" key="deptname" prop="deptname" v-if="columns[3].visible"
+                               :show-overflow-tooltip="true"/>
+              <el-table-column label="手机号码" align="center" key="mobile" prop="mobile" v-if="columns[4].visible" show-overflow-tooltip/>
+            </el-table>
+          </div>
+          <pagination
+              v-show="total > 0"
+              :total="total"
+              v-model:page="queryParams.pageNum"
+              v-model:limit="queryParams.pageSize"
+              @pagination="getList"
+          />
         </div>
-        <pagination
-            v-show="total > 0"
-            :total="total"
-            v-model:page="queryParams.pageNum"
-            v-model:limit="queryParams.pageSize"
-            @pagination="getList"
-        />
       </el-col>
     </el-row>
   </div>
@@ -279,8 +281,9 @@ selectedNodeId()
   }
 }
 .left-container {
+  padding-top: 10px;
   .el-tree {
-    background: #f9f9f9;
+    background: 0;
   }
   :deep(.el-tree--highlight-current) .el-tree-node.is-current>.el-tree-node__content {
     background-color: rgba(35, 56, 94, 0.1);
@@ -288,5 +291,8 @@ selectedNodeId()
   :deep(.el-tree-node__content):hover {
     background-color: rgba(35, 56, 94, 0.03);
   }
+}
+.right-container {
+  padding-top: 10px;
 }
 </style>
