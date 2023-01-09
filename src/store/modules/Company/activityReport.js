@@ -33,7 +33,7 @@ const useActivityReportStore = defineStore(
                     //    发送请求获取数据
                     getBrandTop(data).then(res => {
                         if (res.code == 200) {
-                            this.activityReportBrandList = [...res.data,...res.data,...res.data,...res.data,...res.data,...res.data]
+                            this.activityReportBrandList = res.data
                             resolve(true)
                         }
                     })
