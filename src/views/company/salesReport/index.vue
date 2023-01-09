@@ -741,7 +741,7 @@ const chart_two_Option = ref({
   },
   xAxis: {
     // 坐标轴刻度标签
-    name: '销售额（元）',
+    name: '销售额',
     splitLine: {
       show: true // 是否显示分隔线。默认数值轴显示
     },
@@ -759,7 +759,7 @@ const chart_two_Option = ref({
       // fontSize: 16, // 文字的字体大小
       // color: '#cdd3ee', // 刻度标签文字的颜色
       // 使用字符串模板，模板变量为刻度默认标签 {value}
-      formatter: '{value}'
+      formatter: '{value}元'
     },
   },
   yAxis: {
@@ -906,7 +906,7 @@ const chart_three_Option = ref({
   },
   xAxis: {
     // 坐标轴刻度标签
-    name: '销售额（元）',
+    name: '销售额',
     splitLine: {
       show: true // 是否显示分隔线。默认数值轴显示
     },
@@ -924,7 +924,7 @@ const chart_three_Option = ref({
       // fontSize: 16, // 文字的字体大小
       // color: '#cdd3ee', // 刻度标签文字的颜色
       // 使用字符串模板，模板变量为刻度默认标签 {value}
-      formatter: '{value}'
+      formatter: '{value}元'
     },
   },
   yAxis: {
@@ -1064,7 +1064,7 @@ const chart_four_Option = ref({
     top: 13, // 定位
   },
   xAxis: {
-    name: '销售额（元）',
+    name: '销售额',
     // 坐标轴刻度标签
     splitLine: {
       show: true // 是否显示分隔线。默认数值轴显示
@@ -1083,7 +1083,7 @@ const chart_four_Option = ref({
       // fontSize: 16, // 文字的字体大小
       // color: '#cdd3ee', // 刻度标签文字的颜色
       // 使用字符串模板，模板变量为刻度默认标签 {value}
-      formatter: '{value}'
+      formatter: '{value}元'
     },
   },
   yAxis: {
