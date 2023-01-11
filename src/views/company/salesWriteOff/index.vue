@@ -33,8 +33,9 @@
                   lastImportTime
                 }}由{{ importUserName }}导入,数据截止到{{ lastDataTime }}，其中{{ insertCount }}条导入成功，{{
                   updateCount
-                }}条更新，
-                {{ cantSaveCount }}条导入失败。</p>
+                }}条更新
+                <span v-if="cantSaveList.length!==0">，{{ cantSaveCount }}条导入失败</span>
+                。</p>
               <el-button
                   type="primary"
                   plain
@@ -42,12 +43,7 @@
                   @click="uploadErrorProCode"
               >查看导入失败
               </el-button>
-              <el-button
-                  type="info"
-                  plain
-                  v-if="cantSaveList.length==0"
-              >查看导入失败
-              </el-button>
+
             </div>
             <div v-if="analysisStatus==3" class="uploadInfo">
               <p style="marginRight:10px" class="desc">上传导入计算失败 ！！！</p>
