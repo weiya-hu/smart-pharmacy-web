@@ -1,24 +1,33 @@
 <template>
-  <el-dialog title="上传表头" v-model="isShow">
+  <el-dialog center width="35vw" style="border-radius: 10px" title="" v-model="isShow">
     <div class="outBox">
-      <el-upload
-          :action="uploadData.uploadUrl"
-          :headers="{'Authorization':uploadData.token}"
-          method:="POST"
-          accept=".xlsx, .xls"
-          :limit="1"
-          :file-list="tableHeaderList"
-          :show-file-list="false"
-          :on-success="handleUploadSuccess">
-        <div class="demo-image__placeholder">
-          <div class="block">
-            <el-image :src="getImageUrl()"
-            >
-            </el-image>
+      <p class="warning">上传新的表格后，点击确定，会让现有表头配置失效，请谨慎操作！</p>
+      <div>
+        <el-upload
+            ref="uploadHeaderRef"
+            :action="uploadData.uploadUrl"
+            :headers="{'Authorization':uploadData.token}"
+            :auto-upload="false"
+            method:="POST"
+            accept=".xlsx, .xls"
+            :limit="1"
+            :file-list="tableHeaderList"
+            :show-file-list="true"
+            :on-success="handleUploadSuccess">
+          <div class="demo-image__placeholder">
+            <div class="block">
+              <el-image :src="getImageUrl()"
+              >
+              </el-image>
+              <div class="tips">点击上传</div>
+            </div>
           </div>
-        </div>
-      </el-upload>
+        </el-upload>
+      </div>
     </div>
+    <template  #footer>
+      <el-button @click="submit" size="large">确定</el-button>
+    </template>
   </el-dialog>
 
 </template>
@@ -27,7 +36,9 @@
 import {ElMessage} from "element-plus";
 import router from "@/router";
 import {getToken} from "@/utils/auth";
-
+import {reactive,getCurrentInstance} from "vue";
+const {proxy} = getCurrentInstance()
+const uploadHeaderRef=ref(null)
 let isShow = ref(false)
 let emits = defineEmits(['uploadSuccess'])
 /**上传附件*/
@@ -45,7 +56,6 @@ const handleUploadSuccess = (res) => {
   //成功之后清空上传文件列表
   tableHeaderList.value = []
   if (res.code === 200) {
-    localStorage.setItem("headerTitle", JSON.stringify(res.data))
     //进行路由跳转
     // router.push({path: '/enterpriseCenter/order/customizeImportSecond'})
     isShow.value = false
@@ -57,6 +67,9 @@ const handleUploadSuccess = (res) => {
 }
 const showDialog = () => {
   isShow.value = true
+}
+const submit = ()=>{
+  proxy.$refs["uploadHeaderRef"].submit();
 }
 defineExpose({
   showDialog
@@ -70,10 +83,32 @@ defineExpose({
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+
+  .warning {
+    font-size: 16px;
+    font-weight: bold;
+    color: #FF5A40;
+  }
 
   .block {
+    position: relative;
     //transform: rotate(180deg)
-    padding: 100px;
+    padding: 10px 0px 0px 0px;
+
+    .tips {
+      position: absolute;
+      width: 64px;
+      height: 22px !important;
+      height: 15px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #333333;
+      line-height: 22px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, 30%);
+    }
   }
 }
 
