@@ -1,5 +1,6 @@
 <template>
-  <el-dialog center width="35vw" style="border-radius: 10px" title="" v-model="isShow">
+  <el-dialog :close-on-click-modal="false"
+             center width="35vw" style="border-radius: 10px" title="" v-model="isShow">
     <div class="outBox">
       <p class="warning">上传新的表格后，点击确定，会让现有表头配置失效，请谨慎操作！</p>
       <div>
@@ -25,8 +26,9 @@
         </el-upload>
       </div>
     </div>
-    <template  #footer>
-      <el-button @click="submit" size="large">确定</el-button>
+    <template #footer>
+      <el-button type="primary" @click="submit" size="large">确定</el-button>
+      <el-button @click="cancelUploadNewHeader" size="large">取消</el-button>
     </template>
   </el-dialog>
 
@@ -36,9 +38,10 @@
 import {ElMessage} from "element-plus";
 import router from "@/router";
 import {getToken} from "@/utils/auth";
-import {reactive,getCurrentInstance} from "vue";
+import {reactive, getCurrentInstance} from "vue";
+
 const {proxy} = getCurrentInstance()
-const uploadHeaderRef=ref(null)
+const uploadHeaderRef = ref(null)
 let isShow = ref(false)
 let emits = defineEmits(['uploadSuccess'])
 /**上传附件*/
@@ -68,8 +71,12 @@ const handleUploadSuccess = (res) => {
 const showDialog = () => {
   isShow.value = true
 }
-const submit = ()=>{
+const submit = () => {
   proxy.$refs["uploadHeaderRef"].submit();
+}
+const cancelUploadNewHeader = () => {
+  isShow.value = false
+  tableHeaderList.value = []
 }
 defineExpose({
   showDialog

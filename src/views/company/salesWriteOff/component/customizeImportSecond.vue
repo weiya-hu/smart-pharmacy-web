@@ -16,7 +16,7 @@
     </div>
     <div class="container">
       <el-form :model="allHeader" label-width="15vw" ref="formRef">
-        <el-table :row-class-name="rowStyle" height="90vh" :span-method="merginType" ref="multipleTable"
+        <el-table  :cell-style="cellStyle" height="90vh" :span-method="merginType" ref="multipleTable"
                   :data="allHeader.data" border style="width: 100%">
           <el-table-column label="分类" prop="type" width="150px">
           </el-table-column>
@@ -59,7 +59,7 @@
 </template>
 <script setup>
 import {getMapping, setConvertMapping, queryProductOrderDynamicHeaderData} from "@/api/system/order";
-import {onMounted} from "vue";
+import {nextTick, onMounted} from "vue";
 import {ElMessage} from "element-plus";
 import router from "@/router";
 import customizeImportFirst from './customizeImportFirst'
@@ -104,14 +104,25 @@ const calculateCell = (tableBody) => {
   }
 
 }
-const rowStyle = ({row, rowIndex}) => {
-  if (row.isRough) {
-    return 'rough_class';
-  } else {
-    return ''
+const cellStyle = ({row, column, columnIndex, rowIndex}) => {
+  console.log(column)
+  if (row.isRough && columnIndex !== 0) {
+    return {
+      borderBottomColor: "#a8a8a8",
+      borderBottomWidth: "2px",
+      borderRight: "none",
+    }
+  } else if (columnIndex == 0) {
+    return {
+      borderRightWidth: "1px",
+      borderBottomWidth: "0px"
+    }
+  } else if(columnIndex !==0){
+    return  {
+      borderRight: "none"
+    }
   }
 }
-
 const merginType = ({row, column, rowIndex, columnIndex}) => {
   if (columnIndex === 0) {
     const rowCell = cellList.value[rowIndex];
@@ -217,11 +228,13 @@ const categoriesHeader = () => {
       return nextItem.type == itemType
     }))
   })
-  newAllHeader.forEach(newItem => {
+  newAllHeader.forEach((newItem, index) => {
     newItem = sortByHeader(newItem)
-    newItem[newItem.length - 1] = {
-      ...newItem[newItem.length - 1],
-      isRough: true
+    if (index !== newAllHeader.length - 1) {
+      newItem[newItem.length - 1] = {
+        ...newItem[newItem.length - 1],
+        isRough: true
+      }
     }
   })
   return newAllHeader.flat()
@@ -281,6 +294,19 @@ const changeHeader = () => {
   padding: 15px;
 }
 
+.container::v-deep(.el-table_1_column_1) {
+  border-bottom-color: transparent !important;
+  border-bottom: none !important;
+}
+
+.container::v-deep(.el-table_1_column_2) {
+  border-right: none !important;
+}
+
+.container::v-deep(.el-table_1_column_3) {
+  border-right: none !important;
+}
+
 .container::v-deep(.el-input__wrapper) {
   box-shadow: none !important;
 }
@@ -297,8 +323,7 @@ const changeHeader = () => {
 }
 
 .rough_class {
-  border-bottom: 2px solid red;
-  border-color: red;
+  border-bottom: 2px solid red !important;
 }
 
 .outBox {
@@ -318,6 +343,7 @@ const changeHeader = () => {
 
   .container {
     margin-top: 50px;
+
 
   }
 
