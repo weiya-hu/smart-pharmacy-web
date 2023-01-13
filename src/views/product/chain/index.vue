@@ -120,7 +120,7 @@
           <el-input v-model="form_All.name" placeholder="请输入产品简称"/>
         </el-form-item>
         <el-form-item class="label" label="产品全称">
-          <el-input v-model="form_All.name" placeholder="请输入产品全称"/>
+          <el-input v-model="form_All.fullname" placeholder="请输入产品全称"/>
         </el-form-item>
         <el-form-item class="label" label="产品类别">
           <el-input v-model="form_All.productType" placeholder="请输入产品类别"/>
@@ -226,6 +226,7 @@ const data = reactive({
     updateTime: null
   },
   form_All: {
+    fullname:null,
     code: null,
     name: null,
     productType: null,
@@ -282,6 +283,7 @@ function reset() {
     updateTime: null
   };
   form_All.value = {
+    fullname: null,
     code: null,
     name: null,
     productType: null,
