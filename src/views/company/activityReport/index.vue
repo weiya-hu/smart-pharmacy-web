@@ -90,6 +90,7 @@
     <!--    图形统计-->
     <div class="barChart">
       <div class="chart chart_two" v-loading="chart_two_loading" element-loading-text="加载中...">
+        <span class="chartTitle">奖励报表</span>
         <scaleChart ref="chart_two_ref" v-show="chart_two_isNull == false" :dataOption="chart_two_data"></scaleChart>
         <el-empty description="暂无数据" v-show="chart_two_isNull == true"/>
       </div>
@@ -97,6 +98,7 @@
         <div class="line"></div>
       </div>
       <div class="chart chart_one" v-loading="chart_one_loading" element-loading-text="加载中...">
+        <span class="chartTitle">销售额报表</span>
         <scaleChart ref="chart_one_ref" v-show="chart_one_isNull == false" :dataOption="chart_one_data"></scaleChart>
         <el-empty description="暂无数据" v-show="chart_one_isNull == true"/>
       </div>
@@ -954,6 +956,17 @@ innitSelectOption()
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
+
+      .chartTitle {
+        position: absolute;
+        left: 2%;
+        top: 4%;
+        color: #000033;
+        font-weight: bold;
+        font-size: 14px;
+        cursor: default;
+      }
     }
 
 
